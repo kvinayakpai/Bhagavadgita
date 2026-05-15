@@ -1,0 +1,510 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+<meta name="theme-color" content="#f4ead8">
+<title>Bhagavad Gītā · Concept KG (Madhva)</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;0,700;1,400&family=Inter:wght@400;500;600&family=Noto+Sans+Devanagari:wght@400;500;600&family=Noto+Sans+Kannada:wght@400;500;600&family=Tiro+Devanagari+Sanskrit:ital@0;1&family=Tiro+Kannada:ital@0;1&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#f4ead8; --bg-2:#ebdfc7; --ink:#1f1a13; --ink-soft:#4a3f30; --ink-fade:#7a6c54;
+  --rule:#d6c599; --rule-soft:#e6d8b0; --paper:#fbf5e6; --paper-2:#f6ecd2;
+  --hl:#f9d57a;
+
+  --t-paramartha:#8b1e1a; --t-tattva:#a83f1a; --t-kshetra:#b8702a;
+  --t-guna:#c69e2a;       --t-yoga:#7b8d2e;    --t-sadhana:#3f7a4a;
+  --t-antahkarana:#2f6e7a;--t-dharma:#3a4a7a;  --t-dosha:#5a3e6a;
+  --t-phala:#7a1e5a;      --t-yajna:#6a2e2e;   --t-pratika:#3e3a32;
+
+  --e-is-a:#5a5a5a;       --e-includes:#3a6a3a; --e-leads-to:#2e6a7a;
+  --e-opposite-of:#8a3a3a; --e-antidote-to:#3a6a7a; --e-arises-from:#7a4a2a;
+  --e-predicates-on:#4a3a7a; --e-transforms-into:#7a5a3a;
+}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{height:100%;min-height:100svh;margin:0;padding:0}
+body{
+  background:
+    radial-gradient(ellipse at 20% -10%, #f9efd9 0%, transparent 55%),
+    radial-gradient(ellipse at 110% 110%, #ead9b3 0%, transparent 55%),
+    var(--bg);
+  color:var(--ink);
+  font-family:'Inter',system-ui,sans-serif;
+  -webkit-font-smoothing:antialiased;
+  overscroll-behavior-y:contain;
+}
+.app{
+  position:relative;z-index:1;
+  max-width:840px;margin:0 auto;
+  min-height:100svh;
+  display:flex;flex-direction:column;
+}
+
+/* ============ HEADER ============ */
+header.top{
+  position:sticky;top:0;z-index:10;
+  display:flex;align-items:center;gap:8px;
+  padding:max(10px,env(safe-area-inset-top,0)) 14px 10px;
+  background:#f4ead8;
+  border-bottom:1px solid var(--rule);
+}
+header .brand{flex:1;min-width:0;display:flex;align-items:baseline;gap:8px;overflow:hidden}
+header .brand .name{
+  font-family:'Cormorant Garamond',serif;font-weight:600;font-size:18px;line-height:1;
+  white-space:nowrap;overflow:hidden;text-overflow:ellipsis;
+}
+header .brand .name em{font-style:italic;color:var(--ink-soft);font-weight:500}
+header .brand .crumb{
+  font-size:11px;letter-spacing:.16em;text-transform:uppercase;
+  color:var(--ink-fade);white-space:nowrap;flex:0 0 auto;
+}
+header .lang{
+  display:flex;gap:0;background:var(--paper);border:1px solid var(--rule);
+  border-radius:8px;overflow:hidden;font-size:11px;letter-spacing:.06em;
+}
+header .lang button{
+  background:transparent;border:0;color:var(--ink-soft);
+  padding:6px 8px;cursor:pointer;font:inherit;
+}
+header .lang button.on{background:var(--ink);color:var(--paper)}
+header .lang button + button{border-left:1px solid var(--rule)}
+
+/* ============ SUBHEADER / VIEW TABS ============ */
+.subhead{
+  display:flex;gap:0;border-bottom:1px solid var(--rule);background:#f4ead8;
+  position:sticky;top:46px;z-index:9;
+}
+.subhead button{
+  flex:1;padding:10px 4px;background:transparent;border:0;
+  font:inherit;color:var(--ink-fade);font-size:12px;letter-spacing:.16em;text-transform:uppercase;cursor:pointer;
+}
+.subhead button.on{color:var(--ink);box-shadow:inset 0 -2px 0 var(--ink)}
+
+/* ============ SEARCH ============ */
+.search{padding:10px 14px;background:#f4ead8;border-bottom:1px solid var(--rule-soft);position:sticky;top:84px;z-index:8}
+.search input{
+  width:100%;padding:8px 10px;border:1px solid var(--rule);border-radius:6px;
+  background:var(--paper);font:inherit;font-size:13px;color:var(--ink);
+}
+.search input:focus{outline:0;border-color:var(--ink-soft)}
+
+/* ============ MAIN ============ */
+main{flex:1;padding:8px 0 80px}
+
+/* ============ BROWSE ============ */
+.tier-section{padding:10px 14px 4px}
+.tier-section .tier-head{
+  display:flex;align-items:baseline;gap:8px;margin-bottom:6px;
+}
+.tier-section .tier-dot{
+  display:inline-block;width:10px;height:10px;border-radius:50%;
+}
+.tier-section .tier-name{
+  font-family:'Cormorant Garamond',serif;font-size:16px;font-weight:600;
+}
+.tier-section .tier-gloss{font-size:11px;color:var(--ink-fade);letter-spacing:.04em}
+.tier-section .tier-count{font-size:11px;color:var(--ink-fade);margin-left:auto}
+ul.entry-list{list-style:none;margin:0;padding:0 14px 16px}
+ul.entry-list li{
+  padding:9px 10px;margin:4px 0;border-radius:8px;
+  background:var(--paper);border:1px solid var(--rule-soft);
+  display:grid;grid-template-columns:1fr auto;gap:8px;align-items:center;
+  cursor:pointer;transition:transform .08s, border-color .08s;
+}
+ul.entry-list li:hover{border-color:var(--rule);transform:translateY(-1px)}
+ul.entry-list li .label{
+  font-family:'Cormorant Garamond',serif;font-size:15px;font-weight:600;color:var(--ink);
+}
+ul.entry-list li .sub{font-size:11px;color:var(--ink-fade);margin-top:2px}
+ul.entry-list li .ref{font-size:10px;color:var(--ink-fade);letter-spacing:.04em}
+ul.entry-list li.dev .label,
+body.lang-dev ul.entry-list li .label{font-family:'Tiro Devanagari Sanskrit','Noto Sans Devanagari',serif;font-size:18px}
+body.lang-kn ul.entry-list li .label{font-family:'Tiro Kannada','Noto Sans Kannada',serif;font-size:18px}
+.hl{background:var(--hl);padding:0 1px;border-radius:2px}
+
+/* ============ FOCUS ============ */
+.focus-card{
+  margin:10px 14px;padding:14px 16px;border-radius:10px;
+  background:var(--paper);border:1px solid var(--rule);
+}
+.focus-card .tier-badge{
+  display:inline-flex;align-items:center;gap:6px;
+  font-size:10px;letter-spacing:.16em;text-transform:uppercase;color:var(--ink-fade);
+}
+.focus-card .tier-badge::before{
+  content:"";display:inline-block;width:8px;height:8px;border-radius:50%;
+}
+.focus-card h1{
+  font-family:'Cormorant Garamond',serif;font-weight:600;font-size:28px;
+  margin:6px 0 2px;line-height:1.1;
+}
+body.lang-dev .focus-card h1{font-family:'Tiro Devanagari Sanskrit',serif;font-size:30px}
+body.lang-kn  .focus-card h1{font-family:'Tiro Kannada',serif;font-size:30px}
+.focus-card .subtitle{font-size:13px;color:var(--ink-soft);font-style:italic;margin-bottom:8px}
+.focus-card .note{font-size:14px;line-height:1.5;color:var(--ink);margin:8px 0}
+.focus-card .madhva{
+  font-size:13px;line-height:1.45;color:var(--ink-soft);
+  padding:8px 10px;background:var(--paper-2);border-left:3px solid var(--t-paramartha);
+  border-radius:0 6px 6px 0;margin-top:8px;
+}
+.focus-card .madhva::before{content:"Madhva · "; font-weight:600;color:var(--t-paramartha)}
+.focus-card .refs{font-size:11px;letter-spacing:.06em;color:var(--ink-fade);margin-top:10px}
+
+.shloka{
+  margin:0 14px 12px;padding:14px 16px;border-radius:10px;
+  background:linear-gradient(180deg, var(--paper) 0%, var(--paper-2) 100%);
+  border:1px solid var(--rule);
+}
+.shloka .shloka-script{
+  font-family:'Tiro Devanagari Sanskrit',serif;font-size:18px;line-height:1.6;white-space:pre-wrap;
+  color:var(--ink);
+}
+body.lang-kn .shloka .shloka-script{font-family:'Tiro Kannada',serif}
+body.lang-en .shloka .shloka-script{font-family:'Cormorant Garamond',serif;font-style:italic;font-size:16px}
+.shloka .shloka-ref{font-size:11px;color:var(--ink-fade);margin-top:6px;letter-spacing:.06em;text-align:right}
+
+.relations{margin:0 14px 80px}
+.relations h2{
+  font-family:'Cormorant Garamond',serif;font-weight:600;font-size:16px;
+  margin:14px 0 6px;color:var(--ink-soft);
+  letter-spacing:.04em;
+}
+.relations ul{list-style:none;margin:0;padding:0}
+.relations li{
+  display:grid;grid-template-columns:auto 1fr auto;gap:8px;align-items:center;
+  padding:8px 10px;margin:3px 0;border-radius:6px;
+  background:var(--paper);border:1px solid var(--rule-soft);cursor:pointer;
+  transition:transform .08s, border-color .08s;
+}
+.relations li:hover{border-color:var(--rule);transform:translateX(2px)}
+.relations li .edge-type{
+  font-size:10px;letter-spacing:.06em;text-transform:uppercase;
+  padding:2px 6px;border-radius:3px;color:#fff;font-weight:500;
+}
+.relations li .edge-label{font-size:13px;color:var(--ink-soft)}
+.relations li .other{
+  font-family:'Cormorant Garamond',serif;font-size:15px;font-weight:600;color:var(--ink);text-align:right;
+}
+body.lang-dev .relations li .other{font-family:'Tiro Devanagari Sanskrit',serif;font-size:17px}
+body.lang-kn  .relations li .other{font-family:'Tiro Kannada',serif;font-size:17px}
+
+/* ============ MAP (full graph) ============ */
+.map-wrap{padding:10px 8px 80px;overflow:auto}
+.map-wrap svg{display:block;margin:0 auto;background:var(--paper);border:1px solid var(--rule);border-radius:8px}
+.map-node circle{cursor:pointer;transition:r .1s, stroke-width .1s}
+.map-node:hover circle{stroke-width:2.5}
+.map-node text{font-family:'Cormorant Garamond',serif;font-size:10px;fill:var(--ink);pointer-events:none;text-anchor:middle}
+.map-edge{fill:none;stroke-opacity:.45}
+
+/* ============ FOOTER ============ */
+footer{
+  position:fixed;bottom:0;left:0;right:0;
+  padding:8px 14px max(8px,env(safe-area-inset-bottom,0));
+  background:rgba(244,234,216,.94);backdrop-filter:blur(8px);
+  border-top:1px solid var(--rule);
+  font-size:10px;color:var(--ink-fade);letter-spacing:.06em;text-align:center;
+}
+</style>
+</head>
+<body class="lang-en">
+<div class="app">
+
+<header class="top">
+  <div class="brand">
+    <span class="name">Bhagavad <em>Gītā</em> · Concept KG</span>
+    <span class="crumb">Madhva</span>
+  </div>
+  <div class="lang" id="lang-tabs">
+    <button data-lang="en" class="on">EN</button>
+    <button data-lang="dev">देव</button>
+    <button data-lang="kn">ಕನ್ನಡ</button>
+  </div>
+</header>
+
+<nav class="subhead" id="view-tabs">
+  <button data-view="browse" class="on">Browse</button>
+  <button data-view="focus">Focus</button>
+  <button data-view="map">Map</button>
+</nav>
+
+<section class="search" id="search-bar">
+  <input id="q" type="search" placeholder="Search concepts, tiers, verses…" autocomplete="off" />
+</section>
+
+<main>
+  <div id="view-browse"></div>
+  <div id="view-focus" hidden></div>
+  <div id="view-map" hidden></div>
+</main>
+
+</div>
+
+<footer>
+  <span id="stats"></span>
+</footer>
+
+<script src="data.js"></script>
+<script>
+/* ============================================================================
+   Renderer
+   ============================================================================ */
+const state = { lang:'en', view:'browse', focusId:null, q:'' };
+
+function setLang(lang){
+  state.lang = lang;
+  document.body.classList.remove('lang-en','lang-dev','lang-kn');
+  document.body.classList.add('lang-'+lang);
+  document.querySelectorAll('#lang-tabs button').forEach(b=>{
+    b.classList.toggle('on', b.dataset.lang===lang);
+  });
+  render();
+}
+
+function setView(v, id){
+  state.view = v;
+  if (id) state.focusId = id;
+  document.querySelectorAll('#view-tabs button').forEach(b=>{
+    b.classList.toggle('on', b.dataset.view===v);
+  });
+  document.getElementById('view-browse').hidden = v!=='browse';
+  document.getElementById('view-focus').hidden  = v!=='focus';
+  document.getElementById('view-map').hidden    = v!=='map';
+  document.getElementById('search-bar').hidden  = v==='map';
+  window.scrollTo({top:0, behavior:'instant'});
+  render();
+}
+
+function labelOf(n){
+  return state.lang==='dev' ? n.dev : state.lang==='kn' ? n.kn : n.en;
+}
+
+function escapeHtml(s){
+  return String(s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+}
+function highlight(s, q){
+  if (!q) return escapeHtml(s);
+  const idx = s.toLowerCase().indexOf(q.toLowerCase());
+  if (idx<0) return escapeHtml(s);
+  return escapeHtml(s.slice(0,idx)) + '<span class="hl">'+escapeHtml(s.slice(idx,idx+q.length))+'</span>' + escapeHtml(s.slice(idx+q.length));
+}
+
+const NODE_BY_ID = Object.fromEntries(NODES.map(n=>[n.id,n]));
+const TIER_BY_ID = Object.fromEntries(TIERS.map(t=>[t.id,t]));
+const ADJ = {};
+NODES.forEach(n => ADJ[n.id] = { out:[], in:[] });
+EDGES.forEach(e=>{
+  if (!ADJ[e.source] || !ADJ[e.target]) return;
+  ADJ[e.source].out.push(e);
+  ADJ[e.target].in.push(e);
+});
+
+/* ---------- BROWSE ---------- */
+function renderBrowse(){
+  const root = document.getElementById('view-browse');
+  const q = state.q.trim().toLowerCase();
+  let html = '';
+
+  const matches = (n) => {
+    if (!q) return true;
+    const hay = [n.en, n.dev, n.kn, n.title, n.note, n.refs, n.tier].join(' ').toLowerCase();
+    return hay.includes(q);
+  };
+
+  let total = 0;
+  TIERS.forEach(tier=>{
+    const nodes = NODES.filter(n => n.tier===tier.id && matches(n));
+    if (!nodes.length) return;
+    total += nodes.length;
+    html += `<section class="tier-section">
+      <div class="tier-head">
+        <span class="tier-dot" style="background:var(--t-${tier.id})"></span>
+        <span class="tier-name">${escapeHtml(state.lang==='dev'?tier.dev:state.lang==='kn'?tier.kn:tier.en)}</span>
+        <span class="tier-gloss">${escapeHtml(tier.gloss)}</span>
+        <span class="tier-count">${nodes.length}</span>
+      </div>
+    </section>
+    <ul class="entry-list">`;
+    nodes.forEach(n=>{
+      const lab = labelOf(n);
+      html += `<li data-id="${n.id}">
+        <div>
+          <div class="label">${highlight(lab,q)}</div>
+          <div class="sub">${escapeHtml(n.title)}</div>
+        </div>
+        <div class="ref">${escapeHtml(n.refs)}</div>
+      </li>`;
+    });
+    html += `</ul>`;
+  });
+
+  if (!total){
+    html = `<div style="padding:40px 20px;text-align:center;color:var(--ink-fade)">No concepts match "${escapeHtml(state.q)}".</div>`;
+  }
+  root.innerHTML = html;
+}
+
+/* ---------- FOCUS ---------- */
+function renderFocus(){
+  const root = document.getElementById('view-focus');
+  const id = state.focusId || NODES[0].id;
+  const n = NODE_BY_ID[id];
+  if (!n){ root.innerHTML = `<div style="padding:20px">Concept not found.</div>`; return; }
+  const tier = TIER_BY_ID[n.tier];
+
+  let html = `<article class="focus-card">
+    <span class="tier-badge" style="--tc:var(--t-${tier.id})">
+      <style>.focus-card .tier-badge::before{background:var(--t-${tier.id})}</style>
+      ${escapeHtml(state.lang==='dev'?tier.dev:state.lang==='kn'?tier.kn:tier.en)}
+    </span>
+    <h1>${escapeHtml(labelOf(n))}</h1>
+    <div class="subtitle">${escapeHtml(n.title)}</div>
+    <p class="note">${escapeHtml(n.note)}</p>
+    ${n.madhva ? `<div class="madhva">${escapeHtml(n.madhva)}</div>` : ''}
+    <div class="refs">${escapeHtml(n.refs)}</div>
+  </article>`;
+
+  // shloka card
+  const s = SHLOKAS[n.id];
+  if (s){
+    const scriptText = state.lang==='dev' ? s.dev : state.lang==='kn' ? s.kn : s.iast;
+    html += `<section class="shloka">
+      <div class="shloka-script">${escapeHtml(scriptText)}</div>
+      <div class="shloka-ref">— ${escapeHtml(s.ref)}</div>
+    </section>`;
+  }
+
+  // relations
+  const out = ADJ[n.id]?.out || [];
+  const inc = ADJ[n.id]?.in || [];
+  if (out.length || inc.length){
+    html += `<section class="relations">`;
+    if (out.length){
+      html += `<h2>Outgoing</h2><ul>`;
+      out.forEach(e=>{
+        const other = NODE_BY_ID[e.target];
+        if (!other) return;
+        const colorVar = `--e-${e.type}`;
+        html += `<li data-id="${other.id}">
+          <span class="edge-type" style="background:var(${colorVar})">${escapeHtml(e.type)}</span>
+          <span class="edge-label">${escapeHtml(e.label||'')}</span>
+          <span class="other">${escapeHtml(labelOf(other))} →</span>
+        </li>`;
+      });
+      html += `</ul>`;
+    }
+    if (inc.length){
+      html += `<h2>Incoming</h2><ul>`;
+      inc.forEach(e=>{
+        const other = NODE_BY_ID[e.source];
+        if (!other) return;
+        const colorVar = `--e-${e.type}`;
+        html += `<li data-id="${other.id}">
+          <span class="edge-type" style="background:var(${colorVar})">${escapeHtml(e.type)}</span>
+          <span class="edge-label">${escapeHtml(e.label||'')}</span>
+          <span class="other">← ${escapeHtml(labelOf(other))}</span>
+        </li>`;
+      });
+      html += `</ul>`;
+    }
+    html += `</section>`;
+  }
+
+  root.innerHTML = html;
+}
+
+/* ---------- MAP (auto-layout: stacked tiers, nodes within each tier in a row) ---------- */
+function renderMap(){
+  const root = document.getElementById('view-map');
+  const W = 820, leftPad = 100, rightPad = 30;
+  const tierGap = 84;
+  const H = TIERS.length * tierGap + 80;
+
+  // group nodes by tier in declared order
+  const byTier = Object.fromEntries(TIERS.map(t=>[t.id,[]]));
+  NODES.forEach(n => { if (byTier[n.tier]) byTier[n.tier].push(n); });
+
+  // assign x within tier row, y from tier index
+  const pos = {};
+  TIERS.forEach((tier, ti)=>{
+    const arr = byTier[tier.id];
+    const usable = W - leftPad - rightPad;
+    arr.forEach((n,i)=>{
+      const x = leftPad + (arr.length===1 ? usable/2 : (i/(arr.length-1))*usable);
+      const y = 40 + ti*tierGap + 22;
+      pos[n.id] = { x, y, r:9 };
+    });
+  });
+
+  let svg = `<svg viewBox="0 0 ${W} ${H}" width="${W}" height="${H}" xmlns="http://www.w3.org/2000/svg">`;
+
+  // tier bands & labels
+  TIERS.forEach((tier,ti)=>{
+    const y = 40 + ti*tierGap;
+    svg += `<rect x="0" y="${y-22}" width="${W}" height="${tierGap}" fill="${ti%2 ? 'rgba(214,197,153,.10)' : 'rgba(230,216,176,.18)'}"/>`;
+    const lab = state.lang==='dev'?tier.dev:state.lang==='kn'?tier.kn:tier.en;
+    const fontFam = state.lang==='dev'?'Tiro Devanagari Sanskrit':state.lang==='kn'?'Tiro Kannada':'Cormorant Garamond';
+    svg += `<text x="14" y="${y+18}" font-family="${fontFam}" font-size="13" fill="var(--ink-soft)" font-weight="600">${escapeHtml(lab)}</text>`;
+  });
+
+  // edges
+  EDGES.forEach(e=>{
+    const a = pos[e.source]; const b = pos[e.target];
+    if (!a || !b) return;
+    const dx = b.x - a.x, dy = b.y - a.y;
+    const mx = (a.x+b.x)/2, my = (a.y+b.y)/2 - Math.abs(dy)*0.12;
+    const colorVar = `var(--e-${e.type})`;
+    svg += `<path class="map-edge" d="M ${a.x} ${a.y} Q ${mx} ${my} ${b.x} ${b.y}" stroke="${colorVar}" stroke-width="0.8"/>`;
+  });
+
+  // nodes
+  NODES.forEach(n=>{
+    const p = pos[n.id]; if (!p) return;
+    const tierColor = `var(--t-${n.tier})`;
+    const lab = labelOf(n);
+    const fontFam = state.lang==='dev'?'Tiro Devanagari Sanskrit':state.lang==='kn'?'Tiro Kannada':'Cormorant Garamond';
+    svg += `<g class="map-node" data-id="${n.id}">
+      <circle cx="${p.x}" cy="${p.y}" r="${p.r}" fill="${tierColor}" fill-opacity="0.85" stroke="${tierColor}" stroke-width="1.2"/>
+      <text x="${p.x}" y="${p.y + p.r + 11}" font-family="${fontFam}" font-size="${state.lang==='en'?9:10}">${escapeHtml(lab.length>14?lab.slice(0,13)+'…':lab)}</text>
+    </g>`;
+  });
+
+  svg += `</svg>`;
+  root.innerHTML = `<div class="map-wrap">${svg}</div>`;
+}
+
+/* ---------- main render ---------- */
+function render(){
+  document.getElementById('stats').textContent =
+    `${NODES.length} concepts · ${EDGES.length} relations · ${TIERS.length} tiers · Madhva siddhānta`;
+  if (state.view==='browse') renderBrowse();
+  else if (state.view==='focus') renderFocus();
+  else if (state.view==='map') renderMap();
+}
+
+/* ---------- wiring ---------- */
+document.getElementById('lang-tabs').addEventListener('click', e=>{
+  const b = e.target.closest('button[data-lang]'); if (!b) return;
+  setLang(b.dataset.lang);
+});
+document.getElementById('view-tabs').addEventListener('click', e=>{
+  const b = e.target.closest('button[data-view]'); if (!b) return;
+  setView(b.dataset.view);
+});
+document.getElementById('q').addEventListener('input', e=>{
+  state.q = e.target.value;
+  if (state.view !== 'browse') setView('browse');
+  else renderBrowse();
+});
+document.addEventListener('click', e=>{
+  const li = e.target.closest('ul.entry-list li[data-id], .relations li[data-id], .map-node[data-id]');
+  if (!li) return;
+  const id = li.dataset.id || li.getAttribute('data-id');
+  setView('focus', id);
+});
+
+render();
+</script>
+</body>
+</html>
