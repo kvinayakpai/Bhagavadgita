@@ -1,0 +1,21 @@
+{
+  "name": "bhagavadgita-concept-kg",
+  "version": "0.1.0",
+  "description": "A concept-centered knowledge graph of the Bhagavad Gītā, read through Madhva siddhānta.",
+  "main": "data.js",
+  "scripts": {
+    "build:decks": "node build-decks.js"
+  },
+  "keywords": [
+    "bhagavad-gita",
+    "madhva",
+    "knowledge-graph",
+    "ontology",
+    "vedanta"
+  ],
+  "author": "kvinayakpai",
+  "license": "MIT",
+  "devDependencies": {
+    "pptxgenjs": "^3.12.0"
+  }
+}
