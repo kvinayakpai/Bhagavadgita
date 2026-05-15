@@ -580,7 +580,9 @@ const EDGES = [
   E('isvara','antaryamin','is-a','Hari as indweller'),
   E('para_prakriti','jiva','is-a','jīva-bhūtā = higher prakṛti'),
   E('prakriti','mahabhutas','includes','5 of 8 components'),
-  E('prakriti','antahkarana','includes','manas/buddhi/ahaṅkāra'),
+  E('prakriti','manas','includes','manas as evolute of prakṛti'),
+  E('prakriti','buddhi','includes','buddhi as evolute of prakṛti'),
+  E('prakriti','ahankara','includes','ahaṅkāra as evolute of prakṛti'),
   E('karma_tattva','svabhava','arises-from','action expresses nature'),
   E('aksharam_param_brahma','brahman','is-a','imperishable Brahman'),
 
@@ -605,11 +607,7 @@ const EDGES = [
   E('triguna_atita','gunatita','is-a','same state in 2.45'),
 
   // Yoga axis
-  E('karma_yoga','yoga','is-a',''),  E('jnana_yoga','yoga','is-a',''),
-  E('bhakti_yoga','yoga','is-a',''), E('dhyana_yoga','yoga','is-a',''),
-  E('sannyasa_yoga','yoga','is-a',''),E('buddhi_yoga','yoga','is-a',''),
-  E('abhyasa_vairagya','yoga','is-a',''),
-  E('samatva','yoga','is-a','BG 2.48 definition'),
+  // (membership in the 'yoga' tier is captured by node.tier; we omit redundant tier-stub edges)
   E('sharanagati','bhakti_yoga','is-a','culmination of bhakti'),
   E('karma_yoga','sannyasa_yoga','transforms-into','same goal, different posture'),
   E('bhakti_yoga','jnana_yoga','includes','Madhva: bhakti requires jñāna'),
@@ -620,8 +618,7 @@ const EDGES = [
   E('vairagya','abhyasa','includes','two wings of yoga'),
   E('abhyasa','abhyasa_vairagya','is-a',''),
   E('vairagya','abhyasa_vairagya','is-a',''),
-  E('tapas','sadhana','is-a',''),
-  E('dana','sadhana','is-a',''),
+  // (tapas, dana tier-membership captured by node.tier)
   E('tyaga','sannyasa_yoga','is-a','fruit-renunciation as sannyāsa'),
   E('indriya_nigraha','sthitaprajna','leads-to','sense-restraint → steady-wisdom'),
   E('samadhi','moksha','leads-to','absorption → release'),
@@ -669,7 +666,6 @@ const EDGES = [
   E('sharanagati','sarva_dharman_parityajya','is-a','surrender = carama-upadeśa'),
 
   // Yajña axis
-  E('dravya_yajna','yajna_yajna_root','is-a',''), // (we'll alias yajna_yajna_root if needed; the tier label suffices)
   E('jnana_yajna','dravya_yajna','transforms-into','knowledge yajña surpasses substance yajña'),
   E('brahmarpana','jnana_yajna','includes','universal sacramental view'),
 
@@ -683,7 +679,7 @@ const EDGES = [
 
   // Cross-tier doctrinal anchors
   E('kshetra_jnana','jnana_yoga','includes','Ch 13 culminates jñāna'),
-  E('shraddha','sadhana_root','is-a',''), // tier-anchor; harmless
+  // (shraddha→bhakti_yoga already defined above)
   E('bhakti_yoga','sharanagati','leads-to','devotion culminates in surrender'),
   E('jnana_yoga','moksha','leads-to','knowledge → release'),
   E('karma_yoga','jnana_yoga','leads-to','action purifies → knowledge'),
