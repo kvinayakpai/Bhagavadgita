@@ -482,6 +482,31 @@ const NODES = [
     note:"'I will release you from all sins; do not grieve' — Krishna's guarantee at 18.66. For Madhva, the crown of the Gītā.",
     refs:'BG 18.66',
     madhva:'The carama-śloka — Madhva\'s direct mokṣa-upadeśa.' },
+  /* — Madhva-distinctive: gradations of mokṣa — */
+  { id:'salokya', tier:'phala',
+    en:'Sālokya', dev:'सालोक्य', kn:'ಸಾಲೋಕ್ಯ',
+    title:'Co-residence in Hari\'s world',
+    note:"First grade of mokṣa: dwelling in the same loka as Hari (Vaikuṇṭha) — but not yet in His proximity.",
+    refs:'BG 8.21 · 15.6',
+    madhva:'Madhva: lowest of four mukti-gradations. Not all liberated jīvas attain identical bliss.' },
+  { id:'samipya', tier:'phala',
+    en:'Sāmīpya', dev:'सामीप्य', kn:'ಸಾಮೀಪ್ಯ',
+    title:'Nearness to Hari',
+    note:"Second grade: proximity to Hari in His own abode. Beyond sālokya, not yet sārūpya.",
+    refs:'BG 11.55',
+    madhva:'Madhva: second of four mukti-gradations.' },
+  { id:'sarupya', tier:'phala',
+    en:'Sārūpya', dev:'सारूप्य', kn:'ಸಾರೂಪ್ಯ',
+    title:'Form-likeness to Hari',
+    note:"Third grade: attaining a form resembling Hari\'s, while preserving distinct jīva-svarūpa.",
+    refs:'BG 11.55 · 14.2',
+    madhva:'Madhva: third of four mukti-gradations. Form likeness — never identity.' },
+  { id:'sayujya', tier:'phala',
+    en:'Sāyujya', dev:'सायुज्य', kn:'ಸಾಯುಜ್ಯ',
+    title:'Communion (not absorption)',
+    note:"Highest grade of mokṣa: deepest communion with Hari, full sa-rasa bliss. For Madhva, NOT identity — the jīva remains an aṃśa distinct from the aṃśin.",
+    refs:'BG 5.24–26 · 18.55',
+    madhva:'Madhva: fourth and highest grade. Communion not aikya — jīva-paramātman bheda preserved even in mukti.' },
 
   /* ---------------- Yajña (6) ---------------- */
   { id:'dravya_yajna', tier:'yajna',
@@ -664,6 +689,16 @@ const EDGES = [
   E('dhumadi_marga','archiradi_marga','opposite-of','return vs no-return'),
   E('sarva_dharman_parityajya','moksha','leads-to','carama-śloka guarantee'),
   E('sharanagati','sarva_dharman_parityajya','is-a','surrender = carama-upadeśa'),
+
+  // Madhva mokṣa gradations (tāratamya in mukti)
+  E('moksha','salokya','includes','grade 1 of mukti'),
+  E('moksha','samipya','includes','grade 2 of mukti'),
+  E('moksha','sarupya','includes','grade 3 of mukti'),
+  E('moksha','sayujya','includes','grade 4 of mukti — highest'),
+  E('salokya','samipya','leads-to','ascending grade'),
+  E('samipya','sarupya','leads-to','ascending grade'),
+  E('sarupya','sayujya','leads-to','ascending grade'),
+  E('sayujya','paramagati','is-a','highest mokṣa = supreme destination'),
 
   // Yajña axis
   E('jnana_yajna','dravya_yajna','transforms-into','knowledge yajña surpasses substance yajña'),

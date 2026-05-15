@@ -126,6 +126,16 @@ const KG_POSITIONS = {
   'archiradi_marga':    [340, 1420, 11],
   'dhumadi_marga':      [180, 1420, 11],
   'sarva_dharman_parityajya':[500, 1420, 16],  // carama-śloka emphasized
+  // Madhva mukti-gradations clustered around moksha
+  'salokya':            [360, 1290, 11],
+  'samipya':            [440, 1290, 11],
+  'sarupya':            [560, 1290, 11],
+  'sayujya':            [640, 1290, 13],
+  // Madhva mukti-gradations clustered around moksha
+  'salokya':            [360, 1290, 11],
+  'samipya':            [440, 1290, 11],
+  'sarupya':            [560, 1290, 11],
+  'sayujya':            [640, 1290, 13],
 
   // ============ Yajña (side column, y ≈ 600–950) — right edge ============
   'dravya_yajna':       [950, 600, 10],
@@ -153,8 +163,4 @@ const KG_TIER_BANDS = [
 ];
 
 /* Edge types to render on the full map (others suppressed for visual clarity) */
-const KG_SHOW_EDGE_TYPES = new Set(['is-a', 'leads-to', 'antidote-to', 'transforms-into', 'opposite-of', 'arises-from']);
-
-if (typeof module !== 'undefined') {
-  module.exports = { KG_POSITIONS, KG_TIER_BANDS, KG_SHOW_EDGE_TYPES };
-}
+const KG_SHOW_EDG
