@@ -180,4 +180,12 @@ const KG_TIER_BANDS = [
 ];
 
 /* Edge types to render on the full map (others suppressed for visual clarity) */
-const KG_SHOW_EDG
+const KG_SHOW_EDGE_TYPES = new Set([
+  'is-a','includes','leads-to','opposite-of','antidote-to',
+  'arises-from','predicates-on','transforms-into','grounded-in',
+]);
+
+/* Export for the renderer / verifier (no-op in the browser) */
+if (typeof module !== 'undefined') {
+  module.exports = { KG_POSITIONS, KG_TIER_BANDS, KG_SHOW_EDGE_TYPES };
+}

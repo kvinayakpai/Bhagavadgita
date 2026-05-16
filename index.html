@@ -494,4 +494,68 @@ function renderMapAuto(root){
     const y = 40 + ti*tierGap;
     svg += `<rect x="0" y="${y-22}" width="${W}" height="${tierGap}" fill="${ti%2 ? 'rgba(214,197,153,.10)' : 'rgba(230,216,176,.18)'}"/>`;
     const lab = state.lang==='dev'?tier.dev:state.lang==='kn'?tier.kn:tier.en;
-    sv
+    svg += `<text x="10" y="${y+4}" font-family="${fontFam}" font-size="12" fill="var(--ink-soft)" font-weight="600">${escapeHtml(lab)}</text>`;
+  });
+  EDGES.forEach(e=>{
+    const a = pos[e.source]; const b = pos[e.target];
+    if (!a || !b) return;
+    const mx = (a.x+b.x)/2;
+    const my = (a.y+b.y)/2 - Math.abs(b.y-a.y)*0.08;
+    svg += `<path class="map-edge" d="M ${a.x} ${a.y} Q ${mx} ${my} ${b.x} ${b.y}" stroke="var(--e-${e.type})" stroke-width="0.7"/>`;
+  });
+  NODES.forEach(n=>{
+    const p = pos[n.id]; if (!p) return;
+    const lab = labelOf(n);
+    const maxLen = state.lang==='en' ? 14 : 10;
+    const shown = lab.length > maxLen ? lab.slice(0,maxLen-1)+'\u2026' : lab;
+    svg += `<g class="map-node" data-id="${n.id}">
+      <circle cx="${p.x}" cy="${p.y}" r="${p.r}" fill="var(--t-${n.tier})" fill-opacity="0.88" stroke="var(--t-${n.tier})" stroke-width="1.2"/>
+      <text x="${p.x}" y="${p.y + p.r + 11}" font-family="${fontFam}" font-size="${state.lang==='en'?10:11}">${escapeHtml(shown)}</text>
+    </g>`;
+  });
+  svg += `</svg>`;
+  root.innerHTML = `<div class="map-wrap">${svg}</div>`;
+}
+
+/* ---------- DISPATCH ---------- */
+function render(){
+  if (state.view==='browse') renderBrowse();
+  else if (state.view==='focus') renderFocus();
+  else if (state.view==='map') renderMap();
+  const f = document.getElementById('stats');
+  if (f) f.textContent = `${NODES.length} concepts \u00b7 ${EDGES.length} relations \u00b7 ${Object.keys(SHLOKAS).length} shlokas \u00b7 ${TIERS.length} tiers`;
+}
+
+/* ---------- WIRING ---------- */
+document.getElementById('lang-tabs').addEventListener('click', (ev)=>{
+  const b = ev.target.closest('button[data-lang]');
+  if (!b) return;
+  setLang(b.dataset.lang);
+});
+
+document.getElementById('view-tabs').addEventListener('click', (ev)=>{
+  const b = ev.target.closest('button[data-view]');
+  if (!b) return;
+  setView(b.dataset.view);
+});
+
+document.getElementById('q').addEventListener('input', (ev)=>{
+  state.q = ev.target.value;
+  if (state.view!=='browse') setView('browse');
+  else render();
+});
+
+/* Delegated clicks: Browse list items, Focus relation items, and Map node circles
+   all use data-id and route to the Focus view. */
+document.addEventListener('click', (ev)=>{
+  const li = ev.target.closest('li[data-id]');
+  if (li){ setView('focus', li.dataset.id); return; }
+  const g = ev.target.closest('g.map-node[data-id]');
+  if (g){ setView('focus', g.dataset.id); return; }
+});
+
+/* Initial render */
+render();
+</script>
+</body>
+</html>
