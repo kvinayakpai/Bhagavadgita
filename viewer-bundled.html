@@ -1,0 +1,1677 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+<meta name="theme-color" content="#f4ead8">
+<title>Bhagavad Gītā · Concept KG (Madhva)</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;0,700;1,400&family=Inter:wght@400;500;600&family=Noto+Sans+Devanagari:wght@400;500;600&family=Noto+Sans+Kannada:wght@400;500;600&family=Tiro+Devanagari+Sanskrit:ital@0;1&family=Tiro+Kannada:ital@0;1&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#f4ead8; --bg-2:#ebdfc7; --ink:#1f1a13; --ink-soft:#4a3f30; --ink-fade:#7a6c54;
+  --rule:#d6c599; --rule-soft:#e6d8b0; --paper:#fbf5e6; --paper-2:#f6ecd2;
+  --hl:#f9d57a;
+
+  --t-paramartha:#8b1e1a; --t-tattva:#a83f1a; --t-kshetra:#b8702a;
+  --t-guna:#c69e2a;       --t-yoga:#7b8d2e;    --t-sadhana:#3f7a4a;
+  --t-antahkarana:#2f6e7a;--t-dharma:#3a4a7a;  --t-dosha:#5a3e6a;
+  --t-phala:#7a1e5a;      --t-yajna:#6a2e2e;   --t-pratika:#3e3a32;
+
+  --e-is-a:#5a5a5a;       --e-includes:#3a6a3a; --e-leads-to:#2e6a7a;
+  --e-opposite-of:#8a3a3a; --e-antidote-to:#3a6a7a; --e-arises-from:#7a4a2a;
+  --e-predicates-on:#4a3a7a; --e-transforms-into:#7a5a3a;
+}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{height:100%;min-height:100svh;margin:0;padding:0}
+body{
+  background:
+    radial-gradient(ellipse at 20% -10%, #f9efd9 0%, transparent 55%),
+    radial-gradient(ellipse at 110% 110%, #ead9b3 0%, transparent 55%),
+    var(--bg);
+  color:var(--ink);
+  font-family:'Inter',system-ui,sans-serif;
+  -webkit-font-smoothing:antialiased;
+  overscroll-behavior-y:contain;
+}
+.app{
+  position:relative;z-index:1;
+  max-width:840px;margin:0 auto;
+  min-height:100svh;
+  display:flex;flex-direction:column;
+}
+
+/* ============ HEADER ============ */
+header.top{
+  position:sticky;top:0;z-index:10;
+  display:flex;align-items:center;gap:8px;
+  padding:max(10px,env(safe-area-inset-top,0)) 14px 10px;
+  background:#f4ead8;
+  border-bottom:1px solid var(--rule);
+}
+header .brand{flex:1;min-width:0;display:flex;align-items:baseline;gap:8px;overflow:hidden}
+header .brand .name{
+  font-family:'Cormorant Garamond',serif;font-weight:600;font-size:18px;line-height:1;
+  white-space:nowrap;overflow:hidden;text-overflow:ellipsis;
+}
+header .brand .name em{font-style:italic;color:var(--ink-soft);font-weight:500}
+header .brand .crumb{
+  font-size:11px;letter-spacing:.16em;text-transform:uppercase;
+  color:var(--ink-fade);white-space:nowrap;flex:0 0 auto;
+}
+header .lang{
+  display:flex;gap:0;background:var(--paper);border:1px solid var(--rule);
+  border-radius:8px;overflow:hidden;font-size:11px;letter-spacing:.06em;
+}
+header .lang button{
+  background:transparent;border:0;color:var(--ink-soft);
+  padding:6px 8px;cursor:pointer;font:inherit;
+}
+header .lang button.on{background:var(--ink);color:var(--paper)}
+header .lang button + button{border-left:1px solid var(--rule)}
+
+/* ============ SUBHEADER / VIEW TABS ============ */
+.subhead{
+  display:flex;gap:0;border-bottom:1px solid var(--rule);background:#f4ead8;
+  position:sticky;top:46px;z-index:9;
+}
+.subhead button{
+  flex:1;padding:10px 4px;background:transparent;border:0;
+  font:inherit;color:var(--ink-fade);font-size:12px;letter-spacing:.16em;text-transform:uppercase;cursor:pointer;
+}
+.subhead button.on{color:var(--ink);box-shadow:inset 0 -2px 0 var(--ink)}
+
+/* ============ SEARCH ============ */
+.search{padding:10px 14px;background:#f4ead8;border-bottom:1px solid var(--rule-soft);position:sticky;top:84px;z-index:8}
+.search input{
+  width:100%;padding:8px 10px;border:1px solid var(--rule);border-radius:6px;
+  background:var(--paper);font:inherit;font-size:13px;color:var(--ink);
+}
+.search input:focus{outline:0;border-color:var(--ink-soft)}
+
+/* ============ MAIN ============ */
+main{flex:1;padding:8px 0 80px}
+
+/* ============ BROWSE ============ */
+.tier-section{padding:10px 14px 4px}
+.tier-section .tier-head{
+  display:flex;align-items:baseline;gap:8px;margin-bottom:6px;
+}
+.tier-section .tier-dot{
+  display:inline-block;width:10px;height:10px;border-radius:50%;
+}
+.tier-section .tier-name{
+  font-family:'Cormorant Garamond',serif;font-size:16px;font-weight:600;
+}
+.tier-section .tier-gloss{font-size:11px;color:var(--ink-fade);letter-spacing:.04em}
+.tier-section .tier-count{font-size:11px;color:var(--ink-fade);margin-left:auto}
+ul.entry-list{list-style:none;margin:0;padding:0 14px 16px}
+ul.entry-list li{
+  padding:9px 10px;margin:4px 0;border-radius:8px;
+  background:var(--paper);border:1px solid var(--rule-soft);
+  display:grid;grid-template-columns:1fr auto;gap:8px;align-items:center;
+  cursor:pointer;transition:transform .08s, border-color .08s;
+}
+ul.entry-list li:hover{border-color:var(--rule);transform:translateY(-1px)}
+ul.entry-list li .label{
+  font-family:'Cormorant Garamond',serif;font-size:15px;font-weight:600;color:var(--ink);
+}
+ul.entry-list li .sub{font-size:11px;color:var(--ink-fade);margin-top:2px}
+ul.entry-list li .ref{font-size:10px;color:var(--ink-fade);letter-spacing:.04em}
+ul.entry-list li.dev .label,
+body.lang-dev ul.entry-list li .label{font-family:'Tiro Devanagari Sanskrit','Noto Sans Devanagari',serif;font-size:18px}
+body.lang-kn ul.entry-list li .label{font-family:'Tiro Kannada','Noto Sans Kannada',serif;font-size:18px}
+.hl{background:var(--hl);padding:0 1px;border-radius:2px}
+
+/* ============ FOCUS ============ */
+.focus-card{
+  margin:10px 14px;padding:14px 16px;border-radius:10px;
+  background:var(--paper);border:1px solid var(--rule);
+}
+.focus-card .tier-badge{
+  display:inline-flex;align-items:center;gap:6px;
+  font-size:10px;letter-spacing:.16em;text-transform:uppercase;color:var(--ink-fade);
+}
+.focus-card .tier-badge::before{
+  content:"";display:inline-block;width:8px;height:8px;border-radius:50%;
+}
+.focus-card h1{
+  font-family:'Cormorant Garamond',serif;font-weight:600;font-size:28px;
+  margin:6px 0 2px;line-height:1.1;
+}
+body.lang-dev .focus-card h1{font-family:'Tiro Devanagari Sanskrit',serif;font-size:30px}
+body.lang-kn  .focus-card h1{font-family:'Tiro Kannada',serif;font-size:30px}
+.focus-card .subtitle{font-size:13px;color:var(--ink-soft);font-style:italic;margin-bottom:8px}
+.focus-card .note{font-size:14px;line-height:1.5;color:var(--ink);margin:8px 0}
+.focus-card .madhva{
+  font-size:13px;line-height:1.45;color:var(--ink-soft);
+  padding:8px 10px;background:var(--paper-2);border-left:3px solid var(--t-paramartha);
+  border-radius:0 6px 6px 0;margin-top:8px;
+}
+.focus-card .madhva::before{content:"Madhva · "; font-weight:600;color:var(--t-paramartha)}
+.focus-card .refs{font-size:11px;letter-spacing:.06em;color:var(--ink-fade);margin-top:10px}
+
+.shloka{
+  margin:0 14px 12px;padding:14px 16px;border-radius:10px;
+  background:linear-gradient(180deg, var(--paper) 0%, var(--paper-2) 100%);
+  border:1px solid var(--rule);
+}
+.shloka .shloka-script{
+  font-family:'Tiro Devanagari Sanskrit',serif;font-size:18px;line-height:1.6;white-space:pre-wrap;
+  color:var(--ink);
+}
+body.lang-kn .shloka .shloka-script{font-family:'Tiro Kannada',serif}
+body.lang-en .shloka .shloka-script{font-family:'Cormorant Garamond',serif;font-style:italic;font-size:16px}
+.shloka .shloka-ref{font-size:11px;color:var(--ink-fade);margin-top:6px;letter-spacing:.06em;text-align:right}
+
+.relations{margin:0 14px 80px}
+.relations h2{
+  font-family:'Cormorant Garamond',serif;font-weight:600;font-size:16px;
+  margin:14px 0 6px;color:var(--ink-soft);
+  letter-spacing:.04em;
+}
+.relations ul{list-style:none;margin:0;padding:0}
+.relations li{
+  display:grid;grid-template-columns:auto 1fr auto;gap:8px;align-items:center;
+  padding:8px 10px;margin:3px 0;border-radius:6px;
+  background:var(--paper);border:1px solid var(--rule-soft);cursor:pointer;
+  transition:transform .08s, border-color .08s;
+}
+.relations li:hover{border-color:var(--rule);transform:translateX(2px)}
+.relations li .edge-type{
+  font-size:10px;letter-spacing:.06em;text-transform:uppercase;
+  padding:2px 6px;border-radius:3px;color:#fff;font-weight:500;
+}
+.relations li .edge-label{font-size:13px;color:var(--ink-soft)}
+.relations li .other{
+  font-family:'Cormorant Garamond',serif;font-size:15px;font-weight:600;color:var(--ink);text-align:right;
+}
+body.lang-dev .relations li .other{font-family:'Tiro Devanagari Sanskrit',serif;font-size:17px}
+body.lang-kn  .relations li .other{font-family:'Tiro Kannada',serif;font-size:17px}
+
+/* ============ MAP (full graph) ============ */
+.map-wrap{padding:10px 8px 80px;overflow:auto}
+.map-wrap svg{display:block;margin:0 auto;background:var(--paper);border:1px solid var(--rule);border-radius:8px}
+.map-node circle{cursor:pointer;transition:r .1s, stroke-width .1s}
+.map-node:hover circle{stroke-width:2.5}
+.map-node text{font-family:'Cormorant Garamond',serif;font-size:10px;fill:var(--ink);pointer-events:none;text-anchor:middle}
+.map-edge{fill:none;stroke-opacity:.45}
+
+/* ============ FOOTER ============ */
+footer{
+  position:fixed;bottom:0;left:0;right:0;
+  padding:8px 14px max(8px,env(safe-area-inset-bottom,0));
+  background:rgba(244,234,216,.94);backdrop-filter:blur(8px);
+  border-top:1px solid var(--rule);
+  font-size:10px;color:var(--ink-fade);letter-spacing:.06em;text-align:center;
+}
+</style>
+</head>
+<body class="lang-en">
+<div class="app">
+
+<header class="top">
+  <div class="brand">
+    <span class="name">Bhagavad <em>Gītā</em> · Concept KG</span>
+    <span class="crumb">Madhva</span>
+  </div>
+  <div class="lang" id="lang-tabs">
+    <button data-lang="en" class="on">EN</button>
+    <button data-lang="dev">देव</button>
+    <button data-lang="kn">ಕನ್ನಡ</button>
+  </div>
+</header>
+
+<nav class="subhead" id="view-tabs">
+  <button data-view="browse" class="on">Browse</button>
+  <button data-view="focus">Focus</button>
+  <button data-view="map">Map</button>
+</nav>
+
+<section class="search" id="search-bar">
+  <input id="q" type="search" placeholder="Search concepts, tiers, verses…" autocomplete="off" />
+</section>
+
+<main>
+  <div id="view-browse"></div>
+  <div id="view-focus" hidden></div>
+  <div id="view-map" hidden></div>
+</main>
+
+</div>
+
+<footer>
+  <span id="stats"></span>
+</footer>
+
+<script>
+/* === inlined from data.js === */
+/* Bhagavad Gītā Concept Knowledge Graph — Madhva siddhānta reading
+ *
+ * Author intent: ontology of CONCEPTS taught in the Gītā, organized into 12 tiers,
+ *                with every node anchored to a specific verse (or short verse range)
+ *                and read through Madhva's commentary tradition (Gītā-bhāṣya +
+ *                Bannanje Govindacharya's Kannada exposition).
+ *
+ * Tri-script: every node has IAST (en), Devanāgarī (dev), Kannada lipi (kn).
+ *
+ * Tiers (12) — see TIERS array below.
+ */
+
+const TIERS = [
+  { id:'paramartha',   en:'Paramārtha',    dev:'परमार्थ',      kn:'ಪರಮಾರ್ಥ',     gloss:'Ultimate reality — Hari, the sarvottama' },
+  { id:'tattva',       en:'Tattva',        dev:'तत्त्व',         kn:'ತತ್ತ್ವ',         gloss:'Metaphysical categories — jīva, prakṛti, kāla' },
+  { id:'kshetra',      en:'Kṣetra-Kṣetrajña', dev:'क्षेत्र-क्षेत्रज्ञ', kn:'ಕ್ಷೇತ್ರ-ಕ್ಷೇತ್ರಜ್ಞ', gloss:'Field & field-knower — body, knower, 24 elements (Ch 13)' },
+  { id:'guna',         en:'Guṇa',          dev:'गुण',           kn:'ಗುಣ',          gloss:'The three modes of prakṛti — sattva, rajas, tamas' },
+  { id:'yoga',         en:'Yoga',          dev:'योग',           kn:'ಯೋಗ',         gloss:'Paths — karma, jñāna, bhakti, dhyāna, sannyāsa' },
+  { id:'sadhana',      en:'Sādhanā',       dev:'साधना',         kn:'ಸಾಧನಾ',         gloss:'Practices — śraddhā, vairāgya, yajña, tapas, tyāga' },
+  { id:'antahkarana',  en:'Antaḥkaraṇa',   dev:'अन्तःकरण',      kn:'ಅಂತಃಕರಣ',     gloss:'Inner instrument — manas, buddhi, ahaṅkāra, indriyas' },
+  { id:'dharma',       en:'Dharma',        dev:'धर्म',           kn:'ಧರ್ಮ',         gloss:'Ethics — svadharma, niṣkāma-karma, sthita-prajña' },
+  { id:'dosha',        en:'Doṣa',          dev:'दोष',           kn:'ದೋಷ',          gloss:'Defects — kāma, krodha, lobha, moha, asat-saṅga' },
+  { id:'phala',        en:'Phala',         dev:'फल',            kn:'ಫಲ',           gloss:'Goals & states — mokṣa, paramagati, brāhmī-sthiti' },
+  { id:'yajna',        en:'Yajña',         dev:'यज्ञ',           kn:'ಯಜ್ಞ',          gloss:'Sacrifice varieties — dravya, tapo, jñāna, svādhyāya' },
+  { id:'pratika',      en:'Pratīka',       dev:'प्रतीक',          kn:'ಪ್ರತೀಕ',        gloss:'Symbols & metaphors — aśvattha, ratha, praṇava' },
+];
+
+const TIER_COLOR = {
+  paramartha:'#8b1e1a', tattva:'#a83f1a', kshetra:'#b8702a',
+  guna:'#c69e2a', yoga:'#7b8d2e', sadhana:'#3f7a4a',
+  antahkarana:'#2f6e7a', dharma:'#3a4a7a', dosha:'#5a3e6a',
+  phala:'#7a1e5a', yajna:'#6a2e2e', pratika:'#3e3a32',
+};
+
+const TIER_INDEX = Object.fromEntries(TIERS.map((t,i)=>[t.id,i]));
+
+/* ============================================================================
+ * NODES — concept entries
+ * ============================================================================
+ * Schema: { id, tier, en, dev, kn, title, note, refs, madhva (optional flag/note) }
+ *   - id: stable slug, ascii-only
+ *   - en / dev / kn: the label in each script
+ *   - title: short subtitle (English; the script-specific HTMLs override)
+ *   - note: 2-3 sentence doctrinal note from a Madhva angle
+ *   - refs: anchor verse(s) — BG x.y format
+ *   - madhva: short note where Madhva's reading is distinctive (optional)
+ */
+
+const NODES = [
+  /* ---------------- Paramārtha (8) ---------------- */
+  { id:'brahman', tier:'paramartha',
+    en:'Brahman', dev:'ब्रह्मन्', kn:'ಬ್ರಹ್ಮನ್',
+    title:'Brahman — the Supreme',
+    note:"For Madhva, Brahman names Viṣṇu/Nārāyaṇa alone — sarvottama, the puruṣottama beyond kṣara and akṣara. Not a generic 'absolute'.",
+    refs:'BG 8.3 · 14.27 · 15.18',
+    madhva:'Brahman = Viṣṇu (not nirguṇa absolute as in Advaita).' },
+  { id:'paramatman', tier:'paramartha',
+    en:'Paramātman', dev:'परमात्मन्', kn:'ಪರಮಾತ್ಮನ್',
+    title:'Paramātman — the indweller',
+    note:"The 'highest Self' standing in every body as the witness, sustainer, ordainer. Distinct from jīva (BG 15.17).",
+    refs:'BG 13.22 · 15.17',
+    madhva:'Always tri-vidha — different from kṣara (perishable) and akṣara (jīva).' },
+  { id:'purushottama', tier:'paramartha',
+    en:'Puruṣottama', dev:'पुरुषोत्तम', kn:'ಪುರುಷೋತ್ತಮ',
+    title:'Puruṣottama — the supreme person',
+    note:"Krishna's self-designation as the puruṣa beyond the perishable and the imperishable. The hermeneutic center of Ch 15.",
+    refs:'BG 15.18–19',
+    madhva:'Strictly = Hari. Not jīva-paramātman aikya as Advaita reads.' },
+  { id:'ksara_purusha', tier:'paramartha',
+    en:'Kṣara-puruṣa', dev:'क्षरपुरुष', kn:'ಕ್ಷರಪುರುಷ',
+    title:'The perishable puruṣa',
+    note:"The collectivity of bound jīvas in saṃsāra — 'all beings' subject to change. Lower step in the Ch 15 ladder.",
+    refs:'BG 15.16' },
+  { id:'akshara_purusha', tier:'paramartha',
+    en:'Akṣara-puruṣa', dev:'अक्षरपुरुष', kn:'ಅಕ್ಷರಪುರುಷ',
+    title:'The imperishable puruṣa',
+    note:"The kūṭa-stha — for Madhva, Lakṣmī, the eternally-liberated jīva-gaṇa-mukhya. Sarvottama after Hari.",
+    refs:'BG 15.16',
+    madhva:'Madhva: akṣara = Śrī/Lakṣmī, not impersonal Brahman as Advaita reads.' },
+  { id:'avatara', tier:'paramartha',
+    en:'Avatāra', dev:'अवतार', kn:'ಅವತಾರ',
+    title:'Divine descent',
+    note:"Hari assumes form in age after age to restore dharma and protect the sādhus. The body is sva-icchā, not karma-bound.",
+    refs:'BG 4.6–8' },
+  { id:'svarupa_aikya', tier:'paramartha',
+    en:'Svarūpa-aikya', dev:'स्वरूपैक्य', kn:'ಸ್ವರೂಪೈಕ್ಯ',
+    title:'Identity of Hari\'s forms',
+    note:"Krishna, Viṣṇu, Nārāyaṇa, Vāsudeva — no svarūpa-bheda. One paramātman with multiple manifestation-forms (vyūha).",
+    refs:'BG 10.20 · 11.24',
+    madhva:'Madhva-distinctive: rejects panentheism, preserves form-realism.' },
+  { id:'sarvottamatva', tier:'paramartha',
+    en:'Sarvottamatva', dev:'सर्वोत्तमत्व', kn:'ಸರ್ವೋತ್ತಮತ್ವ',
+    title:'Hari\'s absolute supremacy',
+    note:"The axiom anchoring tāratamya: Hari is highest, no one his equal or superior. Every other being is strictly subordinate.",
+    refs:'BG 7.7 · 11.43 · 18.65',
+    madhva:'Foundational Madhva siddhānta — pañca-bheda starts here.' },
+  { id:'taratamya', tier:'paramartha',
+    en:'Tāratamya', dev:'तारतम्य', kn:'ತಾರತಮ್ಯ',
+    title:'Gradation of being',
+    note:"The strict hierarchy of all reality under Hari — every soul has a definite, irreversible rank. The architectural principle of Madhva metaphysics.",
+    refs:'BG 7.7 · 15.16–18',
+    madhva:'Distinctively Madhva. Underwrites pañca-bheda and the gradations of mukti.' },
+  { id:'pancha_bheda', tier:'paramartha',
+    en:'Pañca-bheda', dev:'पञ्चभेद', kn:'ಪಂಚಭೇದ',
+    title:'Five real differences',
+    note:"Hari-jīva, Hari-jaḍa, jīva-jaḍa, jīva-jīva, jaḍa-jaḍa — five eternal differences that Madhva siddhānta defends as ontologically real.",
+    refs:'BG 7.4–5 · 15.7 · 15.16–18',
+    madhva:'Madhva-defining. Each bheda is anchored in BG (jīva 15.7, jīva-jīva-bheda implicit in svabhāva 18.41ff).' },
+
+  /* ---------------- Tattva (8) ---------------- */
+  { id:'jiva', tier:'tattva',
+    en:'Jīva', dev:'जीव', kn:'ಜೀವ',
+    title:'The embodied self',
+    note:"An eternal aṃśa of Hari (BG 15.7) — real, distinct, plural, never merged with Brahman. Bound by avidyā until released.",
+    refs:'BG 15.7',
+    madhva:'Jīva-bheda is real (pañca-bheda #1). Plurality of jīvas is eternal.' },
+  { id:'isvara', tier:'tattva',
+    en:'Īśvara', dev:'ईश्वर', kn:'ಈಶ್ವರ',
+    title:'The Lord as ordainer',
+    note:"Hari as antaryāmī — stands in every heart and directs (yantra-ārūḍha-māyā) the jīvas as if mounted on a machine.",
+    refs:'BG 18.61' },
+  { id:'prakriti', tier:'tattva',
+    en:'Prakṛti', dev:'प्रकृति', kn:'ಪ್ರಕೃತಿ',
+    title:'Material nature',
+    note:"Hari's own lower nature — eightfold: earth, water, fire, air, ether, manas, buddhi, ahaṅkāra. The womb of all forms.",
+    refs:'BG 7.4–5 · 9.10',
+    madhva:'Prakṛti is real, dependent on Hari (not māyā as illusion).' },
+  { id:'para_prakriti', tier:'tattva',
+    en:'Para-prakṛti', dev:'पराप्रकृति', kn:'ಪರಾಪ್ರಕೃತಿ',
+    title:'The higher nature',
+    note:"The jīva-bhūta — Hari's higher nature by which the universe is upheld. Distinct from the eightfold material prakṛti.",
+    refs:'BG 7.5' },
+  { id:'kala', tier:'tattva',
+    en:'Kāla', dev:'काल', kn:'ಕಾಲ',
+    title:'Time as Hari',
+    note:"'I am time, the destroyer of worlds' (BG 11.32). Kāla is Hari's instrumentality of dissolution — not an independent tattva.",
+    refs:'BG 10.30 · 11.32' },
+  { id:'karma_tattva', tier:'tattva',
+    en:'Karma', dev:'कर्म', kn:'ಕರ್ಮ',
+    title:'Action as principle',
+    note:"All embodied beings act unceasingly under the guṇas (BG 3.5). Karma binds when attached, frees when offered.",
+    refs:'BG 3.5 · 4.17' },
+  { id:'svabhava', tier:'tattva',
+    en:'Svabhāva', dev:'स्वभाव', kn:'ಸ್ವಭಾವ',
+    title:'Innate nature',
+    note:"Each jīva has a beginningless intrinsic nature (sva-rūpa-yogyatā in Madhva). Determines varṇa, capacities, and ultimate destination.",
+    refs:'BG 5.14 · 8.3 · 18.41',
+    madhva:'Sva-rūpa-yogyatā is eternal — explains tri-vidha jīva (mukti / nitya-saṃsārin / tamoyogya).' },
+  { id:'aksharam_param_brahma', tier:'tattva',
+    en:'Akṣaraṃ Brahma', dev:'अक्षरं ब्रह्म', kn:'ಅಕ್ಷರಂ ಬ್ರಹ್ಮ',
+    title:'The imperishable Brahman',
+    note:"'tad akṣaraṃ paramaṃ brahma' — the supreme imperishable, designated as Brahman; identifiable with Hari in His akṣara aspect.",
+    refs:'BG 8.3 · 8.21' },
+
+  /* ---------------- Kṣetra-Kṣetrajña (8) ---------------- */
+  { id:'kshetra_field', tier:'kshetra',
+    en:'Kṣetra', dev:'क्षेत्र', kn:'ಕ್ಷೇತ್ರ',
+    title:'The field (body)',
+    note:"This body, with its 24 elements (mahābhūtas, ahaṅkāra, buddhi, avyakta, indriyas, mind, viṣayas, will, dveṣa, sukha, duḥkha, saṅghāta, cetanā, dhṛti).",
+    refs:'BG 13.1 · 13.5–6' },
+  { id:'kshetrajna', tier:'kshetra',
+    en:'Kṣetrajña', dev:'क्षेत्रज्ञ', kn:'ಕ್ಷೇತ್ರಜ್ಞ',
+    title:'The field-knower',
+    note:"The witness who knows the field. Krishna: 'kṣetrajñaṃ cāpi māṃ viddhi sarva-kṣetreṣu bhārata' — Hari is the highest kṣetrajña.",
+    refs:'BG 13.2',
+    madhva:'Two kṣetrajñas: jīva (limited knower) and Hari (universal knower). Never identical.' },
+  { id:'mahabhutas', tier:'kshetra',
+    en:'Mahābhūtas', dev:'महाभूतानि', kn:'ಮಹಾಭೂತಗಳು',
+    title:'The five gross elements',
+    note:"Earth, water, fire, air, ether — first five of the 24 kṣetra constituents.",
+    refs:'BG 13.5' },
+  { id:'avyakta', tier:'kshetra',
+    en:'Avyakta', dev:'अव्यक्त', kn:'ಅವ್ಯಕ್ತ',
+    title:'The unmanifest',
+    note:"Mūla-prakṛti before evolutes. From it emerge mahat, ahaṅkāra, and the tanmātras.",
+    refs:'BG 13.5 · 8.18' },
+  { id:'indriyas', tier:'kshetra',
+    en:'Indriyas', dev:'इन्द्रियाणि', kn:'ಇಂದ್ರಿಯಗಳು',
+    title:'The eleven senses',
+    note:"Five jñānendriyas (eye/ear/nose/skin/tongue), five karmendriyas (voice/hand/foot/anus/genitals), and manas as the eleventh.",
+    refs:'BG 13.6 · 15.7' },
+  { id:'icchā_dveṣa', tier:'kshetra',
+    en:'Icchā–Dveṣa', dev:'इच्छा-द्वेष', kn:'ಇಚ್ಛಾ-ದ್ವೇಷ',
+    title:'Desire and aversion',
+    note:"Listed among kṣetra-vikāras: liking and disliking — the affective pair from which most karma issues.",
+    refs:'BG 13.6 · 7.27' },
+  { id:'sanghata_cetana_dhrti', tier:'kshetra',
+    en:'Saṅghāta-Cetanā-Dhṛti', dev:'सङ्घात-चेतना-धृति', kn:'ಸಂಘಾತ-ಚೇತನಾ-ಧೃತಿ',
+    title:'Aggregate, consciousness, fortitude',
+    note:"Three subtle vikāras of the kṣetra — bodily aggregate, vital consciousness, sustaining will. Distinguish jīva from inert kṣetra.",
+    refs:'BG 13.6' },
+  { id:'kshetra_jnana', tier:'kshetra',
+    en:'Kṣetra-jñāna', dev:'क्षेत्र-ज्ञान', kn:'ಕ್ಷೇತ್ರ-ಜ್ಞಾನ',
+    title:'Discrimination of field from knower',
+    note:"The capstone insight of Ch 13: knowing kṣetra and kṣetrajña as distinct, with Hari as the highest kṣetrajña, is the supreme jñāna.",
+    refs:'BG 13.2 · 13.34' },
+
+  /* ---------------- Guṇa (8) ---------------- */
+  { id:'sattva', tier:'guna',
+    en:'Sattva', dev:'सत्त्व', kn:'ಸತ್ತ್ವ',
+    title:'Mode of clarity',
+    note:"Light, luminous, healthful — binds the jīva through attachment to happiness and knowledge. Predominates in the wise.",
+    refs:'BG 14.6 · 14.11' },
+  { id:'rajas', tier:'guna',
+    en:'Rajas', dev:'रजस्', kn:'ರಜಸ್',
+    title:'Mode of passion',
+    note:"Of the nature of craving and attachment; born of thirst (tṛṣṇā) and clinging (saṅga). Drives ceaseless action.",
+    refs:'BG 14.7 · 14.12' },
+  { id:'tamas', tier:'guna',
+    en:'Tamas', dev:'तमस्', kn:'ತಮಸ್',
+    title:'Mode of darkness',
+    note:"Born of ajñāna — deludes all embodied beings; binds through negligence, indolence, sleep.",
+    refs:'BG 14.8 · 14.13' },
+  { id:'gunatita', tier:'guna',
+    en:'Guṇātīta', dev:'गुणातीत', kn:'ಗುಣಾತೀತ',
+    title:'Beyond the guṇas',
+    note:"One in whom no guṇa-impulse arises by attachment; treats friend and foe alike; abandons all undertakings.",
+    refs:'BG 14.22–25' },
+  { id:'sattvika_jnana', tier:'guna',
+    en:'Sāttvika jñāna', dev:'सात्त्विकं ज्ञानम्', kn:'ಸಾತ್ತ್ವಿಕ ಜ್ಞಾನ',
+    title:'Knowledge in sattva',
+    note:"That by which one sees the one imperishable being in all beings, undivided in the divided — the highest knowledge.",
+    refs:'BG 18.20' },
+  { id:'sattvika_karma', tier:'guna',
+    en:'Sāttvika karma', dev:'सात्त्विकं कर्म', kn:'ಸಾತ್ತ್ವಿಕ ಕರ್ಮ',
+    title:'Action in sattva',
+    note:"Action prescribed, without attachment, done without rāga-dveṣa, by one not desiring its fruit.",
+    refs:'BG 18.23' },
+  { id:'sattvika_karta', tier:'guna',
+    en:'Sāttvika kartā', dev:'सात्त्विकः कर्ता', kn:'ಸಾತ್ತ್ವಿಕ ಕರ್ತಾ',
+    title:'The agent in sattva',
+    note:"Free from attachment, non-egoistic, full of fortitude and zeal, unmoved by success or failure.",
+    refs:'BG 18.26' },
+  { id:'triguna_atita', tier:'guna',
+    en:'Trairguṇya-viṣayā vedāḥ', dev:'त्रैगुण्यविषया वेदाः', kn:'ತ್ರೈಗುಣ್ಯವಿಷಯಾ ವೇದಾಃ',
+    title:'Vedas\' guṇa-domain & beyond',
+    note:"Krishna: 'be free of the three guṇas, free of the pairs of opposites, established in pure sattva, indifferent to possessions, self-possessed.'",
+    refs:'BG 2.45' },
+
+  /* — Threefold by guṇa: faith & food (Ch 17) — */
+  { id:'sattvika_shraddha', tier:'guna',
+    en:'Sāttvika śraddhā', dev:'सात्त्विकी श्रद्धा', kn:'ಸಾತ್ತ್ವಿಕೀ ಶ್ರದ್ಧಾ',
+    title:'Faith in sattva',
+    note:"Faith directed at the devas — the highest of the three. Whatever a person's faith is, that they are.",
+    refs:'BG 17.2–4' },
+  { id:'rajasa_shraddha', tier:'guna',
+    en:'Rājasa śraddhā', dev:'राजसी श्रद्धा', kn:'ರಾಜಸೀ ಶ್ರದ್ಧಾ',
+    title:'Faith in rajas',
+    note:"Faith directed at yakṣas and rakṣas — driven by the impulse to power and acquisition.",
+    refs:'BG 17.4' },
+  { id:'tamasa_shraddha', tier:'guna',
+    en:'Tāmasa śraddhā', dev:'तामसी श्रद्धा', kn:'ತಾಮಸೀ ಶ್ರದ್ಧಾ',
+    title:'Faith in tamas',
+    note:"Faith directed at ghosts and the hosts of bhūtas — clouded by ignorance, indifferent to the dharma the Vedas teach.",
+    refs:'BG 17.4' },
+  { id:'sattvika_ahara', tier:'guna',
+    en:'Sāttvika āhāra', dev:'सात्त्विक आहार', kn:'ಸಾತ್ತ್ವಿಕ ಆಹಾರ',
+    title:'Food in sattva',
+    note:"Foods that increase life, vitality, strength, health, happiness — juicy, soft, nourishing. The threefold āhāra-vargas of Ch 17.7-10 carry their guṇa into the eater.",
+    refs:'BG 17.7–10' },
+
+  /* ---------------- Yoga (9) ---------------- */
+  { id:'karma_yoga', tier:'yoga',
+    en:'Karma-yoga', dev:'कर्मयोग', kn:'ಕರ್ಮಯೋಗ',
+    title:'Path of selfless action',
+    note:"Doing one's duty as an offering to Hari, surrendering all fruits. The path Krishna prescribes most often to Arjuna.",
+    refs:'BG 3.3 · 3.19 · 5.2' },
+  { id:'jnana_yoga', tier:'yoga',
+    en:'Jñāna-yoga', dev:'ज्ञानयोग', kn:'ಜ್ಞಾನಯೋಗ',
+    title:'Path of discriminative knowledge',
+    note:"Knowing Hari as supreme, jīva as His aṃśa, world as His dependent reality. The means for the qualified.",
+    refs:'BG 3.3 · 4.33–38' },
+  { id:'bhakti_yoga', tier:'yoga',
+    en:'Bhakti-yoga', dev:'भक्तियोग', kn:'ಭಕ್ತಿಯೋಗ',
+    title:'Path of devotion',
+    note:"Loving knowledge of Hari that exceeds all other knowledge. For Madhva, bhakti is sthira-jñāna-pūrvika-prema — the indispensable cause of mokṣa.",
+    refs:'BG 9.22 · 11.54 · 18.55',
+    madhva:'Madhva: bhakti is both means and constituent of mokṣa.' },
+  { id:'dhyana_yoga', tier:'yoga',
+    en:'Dhyāna-yoga', dev:'ध्यानयोग', kn:'ಧ್ಯಾನಯೋಗ',
+    title:'Path of meditation',
+    note:"Seated, body erect and still, senses withdrawn, mind fixed on Hari alone. Ch 6 lays the technique.",
+    refs:'BG 6.10–15' },
+  { id:'sannyasa_yoga', tier:'yoga',
+    en:'Sannyāsa-yoga', dev:'सन्न्यासयोग', kn:'ಸನ್ನ್ಯಾಸಯೋಗ',
+    title:'Path of renunciation',
+    note:"Not abandoning action (which is impossible while embodied), but abandoning attachment to the fruit. Identical in goal to karma-yoga.",
+    refs:'BG 5.2 · 6.1–2 · 18.2' },
+  { id:'buddhi_yoga', tier:'yoga',
+    en:'Buddhi-yoga', dev:'बुद्धियोग', kn:'ಬುದ್ಧಿಯೋಗ',
+    title:'Yoga of discriminating intellect',
+    note:"Equipoise of intellect — neither elated by success nor crushed by failure. The interior foundation of karma-yoga.",
+    refs:'BG 2.49 · 10.10' },
+  { id:'abhyasa_vairagya', tier:'yoga',
+    en:'Abhyāsa & Vairāgya', dev:'अभ्यास-वैराग्य', kn:'ಅಭ್ಯಾಸ-ವೈರಾಗ್ಯ',
+    title:'Practice & dispassion',
+    note:"The two wings of yoga — repeated discipline + detachment from sense-objects. Krishna prescribes both to Arjuna.",
+    refs:'BG 6.35' },
+  { id:'samatva', tier:'yoga',
+    en:'Samatva', dev:'समत्व', kn:'ಸಮತ್ವ',
+    title:'Equanimity as yoga',
+    note:"'samatvaṃ yoga ucyate' — the defining moment of the BG. Yoga is balance of mind in pleasure and pain alike.",
+    refs:'BG 2.48' },
+  { id:'sharanagati', tier:'yoga',
+    en:'Śaraṇāgati', dev:'शरणागति', kn:'ಶರಣಾಗತಿ',
+    title:'Self-surrender to Hari',
+    note:"'sarva-dharmān parityajya mām ekaṃ śaraṇaṃ vraja' — the closing teaching. Total taking-of-refuge in Hari, who then absolves all sin.",
+    refs:'BG 18.66',
+    madhva:'Madhva: the carama-śloka — distilled mokṣa-upadeśa.' },
+
+  /* ---------------- Sādhanā (9) ---------------- */
+  { id:'shraddha', tier:'sadhana',
+    en:'Śraddhā', dev:'श्रद्धा', kn:'ಶ್ರದ್ಧಾ',
+    title:'Faith',
+    note:"Faith follows one's nature; one is what one's faith is. Threefold by guṇa — sāttvika in gods, rājasa in yakṣas, tāmasa in spirits.",
+    refs:'BG 17.2–3' },
+  { id:'vairagya', tier:'sadhana',
+    en:'Vairāgya', dev:'वैराग्य', kn:'ವೈರಾಗ್ಯ',
+    title:'Dispassion',
+    note:"Detachment from sense-objects — not life-rejection but the seeing-through of binding attractions.",
+    refs:'BG 6.35 · 13.8–11' },
+  { id:'abhyasa', tier:'sadhana',
+    en:'Abhyāsa', dev:'अभ्यास', kn:'ಅಭ್ಯಾಸ',
+    title:'Repeated practice',
+    note:"The 'samādhi-abhyāsa' — bringing back the wandering mind, again and again, to Hari.",
+    refs:'BG 6.26 · 12.9' },
+  { id:'tapas', tier:'sadhana',
+    en:'Tapas', dev:'तपस्', kn:'ತಪಸ್',
+    title:'Austerity (3-fold)',
+    note:"Tapas of body (worship/cleanliness/celibacy), of speech (truth/kindness/study), of mind (serenity/silence/self-control). All threefold by guṇa.",
+    refs:'BG 17.14–19' },
+  { id:'dana', tier:'sadhana',
+    en:'Dāna', dev:'दान', kn:'ದಾನ',
+    title:'Giving (3-fold)',
+    note:"Sāttvika dāna: to the worthy, in proper place and time, without expecting return. Rājasa: with expectation. Tāmasa: in wrong place/time/recipient.",
+    refs:'BG 17.20–22' },
+  { id:'tyaga', tier:'sadhana',
+    en:'Tyāga', dev:'त्याग', kn:'ತ್ಯಾಗ',
+    title:'Renunciation of fruit',
+    note:"Distinguished from sannyāsa: tyāga is renouncing the fruit while continuing to act. The whole of Ch 18 turns on this distinction.",
+    refs:'BG 18.2–11' },
+  { id:'indriya_nigraha', tier:'sadhana',
+    en:'Indriya-nigraha', dev:'इन्द्रियनिग्रह', kn:'ಇಂದ್ರಿಯನಿಗ್ರಹ',
+    title:'Restraint of senses',
+    note:"Withdrawing the senses from their objects as a tortoise withdraws its limbs — the sthita-prajña\'s mark.",
+    refs:'BG 2.58 · 2.67–68' },
+  { id:'samadhi', tier:'sadhana',
+    en:'Samādhi', dev:'समाधि', kn:'ಸಮಾಧಿ',
+    title:'Absorption in Hari',
+    note:"The mind 'fixed in samādhi by yoga' — undisturbed, single-pointed, established in the Self.",
+    refs:'BG 2.53 · 6.13–15' },
+  { id:'svadhyaya', tier:'sadhana',
+    en:'Svādhyāya', dev:'स्वाध्याय', kn:'ಸ್ವಾಧ್ಯಾಯ',
+    title:'Recitation of scripture',
+    note:"Recitation of the Veda — listed among the vāṅmaya tapas. Madhva tradition treats svādhyāya as continuous Hari-smaraṇa.",
+    refs:'BG 17.15' },
+
+  /* — Jñāna-aṅgas from BG 13.7-11 — */
+  { id:'jnana_angas', tier:'sadhana',
+    en:'Jñāna-aṅgas', dev:'ज्ञानाङ्गानि', kn:'ಜ್ಞಾನಾಂಗಗಳು',
+    title:'The 20 constituents of knowledge',
+    note:"Krishna's BG 13.7-11 enumeration of what 'knowledge' actually is — twenty virtues from amānitva to tattva-jñānārtha-darśana. Together they constitute jñāna; their opposite is ajñāna.",
+    refs:'BG 13.7–11' },
+  { id:'amanitva', tier:'sadhana',
+    en:'Amānitva', dev:'अमानित्व', kn:'ಅಮಾನಿತ್ವ',
+    title:'Humility',
+    note:"Absence of self-importance — the first virtue Krishna names when defining knowledge. Without it, all other practice carries an ahaṅkāra-tail.",
+    refs:'BG 13.7' },
+  { id:'arjava', tier:'sadhana',
+    en:'Ārjava', dev:'आर्जव', kn:'ಆರ್ಜವ',
+    title:'Uprightness · straightforwardness',
+    note:"Inner and outer alignment — thought, speech, and act in one line. Listed in jñāna-aṅgas and again in śārīra-tapas.",
+    refs:'BG 13.7 · 17.14' },
+  { id:'shauca', tier:'sadhana',
+    en:'Śauca', dev:'शौच', kn:'ಶೌಚ',
+    title:'Purity — outer & inner',
+    note:"Bāhya-śauca (cleanliness of body, surroundings) and ābhyantara-śauca (clarity of mind). One of the divine virtues.",
+    refs:'BG 13.7 · 16.3 · 17.14' },
+  { id:'ksanti', tier:'sadhana',
+    en:'Kṣānti', dev:'क्षान्ति', kn:'ಕ್ಷಾಂತಿ',
+    title:'Forbearance',
+    note:"Patient endurance under provocation — letting the other's words not bite. Listed both in jñāna-aṅgas (13.7) and divine endowment (16.3).",
+    refs:'BG 13.7 · 16.3' },
+  { id:'ananya_yoga', tier:'sadhana',
+    en:'Ananya-yoga', dev:'अनन्ययोग', kn:'ಅನನ್ಯಯೋಗ',
+    title:'Undeviating devotion',
+    note:"Bhakti directed at Hari alone, with no second object. Among the jñāna-aṅgas of Ch 13, and repeated in Ch 9.22 as the form of bhakti Hari himself sustains.",
+    refs:'BG 9.22 · 13.10 · 12.6–7' },
+  { id:'vivikta_seva', tier:'sadhana',
+    en:'Vivikta-deśa-sevitvam', dev:'विविक्तदेशसेवित्व', kn:'ವಿವಿಕ್ತದೇಶಸೇವಿತ್ವ',
+    title:'Resort to solitary places',
+    note:"Cultivating solitude — for dhyāna, for svādhyāya, for the inner work the marketplace can't host.",
+    refs:'BG 13.10' },
+  { id:'adhyatma_jnana_nityatvam', tier:'sadhana',
+    en:'Adhyātma-jñāna-nityatvam', dev:'अध्यात्मज्ञाननित्यत्व', kn:'ಅಧ್ಯಾತ್ಮಜ್ಞಾನನಿತ್ಯತ್ವ',
+    title:'Constancy in self-knowledge',
+    note:"Steadiness in turning to ātma-knowledge — not as occasional study but as continuous orientation. Penultimate jñāna-aṅga.",
+    refs:'BG 13.11' },
+  { id:'tattva_jnanartha_darshanam', tier:'sadhana',
+    en:'Tattva-jñānārtha-darśanam', dev:'तत्त्वज्ञानार्थदर्शन', kn:'ತತ್ತ್ವಜ್ಞಾನಾರ್ಥದರ್ಶನ',
+    title:'Seeing the goal of true knowledge',
+    note:"Looking always toward the goal — knowing for what (mokṣa, Hari), not knowing for its own sake. The capstone jñāna-aṅga in Krishna's list.",
+    refs:'BG 13.11' },
+
+  /* ---------------- Antaḥkaraṇa (6) ---------------- */
+  { id:'manas', tier:'antahkarana',
+    en:'Manas', dev:'मनस्', kn:'ಮನಸ್',
+    title:'Mind',
+    note:"The eleventh indriya. Restless, turbulent, hard to subdue — but Krishna affirms it is conquerable by abhyāsa and vairāgya.",
+    refs:'BG 6.34–35 · 3.6–7' },
+  { id:'buddhi', tier:'antahkarana',
+    en:'Buddhi', dev:'बुद्धि', kn:'ಬುದ್ಧಿ',
+    title:'Discriminating intellect',
+    note:"That faculty which discriminates duty from non-duty, what to do from what not to do. Sāttvika buddhi knows pravṛtti and nivṛtti.",
+    refs:'BG 18.30–32' },
+  { id:'ahankara', tier:'antahkarana',
+    en:'Ahaṅkāra', dev:'अहङ्कार', kn:'ಅಹಂಕಾರ',
+    title:'I-maker',
+    note:"The sense of being the doer. 'kartāham iti manyate' — when the puruṣa is bewildered by ahaṅkāra he thinks himself the agent.",
+    refs:'BG 3.27 · 7.4' },
+  { id:'citta', tier:'antahkarana',
+    en:'Citta', dev:'चित्त', kn:'ಚಿತ್ತ',
+    title:'Reflective consciousness',
+    note:"The stream of conscious states. To be made cala (steady) and ekāgra (one-pointed) on Hari.",
+    refs:'BG 8.7 · 12.9' },
+  { id:'antaryamin', tier:'antahkarana',
+    en:'Antaryāmin', dev:'अन्तर्यामिन्', kn:'ಅಂತರ್ಯಾಮಿನ್',
+    title:'Indweller — Hari within',
+    note:"'īśvaraḥ sarva-bhūtānāṃ hṛd-deśe tiṣṭhati' — the Lord stands in the heart of every being, directing them.",
+    refs:'BG 18.61',
+    madhva:'A primary Madhva theme — Hari as antaryāmin without identity-merger.' },
+  { id:'jnanendriyas_karmendriyas', tier:'antahkarana',
+    en:'Jñāna- & Karma-indriyas', dev:'ज्ञान-कर्म-इन्द्रियाणि', kn:'ಜ್ಞಾನ-ಕರ್ಮ-ಇಂದ್ರಿಯಗಳು',
+    title:'Senses of knowing & acting',
+    note:"Five each: eye/ear/nose/skin/tongue and voice/hand/foot/anus/genitals. Their objects move in their domains (BG 3.28).",
+    refs:'BG 3.28 · 15.9' },
+
+  /* ---------------- Dharma (8) ---------------- */
+  { id:'svadharma', tier:'dharma',
+    en:'Svadharma', dev:'स्वधर्म', kn:'ಸ್ವಧರ್ಮ',
+    title:'One\'s own duty',
+    note:"'better one\'s own dharma poorly done than another\'s well done' — performing the duty arising from one\'s svabhāva.",
+    refs:'BG 3.35 · 18.47' },
+  { id:'varnashrama', tier:'dharma',
+    en:'Varṇa-svabhāva', dev:'वर्णस्वभाव', kn:'ವರ್ಣಸ್ವಭಾವ',
+    title:'Duties by intrinsic nature',
+    note:"Brāhmaṇa, kṣatriya, vaiśya, śūdra — duties arising from guṇa-karma-vibhāga. Madhva: rooted in eternal sva-rūpa-yogyatā.",
+    refs:'BG 4.13 · 18.41–44' },
+  { id:'nishkama_karma', tier:'dharma',
+    en:'Niṣkāma karma', dev:'निष्कामकर्म', kn:'ನಿಷ್ಕಾಮ-ಕರ್ಮ',
+    title:'Desireless action',
+    note:"Action performed without desire for its result. The signature ethical demand of the BG.",
+    refs:'BG 2.47 · 4.20' },
+  { id:'sthitaprajna', tier:'dharma',
+    en:'Sthita-prajña', dev:'स्थितप्रज्ञ', kn:'ಸ್ಥಿತಪ್ರಜ್ಞ',
+    title:'One of steady wisdom',
+    note:"Indifferent to pleasure and pain, free of attachment, fear, anger; senses fully withdrawn. Closing portrait of Ch 2.",
+    refs:'BG 2.55–72' },
+  { id:'daivi_sampad', tier:'dharma',
+    en:'Daivī sampad', dev:'दैवी सम्पद्', kn:'ದೈವೀ ಸಂಪತ್',
+    title:'Divine endowment',
+    note:"Fearlessness, purity of heart, steadfastness in jñāna, dāna, dama, yajña, svādhyāya, tapas, ārjava — leads to mokṣa.",
+    refs:'BG 16.1–3 · 16.5' },
+  { id:'ahimsa', tier:'dharma',
+    en:'Ahiṃsā', dev:'अहिंसा', kn:'ಅಹಿಂಸಾ',
+    title:'Non-injury',
+    note:"Listed among divine virtues and as a jñāna-aṅga. Not mere abstention but the inner posture of harmlessness.",
+    refs:'BG 10.5 · 13.7 · 16.2' },
+  { id:'satya', tier:'dharma',
+    en:'Satya', dev:'सत्य', kn:'ಸತ್ಯ',
+    title:'Truth-speaking',
+    note:"Speech that is true, pleasant, beneficial, not agitating — the vāṅmaya tapas.",
+    refs:'BG 10.4 · 17.15' },
+  { id:'samatva_dharma', tier:'dharma',
+    en:'Sama-darśana', dev:'समदर्शन', kn:'ಸಮದರ್ಶನ',
+    title:'Equality of vision',
+    note:"Seeing the same indwelling Self in a brahmin, a cow, an elephant, a dog, and a dog-eater — the paṇḍita\'s mark.",
+    refs:'BG 5.18' },
+
+  /* — Pravṛtti & Nivṛtti, sāttvika-buddhi's dual knowing — */
+  { id:'pravritti_nivritti', tier:'dharma',
+    en:'Pravṛtti-Nivṛtti', dev:'प्रवृत्ति-निवृत्ति', kn:'ಪ್ರವೃತ್ತಿ-ನಿವೃತ್ತಿ',
+    title:'What to do · what to refrain from',
+    note:"Krishna's definition of sāttvika buddhi (18.30): it knows pravṛtti (action to be undertaken) and nivṛtti (action to be abandoned), what is bound and what is freeing, what is fear and what is fearlessness.",
+    refs:'BG 18.30' },
+
+  /* ---------------- Doṣa (8) ---------------- */
+  { id:'kama', tier:'dosha',
+    en:'Kāma', dev:'काम', kn:'ಕಾಮ',
+    title:'Desire',
+    note:"'this is the enemy here, born of rajas, all-devouring, greatly sinful' — Krishna names kāma as the primary foe.",
+    refs:'BG 3.37–39' },
+  { id:'krodha', tier:'dosha',
+    en:'Krodha', dev:'क्रोध', kn:'ಕ್ರೋಧ',
+    title:'Anger',
+    note:"From kāma-vighāta (blocked desire) arises krodha; from krodha, delusion; from delusion, loss of memory.",
+    refs:'BG 2.62–63 · 3.37' },
+  { id:'lobha', tier:'dosha',
+    en:'Lobha', dev:'लोभ', kn:'ಲೋಭ',
+    title:'Greed',
+    note:"One of the three gates of hell, alongside kāma and krodha. To be abandoned at the threshold of the path.",
+    refs:'BG 16.21' },
+  { id:'moha', tier:'dosha',
+    en:'Moha', dev:'मोह', kn:'ಮೋಹ',
+    title:'Delusion',
+    note:"Loss of discrimination from anger; the disorientation of the bewildered self. Arjuna\'s starting condition.",
+    refs:'BG 2.7 · 2.63 · 18.73' },
+  { id:'asatsanga', tier:'dosha',
+    en:'Asat-saṅga', dev:'असत्सङ्ग', kn:'ಅಸತ್ಸಂಗ',
+    title:'Bad association',
+    note:"From clinging (saṅga) to objects, kāma arises (BG 2.62). The chain begins with the company we keep.",
+    refs:'BG 2.62' },
+  { id:'avidya', tier:'dosha',
+    en:'Avidyā', dev:'अविद्या', kn:'ಅವಿದ್ಯಾ',
+    title:'Ignorance',
+    note:"Not-knowing Hari as supreme, the jīva as His aṃśa, and the world as His dependent reality. The taproot of bondage.",
+    refs:'BG 5.15 · 14.8' },
+  { id:'dvandva', tier:'dosha',
+    en:'Dvandva', dev:'द्वन्द्व', kn:'ದ್ವಂದ್ವ',
+    title:'The pairs of opposites',
+    note:"Pleasure-pain, heat-cold, honor-dishonor — the pairs that disturb until equanimity is established.",
+    refs:'BG 2.45 · 7.27' },
+  { id:'asuri_sampad', tier:'dosha',
+    en:'Āsurī sampad', dev:'आसुरी सम्पद्', kn:'ಆಸುರೀ ಸಂಪತ್',
+    title:'Demonic endowment',
+    note:"Hypocrisy, arrogance, conceit, anger, harshness, ignorance — the inverse of divine endowment. Leads to bondage.",
+    refs:'BG 16.4 · 16.7–20',
+    madhva:'For Madhva, tamoyogya jīvas have this as their eternal disposition.' },
+
+  /* ---------------- Phala (8) ---------------- */
+  { id:'moksha', tier:'phala',
+    en:'Mokṣa', dev:'मोक्ष', kn:'ಮೋಕ್ಷ',
+    title:'Liberation',
+    note:"Release from saṃsāra into Hari's eternal presence. For Madhva: gradations of mokṣa (sālokya, sārṣṭi, sāmīpya, sārūpya, sāyujya).",
+    refs:'BG 5.24–26 · 18.66',
+    madhva:'Mokṣa has tāratamya — not all liberated jīvas attain identical bliss.' },
+  { id:'paramagati', tier:'phala',
+    en:'Paramā gati', dev:'परमा गति', kn:'ಪರಮಾ ಗತಿ',
+    title:'The supreme destination',
+    note:"'yaṃ prāpya na nivartante tad dhāma paramaṃ mama' — Hari's supreme abode, reaching which one does not return.",
+    refs:'BG 15.6 · 8.21' },
+  { id:'brahmi_sthiti', tier:'phala',
+    en:'Brāhmī sthiti', dev:'ब्राह्मी स्थिति', kn:'ಬ್ರಾಹ್ಮೀ ಸ್ಥಿತಿ',
+    title:'Establishment in Brahman',
+    note:"'attaining this, one is not deluded even at the hour of death' — the steady state at the close of Ch 2.",
+    refs:'BG 2.72' },
+  { id:'jivanmukti', tier:'phala',
+    en:'Jīvanmukti', dev:'जीवन्मुक्ति', kn:'ಜೀವನ್ಮುಕ್ತಿ',
+    title:'Liberation while embodied',
+    note:"Living free of saṅga, of ahaṅkāra, of dvandva — Krishna's many portraits across Ch 2, 12, 14, 18.",
+    refs:'BG 5.19–21 · 12.13–19 · 14.22–25' },
+  { id:'naishkarmya_siddhi', tier:'phala',
+    en:'Naiṣkarmya-siddhi', dev:'नैष्कर्म्यसिद्धि', kn:'ನೈಷ್ಕರ್ಮ್ಯ-ಸಿದ್ಧಿ',
+    title:'Perfection beyond action',
+    note:"The state in which action no longer binds — having transcended attachment one acts but is not stained.",
+    refs:'BG 18.49' },
+  { id:'archiradi_marga', tier:'phala',
+    en:'Arciradi-mārga', dev:'अर्चिरादिमार्ग', kn:'ಅರ್ಚಿರಾದಿ-ಮಾರ್ಗ',
+    title:'The path of light',
+    note:"The bright path through fire, day, the bright fortnight, six months of the north — at the end of which one does not return.",
+    refs:'BG 8.24' },
+  { id:'dhumadi_marga', tier:'phala',
+    en:'Dhūmādi-mārga', dev:'धूमादिमार्ग', kn:'ಧೂಮಾದಿ-ಮಾರ್ಗ',
+    title:'The path of smoke',
+    note:"The dark path through smoke, night, the dark fortnight — leading to the lunar realm and return to saṃsāra.",
+    refs:'BG 8.25' },
+  { id:'sarva_dharman_parityajya', tier:'phala',
+    en:'Carama-śloka phala', dev:'चरमश्लोकफल', kn:'ಚರಮಶ್ಲೋಕ-ಫಲ',
+    title:'Fruit of surrender',
+    note:"'I will release you from all sins; do not grieve' — Krishna's guarantee at 18.66. For Madhva, the crown of the Gītā.",
+    refs:'BG 18.66',
+    madhva:'The carama-śloka — Madhva\'s direct mokṣa-upadeśa.' },
+  /* — Madhva-distinctive: gradations of mokṣa — */
+  { id:'salokya', tier:'phala',
+    en:'Sālokya', dev:'सालोक्य', kn:'ಸಾಲೋಕ್ಯ',
+    title:'Co-residence in Hari\'s world',
+    note:"First grade of mokṣa: dwelling in the same loka as Hari (Vaikuṇṭha) — but not yet in His proximity.",
+    refs:'BG 8.21 · 15.6',
+    madhva:'Madhva: lowest of four mukti-gradations. Not all liberated jīvas attain identical bliss.' },
+  { id:'samipya', tier:'phala',
+    en:'Sāmīpya', dev:'सामीप्य', kn:'ಸಾಮೀಪ್ಯ',
+    title:'Nearness to Hari',
+    note:"Second grade: proximity to Hari in His own abode. Beyond sālokya, not yet sārūpya.",
+    refs:'BG 11.55',
+    madhva:'Madhva: second of four mukti-gradations.' },
+  { id:'sarupya', tier:'phala',
+    en:'Sārūpya', dev:'सारूप्य', kn:'ಸಾರೂಪ್ಯ',
+    title:'Form-likeness to Hari',
+    note:"Third grade: attaining a form resembling Hari\'s, while preserving distinct jīva-svarūpa.",
+    refs:'BG 11.55 · 14.2',
+    madhva:'Madhva: third of four mukti-gradations. Form likeness — never identity.' },
+  { id:'sayujya', tier:'phala',
+    en:'Sāyujya', dev:'सायुज्य', kn:'ಸಾಯುಜ್ಯ',
+    title:'Communion (not absorption)',
+    note:"Highest grade of mokṣa: deepest communion with Hari, full sa-rasa bliss. For Madhva, NOT identity — the jīva remains an aṃśa distinct from the aṃśin.",
+    refs:'BG 5.24–26 · 18.55',
+    madhva:'Madhva: fourth and highest grade. Communion not aikya — jīva-paramātman bheda preserved even in mukti.' },
+
+  /* ---------------- Yajña (6) ---------------- */
+  { id:'dravya_yajna', tier:'yajna',
+    en:'Dravya-yajña', dev:'द्रव्ययज्ञ', kn:'ದ್ರವ್ಯಯಜ್ಞ',
+    title:'Sacrifice of substance',
+    note:"Offering material wealth — first of Krishna\'s catalogue of yajñas at BG 4.28.",
+    refs:'BG 4.28' },
+  { id:'tapo_yajna', tier:'yajna',
+    en:'Tapo-yajña', dev:'तपोयज्ञ', kn:'ತಪೋಯಜ್ಞ',
+    title:'Sacrifice of austerity',
+    note:"Offering one\'s tapas — bodily, vocal, mental austerities — as worship.",
+    refs:'BG 4.28' },
+  { id:'yoga_yajna', tier:'yajna',
+    en:'Yoga-yajña', dev:'योगयज्ञ', kn:'ಯೋಗಯಜ್ಞ',
+    title:'Sacrifice of yoga',
+    note:"Offering one\'s yogic discipline — prāṇa-apāna control, eightfold yoga — as worship of Hari.",
+    refs:'BG 4.28–30' },
+  { id:'svadhyaya_yajna', tier:'yajna',
+    en:'Svādhyāya-jñāna-yajña', dev:'स्वाध्यायज्ञानयज्ञ', kn:'ಸ್ವಾಧ್ಯಾಯ-ಜ್ಞಾನ-ಯಜ್ಞ',
+    title:'Sacrifice of study & knowledge',
+    note:"Recitation of scripture together with the knowledge it discloses — the highest verbal yajña.",
+    refs:'BG 4.28' },
+  { id:'jnana_yajna', tier:'yajna',
+    en:'Jñāna-yajña', dev:'ज्ञानयज्ञ', kn:'ಜ್ಞಾನಯಜ್ಞ',
+    title:'Sacrifice of knowledge',
+    note:"'śreyān dravyamayād yajñāj jñāna-yajñaḥ parantapa' — the sacrifice of knowledge surpasses every material sacrifice.",
+    refs:'BG 4.33' },
+  { id:'brahmarpana', tier:'yajna',
+    en:'Brahmārpaṇa', dev:'ब्रह्मार्पण', kn:'ಬ್ರಹ್ಮಾರ್ಪಣ',
+    title:'Offering all into Brahman',
+    note:"'The act of offering is Brahman; what is offered is Brahman; the offerer is Brahman, the fire is Brahman' — the universal sacramental view.",
+    refs:'BG 4.24' },
+
+  /* ---------------- Pratīka (6) ---------------- */
+  { id:'ashvattha', tier:'pratika',
+    en:'Aśvattha-vṛkṣa', dev:'अश्वत्थवृक्ष', kn:'ಅಶ್ವತ್ಥವೃಕ್ಷ',
+    title:'The inverted fig-tree',
+    note:"Roots above (Hari), branches below (the worlds); fed by the guṇas, sprouting sense-objects. Cut it with the axe of non-attachment.",
+    refs:'BG 15.1–3' },
+  { id:'ratha_rupaka', tier:'pratika',
+    en:'Ratha-rūpaka', dev:'रथरूपक', kn:'ರಥರೂಪಕ',
+    title:'The chariot allegory',
+    note:"Implied throughout Ch 1–2: Krishna the sārathi (charioteer), Arjuna the rathin (warrior on the chariot). Echo of Kaṭha Up.",
+    refs:'BG 1.21–25 · 18.78' },
+  { id:'pranava_om', tier:'pratika',
+    en:'Praṇava (Om)', dev:'प्रणव (ॐ)', kn:'ಪ್ರಣವ (ಓಂ)',
+    title:'The syllable Om',
+    note:"'oṃ ity ekākṣaraṃ brahma' — uttering Om at the moment of death, remembering Hari, one attains the supreme.",
+    refs:'BG 8.13 · 17.23' },
+  { id:'akshara_a', tier:'pratika',
+    en:'Akṣarāṇām akāraḥ', dev:'अक्षराणामकारः', kn:'ಅಕ್ಷರಾಣಾಮಕಾರಃ',
+    title:'\'I am the letter A\'',
+    note:"Among letters, Krishna says, 'I am A' — the source of all phonemes; among compounds, the dvandva.",
+    refs:'BG 10.33' },
+  { id:'jyotir_jyoti', tier:'pratika',
+    en:'Jyotiṣām jyotiḥ', dev:'ज्योतिषां ज्योतिः', kn:'ಜ್ಯೋತಿಷಾಂ ಜ್ಯೋತಿಃ',
+    title:'The light of lights',
+    note:"'jyotiṣām api taj jyotiḥ' — that beyond which there is no light. Hari is the illuminator of every luminous thing.",
+    refs:'BG 13.17' },
+  { id:'vibhuti', tier:'pratika',
+    en:'Vibhūti', dev:'विभूति', kn:'ವಿಭೂತಿ',
+    title:'Divine glory in beings',
+    note:"Anything excellent, beautiful, powerful, or luminous is from a spark of Hari\'s splendor. Ch 10 enumerates seventy-some such glories.",
+    refs:'BG 10.41' },
+];
+
+/* ============================================================================
+ * EDGES — concept relations
+ * ============================================================================
+ *  Types:
+ *    is-a            taxonomy (bhakti-yoga IS-A yoga)
+ *    includes        meronymy / containment
+ *    leads-to        causal/instrumental progress (sthitaprajna LEADS-TO moksha)
+ *    opposite-of     polarity (sattva OPPOSITE-OF tamas)
+ *    antidote-to     specific counteragent (jnana ANTIDOTE-TO avidya)
+ *    arises-from     genetic chain (krodha ARISES-FROM kama-vighata)
+ *    predicates-on   subject-of-predication (kshetrajna PREDICATES-ON kshetra)
+ *    transforms-into stage-of-progression (sanga TRANSFORMS-INTO kama)
+ *    grounded-in     verse anchor (handled via refs field on each node)
+ */
+
+const E = (s, t, type, label) => ({ source:s, target:t, type, label });
+
+const EDGES = [
+  // Paramārtha internal axis
+  E('brahman','paramatman','is-a','same referent — Hari'),
+  E('paramatman','purushottama','is-a','supreme person'),
+  E('purushottama','ksara_purusha','predicates-on','beyond perishable'),
+  E('purushottama','akshara_purusha','predicates-on','beyond imperishable'),
+  E('avatara','purushottama','is-a','descent of'),
+  E('svarupa_aikya','purushottama','predicates-on','identity of forms'),
+  E('sarvottamatva','purushottama','predicates-on','axiomatic property'),
+
+  // Tattva axis
+  E('jiva','ksara_purusha','is-a','bound jīva = kṣara'),
+  E('isvara','antaryamin','is-a','Hari as indweller'),
+  E('para_prakriti','jiva','is-a','jīva-bhūtā = higher prakṛti'),
+  E('prakriti','mahabhutas','includes','5 of 8 components'),
+  E('prakriti','manas','includes','manas as evolute of prakṛti'),
+  E('prakriti','buddhi','includes','buddhi as evolute of prakṛti'),
+  E('prakriti','ahankara','includes','ahaṅkāra as evolute of prakṛti'),
+  E('karma_tattva','svabhava','arises-from','action expresses nature'),
+  E('aksharam_param_brahma','brahman','is-a','imperishable Brahman'),
+
+  // Kṣetra axis
+  E('kshetra_field','mahabhutas','includes','first five tattvas'),
+  E('kshetra_field','avyakta','includes','sixth tattva'),
+  E('kshetra_field','indriyas','includes','eleven indriyas'),
+  E('kshetra_field','icchā_dveṣa','includes','vikāra pair'),
+  E('kshetra_field','sanghata_cetana_dhrti','includes','subtle vikāras'),
+  E('kshetrajna','kshetra_field','predicates-on','knower of field'),
+  E('kshetra_jnana','kshetrajna','predicates-on','knowing the knower'),
+  E('kshetra_jnana','jiva','antidote-to','removes ignorance about self'),
+
+  // Guṇa axis
+  E('sattva','rajas','opposite-of','luminous vs passionate'),
+  E('rajas','tamas','opposite-of','active vs inert'),
+  E('sattva','tamas','opposite-of','clarity vs darkness'),
+  E('sattva','sattvika_jnana','transforms-into','mode → its knowledge'),
+  E('sattva','sattvika_karma','transforms-into','mode → its action'),
+  E('sattva','sattvika_karta','transforms-into','mode → its agent'),
+  E('gunatita','sattva','transforms-into','transcends the modes'),
+  E('triguna_atita','gunatita','is-a','same state in 2.45'),
+
+  // Yoga axis
+  // (membership in the 'yoga' tier is captured by node.tier; we omit redundant tier-stub edges)
+  E('sharanagati','bhakti_yoga','is-a','culmination of bhakti'),
+  E('karma_yoga','sannyasa_yoga','transforms-into','same goal, different posture'),
+  E('bhakti_yoga','jnana_yoga','includes','Madhva: bhakti requires jñāna'),
+  E('buddhi_yoga','samatva','transforms-into','intellect-equipoise as samatva'),
+
+  // Sādhanā axis
+  E('shraddha','bhakti_yoga','leads-to','faith → devotion'),
+  E('vairagya','abhyasa','includes','two wings of yoga'),
+  E('abhyasa','abhyasa_vairagya','is-a',''),
+  E('vairagya','abhyasa_vairagya','is-a',''),
+  // (tapas, dana tier-membership captured by node.tier)
+  E('tyaga','sannyasa_yoga','is-a','fruit-renunciation as sannyāsa'),
+  E('indriya_nigraha','sthitaprajna','leads-to','sense-restraint → steady-wisdom'),
+  E('samadhi','moksha','leads-to','absorption → release'),
+  E('svadhyaya','svadhyaya_yajna','is-a','recitation as yajña'),
+
+  // Antaḥkaraṇa axis
+  E('manas','indriyas','is-a','11th indriya'),
+  E('buddhi','manas','predicates-on','intellect over mind'),
+  E('ahankara','jiva','transforms-into','bewilders the jīva'),
+  E('citta','samadhi','leads-to','steady citta → samādhi'),
+  E('antaryamin','isvara','is-a',''),
+  E('jnanendriyas_karmendriyas','indriyas','is-a',''),
+
+  // Dharma axis
+  E('svadharma','svabhava','arises-from','duty from nature'),
+  E('varnashrama','svabhava','arises-from','varṇa from intrinsic nature'),
+  E('nishkama_karma','karma_yoga','is-a','desireless action = karma-yoga'),
+  E('sthitaprajna','indriya_nigraha','includes','sense-restraint'),
+  E('sthitaprajna','samatva','includes','equanimity'),
+  E('daivi_sampad','moksha','leads-to','divine endowment → release'),
+  E('ahimsa','daivi_sampad','is-a','divine virtue'),
+  E('satya','daivi_sampad','is-a','divine virtue'),
+  E('samatva_dharma','sthitaprajna','is-a',''),
+
+  // Doṣa axis — the famous chain
+  E('asatsanga','kama','transforms-into','BG 2.62 — saṅga → kāma'),
+  E('kama','krodha','transforms-into','BG 2.63 — kāma-vighāta → krodha'),
+  E('krodha','moha','transforms-into','BG 2.63 — krodha → moha'),
+  E('moha','avidya','is-a','delusion as ignorance-form'),
+  E('kama','rajas','arises-from','born of rajas'),
+  E('lobha','asuri_sampad','is-a','gate of hell'),
+  E('kama','asuri_sampad','is-a','gate of hell'),
+  E('krodha','asuri_sampad','is-a','gate of hell'),
+  E('asuri_sampad','daivi_sampad','opposite-of',''),
+  E('avidya','kshetra_jnana','opposite-of','ignorance vs discrimination'),
+
+  // Phala axis
+  E('moksha','paramagati','is-a','liberation as supreme destination'),
+  E('brahmi_sthiti','moksha','leads-to','established → released'),
+  E('jivanmukti','moksha','leads-to','embodied liberation → mukti'),
+  E('naishkarmya_siddhi','jivanmukti','is-a',''),
+  E('archiradi_marga','moksha','leads-to','path of light → no return'),
+  E('dhumadi_marga','archiradi_marga','opposite-of','return vs no-return'),
+  E('sarva_dharman_parityajya','moksha','leads-to','carama-śloka guarantee'),
+  E('sharanagati','sarva_dharman_parityajya','is-a','surrender = carama-upadeśa'),
+
+  // Madhva mokṣa gradations (tāratamya in mukti)
+  E('moksha','salokya','includes','grade 1 of mukti'),
+  E('moksha','samipya','includes','grade 2 of mukti'),
+  E('moksha','sarupya','includes','grade 3 of mukti'),
+  E('moksha','sayujya','includes','grade 4 of mukti — highest'),
+  E('salokya','samipya','leads-to','ascending grade'),
+  E('samipya','sarupya','leads-to','ascending grade'),
+  E('sarupya','sayujya','leads-to','ascending grade'),
+  E('sayujya','paramagati','is-a','highest mokṣa = supreme destination'),
+
+  // Madhva schemata
+  E('taratamya','sarvottamatva','predicates-on','axiom from which tāratamya descends'),
+  E('pancha_bheda','taratamya','predicates-on','5 real differences encoded by tāratamya'),
+  E('pancha_bheda','jiva','predicates-on','jīva-bheda is bheda #1'),
+  E('pancha_bheda','prakriti','predicates-on','jīva-jaḍa & jaḍa-jaḍa bheda'),
+
+  // jñāna-aṅgas → jñāna-yoga
+  E('jnana_angas','jnana_yoga','leads-to','20 virtues that constitute knowledge'),
+  E('amanitva','jnana_angas','is-a','first of the 20'),
+  E('arjava','jnana_angas','is-a','3rd of the 20'),
+  E('shauca','jnana_angas','is-a','6th of the 20'),
+  E('ksanti','jnana_angas','is-a','4th of the 20'),
+  E('ahimsa','jnana_angas','is-a','2nd of the 20'),
+  E('vairagya','jnana_angas','is-a','11th of the 20'),
+  E('ananya_yoga','jnana_angas','is-a','16th of the 20'),
+  E('ananya_yoga','bhakti_yoga','is-a','undeviating bhakti'),
+  E('vivikta_seva','jnana_angas','is-a','17th of the 20'),
+  E('adhyatma_jnana_nityatvam','jnana_angas','is-a','19th of the 20'),
+  E('tattva_jnanartha_darshanam','jnana_angas','is-a','20th — the capstone'),
+
+  // Threefold faith / food
+  E('sattvika_shraddha','shraddha','is-a','faith in sattva'),
+  E('rajasa_shraddha','shraddha','is-a','faith in rajas'),
+  E('tamasa_shraddha','shraddha','is-a','faith in tamas'),
+  E('sattvika_shraddha','sattva','arises-from','expresses sattva'),
+  E('rajasa_shraddha','rajas','arises-from','expresses rajas'),
+  E('tamasa_shraddha','tamas','arises-from','expresses tamas'),
+  E('sattvika_ahara','sattva','arises-from','food expressing sattva'),
+
+  // Pravritti-Nivritti
+  E('pravritti_nivritti','buddhi','predicates-on','sāttvika buddhi knows both'),
+  E('pravritti_nivritti','svadharma','leads-to','knowing pravṛtti = knowing one\'s duty'),
+
+  // Yajña axis
+  E('jnana_yajna','dravya_yajna','transforms-into','knowledge yajña surpasses substance yajña'),
+  E('brahmarpana','jnana_yajna','includes','universal sacramental view'),
+
+  // Pratīka axis
+  E('ashvattha','kshetra_field','is-a','tree as metaphor for embodiment'),
+  E('ratha_rupaka','kshetra_field','is-a','chariot as field-metaphor'),
+  E('pranava_om','brahman','is-a','syllable identifying Brahman'),
+  E('akshara_a','pranava_om','is-a','first phoneme'),
+  E('jyotir_jyoti','paramatman','is-a','light of lights = Hari'),
+  E('vibhuti','sarvottamatva','predicates-on','glory expresses supremacy'),
+
+  // Cross-tier doctrinal anchors
+  E('kshetra_jnana','jnana_yoga','includes','Ch 13 culminates jñāna'),
+  // (shraddha→bhakti_yoga already defined above)
+  E('bhakti_yoga','sharanagati','leads-to','devotion culminates in surrender'),
+  E('jnana_yoga','moksha','leads-to','knowledge → release'),
+  E('karma_yoga','jnana_yoga','leads-to','action purifies → knowledge'),
+  E('dhyana_yoga','samadhi','leads-to',''),
+  E('vairagya','tyaga','is-a',''),
+];
+
+/* ============================================================================
+ * SHLOKAS — anchor verses in tri-script
+ * Each entry: id matches NODE id; { dev, iast, kn, ref }.
+ * Only the strict anchor verses are included (1-2 per concept where strong).
+ * ============================================================================ */
+
+const SHLOKAS = {
+  'brahman': { dev:'अक्षरं ब्रह्म परमं स्वभावोऽध्यात्ममुच्यते।\nभूतभावोद्भवकरो विसर्गः कर्मसंज्ञितः॥', iast:'akṣaraṃ brahma paramaṃ svabhāvo\'dhyātmam ucyate |\nbhūta-bhāvodbhava-karo visargaḥ karma-saṃjñitaḥ ||', kn:'ಅಕ್ಷರಂ ಬ್ರಹ್ಮ ಪರಮಂ ಸ್ವಭಾವೋಽಧ್ಯಾತ್ಮಮುಚ್ಯತೇ।\nಭೂತಭಾವೋದ್ಭವಕರೋ ವಿಸರ್ಗಃ ಕರ್ಮಸಂಜ್ಞಿತಃ॥', ref:'BG 8.3' },
+  'paramatman': { dev:'उपद्रष्टानुमन्ता च भर्ता भोक्ता महेश्वरः।\nपरमात्मेति चाप्युक्तो देहेऽस्मिन्पुरुषः परः॥', iast:'upadraṣṭānumantā ca bhartā bhoktā maheśvaraḥ |\nparamātmeti cāpy ukto dehe \'smin puruṣaḥ paraḥ ||', kn:'ಉಪದ್ರಷ್ಟಾನುಮಂತಾ ಚ ಭರ್ತಾ ಭೋಕ್ತಾ ಮಹೇಶ್ವರಃ।\nಪರಮಾತ್ಮೇತಿ ಚಾಪ್ಯುಕ್ತೋ ದೇಹೇಽಸ್ಮಿನ್ಪುರುಷಃ ಪರಃ॥', ref:'BG 13.22' },
+  'purushottama': { dev:'यस्मात्क्षरमतीतोऽहमक्षरादपि चोत्तमः।\nअतोऽस्मि लोके वेदे च प्रसिद्धः पुरुषोत्तमः॥', iast:'yasmāt kṣaram atīto \'ham akṣarād api cottamaḥ |\nato \'smi loke vede ca prasiddhaḥ puruṣottamaḥ ||', kn:'ಯಸ್ಮಾತ್ಕ್ಷರಮತೀತೋಽಹಮಕ್ಷರಾದಪಿ ಚೋತ್ತಮಃ।\nಅತೋಽಸ್ಮಿ ಲೋಕೇ ವೇದೇ ಚ ಪ್ರಸಿದ್ಧಃ ಪುರುಷೋತ್ತಮಃ॥', ref:'BG 15.18' },
+  'ksara_purusha': { dev:'द्वाविमौ पुरुषौ लोके क्षरश्चाक्षर एव च।\nक्षरः सर्वाणि भूतानि कूटस्थोऽक्षर उच्यते॥', iast:'dvāv imau puruṣau loke kṣaraś cākṣara eva ca |\nkṣaraḥ sarvāṇi bhūtāni kūṭastho \'kṣara ucyate ||', kn:'ದ್ವಾವಿಮೌ ಪುರುಷೌ ಲೋಕೇ ಕ್ಷರಶ್ಚಾಕ್ಷರ ಏವ ಚ।\nಕ್ಷರಃ ಸರ್ವಾಣಿ ಭೂತಾನಿ ಕೂಟಸ್ಥೋಽಕ್ಷರ ಉಚ್ಯತೇ॥', ref:'BG 15.16' },
+  'akshara_purusha': { dev:'द्वाविमौ पुरुषौ लोके क्षरश्चाक्षर एव च।\nक्षरः सर्वाणि भूतानि कूटस्थोऽक्षर उच्यते॥', iast:'dvāv imau puruṣau loke kṣaraś cākṣara eva ca |\nkṣaraḥ sarvāṇi bhūtāni kūṭastho \'kṣara ucyate ||', kn:'ದ್ವಾವಿಮೌ ಪುರುಷೌ ಲೋಕೇ ಕ್ಷರಶ್ಚಾಕ್ಷರ ಏವ ಚ।\nಕ್ಷರಃ ಸರ್ವಾಣಿ ಭೂತಾನಿ ಕೂಟಸ್ಥೋಽಕ್ಷರ ಉಚ್ಯತೇ॥', ref:'BG 15.16' },
+  'avatara': { dev:'यदा यदा हि धर्मस्य ग्लानिर्भवति भारत।\nअभ्युत्थानमधर्मस्य तदात्मानं सृजाम्यहम्॥', iast:'yadā yadā hi dharmasya glānir bhavati bhārata |\nabhyutthānam adharmasya tadātmānaṃ sṛjāmy aham ||', kn:'ಯದಾ ಯದಾ ಹಿ ಧರ್ಮಸ್ಯ ಗ್ಲಾನಿರ್ಭವತಿ ಭಾರತ।\nಅಭ್ಯುತ್ಥಾನಮಧರ್ಮಸ್ಯ ತದಾತ್ಮಾನಂ ಸೃಜಾಮ್ಯಹಮ್॥', ref:'BG 4.7' },
+  'svarupa_aikya': { dev:'मत्तः परतरं नान्यत्किञ्चिदस्ति धनञ्जय।\nमयि सर्वमिदं प्रोतं सूत्रे मणिगणा इव॥', iast:'mattaḥ parataraṃ nānyat kiñcid asti dhanañjaya |\nmayi sarvam idaṃ protaṃ sūtre maṇi-gaṇā iva ||', kn:'ಮತ್ತಃ ಪರತರಂ ನಾನ್ಯತ್ಕಿಂಚಿದಸ್ತಿ ಧನಂಜಯ।\nಮಯಿ ಸರ್ವಮಿದಂ ಪ್ರೋತಂ ಸೂತ್ರೇ ಮಣಿಗಣಾ ಇವ॥', ref:'BG 7.7' },
+  'sarvottamatva': { dev:'मत्तः परतरं नान्यत्किञ्चिदस्ति धनञ्जय।', iast:'mattaḥ parataraṃ nānyat kiñcid asti dhanañjaya |', kn:'ಮತ್ತಃ ಪರತರಂ ನಾನ್ಯತ್ಕಿಂಚಿದಸ್ತಿ ಧನಂಜಯ।', ref:'BG 7.7' },
+
+  'jiva': { dev:'ममैवांशो जीवलोके जीवभूतः सनातनः।\nमनःषष्ठानीन्द्रियाणि प्रकृतिस्थानि कर्षति॥', iast:'mamaivāṃśo jīva-loke jīva-bhūtaḥ sanātanaḥ |\nmanaḥ-ṣaṣṭhānīndriyāṇi prakṛti-sthāni karṣati ||', kn:'ಮಮೈವಾಂಶೋ ಜೀವಲೋಕೇ ಜೀವಭೂತಃ ಸನಾತನಃ।\nಮನಃಷಷ್ಠಾನೀಂದ್ರಿಯಾಣಿ ಪ್ರಕೃತಿಸ್ಥಾನಿ ಕರ್ಷತಿ॥', ref:'BG 15.7' },
+  'isvara': { dev:'ईश्वरः सर्वभूतानां हृद्देशेऽर्जुन तिष्ठति।\nभ्रामयन्सर्वभूतानि यन्त्रारूढानि मायया॥', iast:'īśvaraḥ sarva-bhūtānāṃ hṛd-deśe \'rjuna tiṣṭhati |\nbhrāmayan sarva-bhūtāni yantrārūḍhāni māyayā ||', kn:'ಈಶ್ವರಃ ಸರ್ವಭೂತಾನಾಂ ಹೃದ್ದೇಶೇಽರ್ಜುನ ತಿಷ್ಠತಿ।\nಭ್ರಾಮಯನ್ಸರ್ವಭೂತಾನಿ ಯಂತ್ರಾರೂಢಾನಿ ಮಾಯಯಾ॥', ref:'BG 18.61' },
+  'prakriti': { dev:'भूमिरापोऽनलो वायुः खं मनो बुद्धिरेव च।\nअहङ्कार इतीयं मे भिन्ना प्रकृतिरष्टधा॥', iast:'bhūmir āpo \'nalo vāyuḥ khaṃ mano buddhir eva ca |\nahaṅkāra itīyaṃ me bhinnā prakṛtir aṣṭadhā ||', kn:'ಭೂಮಿರಾಪೋಽನಲೋ ವಾಯುಃ ಖಂ ಮನೋ ಬುದ್ಧಿರೇವ ಚ।\nಅಹಂಕಾರ ಇತೀಯಂ ಮೇ ಭಿನ್ನಾ ಪ್ರಕೃತಿರಷ್ಟಧಾ॥', ref:'BG 7.4' },
+  'para_prakriti': { dev:'अपरेयमितस्त्वन्यां प्रकृतिं विद्धि मे पराम्।\nजीवभूतां महाबाहो ययेदं धार्यते जगत्॥', iast:'apareyam itas tv anyāṃ prakṛtiṃ viddhi me parām |\njīva-bhūtāṃ mahā-bāho yayedaṃ dhāryate jagat ||', kn:'ಅಪರೇಯಮಿತಸ್ತ್ವನ್ಯಾಂ ಪ್ರಕೃತಿಂ ವಿದ್ಧಿ ಮೇ ಪರಾಮ್।\nಜೀವಭೂತಾಂ ಮಹಾಬಾಹೋ ಯಯೇದಂ ಧಾರ್ಯತೇ ಜಗತ್॥', ref:'BG 7.5' },
+  'kala': { dev:'कालोऽस्मि लोकक्षयकृत्प्रवृद्धो लोकान्समाहर्तुमिह प्रवृत्तः।', iast:'kālo \'smi loka-kṣaya-kṛt pravṛddho lokān samāhartum iha pravṛttaḥ |', kn:'ಕಾಲೋಽಸ್ಮಿ ಲೋಕಕ್ಷಯಕೃತ್ಪ್ರವೃದ್ಧೋ ಲೋಕಾನ್ಸಮಾಹರ್ತುಮಿಹ ಪ್ರವೃತ್ತಃ।', ref:'BG 11.32' },
+  'svabhava': { dev:'सहजं कर्म कौन्तेय सदोषमपि न त्यजेत्।\nसर्वारम्भा हि दोषेण धूमेनाग्निरिवावृताः॥', iast:'sahajaṃ karma kaunteya sa-doṣam api na tyajet |\nsarvārambhā hi doṣeṇa dhūmenāgnir ivāvṛtāḥ ||', kn:'ಸಹಜಂ ಕರ್ಮ ಕೌಂತೇಯ ಸದೋಷಮಪಿ ನ ತ್ಯಜೇತ್।\nಸರ್ವಾರಂಭಾ ಹಿ ದೋಷೇಣ ಧೂಮೇನಾಗ್ನಿರಿವಾವೃತಾಃ॥', ref:'BG 18.48' },
+
+  'kshetra_field': { dev:'इदं शरीरं कौन्तेय क्षेत्रमित्यभिधीयते।\nएतद्यो वेत्ति तं प्राहुः क्षेत्रज्ञ इति तद्विदः॥', iast:'idaṃ śarīraṃ kaunteya kṣetram ity abhidhīyate |\netad yo vetti taṃ prāhuḥ kṣetrajña iti tad-vidaḥ ||', kn:'ಇದಂ ಶರೀರಂ ಕೌಂತೇಯ ಕ್ಷೇತ್ರಮಿತ್ಯಭಿಧೀಯತೇ।\nಏತದ್ಯೋ ವೇತ್ತಿ ತಂ ಪ್ರಾಹುಃ ಕ್ಷೇತ್ರಜ್ಞ ಇತಿ ತದ್ವಿದಃ॥', ref:'BG 13.1' },
+  'kshetrajna': { dev:'क्षेत्रज्ञं चापि मां विद्धि सर्वक्षेत्रेषु भारत।\nक्षेत्रक्षेत्रज्ञयोर्ज्ञानं यत्तज्ज्ञानं मतं मम॥', iast:'kṣetrajñaṃ cāpi māṃ viddhi sarva-kṣetreṣu bhārata |\nkṣetra-kṣetrajñayor jñānaṃ yat taj jñānaṃ mataṃ mama ||', kn:'ಕ್ಷೇತ್ರಜ್ಞಂ ಚಾಪಿ ಮಾಂ ವಿದ್ಧಿ ಸರ್ವಕ್ಷೇತ್ರೇಷು ಭಾರತ।\nಕ್ಷೇತ್ರಕ್ಷೇತ್ರಜ್ಞಯೋರ್ಜ್ಞಾನಂ ಯತ್ತಜ್ಜ್ಞಾನಂ ಮತಂ ಮಮ॥', ref:'BG 13.2' },
+
+  'sattva': { dev:'तत्र सत्त्वं निर्मलत्वात्प्रकाशकमनामयम्।\nसुखसङ्गेन बध्नाति ज्ञानसङ्गेन चानघ॥', iast:'tatra sattvaṃ nirmalatvāt prakāśakam anāmayam |\nsukha-saṅgena badhnāti jñāna-saṅgena cānagha ||', kn:'ತತ್ರ ಸತ್ತ್ವಂ ನಿರ್ಮಲತ್ವಾತ್ಪ್ರಕಾಶಕಮನಾಮಯಮ್।\nಸುಖಸಂಗೇನ ಬಧ್ನಾತಿ ಜ್ಞಾನಸಂಗೇನ ಚಾನಘ॥', ref:'BG 14.6' },
+  'rajas': { dev:'रजो रागात्मकं विद्धि तृष्णासङ्गसमुद्भवम्।\nतन्निबध्नाति कौन्तेय कर्मसङ्गेन देहिनम्॥', iast:'rajo rāgātmakaṃ viddhi tṛṣṇā-saṅga-samudbhavam |\ntan nibadhnāti kaunteya karma-saṅgena dehinam ||', kn:'ರಜೋ ರಾಗಾತ್ಮಕಂ ವಿದ್ಧಿ ತೃಷ್ಣಾಸಂಗಸಮುದ್ಭವಮ್।\nತನ್ನಿಬಧ್ನಾತಿ ಕೌಂತೇಯ ಕರ್ಮಸಂಗೇನ ದೇಹಿನಮ್॥', ref:'BG 14.7' },
+  'tamas': { dev:'तमस्त्वज्ञानजं विद्धि मोहनं सर्वदेहिनाम्।\nप्रमादालस्यनिद्राभिस्तन्निबध्नाति भारत॥', iast:'tamas tv ajñāna-jaṃ viddhi mohanaṃ sarva-dehinām |\npramādālasya-nidrābhis tan nibadhnāti bhārata ||', kn:'ತಮಸ್ತ್ವಜ್ಞಾನಜಂ ವಿದ್ಧಿ ಮೋಹನಂ ಸರ್ವದೇಹಿನಾಮ್।\nಪ್ರಮಾದಾಲಸ್ಯನಿದ್ರಾಭಿಸ್ತನ್ನಿಬಧ್ನಾತಿ ಭಾರತ॥', ref:'BG 14.8' },
+  'gunatita': { dev:'समदुःखसुखः स्वस्थः समलोष्टाश्मकाञ्चनः।\nतुल्यप्रियाप्रियो धीरस्तुल्यनिन्दात्मसंस्तुतिः॥', iast:'sama-duḥkha-sukhaḥ sva-sthaḥ sama-loṣṭāśma-kāñcanaḥ |\ntulya-priyāpriyo dhīras tulya-nindātma-saṃstutiḥ ||', kn:'ಸಮದುಃಖಸುಖಃ ಸ್ವಸ್ಥಃ ಸಮಲೋಷ್ಟಾಶ್ಮಕಾಂಚನಃ।\nತುಲ್ಯಪ್ರಿಯಾಪ್ರಿಯೋ ಧೀರಸ್ತುಲ್ಯನಿಂದಾತ್ಮಸಂಸ್ತುತಿಃ॥', ref:'BG 14.24' },
+
+  'karma_yoga': { dev:'कर्मण्येवाधिकारस्ते मा फलेषु कदाचन।\nमा कर्मफलहेतुर्भूर्मा ते सङ्गोऽस्त्वकर्मणि॥', iast:'karmaṇy evādhikāras te mā phaleṣu kadācana |\nmā karma-phala-hetur bhūr mā te saṅgo \'stv akarmaṇi ||', kn:'ಕರ್ಮಣ್ಯೇವಾಧಿಕಾರಸ್ತೇ ಮಾ ಫಲೇಷು ಕದಾಚನ।\nಮಾ ಕರ್ಮಫಲಹೇತುರ್ಭೂರ್ಮಾ ತೇ ಸಂಗೋಽಸ್ತ್ವಕರ್ಮಣಿ॥', ref:'BG 2.47' },
+  'jnana_yoga': { dev:'न हि ज्ञानेन सदृशं पवित्रमिह विद्यते।\nतत्स्वयं योगसंसिद्धः कालेनात्मनि विन्दति॥', iast:'na hi jñānena sadṛśaṃ pavitram iha vidyate |\ntat svayaṃ yoga-saṃsiddhaḥ kālenātmani vindati ||', kn:'ನ ಹಿ ಜ್ಞಾನೇನ ಸದೃಶಂ ಪವಿತ್ರಮಿಹ ವಿದ್ಯತೇ।\nತತ್ಸ್ವಯಂ ಯೋಗಸಂಸಿದ್ಧಃ ಕಾಲೇನಾತ್ಮನಿ ವಿಂದತಿ॥', ref:'BG 4.38' },
+  'bhakti_yoga': { dev:'मन्मना भव मद्भक्तो मद्याजी मां नमस्कुरु।\nमामेवैष्यसि सत्यं ते प्रतिजाने प्रियोऽसि मे॥', iast:'man-manā bhava mad-bhakto mad-yājī māṃ namaskuru |\nmām evaiṣyasi satyaṃ te pratijāne priyo \'si me ||', kn:'ಮನ್ಮನಾ ಭವ ಮದ್ಭಕ್ತೋ ಮದ್ಯಾಜೀ ಮಾಂ ನಮಸ್ಕುರು।\nಮಾಮೇವೈಷ್ಯಸಿ ಸತ್ಯಂ ತೇ ಪ್ರತಿಜಾನೇ ಪ್ರಿಯೋಽಸಿ ಮೇ॥', ref:'BG 18.65' },
+  'dhyana_yoga': { dev:'योगी युञ्जीत सततमात्मानं रहसि स्थितः।\nएकाकी यतचित्तात्मा निराशीरपरिग्रहः॥', iast:'yogī yuñjīta satatam ātmānaṃ rahasi sthitaḥ |\nekākī yata-cittātmā nirāśīr aparigrahaḥ ||', kn:'ಯೋಗೀ ಯುಂಜೀತ ಸತತಮಾತ್ಮಾನಂ ರಹಸಿ ಸ್ಥಿತಃ।\nಏಕಾಕೀ ಯತಚಿತ್ತಾತ್ಮಾ ನಿರಾಶೀರಪರಿಗ್ರಹಃ॥', ref:'BG 6.10' },
+  'samatva': { dev:'योगस्थः कुरु कर्माणि सङ्गं त्यक्त्वा धनञ्जय।\nसिद्ध्यसिद्ध्योः समो भूत्वा समत्वं योग उच्यते॥', iast:'yoga-sthaḥ kuru karmāṇi saṅgaṃ tyaktvā dhanañjaya |\nsiddhy-asiddhyoḥ samo bhūtvā samatvaṃ yoga ucyate ||', kn:'ಯೋಗಸ್ಥಃ ಕುರು ಕರ್ಮಾಣಿ ಸಂಗಂ ತ್ಯಕ್ತ್ವಾ ಧನಂಜಯ।\nಸಿದ್ಧ್ಯಸಿದ್ಧ್ಯೋಃ ಸಮೋ ಭೂತ್ವಾ ಸಮತ್ವಂ ಯೋಗ ಉಚ್ಯತೇ॥', ref:'BG 2.48' },
+  'sharanagati': { dev:'सर्वधर्मान्परित्यज्य मामेकं शरणं व्रज।\nअहं त्वा सर्वपापेभ्यो मोक्षयिष्यामि मा शुचः॥', iast:'sarva-dharmān parityajya mām ekaṃ śaraṇaṃ vraja |\nahaṃ tvā sarva-pāpebhyo mokṣayiṣyāmi mā śucaḥ ||', kn:'ಸರ್ವಧರ್ಮಾನ್ಪರಿತ್ಯಜ್ಯ ಮಾಮೇಕಂ ಶರಣಂ ವ್ರಜ।\nಅಹಂ ತ್ವಾ ಸರ್ವಪಾಪೇಭ್ಯೋ ಮೋಕ್ಷಯಿಷ್ಯಾಮಿ ಮಾ ಶುಚಃ॥', ref:'BG 18.66' },
+
+  'sthitaprajna': { dev:'दुःखेष्वनुद्विग्नमनाः सुखेषु विगतस्पृहः।\nवीतरागभयक्रोधः स्थितधीर्मुनिरुच्यते॥', iast:'duḥkheṣv anudvigna-manāḥ sukheṣu vigata-spṛhaḥ |\nvīta-rāga-bhaya-krodhaḥ sthita-dhīr munir ucyate ||', kn:'ದುಃಖೇಷ್ವನುದ್ವಿಗ್ನಮನಾಃ ಸುಖೇಷು ವಿಗತಸ್ಪೃಹಃ।\nವೀತರಾಗಭಯಕ್ರೋಧಃ ಸ್ಥಿತಧೀರ್ಮುನಿರುಚ್ಯತೇ॥', ref:'BG 2.56' },
+  'svadharma': { dev:'श्रेयान्स्वधर्मो विगुणः परधर्मात्स्वनुष्ठितात्।\nस्वधर्मे निधनं श्रेयः परधर्मो भयावहः॥', iast:'śreyān sva-dharmo viguṇaḥ para-dharmāt sv-anuṣṭhitāt |\nsva-dharme nidhanaṃ śreyaḥ para-dharmo bhayāvahaḥ ||', kn:'ಶ್ರೇಯಾನ್ಸ್ವಧರ್ಮೋ ವಿಗುಣಃ ಪರಧರ್ಮಾತ್ಸ್ವನುಷ್ಠಿತಾತ್।\nಸ್ವಧರ್ಮೇ ನಿಧನಂ ಶ್ರೇಯಃ ಪರಧರ್ಮೋ ಭಯಾವಹಃ॥', ref:'BG 3.35' },
+  'nishkama_karma': { dev:'कर्मण्येवाधिकारस्ते मा फलेषु कदाचन।', iast:'karmaṇy evādhikāras te mā phaleṣu kadācana |', kn:'ಕರ್ಮಣ್ಯೇವಾಧಿಕಾರಸ್ತೇ ಮಾ ಫಲೇಷು ಕದಾಚನ।', ref:'BG 2.47' },
+  'daivi_sampad': { dev:'दैवी सम्पद्विमोक्षाय निबन्धायासुरी मता।\nमा शुचः सम्पदं दैवीमभिजातोऽसि पाण्डव॥', iast:'daivī sampad vimokṣāya nibandhāyāsurī matā |\nmā śucaḥ sampadaṃ daivīm abhijāto \'si pāṇḍava ||', kn:'ದೈವೀ ಸಂಪದ್ವಿಮೋಕ್ಷಾಯ ನಿಬಂಧಾಯಾಸುರೀ ಮತಾ।\nಮಾ ಶುಚಃ ಸಂಪದಂ ದೈವೀಮಭಿಜಾತೋಽಸಿ ಪಾಂಡವ॥', ref:'BG 16.5' },
+
+  'kama': { dev:'काम एष क्रोध एष रजोगुणसमुद्भवः।\nमहाशनो महापाप्मा विद्ध्येनमिह वैरिणम्॥', iast:'kāma eṣa krodha eṣa rajo-guṇa-samudbhavaḥ |\nmahāśano mahā-pāpmā viddhy enam iha vairiṇam ||', kn:'ಕಾಮ ಏಷ ಕ್ರೋಧ ಏಷ ರಜೋಗುಣಸಮುದ್ಭವಃ।\nಮಹಾಶನೋ ಮಹಾಪಾಪ್ಮಾ ವಿದ್ಧ್ಯೇನಮಿಹ ವೈರಿಣಮ್॥', ref:'BG 3.37' },
+  'krodha': { dev:'क्रोधाद्भवति सम्मोहः सम्मोहात्स्मृतिविभ्रमः।\nस्मृतिभ्रंशाद् बुद्धिनाशो बुद्धिनाशात्प्रणश्यति॥', iast:'krodhād bhavati sammohaḥ sammohāt smṛti-vibhramaḥ |\nsmṛti-bhraṃśād buddhi-nāśo buddhi-nāśāt praṇaśyati ||', kn:'ಕ್ರೋಧಾದ್ಭವತಿ ಸಮ್ಮೋಹಃ ಸಮ್ಮೋಹಾತ್ಸ್ಮೃತಿವಿಭ್ರಮಃ।\nಸ್ಮೃತಿಭ್ರಂಶಾದ್ ಬುದ್ಧಿನಾಶೋ ಬುದ್ಧಿನಾಶಾತ್ಪ್ರಣಶ್ಯತಿ॥', ref:'BG 2.63' },
+  'asatsanga': { dev:'ध्यायतो विषयान्पुंसः सङ्गस्तेषूपजायते।\nसङ्गात्सञ्जायते कामः कामात्क्रोधोऽभिजायते॥', iast:'dhyāyato viṣayān puṃsaḥ saṅgas teṣūpajāyate |\nsaṅgāt sañjāyate kāmaḥ kāmāt krodho \'bhijāyate ||', kn:'ಧ್ಯಾಯತೋ ವಿಷಯಾನ್ಪುಂಸಃ ಸಂಗಸ್ತೇಷೂಪಜಾಯತೇ।\nಸಂಗಾತ್ಸಂಜಾಯತೇ ಕಾಮಃ ಕಾಮಾತ್ಕ್ರೋಧೋಽಭಿಜಾಯತೇ॥', ref:'BG 2.62' },
+  'asuri_sampad': { dev:'त्रिविधं नरकस्येदं द्वारं नाशनमात्मनः।\nकामः क्रोधस्तथा लोभस्तस्मादेतत्त्रयं त्यजेत्॥', iast:'tri-vidhaṃ narakasyedaṃ dvāraṃ nāśanam ātmanaḥ |\nkāmaḥ krodhas tathā lobhas tasmād etat trayaṃ tyajet ||', kn:'ತ್ರಿವಿಧಂ ನರಕಸ್ಯೇದಂ ದ್ವಾರಂ ನಾಶನಮಾತ್ಮನಃ।\nಕಾಮಃ ಕ್ರೋಧಸ್ತಥಾ ಲೋಭಸ್ತಸ್ಮಾದೇತತ್ತ್ರಯಂ ತ್ಯಜೇತ್॥', ref:'BG 16.21' },
+
+  'moksha': { dev:'अनाश्रितः कर्मफलं कार्यं कर्म करोति यः।\nस सन्न्यासी च योगी च न निरग्निर्न चाक्रियः॥', iast:'anāśritaḥ karma-phalaṃ kāryaṃ karma karoti yaḥ |\nsa sannyāsī ca yogī ca na niragnir na cākriyaḥ ||', kn:'ಅನಾಶ್ರಿತಃ ಕರ್ಮಫಲಂ ಕಾರ್ಯಂ ಕರ್ಮ ಕರೋತಿ ಯಃ।\nಸ ಸನ್ನ್ಯಾಸೀ ಚ ಯೋಗೀ ಚ ನ ನಿರಗ್ನಿರ್ನ ಚಾಕ್ರಿಯಃ॥', ref:'BG 6.1' },
+  'paramagati': { dev:'यद्गत्वा न निवर्तन्ते तद्धाम परमं मम।', iast:'yad gatvā na nivartante tad dhāma paramaṃ mama |', kn:'ಯದ್ಗತ್ವಾ ನ ನಿವರ್ತಂತೇ ತದ್ಧಾಮ ಪರಮಂ ಮಮ।', ref:'BG 15.6' },
+  'brahmi_sthiti': { dev:'एषा ब्राह्मी स्थितिः पार्थ नैनां प्राप्य विमुह्यति।\nस्थित्वास्यामन्तकालेऽपि ब्रह्मनिर्वाणमृच्छति॥', iast:'eṣā brāhmī sthitiḥ pārtha naināṃ prāpya vimuhyati |\nsthitvāsyām anta-kāle \'pi brahma-nirvāṇam ṛcchati ||', kn:'ಏಷಾ ಬ್ರಾಹ್ಮೀ ಸ್ಥಿತಿಃ ಪಾರ್ಥ ನೈನಾಂ ಪ್ರಾಪ್ಯ ವಿಮುಹ್ಯತಿ।\nಸ್ಥಿತ್ವಾಸ್ಯಾಮಂತಕಾಲೇಽಪಿ ಬ್ರಹ್ಮನಿರ್ವಾಣಮೃಚ್ಛತಿ॥', ref:'BG 2.72' },
+
+  'jnana_yajna': { dev:'श्रेयान्द्रव्यमयाद्यज्ञाज्ज्ञानयज्ञः परन्तप।\nसर्वं कर्माखिलं पार्थ ज्ञाने परिसमाप्यते॥', iast:'śreyān dravyamayād yajñāj jñāna-yajñaḥ parantapa |\nsarvaṃ karmākhilaṃ pārtha jñāne parisamāpyate ||', kn:'ಶ್ರೇಯಾನ್ದ್ರವ್ಯಮಯಾದ್ಯಜ್ಞಾಜ್ಜ್ಞಾನಯಜ್ಞಃ ಪರಂತಪ।\nಸರ್ವಂ ಕರ್ಮಾಖಿಲಂ ಪಾರ್ಥ ಜ್ಞಾನೇ ಪರಿಸಮಾಪ್ಯತೇ॥', ref:'BG 4.33' },
+  'brahmarpana': { dev:'ब्रह्मार्पणं ब्रह्म हविर्ब्रह्माग्नौ ब्रह्मणा हुतम्।\nब्रह्मैव तेन गन्तव्यं ब्रह्मकर्मसमाधिना॥', iast:'brahmārpaṇaṃ brahma havir brahmāgnau brahmaṇā hutam |\nbrahmaiva tena gantavyaṃ brahma-karma-samādhinā ||', kn:'ಬ್ರಹ್ಮಾರ್ಪಣಂ ಬ್ರಹ್ಮ ಹವಿರ್ಬ್ರಹ್ಮಾಗ್ನೌ ಬ್ರಹ್ಮಣಾ ಹುತಮ್।\nಬ್ರಹ್ಮೈವ ತೇನ ಗಂತವ್ಯಂ ಬ್ರಹ್ಮಕರ್ಮಸಮಾಧಿನಾ॥', ref:'BG 4.24' },
+
+  'ashvattha': { dev:'ऊर्ध्वमूलमधःशाखमश्वत्थं प्राहुरव्ययम्।\nछन्दांसि यस्य पर्णानि यस्तं वेद स वेदवित्॥', iast:'ūrdhva-mūlam adhaḥ-śākham aśvatthaṃ prāhur avyayam |\nchandāṃsi yasya parṇāni yas taṃ veda sa vedavit ||', kn:'ಊರ್ಧ್ವಮೂಲಮಧಃಶಾಖಮಶ್ವತ್ಥಂ ಪ್ರಾಹುರವ್ಯಯಮ್।\nಛಂದಾಂಸಿ ಯಸ್ಯ ಪರ್ಣಾನಿ ಯಸ್ತಂ ವೇದ ಸ ವೇದವಿತ್॥', ref:'BG 15.1' },
+  'pranava_om': { dev:'ओमित्येकाक्षरं ब्रह्म व्याहरन्मामनुस्मरन्।\nयः प्रयाति त्यजन्देहं स याति परमां गतिम्॥', iast:'om ity ekākṣaraṃ brahma vyāharan mām anusmaran |\nyaḥ prayāti tyajan dehaṃ sa yāti paramāṃ gatim ||', kn:'ಓಮಿತ್ಯೇಕಾಕ್ಷರಂ ಬ್ರಹ್ಮ ವ್ಯಾಹರನ್ಮಾಮನುಸ್ಮರನ್।\nಯಃ ಪ್ರಯಾತಿ ತ್ಯಜನ್ದೇಹಂ ಸ ಯಾತಿ ಪರಮಾಂ ಗತಿಮ್॥', ref:'BG 8.13' },
+  'jyotir_jyoti': { dev:'ज्योतिषामपि तज्ज्योतिस्तमसः परमुच्यते।\nज्ञानं ज्ञेयं ज्ञानगम्यं हृदि सर्वस्य विष्ठितम्॥', iast:'jyotiṣām api taj jyotis tamasaḥ param ucyate |\njñānaṃ jñeyaṃ jñāna-gamyaṃ hṛdi sarvasya viṣṭhitam ||', kn:'ಜ್ಯೋತಿಷಾಮಪಿ ತಜ್ಜ್ಯೋತಿಸ್ತಮಸಃ ಪರಮುಚ್ಯತೇ।\nಜ್ಞಾನಂ ಜ್ಞೇಯಂ ಜ್ಞಾನಗಮ್ಯಂ ಹೃದಿ ಸರ್ವಸ್ಯ ವಿಷ್ಠಿತಮ್॥', ref:'BG 13.17' },
+
+  // ===== Added shlokas (mukti-gradations, Madhva schemata, Ch 13/17/18 themes) =====
+  'taratamya': { dev:'मत्तः परतरं नान्यत्किञ्चिदस्ति धनञ्जय।\nमयि सर्वमिदं प्रोतं सूत्रे मणिगणा इव॥', iast:"mattaḥ parataraṃ nānyat kiñcid asti dhanañjaya |\nmayi sarvam idaṃ protaṃ sūtre maṇi-gaṇā iva ||", kn:'ಮತ್ತಃ ಪರತರಂ ನಾನ್ಯತ್ಕಿಂಚಿದಸ್ತಿ ಧನಂಜಯ।\nಮಯಿ ಸರ್ವಮಿದಂ ಪ್ರೋತಂ ಸೂತ್ರೇ ಮಣಿಗಣಾ ಇವ॥', ref:'BG 7.7' },
+  'pancha_bheda': { dev:'ममैवांशो जीवलोके जीवभूतः सनातनः।', iast:"mamaivāṃśo jīva-loke jīva-bhūtaḥ sanātanaḥ |", kn:'ಮಮೈವಾಂಶೋ ಜೀವಲೋಕೇ ಜೀವಭೂತಃ ಸನಾತನಃ।', ref:'BG 15.7' },
+  'jnana_angas': { dev:'अमानित्वमदम्भित्वमहिंसा क्षान्तिरार्जवम्।\nआचार्योपासनं शौचं स्थैर्यमात्मविनिग्रहः॥', iast:"amānitvam adambhitvam ahiṃsā kṣāntir ārjavam |\nācāryopāsanaṃ śaucaṃ sthairyam ātma-vinigrahaḥ ||", kn:'ಅಮಾನಿತ್ವಮದಂಭಿತ್ವಮಹಿಂಸಾ ಕ್ಷಾಂತಿರಾರ್ಜವಮ್।\nಆಚಾರ್ಯೋಪಾಸನಂ ಶೌಚಂ ಸ್ಥೈರ್ಯಮಾತ್ಮವಿನಿಗ್ರಹಃ॥', ref:'BG 13.7' },
+  'amanitva': { dev:'अमानित्वमदम्भित्वमहिंसा क्षान्तिरार्जवम्।', iast:"amānitvam adambhitvam ahiṃsā kṣāntir ārjavam |", kn:'ಅಮಾನಿತ್ವಮದಂಭಿತ್ವಮಹಿಂಸಾ ಕ್ಷಾಂತಿರಾರ್ಜವಮ್।', ref:'BG 13.7' },
+  'ananya_yoga': { dev:'अनन्याश्चिन्तयन्तो मां ये जनाः पर्युपासते।\nतेषां नित्याभियुक्तानां योगक्षेमं वहाम्यहम्॥', iast:"ananyāś cintayanto māṃ ye janāḥ paryupāsate |\nteṣāṃ nityābhiyuktānāṃ yoga-kṣemaṃ vahāmy aham ||", kn:'ಅನನ್ಯಾಶ್ಚಿಂತಯಂತೋ ಮಾಂ ಯೇ ಜನಾಃ ಪರ್ಯುಪಾಸತೇ।\nತೇಷಾಂ ನಿತ್ಯಾಭಿಯುಕ್ತಾನಾಂ ಯೋಗಕ್ಷೇಮಂ ವಹಾಮ್ಯಹಮ್॥', ref:'BG 9.22' },
+  'sattvika_shraddha': { dev:'त्रिविधा भवति श्रद्धा देहिनां सा स्वभावजा।\nसात्त्विकी राजसी चैव तामसी चेति तां शृणु॥', iast:"tri-vidhā bhavati śraddhā dehināṃ sā svabhāva-jā |\nsāttvikī rājasī caiva tāmasī ceti tāṃ śṛṇu ||", kn:'ತ್ರಿವಿಧಾ ಭವತಿ ಶ್ರದ್ಧಾ ದೇಹಿನಾಂ ಸಾ ಸ್ವಭಾವಜಾ।\nಸಾತ್ತ್ವಿಕೀ ರಾಜಸೀ ಚೈವ ತಾಮಸೀ ಚೇತಿ ತಾಂ ಶೃಣು॥', ref:'BG 17.2' },
+  'sattvika_ahara': { dev:'आयुःसत्त्वबलारोग्यसुखप्रीतिविवर्धनाः।\nरस्याः स्निग्धाः स्थिरा हृद्या आहाराः सात्त्विकप्रियाः॥', iast:"āyuḥ-sattva-balārogya-sukha-prīti-vivardhanāḥ |\nrasyāḥ snigdhāḥ sthirā hṛdyā āhārāḥ sāttvika-priyāḥ ||", kn:'ಆಯುಃಸತ್ತ್ವಬಲಾರೋಗ್ಯಸುಖಪ್ರೀತಿವಿವರ್ಧನಾಃ।\nರಸ್ಯಾಃ ಸ್ನಿಗ್ಧಾಃ ಸ್ಥಿರಾ ಹೃದ್ಯಾ ಆಹಾರಾಃ ಸಾತ್ತ್ವಿಕಪ್ರಿಯಾಃ॥', ref:'BG 17.8' },
+  'pravritti_nivritti': { dev:'प्रवृत्तिं च निवृत्तिं च कार्याकार्ये भयाभये।\nबन्धं मोक्षं च या वेत्ति बुद्धिः सा पार्थ सात्त्विकी॥', iast:"pravṛttiṃ ca nivṛttiṃ ca kāryākārye bhayābhaye |\nbandhaṃ mokṣaṃ ca yā vetti buddhiḥ sā pārtha sāttvikī ||", kn:'ಪ್ರವೃತ್ತಿಂ ಚ ನಿವೃತ್ತಿಂ ಚ ಕಾರ್ಯಾಕಾರ್ಯೇ ಭಯಾಭಯೇ।\nಬಂಧಂ ಮೋಕ್ಷಂ ಚ ಯಾ ವೇತ್ತಿ ಬುದ್ಧಿಃ ಸಾ ಪಾರ್ಥ ಸಾತ್ತ್ವಿಕೀ॥', ref:'BG 18.30' },
+  'sayujya': { dev:'विद्याविनयसम्पन्ने ब्राह्मणे गवि हस्तिनि।\nशुनि चैव श्वपाके च पण्डिताः समदर्शिनः॥', iast:"vidyā-vinaya-sampanne brāhmaṇe gavi hastini |\nśuni caiva śva-pāke ca paṇḍitāḥ sama-darśinaḥ ||", kn:'ವಿದ್ಯಾವಿನಯಸಂಪನ್ನೇ ಬ್ರಾಹ್ಮಣೇ ಗವಿ ಹಸ್ತಿನಿ।\nಶುನಿ ಚೈವ ಶ್ವಪಾಕೇ ಚ ಪಂಡಿತಾಃ ಸಮದರ್ಶಿನಃ॥', ref:'BG 5.18' },
+  'samipya': { dev:'भक्त्या त्वनन्यया शक्य अहमेवंविधोऽर्जुन।\nज्ञातुं द्रष्टुं च तत्त्वेन प्रवेष्टुं च परन्तप॥', iast:"bhaktyā tv ananyayā śakya aham evaṃ-vidho 'rjuna |\njñātuṃ draṣṭuṃ ca tattvena praveṣṭuṃ ca parantapa ||", kn:'ಭಕ್ತ್ಯಾ ತ್ವನನ್ಯಯಾ ಶಕ್ಯ ಅಹಮೇವಂವಿಧೋಽರ್ಜುನ।\nಜ್ಞಾತುಂ ದ್ರಷ್ಟುಂ ಚ ತತ್ತ್ವೇನ ಪ್ರವೇಷ್ಟುಂ ಚ ಪರಂತಪ॥', ref:'BG 11.54' },
+  'salokya': { dev:'ये तु धर्म्यामृतमिदं यथोक्तं पर्युपासते।\nश्रद्दधाना मत्परमा भक्तास्तेऽतीव मे प्रियाः॥', iast:"ye tu dharmyāmṛtam idaṃ yathoktaṃ paryupāsate |\nśraddadhānā mat-paramā bhaktās te 'tīva me priyāḥ ||", kn:'ಯೇ ತು ಧರ್ಮ್ಯಾಮೃತಮಿದಂ ಯಥೋಕ್ತಂ ಪರ್ಯುಪಾಸತೇ।\nಶ್ರದ್ದಧಾನಾ ಮತ್ಪರಮಾ ಭಕ್ತಾಸ್ತೇಽತೀವ ಮೇ ಪ್ರಿಯಾಃ॥', ref:'BG 12.20' },
+  'sarupya': { dev:'इदं ज्ञानमुपाश्रित्य मम साधर्म्यमागताः।\nसर्गेऽपि नोपजायन्ते प्रलये न व्यथन्ति च॥', iast:"idaṃ jñānam upāśritya mama sādharmyam āgatāḥ |\nsarge 'pi nopajāyante pralaye na vyathanti ca ||", kn:'ಇದಂ ಜ್ಞಾನಮುಪಾಶ್ರಿತ್ಯ ಮಮ ಸಾಧರ್ಮ್ಯಮಾಗತಾಃ।\nಸರ್ಗೇಽಪಿ ನೋಪಜಾಯಂತೇ ಪ್ರಲಯೇ ನ ವ್ಯಥಂತಿ ಚ॥', ref:'BG 14.2' },
+  'aksharam_param_brahma': { dev:'अक्षरं ब्रह्म परमं स्वभावोऽध्यात्ममुच्यते।', iast:"akṣaraṃ brahma paramaṃ svabhāvo 'dhyātmam ucyate |", kn:'ಅಕ್ಷರಂ ಬ್ರಹ್ಮ ಪರಮಂ ಸ್ವಭಾವೋಽಧ್ಯಾತ್ಮಮುಚ್ಯತೇ।', ref:'BG 8.3' },
+  'karma_tattva': { dev:'न हि कश्चित्क्षणमपि जातु तिष्ठत्यकर्मकृत्।\nकार्यते ह्यवशः कर्म सर्वः प्रकृतिजैर्गुणैः॥', iast:"na hi kaścit kṣaṇam api jātu tiṣṭhaty akarma-kṛt |\nkāryate hy avaśaḥ karma sarvaḥ prakṛti-jair guṇaiḥ ||", kn:'ನ ಹಿ ಕಶ್ಚಿತ್ಕ್ಷಣಮಪಿ ಜಾತು ತಿಷ್ಠತ್ಯಕರ್ಮಕೃತ್।\nಕಾರ್ಯತೇ ಹ್ಯವಶಃ ಕರ್ಮ ಸರ್ವಃ ಪ್ರಕೃತಿಜೈರ್ಗುಣೈಃ॥', ref:'BG 3.5' },
+};
+
+/* Export for the renderer */
+
+</script>
+<script>
+/* === inlined from positions.js === */
+/* positions.js
+ *
+ * Hand-laid coordinates for the celestial-map view of the Gītā concept KG.
+ *
+ * Layout philosophy: a ladder of being read top-down.
+ *   - Paramārtha (Hari) at the apex — single column
+ *   - Tattvas just below — the metaphysical scaffolding
+ *   - Kṣetra-Kṣetrajña — where embodiment begins
+ *   - Guṇa — the three modes
+ *   - Yoga — the largest tier, spread wide
+ *   - Sādhanā — practices, parallel to yogas
+ *   - Antaḥkaraṇa & Dharma — inner faculties + ethical posture, side-by-side
+ *   - Doṣa & Pratīka — defects (left) and symbols (right), as bookend tiers
+ *   - Phala — the goals, at the bottom (the rest of the climb)
+ *   - Yajña — clustered as a side panel on the right (sacrifice as a vertical column)
+ *
+ * Coordinate system: x in [0, 1000], y in [0, 1500], r is node radius.
+ * Larger r = doctrinally larger weight (purushottama largest, peripheral nodes smaller).
+ */
+
+const KG_POSITIONS = {
+  // ============ Paramārtha (y ≈ 60–180) — center column ============
+  'purushottama':       [500,  80, 22],
+  'brahman':            [340, 140, 17],
+  'paramatman':         [500, 140, 17],
+  'sarvottamatva':      [660, 140, 17],
+  'akshara_purusha':    [340, 200, 13],
+  'ksara_purusha':      [500, 200, 13],
+  'svarupa_aikya':      [660, 200, 13],
+  'avatara':            [580, 260, 13],
+  'taratamya':          [200, 200, 13],
+  'pancha_bheda':       [80,  200, 13],
+
+  // ============ Tattva (y ≈ 280–360) ============
+  'isvara':             [120, 290, 14],
+  'jiva':               [240, 290, 14],
+  'prakriti':           [380, 320, 14],
+  'para_prakriti':      [500, 320, 12],
+  'aksharam_param_brahma':[620, 320, 12],
+  'kala':               [740, 290, 12],
+  'karma_tattva':       [400, 390, 12],
+  'svabhava':           [560, 390, 12],
+
+  // ============ Kṣetra-Kṣetrajña (y ≈ 440–520) ============
+  'kshetrajna':         [200, 460, 14],
+  'kshetra_field':      [340, 460, 14],
+  'mahabhutas':         [460, 460, 11],
+  'avyakta':            [560, 460, 11],
+  'indriyas':           [660, 460, 11],
+  'icchā_dveṣa':        [760, 460, 11],
+  'sanghata_cetana_dhrti':[860, 460, 11],
+  'kshetra_jnana':      [500, 530, 13],
+
+  // ============ Guṇa (y ≈ 580–650) ============
+  'sattva':             [280, 600, 14],
+  'rajas':              [420, 600, 14],
+  'tamas':              [560, 600, 14],
+  'gunatita':           [700, 600, 14],
+  'sattvika_jnana':     [220, 670, 10],
+  'sattvika_karma':     [340, 670, 10],
+  'sattvika_karta':     [460, 670, 10],
+  'triguna_atita':      [780, 670, 12],
+  'sattvika_shraddha':  [220, 720, 10],
+  'rajasa_shraddha':    [340, 720, 10],
+  'tamasa_shraddha':    [460, 720, 10],
+  'sattvika_ahara':     [580, 720, 10],
+
+  // ============ Yoga (y ≈ 730–820) — wide spread, the largest tier ============
+  'karma_yoga':         [120, 760, 14],
+  'jnana_yoga':         [240, 760, 14],
+  'bhakti_yoga':        [380, 760, 16],
+  'dhyana_yoga':        [500, 760, 14],
+  'sannyasa_yoga':      [620, 760, 14],
+  'buddhi_yoga':        [740, 760, 13],
+  'abhyasa_vairagya':   [860, 760, 13],
+  'samatva':            [300, 830, 12],
+  'sharanagati':        [500, 830, 16],   // BG 18.66 — visually emphasized
+
+  // ============ Sādhanā (y ≈ 890–960) — practices, mid-page ============
+  'shraddha':           [120, 910, 12],
+  'vairagya':           [220, 910, 12],
+  'abhyasa':            [320, 910, 12],
+  'tapas':              [420, 910, 12],
+  'dana':               [520, 910, 12],
+  'tyaga':              [620, 910, 12],
+  'indriya_nigraha':    [720, 910, 12],
+  'samadhi':            [820, 910, 12],
+  'svadhyaya':          [920, 910, 11],
+  // jñāna-aṅgas — second row of sādhana
+  'jnana_angas':        [120, 960, 12],
+  'amanitva':           [220, 960,  9],
+  'arjava':             [310, 960,  9],
+  'shauca':             [400, 960,  9],
+  'ksanti':             [490, 960,  9],
+  'ananya_yoga':        [580, 960, 11],
+  'vivikta_seva':       [690, 960,  9],
+  'adhyatma_jnana_nityatvam':[800, 960,  9],
+  'tattva_jnanartha_darshanam':[900, 960, 10],
+
+  // ============ Antaḥkaraṇa (y ≈ 1000) — left cluster ============
+  'manas':              [150, 1010, 12],
+  'buddhi':             [260, 1010, 12],
+  'ahankara':           [370, 1010, 12],
+  'citta':              [150, 1080, 11],
+  'antaryamin':         [260, 1080, 13],
+  'jnanendriyas_karmendriyas':[370, 1080, 10],
+
+  // ============ Dharma (y ≈ 1000) — right cluster, parallel ============
+  'svadharma':          [560, 1010, 12],
+  'varnashrama':        [670, 1010, 12],
+  'nishkama_karma':     [780, 1010, 13],
+  'sthitaprajna':       [560, 1080, 14],
+  'daivi_sampad':       [670, 1080, 13],
+  'ahimsa':             [780, 1080, 11],
+  'satya':              [880, 1080, 11],
+  'samatva_dharma':     [880, 1010, 11],
+  'pravritti_nivritti': [880, 1130, 11],
+
+  // ============ Doṣa (y ≈ 1170) — bottom-left, the descent ============
+  'kama':               [120, 1180, 14],
+  'krodha':             [220, 1180, 14],
+  'lobha':              [320, 1180, 12],
+  'moha':               [420, 1180, 13],
+  'asatsanga':          [120, 1250, 11],
+  'avidya':             [220, 1250, 12],
+  'dvandva':            [320, 1250, 11],
+  'asuri_sampad':       [420, 1250, 13],
+
+  // ============ Pratīka (y ≈ 1170) — bottom-right, symbols ============
+  'pranava_om':         [580, 1180, 13],
+  'ashvattha':          [700, 1180, 13],
+  'ratha_rupaka':       [820, 1180, 12],
+  'akshara_a':          [580, 1250, 11],
+  'jyotir_jyoti':       [700, 1250, 12],
+  'vibhuti':            [820, 1250, 12],
+
+  // ============ Phala (y ≈ 1350) — the goals, at the foot ============
+  'moksha':             [500, 1350, 22],   // big — the goal
+  'paramagati':         [340, 1350, 14],
+  'brahmi_sthiti':      [180, 1350, 13],
+  'jivanmukti':         [660, 1350, 14],
+  'naishkarmya_siddhi': [820, 1350, 12],
+  'archiradi_marga':    [340, 1420, 11],
+  'dhumadi_marga':      [180, 1420, 11],
+  'sarva_dharman_parityajya':[500, 1420, 16],  // carama-śloka emphasized
+  // Madhva mukti-gradations clustered around moksha
+  'salokya':            [360, 1290, 11],
+  'samipya':            [440, 1290, 11],
+  'sarupya':            [560, 1290, 11],
+  'sayujya':            [640, 1290, 13],
+  // Madhva mukti-gradations clustered around moksha
+  'salokya':            [360, 1290, 11],
+  'samipya':            [440, 1290, 11],
+  'sarupya':            [560, 1290, 11],
+  'sayujya':            [640, 1290, 13],
+
+  // ============ Yajña (side column, y ≈ 600–950) — right edge ============
+  'dravya_yajna':       [950, 600, 10],
+  'tapo_yajna':         [950, 670, 10],
+  'yoga_yajna':         [950, 740, 10],
+  'svadhyaya_yajna':    [950, 810, 10],
+  'jnana_yajna':        [950, 880, 12],
+  'brahmarpana':        [950, 950, 12],
+};
+
+/* Tier bands for the map background (y-ranges) */
+const KG_TIER_BANDS = [
+  { tier:'paramartha',  yTop:30,   yBottom:265,  label:{x:14, y:50} },
+  { tier:'tattva',      yTop:270,  yBottom:425,  label:{x:14, y:290} },
+  { tier:'kshetra',     yTop:430,  yBottom:560,  label:{x:14, y:450} },
+  { tier:'guna',        yTop:565,  yBottom:715,  label:{x:14, y:585} },
+  { tier:'yoga',        yTop:720,  yBottom:870,  label:{x:14, y:740} },
+  { tier:'sadhana',     yTop:875,  yBottom:990,  label:{x:14, y:895} },
+  { tier:'antahkarana', yTop:995,  yBottom:1160, label:{x:14, y:1015}, half:'left' },
+  { tier:'dharma',      yTop:995,  yBottom:1160, label:{x:520, y:1015}, half:'right' },
+  { tier:'dosha',       yTop:1165, yBottom:1300, label:{x:14, y:1185}, half:'left' },
+  { tier:'pratika',     yTop:1165, yBottom:1300, label:{x:520, y:1185}, half:'right' },
+  { tier:'phala',       yTop:1305, yBottom:1480, label:{x:14, y:1325} },
+  { tier:'yajna',       yTop:580,  yBottom:990,  label:{x:920, y:580}, side:true },
+];
+
+/* Edge types to render on the full map (others suppressed for visual clarity) */
+const KG_SHOW_EDGE_TYPES = new Set([
+  'is-a','includes','leads-to','opposite-of','antidote-to',
+  'arises-from','predicates-on','transforms-into','grounded-in',
+]);
+
+/* Export for the renderer / verifier (no-op in the browser) */
+
+</script>
+<script>
+/* ============================================================================
+   Renderer
+   ============================================================================ */
+const state = { lang:'en', view:'browse', focusId:null, q:'' };
+
+function setLang(lang){
+  state.lang = lang;
+  document.body.classList.remove('lang-en','lang-dev','lang-kn');
+  document.body.classList.add('lang-'+lang);
+  document.querySelectorAll('#lang-tabs button').forEach(b=>{
+    b.classList.toggle('on', b.dataset.lang===lang);
+  });
+  render();
+}
+
+function setView(v, id){
+  state.view = v;
+  if (id) state.focusId = id;
+  document.querySelectorAll('#view-tabs button').forEach(b=>{
+    b.classList.toggle('on', b.dataset.view===v);
+  });
+  document.getElementById('view-browse').hidden = v!=='browse';
+  document.getElementById('view-focus').hidden  = v!=='focus';
+  document.getElementById('view-map').hidden    = v!=='map';
+  document.getElementById('search-bar').hidden  = v==='map';
+  window.scrollTo({top:0, behavior:'instant'});
+  render();
+}
+
+function labelOf(n){
+  return state.lang==='dev' ? n.dev : state.lang==='kn' ? n.kn : n.en;
+}
+
+function escapeHtml(s){
+  return String(s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+}
+function highlight(s, q){
+  if (!q) return escapeHtml(s);
+  const idx = s.toLowerCase().indexOf(q.toLowerCase());
+  if (idx<0) return escapeHtml(s);
+  return escapeHtml(s.slice(0,idx)) + '<span class="hl">'+escapeHtml(s.slice(idx,idx+q.length))+'</span>' + escapeHtml(s.slice(idx+q.length));
+}
+
+const NODE_BY_ID = Object.fromEntries(NODES.map(n=>[n.id,n]));
+const TIER_BY_ID = Object.fromEntries(TIERS.map(t=>[t.id,t]));
+const ADJ = {};
+NODES.forEach(n => ADJ[n.id] = { out:[], in:[] });
+EDGES.forEach(e=>{
+  if (!ADJ[e.source] || !ADJ[e.target]) return;
+  ADJ[e.source].out.push(e);
+  ADJ[e.target].in.push(e);
+});
+
+/* ---------- BROWSE ---------- */
+function renderBrowse(){
+  const root = document.getElementById('view-browse');
+  const q = state.q.trim().toLowerCase();
+  let html = '';
+
+  const matches = (n) => {
+    if (!q) return true;
+    const hay = [n.en, n.dev, n.kn, n.title, n.note, n.refs, n.tier].join(' ').toLowerCase();
+    return hay.includes(q);
+  };
+
+  let total = 0;
+  TIERS.forEach(tier=>{
+    const nodes = NODES.filter(n => n.tier===tier.id && matches(n));
+    if (!nodes.length) return;
+    total += nodes.length;
+    html += `<section class="tier-section">
+      <div class="tier-head">
+        <span class="tier-dot" style="background:var(--t-${tier.id})"></span>
+        <span class="tier-name">${escapeHtml(state.lang==='dev'?tier.dev:state.lang==='kn'?tier.kn:tier.en)}</span>
+        <span class="tier-gloss">${escapeHtml(tier.gloss)}</span>
+        <span class="tier-count">${nodes.length}</span>
+      </div>
+    </section>
+    <ul class="entry-list">`;
+    nodes.forEach(n=>{
+      const lab = labelOf(n);
+      html += `<li data-id="${n.id}">
+        <div>
+          <div class="label">${highlight(lab,q)}</div>
+          <div class="sub">${escapeHtml(n.title)}</div>
+        </div>
+        <div class="ref">${escapeHtml(n.refs)}</div>
+      </li>`;
+    });
+    html += `</ul>`;
+  });
+
+  if (!total){
+    html = `<div style="padding:40px 20px;text-align:center;color:var(--ink-fade)">No concepts match "${escapeHtml(state.q)}".</div>`;
+  }
+  root.innerHTML = html;
+}
+
+/* ---------- FOCUS ---------- */
+function renderFocus(){
+  const root = document.getElementById('view-focus');
+  const id = state.focusId || NODES[0].id;
+  const n = NODE_BY_ID[id];
+  if (!n){ root.innerHTML = `<div style="padding:20px">Concept not found.</div>`; return; }
+  const tier = TIER_BY_ID[n.tier];
+
+  let html = `<article class="focus-card">
+    <span class="tier-badge" style="--tc:var(--t-${tier.id})">
+      <style>.focus-card .tier-badge::before{background:var(--t-${tier.id})}</style>
+      ${escapeHtml(state.lang==='dev'?tier.dev:state.lang==='kn'?tier.kn:tier.en)}
+    </span>
+    <h1>${escapeHtml(labelOf(n))}</h1>
+    <div class="subtitle">${escapeHtml(n.title)}</div>
+    <p class="note">${escapeHtml(n.note)}</p>
+    ${n.madhva ? `<div class="madhva">${escapeHtml(n.madhva)}</div>` : ''}
+    <div class="refs">${escapeHtml(n.refs)}</div>
+  </article>`;
+
+  // shloka card
+  const s = SHLOKAS[n.id];
+  if (s){
+    const scriptText = state.lang==='dev' ? s.dev : state.lang==='kn' ? s.kn : s.iast;
+    html += `<section class="shloka">
+      <div class="shloka-script">${escapeHtml(scriptText)}</div>
+      <div class="shloka-ref">— ${escapeHtml(s.ref)}</div>
+    </section>`;
+  }
+
+  // relations
+  const out = ADJ[n.id]?.out || [];
+  const inc = ADJ[n.id]?.in || [];
+  if (out.length || inc.length){
+    html += `<section class="relations">`;
+    if (out.length){
+      html += `<h2>Outgoing</h2><ul>`;
+      out.forEach(e=>{
+        const other = NODE_BY_ID[e.target];
+        if (!other) return;
+        const colorVar = `--e-${e.type}`;
+        html += `<li data-id="${other.id}">
+          <span class="edge-type" style="background:var(${colorVar})">${escapeHtml(e.type)}</span>
+          <span class="edge-label">${escapeHtml(e.label||'')}</span>
+          <span class="other">${escapeHtml(labelOf(other))} →</span>
+        </li>`;
+      });
+      html += `</ul>`;
+    }
+    if (inc.length){
+      html += `<h2>Incoming</h2><ul>`;
+      inc.forEach(e=>{
+        const other = NODE_BY_ID[e.source];
+        if (!other) return;
+        const colorVar = `--e-${e.type}`;
+        html += `<li data-id="${other.id}">
+          <span class="edge-type" style="background:var(${colorVar})">${escapeHtml(e.type)}</span>
+          <span class="edge-label">${escapeHtml(e.label||'')}</span>
+          <span class="other">← ${escapeHtml(labelOf(other))}</span>
+        </li>`;
+      });
+      html += `</ul>`;
+    }
+    html += `</section>`;
+  }
+
+  root.innerHTML = html;
+}
+
+/* ---------- MAP — uses hand-laid KG_POSITIONS if positions.js loaded,
+                  falls back to auto-layout otherwise ---------- */
+const HAS_HANDLAID = (typeof KG_POSITIONS !== 'undefined') && (typeof KG_TIER_BANDS !== 'undefined');
+
+function renderMap(){
+  const root = document.getElementById('view-map');
+
+  if (HAS_HANDLAID) return renderMapHandLaid(root);
+  return renderMapAuto(root);
+}
+
+function renderMapHandLaid(root){
+  const W = 1000, H = 1500;
+  const showSet = (typeof KG_SHOW_EDGE_TYPES !== 'undefined') ? KG_SHOW_EDGE_TYPES : null;
+  const fontFam = state.lang==='dev'?'Tiro Devanagari Sanskrit':state.lang==='kn'?'Tiro Kannada':'Cormorant Garamond';
+  let svg = `<svg viewBox="0 0 ${W} ${H}" width="${W}" height="${H}" xmlns="http://www.w3.org/2000/svg">`;
+
+  // tier bands (alternating washes, plus optional side-column for yajna)
+  KG_TIER_BANDS.forEach((band,bi)=>{
+    const x = band.side ? 900 : (band.half==='right' ? W/2 : 0);
+    const w = band.side ? 100 : (band.half ? W/2 : W);
+    svg += `<rect x="${x}" y="${band.yTop}" width="${w}" height="${band.yBottom-band.yTop}" fill="${bi%2 ? 'rgba(214,197,153,.10)' : 'rgba(230,216,176,.18)'}"/>`;
+    const tier = TIER_BY_ID[band.tier];
+    if (!tier) return;
+    const lab = state.lang==='dev'?tier.dev:state.lang==='kn'?tier.kn:tier.en;
+    svg += `<text x="${band.label.x}" y="${band.label.y}" font-family="${fontFam}" font-size="13" fill="var(--ink-soft)" font-weight="600">${escapeHtml(lab)}</text>`;
+  });
+
+  // edges (filtered + curved)
+  EDGES.forEach(e=>{
+    if (showSet && !showSet.has(e.type)) return;
+    const a = KG_POSITIONS[e.source]; const b = KG_POSITIONS[e.target];
+    if (!a || !b) return;
+    const [ax,ay] = a, [bx,by] = b;
+    const mx = (ax+bx)/2;
+    const my = (ay+by)/2 - Math.abs(by-ay)*0.08;
+    svg += `<path class="map-edge" d="M ${ax} ${ay} Q ${mx} ${my} ${bx} ${by}" stroke="var(--e-${e.type})" stroke-width="0.7"/>`;
+  });
+
+  // nodes
+  NODES.forEach(n=>{
+    const p = KG_POSITIONS[n.id]; if (!p) return;
+    const [x,y,r] = p;
+    const lab = labelOf(n);
+    const maxLen = state.lang==='en' ? 16 : 12;
+    const shown = lab.length > maxLen ? lab.slice(0,maxLen-1)+'…' : lab;
+    svg += `<g class="map-node" data-id="${n.id}">
+      <circle cx="${x}" cy="${y}" r="${r}" fill="var(--t-${n.tier})" fill-opacity="0.88" stroke="var(--t-${n.tier})" stroke-width="1.2"/>
+      <text x="${x}" y="${y + r + 11}" font-family="${fontFam}" font-size="${state.lang==='en'?10:11}">${escapeHtml(shown)}</text>
+    </g>`;
+  });
+
+  svg += `</svg>`;
+  root.innerHTML = `<div class="map-wrap">${svg}</div>`;
+}
+
+function renderMapAuto(root){
+  // Fallback: stacked rows by tier order
+  const W = 820, leftPad = 100, rightPad = 30;
+  const tierGap = 84;
+  const H = TIERS.length * tierGap + 80;
+  const byTier = Object.fromEntries(TIERS.map(t=>[t.id,[]]));
+  NODES.forEach(n => { if (byTier[n.tier]) byTier[n.tier].push(n); });
+  const pos = {};
+  TIERS.forEach((tier, ti)=>{
+    const arr = byTier[tier.id];
+    const usable = W - leftPad - rightPad;
+    arr.forEach((n,i)=>{
+      const x = leftPad + (arr.length===1 ? usable/2 : (i/(arr.length-1))*usable);
+      const y = 40 + ti*tierGap + 22;
+      pos[n.id] = { x, y, r:9 };
+    });
+  });
+  const fontFam = state.lang==='dev'?'Tiro Devanagari Sanskrit':state.lang==='kn'?'Tiro Kannada':'Cormorant Garamond';
+  let svg = `<svg viewBox="0 0 ${W} ${H}" width="${W}" height="${H}" xmlns="http://www.w3.org/2000/svg">`;
+  TIERS.forEach((tier,ti)=>{
+    const y = 40 + ti*tierGap;
+    svg += `<rect x="0" y="${y-22}" width="${W}" height="${tierGap}" fill="${ti%2 ? 'rgba(214,197,153,.10)' : 'rgba(230,216,176,.18)'}"/>`;
+    const lab = state.lang==='dev'?tier.dev:state.lang==='kn'?tier.kn:tier.en;
+    svg += `<text x="10" y="${y+4}" font-family="${fontFam}" font-size="12" fill="var(--ink-soft)" font-weight="600">${escapeHtml(lab)}</text>`;
+  });
+  EDGES.forEach(e=>{
+    const a = pos[e.source]; const b = pos[e.target];
+    if (!a || !b) return;
+    const mx = (a.x+b.x)/2;
+    const my = (a.y+b.y)/2 - Math.abs(b.y-a.y)*0.08;
+    svg += `<path class="map-edge" d="M ${a.x} ${a.y} Q ${mx} ${my} ${b.x} ${b.y}" stroke="var(--e-${e.type})" stroke-width="0.7"/>`;
+  });
+  NODES.forEach(n=>{
+    const p = pos[n.id]; if (!p) return;
+    const lab = labelOf(n);
+    const maxLen = state.lang==='en' ? 14 : 10;
+    const shown = lab.length > maxLen ? lab.slice(0,maxLen-1)+'\u2026' : lab;
+    svg += `<g class="map-node" data-id="${n.id}">
+      <circle cx="${p.x}" cy="${p.y}" r="${p.r}" fill="var(--t-${n.tier})" fill-opacity="0.88" stroke="var(--t-${n.tier})" stroke-width="1.2"/>
+      <text x="${p.x}" y="${p.y + p.r + 11}" font-family="${fontFam}" font-size="${state.lang==='en'?10:11}">${escapeHtml(shown)}</text>
+    </g>`;
+  });
+  svg += `</svg>`;
+  root.innerHTML = `<div class="map-wrap">${svg}</div>`;
+}
+
+/* ---------- DISPATCH ---------- */
+function render(){
+  if (state.view==='browse') renderBrowse();
+  else if (state.view==='focus') renderFocus();
+  else if (state.view==='map') renderMap();
+  const f = document.getElementById('stats');
+  if (f) f.textContent = `${NODES.length} concepts \u00b7 ${EDGES.length} relations \u00b7 ${Object.keys(SHLOKAS).length} shlokas \u00b7 ${TIERS.length} tiers`;
+}
+
+/* ---------- WIRING ---------- */
+document.getElementById('lang-tabs').addEventListener('click', (ev)=>{
+  const b = ev.target.closest('button[data-lang]');
+  if (!b) return;
+  setLang(b.dataset.lang);
+});
+
+document.getElementById('view-tabs').addEventListener('click', (ev)=>{
+  const b = ev.target.closest('button[data-view]');
+  if (!b) return;
+  setView(b.dataset.view);
+});
+
+document.getElementById('q').addEventListener('input', (ev)=>{
+  state.q = ev.target.value;
+  if (state.view!=='browse') setView('browse');
+  else render();
+});
+
+/* Delegated clicks: Browse list items, Focus relation items, and Map node circles
+   all use data-id and route to the Focus view. */
+document.addEventListener('click', (ev)=>{
+  const li = ev.target.closest('li[data-id]');
+  if (li){ setView('focus', li.dataset.id); return; }
+  const g = ev.target.closest('g.map-node[data-id]');
+  if (g){ setView('focus', g.dataset.id); return; }
+});
+
+/* Initial render */
+render();
+</script>
+</body>
+</html>
