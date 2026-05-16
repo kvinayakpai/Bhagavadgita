@@ -149,8 +149,30 @@ body.lang-kn  .focus-card h1{font-family:'Tiro Kannada',serif;font-size:30px}
   padding:8px 10px;background:var(--paper-2);border-left:3px solid var(--t-paramartha);
   border-radius:0 6px 6px 0;margin-top:8px;
 }
-.focus-card .madhva::before{content:"Madhva · "; font-weight:600;color:var(--t-paramartha)}
+.focus-card .madhva .madhva-prefix{font-weight:600;color:var(--t-paramartha)}
 .focus-card .refs{font-size:11px;letter-spacing:.06em;color:var(--ink-fade);margin-top:10px}
+
+/* Shloka rendered INSIDE the focus card, between note/madhva and refs.
+   Italicized in IAST mode; native script in dev/kn modes. Indented + ruled
+   on the left to read as a quoted verse callout. */
+.focus-card .focus-shloka{
+  margin:12px 0 6px;padding:10px 14px;
+  border-left:3px solid var(--rule);
+  background:linear-gradient(180deg, var(--paper-2) 0%, var(--paper) 100%);
+  border-radius:0 6px 6px 0;
+}
+.focus-card .focus-shloka .shloka-script{
+  font-family:'Tiro Devanagari Sanskrit',serif;font-size:17px;line-height:1.55;
+  white-space:pre-wrap;color:var(--ink);
+}
+body.lang-kn .focus-card .focus-shloka .shloka-script{font-family:'Tiro Kannada',serif}
+body.lang-en .focus-card .focus-shloka .shloka-script{
+  font-family:'Cormorant Garamond',serif;font-style:italic;font-size:15px;
+}
+.focus-card .focus-shloka .shloka-ref{
+  font-size:10px;color:var(--ink-fade);margin-top:6px;
+  letter-spacing:.06em;text-align:right;
+}
 
 .shloka{
   margin:0 14px 12px;padding:14px 16px;border-radius:10px;
@@ -253,12 +275,57 @@ footer{
    ============================================================================ */
 const state = { lang:'en', view:'browse', focusId:null, q:'' };
 
+/* UI_STRINGS — tri-script translations for chrome labels (section headers,
+   pill badges, footer counter, Madhva callout prefix). All values
+   {en, dev, kn}. Keys mirror the English idiom used by the source. */
+const UI_STRINGS = {
+  outgoing:        { en:'Outgoing',       dev:'निर्गत-सम्बन्धाः',   kn:'ನಿರ್ಗತ-ಸಂಬಂಧಗಳು' },
+  incoming:        { en:'Incoming',       dev:'आगत-सम्बन्धाः',     kn:'ಆಗತ-ಸಂಬಂಧಗಳು' },
+  madhva:          { en:'Madhva',         dev:'माध्व',             kn:'ಮಾಧ್ವ' },
+  noMatch:         { en:'No concepts match',          dev:'न केऽपि सम्मताः',       kn:'ಯಾವ ಪರಿಕಲ್ಪನೆಗಳೂ ಹೊಂದಿಲ್ಲ' },
+  conceptNotFound: { en:'Concept not found.',          dev:'सम्मतम् न प्राप्तम्।',     kn:'ಪರಿಕಲ್ಪನೆ ಸಿಗಲಿಲ್ಲ.' },
+  // footer counter pieces
+  concepts:        { en:'concepts',       dev:'सम्मताः',           kn:'ಪರಿಕಲ್ಪನೆಗಳು' },
+  relations:       { en:'relations',      dev:'सम्बन्धाः',          kn:'ಸಂಬಂಧಗಳು' },
+  shlokas:         { en:'shlokas',        dev:'श्लोकाः',           kn:'ಶ್ಲೋಕಗಳು' },
+  tiers:           { en:'tiers',          dev:'स्तराः',            kn:'ಸ್ತರಗಳು' },
+  // edge type pill badges — keep tight (≤ ~12 chars) for pill display
+  'is-a':            { en:'IS-A',            dev:'प्रकारः',        kn:'ಪ್ರಕಾರ' },
+  'includes':        { en:'INCLUDES',        dev:'अन्तर्भवति',    kn:'ಒಳಗೊಂಡಿದೆ' },
+  'leads-to':        { en:'LEADS-TO',        dev:'→ फलम्',        kn:'→ ಫಲ' },
+  'opposite-of':     { en:'OPPOSITE-OF',     dev:'विरोधी',        kn:'ವಿರೋಧೀ' },
+  'antidote-to':     { en:'ANTIDOTE-TO',     dev:'प्रतिकारः',     kn:'ಪ್ರತಿಕಾರ' },
+  'arises-from':     { en:'ARISES-FROM',     dev:'उद्भवति',       kn:'ಉದ್ಭವಿಸುತ್ತದೆ' },
+  'predicates-on':   { en:'PREDICATES-ON',   dev:'विषयीकरोति',    kn:'ವಿಷಯೀಕರಿಸುತ್ತದೆ' },
+  'transforms-into': { en:'TRANSFORMS-INTO', dev:'परिणमते',       kn:'ಪರಿಣಮಿಸುತ್ತದೆ' },
+  'grounded-in':     { en:'GROUNDED-IN',     dev:'प्रतिष्ठितम्',  kn:'ಪ್ರತಿಷ್ಠಿತ' },
+  // search + nav chrome
+  searchPlaceholder: { en:'Search concepts, tiers, verses…', dev:'सम्मतान्, स्तरान्, श्लोकान् अन्विष्यतु…', kn:'ಪರಿಕಲ್ಪನೆ, ಸ್ತರ, ಶ್ಲೋಕಗಳನ್ನು ಹುಡುಕಿ…' },
+  navBrowse:         { en:'Browse',           dev:'सूची',           kn:'ಸೂಚಿ' },
+  navFocus:          { en:'Focus',            dev:'विवरणम्',        kn:'ವಿವರಣೆ' },
+  navMap:            { en:'Map',              dev:'मानचित्रम्',     kn:'ನಕ್ಷೆ' },
+};
+function UI(key){
+  const row = UI_STRINGS[key];
+  if (!row) return key;
+  return row[state.lang] || row.en;
+}
+
 function setLang(lang){
   state.lang = lang;
   document.body.classList.remove('lang-en','lang-dev','lang-kn');
   document.body.classList.add('lang-'+lang);
   document.querySelectorAll('#lang-tabs button').forEach(b=>{
     b.classList.toggle('on', b.dataset.lang===lang);
+  });
+  // Refresh static chrome strings whose markup is outside the rendered views.
+  const qEl = document.getElementById('q');
+  if (qEl) qEl.placeholder = UI('searchPlaceholder');
+  document.querySelectorAll('#view-tabs button[data-view]').forEach(b=>{
+    const k = b.dataset.view==='browse' ? 'navBrowse'
+            : b.dataset.view==='focus'  ? 'navFocus'
+            : b.dataset.view==='map'    ? 'navMap' : null;
+    if (k) b.textContent = UI(k);
   });
   render();
 }
@@ -279,6 +346,18 @@ function setView(v, id){
 
 function labelOf(n){
   return state.lang==='dev' ? n.dev : state.lang==='kn' ? n.kn : n.en;
+}
+
+/* getActive: read a field that may be either a flat string (English-only) OR a
+   tri-script object {en, dev, kn}. Returns the active-language string when
+   available; falls back to English when a script is missing. */
+function getActive(field){
+  if (field == null) return '';
+  if (typeof field === 'string') return field;
+  if (typeof field === 'object'){
+    return field[state.lang] || field.en || field.dev || field.kn || '';
+  }
+  return String(field);
 }
 
 function escapeHtml(s){
@@ -307,9 +386,15 @@ function renderBrowse(){
   const q = state.q.trim().toLowerCase();
   let html = '';
 
+  const flat = (v) => {
+    if (v == null) return '';
+    if (typeof v === 'string') return v;
+    if (typeof v === 'object') return [v.en, v.dev, v.kn].filter(Boolean).join(' ');
+    return String(v);
+  };
   const matches = (n) => {
     if (!q) return true;
-    const hay = [n.en, n.dev, n.kn, n.title, n.note, n.refs, n.tier].join(' ').toLowerCase();
+    const hay = [n.en, n.dev, n.kn, flat(n.title), flat(n.note), n.refs, n.tier].join(' ').toLowerCase();
     return hay.includes(q);
   };
 
@@ -332,7 +417,7 @@ function renderBrowse(){
       html += `<li data-id="${n.id}">
         <div>
           <div class="label">${highlight(lab,q)}</div>
-          <div class="sub">${escapeHtml(n.title)}</div>
+          <div class="sub">${escapeHtml(getActive(n.title))}</div>
         </div>
         <div class="ref">${escapeHtml(n.refs)}</div>
       </li>`;
@@ -341,7 +426,7 @@ function renderBrowse(){
   });
 
   if (!total){
-    html = `<div style="padding:40px 20px;text-align:center;color:var(--ink-fade)">No concepts match "${escapeHtml(state.q)}".</div>`;
+    html = `<div style="padding:40px 20px;text-align:center;color:var(--ink-fade)">${escapeHtml(UI('noMatch'))} "${escapeHtml(state.q)}".</div>`;
   }
   root.innerHTML = html;
 }
@@ -351,8 +436,15 @@ function renderFocus(){
   const root = document.getElementById('view-focus');
   const id = state.focusId || NODES[0].id;
   const n = NODE_BY_ID[id];
-  if (!n){ root.innerHTML = `<div style="padding:20px">Concept not found.</div>`; return; }
+  if (!n){ root.innerHTML = `<div style="padding:20px">${escapeHtml(UI('conceptNotFound'))}</div>`; return; }
   const tier = TIER_BY_ID[n.tier];
+
+  const s = SHLOKAS[n.id];
+  const shlokaText = s ? (state.lang==='dev' ? s.dev : state.lang==='kn' ? s.kn : s.iast) : '';
+  const shlokaInline = s ? `<div class="focus-shloka">
+      <div class="shloka-script">${escapeHtml(shlokaText)}</div>
+      <div class="shloka-ref">— ${escapeHtml(s.ref)}</div>
+    </div>` : '';
 
   let html = `<article class="focus-card">
     <span class="tier-badge" style="--tc:var(--t-${tier.id})">
@@ -360,21 +452,12 @@ function renderFocus(){
       ${escapeHtml(state.lang==='dev'?tier.dev:state.lang==='kn'?tier.kn:tier.en)}
     </span>
     <h1>${escapeHtml(labelOf(n))}</h1>
-    <div class="subtitle">${escapeHtml(n.title)}</div>
-    <p class="note">${escapeHtml(n.note)}</p>
-    ${n.madhva ? `<div class="madhva">${escapeHtml(n.madhva)}</div>` : ''}
+    <div class="subtitle">${escapeHtml(getActive(n.title))}</div>
+    <p class="note">${escapeHtml(getActive(n.note))}</p>
+    ${n.madhva ? `<div class="madhva"><span class="madhva-prefix">${escapeHtml(UI('madhva'))} · </span>${escapeHtml(getActive(n.madhva))}</div>` : ''}
+    ${shlokaInline}
     <div class="refs">${escapeHtml(n.refs)}</div>
   </article>`;
-
-  // shloka card
-  const s = SHLOKAS[n.id];
-  if (s){
-    const scriptText = state.lang==='dev' ? s.dev : state.lang==='kn' ? s.kn : s.iast;
-    html += `<section class="shloka">
-      <div class="shloka-script">${escapeHtml(scriptText)}</div>
-      <div class="shloka-ref">— ${escapeHtml(s.ref)}</div>
-    </section>`;
-  }
 
   // relations
   const out = ADJ[n.id]?.out || [];
@@ -382,28 +465,28 @@ function renderFocus(){
   if (out.length || inc.length){
     html += `<section class="relations">`;
     if (out.length){
-      html += `<h2>Outgoing</h2><ul>`;
+      html += `<h2>${escapeHtml(UI('outgoing'))}</h2><ul>`;
       out.forEach(e=>{
         const other = NODE_BY_ID[e.target];
         if (!other) return;
         const colorVar = `--e-${e.type}`;
         html += `<li data-id="${other.id}">
-          <span class="edge-type" style="background:var(${colorVar})">${escapeHtml(e.type)}</span>
-          <span class="edge-label">${escapeHtml(e.label||'')}</span>
+          <span class="edge-type" style="background:var(${colorVar})">${escapeHtml(UI(e.type))}</span>
+          <span class="edge-label">${escapeHtml(getActive(e.label))}</span>
           <span class="other">${escapeHtml(labelOf(other))} →</span>
         </li>`;
       });
       html += `</ul>`;
     }
     if (inc.length){
-      html += `<h2>Incoming</h2><ul>`;
+      html += `<h2>${escapeHtml(UI('incoming'))}</h2><ul>`;
       inc.forEach(e=>{
         const other = NODE_BY_ID[e.source];
         if (!other) return;
         const colorVar = `--e-${e.type}`;
         html += `<li data-id="${other.id}">
-          <span class="edge-type" style="background:var(${colorVar})">${escapeHtml(e.type)}</span>
-          <span class="edge-label">${escapeHtml(e.label||'')}</span>
+          <span class="edge-type" style="background:var(${colorVar})">${escapeHtml(UI(e.type))}</span>
+          <span class="edge-label">${escapeHtml(getActive(e.label))}</span>
           <span class="other">← ${escapeHtml(labelOf(other))}</span>
         </li>`;
       });
@@ -507,7 +590,7 @@ function renderMapAuto(root){
     const p = pos[n.id]; if (!p) return;
     const lab = labelOf(n);
     const maxLen = state.lang==='en' ? 14 : 10;
-    const shown = lab.length > maxLen ? lab.slice(0,maxLen-1)+'\u2026' : lab;
+    const shown = lab.length > maxLen ? lab.slice(0,maxLen-1)+'…' : lab;
     svg += `<g class="map-node" data-id="${n.id}">
       <circle cx="${p.x}" cy="${p.y}" r="${p.r}" fill="var(--t-${n.tier})" fill-opacity="0.88" stroke="var(--t-${n.tier})" stroke-width="1.2"/>
       <text x="${p.x}" y="${p.y + p.r + 11}" font-family="${fontFam}" font-size="${state.lang==='en'?10:11}">${escapeHtml(shown)}</text>
@@ -523,7 +606,7 @@ function render(){
   else if (state.view==='focus') renderFocus();
   else if (state.view==='map') renderMap();
   const f = document.getElementById('stats');
-  if (f) f.textContent = `${NODES.length} concepts \u00b7 ${EDGES.length} relations \u00b7 ${Object.keys(SHLOKAS).length} shlokas \u00b7 ${TIERS.length} tiers`;
+  if (f) f.textContent = `${NODES.length} ${UI('concepts')} · ${EDGES.length} ${UI('relations')} · ${Object.keys(SHLOKAS).length} ${UI('shlokas')} · ${TIERS.length} ${UI('tiers')}`;
 }
 
 /* ---------- WIRING ---------- */

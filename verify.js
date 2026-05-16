@@ -11,6 +11,7 @@
  *  6. duplicate node ids
  *  7. unknown edge types
  *  8. tier coverage stats
+ *  9. optional: tri-script edge label shape (en/dev/kn)
  *
  * Exits 0 on clean audit, 1 on any error.
  */
@@ -37,7 +38,7 @@ NODES.forEach((n,i)=>{
   });
 });
 
-// 3 — edge endpoints
+// 3 — edge endpoints + optional tri-script label shape
 const KNOWN_EDGE_TYPES = new Set([
   'is-a','includes','leads-to','opposite-of','antidote-to',
   'arises-from','predicates-on','transforms-into','grounded-in',
@@ -46,6 +47,12 @@ EDGES.forEach((e,i)=>{
   if (!seenIds.has(e.source)) err(`EDGE[${i}] (${e.type}): unknown source "${e.source}"`);
   if (!seenIds.has(e.target)) err(`EDGE[${i}] (${e.type}): unknown target "${e.target}"`);
   if (!KNOWN_EDGE_TYPES.has(e.type)) warn(`EDGE[${i}]: unfamiliar type "${e.type}"`);
+  if (e.label && typeof e.label === 'object'){
+    ['en','dev','kn'].forEach(k=>{
+      if (typeof e.label[k] !== 'string')
+        warn(`EDGE[${i}] (${e.source}→${e.target}): label.${k} missing or non-string`);
+    });
+  }
 });
 
 // 4 — shloka coverage
