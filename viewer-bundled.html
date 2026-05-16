@@ -1476,6 +1476,9 @@ const UI_STRINGS = {
   navBrowse:         { en:'Browse',           dev:'सूची',           kn:'ಸೂಚಿ' },
   navFocus:          { en:'Focus',            dev:'विवरणम्',        kn:'ವಿವರಣೆ' },
   navMap:            { en:'Map',              dev:'मानचित्रम्',     kn:'ನಕ್ಷೆ' },
+  // Masthead — uses innerHTML so EN can keep the italic Gītā.
+  brandName:         { en:'Bhagavad <em>Gītā</em> · Concept KG', dev:'भगवद्गीता · संकल्पना-कोशः', kn:'ಭಗವದ್ಗೀತಾ · ಸಂಕಲ್ಪನಾ-ಕೋಶ' },
+  brandCrumb:        { en:'Madhva',           dev:'माध्व',          kn:'ಮಾಧ್ವ' },
 };
 function UI(key){
   const row = UI_STRINGS[key];
@@ -1499,6 +1502,11 @@ function setLang(lang){
             : b.dataset.view==='map'    ? 'navMap' : null;
     if (k) b.textContent = UI(k);
   });
+  // Masthead brand strings
+  const brandNameEl = document.querySelector('header .brand .name');
+  if (brandNameEl) brandNameEl.innerHTML = UI('brandName');
+  const brandCrumbEl = document.querySelector('header .brand .crumb');
+  if (brandCrumbEl) brandCrumbEl.textContent = UI('brandCrumb');
   render();
 }
 
