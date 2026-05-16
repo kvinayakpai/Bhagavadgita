@@ -28,6 +28,8 @@ const KG_POSITIONS = {
   'ksara_purusha':      [500, 200, 13],
   'svarupa_aikya':      [660, 200, 13],
   'avatara':            [580, 260, 13],
+  'taratamya':          [200, 200, 13],
+  'pancha_bheda':       [80,  200, 13],
 
   // ============ Tattva (y ≈ 280–360) ============
   'isvara':             [120, 290, 14],
@@ -58,6 +60,10 @@ const KG_POSITIONS = {
   'sattvika_karma':     [340, 670, 10],
   'sattvika_karta':     [460, 670, 10],
   'triguna_atita':      [780, 670, 12],
+  'sattvika_shraddha':  [220, 720, 10],
+  'rajasa_shraddha':    [340, 720, 10],
+  'tamasa_shraddha':    [460, 720, 10],
+  'sattvika_ahara':     [580, 720, 10],
 
   // ============ Yoga (y ≈ 730–820) — wide spread, the largest tier ============
   'karma_yoga':         [120, 760, 14],
@@ -80,6 +86,16 @@ const KG_POSITIONS = {
   'indriya_nigraha':    [720, 910, 12],
   'samadhi':            [820, 910, 12],
   'svadhyaya':          [920, 910, 11],
+  // jñāna-aṅgas — second row of sādhana
+  'jnana_angas':        [120, 960, 12],
+  'amanitva':           [220, 960,  9],
+  'arjava':             [310, 960,  9],
+  'shauca':             [400, 960,  9],
+  'ksanti':             [490, 960,  9],
+  'ananya_yoga':        [580, 960, 11],
+  'vivikta_seva':       [690, 960,  9],
+  'adhyatma_jnana_nityatvam':[800, 960,  9],
+  'tattva_jnanartha_darshanam':[900, 960, 10],
 
   // ============ Antaḥkaraṇa (y ≈ 1000) — left cluster ============
   'manas':              [150, 1010, 12],
@@ -98,6 +114,7 @@ const KG_POSITIONS = {
   'ahimsa':             [780, 1080, 11],
   'satya':              [880, 1080, 11],
   'samatva_dharma':     [880, 1010, 11],
+  'pravritti_nivritti': [880, 1130, 11],
 
   // ============ Doṣa (y ≈ 1170) — bottom-left, the descent ============
   'kama':               [120, 1180, 14],
