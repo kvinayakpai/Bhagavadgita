@@ -215,6 +215,22 @@ body.lang-dev .relations li .other{font-family:'Tiro Devanagari Sanskrit',serif;
 body.lang-hi  .relations li .other{font-family:'Tiro Devanagari Hindi',serif;font-size:17px}
 body.lang-kn  .relations li .other{font-family:'Tiro Kannada',serif;font-size:17px}
 
+/* ============ BRIDGE — Viṣṇu-sahasranāma chips ============ */
+.relations .vsn-row{margin:6px 0 0}
+.relations .vsn-chips{display:flex;flex-wrap:wrap;gap:6px;padding:6px 0 4px}
+.vsn-chip{
+  display:inline-flex;align-items:baseline;gap:6px;
+  padding:6px 10px;border-radius:14px;
+  background:#f0e3c4;border:1px solid #c8b486;
+  color:#5a3e22;font-family:'Tiro Devanagari Sanskrit','Noto Sans Devanagari',serif;
+  font-size:14px;font-weight:600;text-decoration:none;
+  transition:background .08s, transform .08s, border-color .08s;
+}
+.vsn-chip:hover{background:#e8d8b0;border-color:#a8945c;transform:translateY(-1px)}
+.vsn-chip .ref{font-family:'Cormorant Garamond',serif;font-size:11px;color:#8b6f3e;font-weight:500;letter-spacing:.04em}
+body.lang-kn .vsn-chip{font-family:'Tiro Kannada','Noto Sans Kannada',serif}
+body.lang-en .vsn-chip{font-family:'Cormorant Garamond',serif;font-style:italic}
+
 /* ============ MAP (full graph) ============ */
 .map-wrap{padding:10px 8px 80px;overflow:auto}
 .map-wrap svg{display:block;margin:0 auto;background:var(--paper);border:1px solid var(--rule);border-radius:8px}
@@ -285,6 +301,7 @@ const state = { lang:'en', view:'browse', focusId:null, q:'' };
 const UI_STRINGS = {
   outgoing:        { en:'Outgoing',       dev:'निर्गत-सम्बन्धाः',   kn:'ನಿರ್ಗತ-ಸಂಬಂಧಗಳು', hi:'बाहर जाने वाले संबंध' },
   incoming:        { en:'Incoming',       dev:'आगत-सम्बन्धाः',     kn:'ಆಗತ-ಸಂಬಂಧಗಳು', hi:'अंदर आने वाले संबंध' },
+  relatedNamas:    { en:'In the Sahasranāma', dev:'सहस्रनामे', kn:'ಸಹಸ್ರನಾಮದಲ್ಲಿ', hi:'सहस्रनाम में' },
   madhva:          { en:'Madhva',         dev:'माध्व',             kn:'ಮಾಧ್ವ', hi:'माध्व' },
   noMatch:         { en:'No concepts match',          dev:'न केऽपि सम्मताः',       kn:'ಯಾವ ಪರಿಕಲ್ಪನೆಗಳೂ ಹೊಂದಿಲ್ಲ', hi:'कोई अवधारणा नहीं मिली' },
   conceptNotFound: { en:'Concept not found.',          dev:'सम्मतम् न प्राप्तम्।',     kn:'ಪರಿಕಲ್ಪನೆ ಸಿಗಲಿಲ್ಲ.', hi:'अवधारणा नहीं मिली।' },
@@ -474,11 +491,15 @@ function renderFocus(){
   // relations
   const out = ADJ[n.id]?.out || [];
   const inc = ADJ[n.id]?.in || [];
-  if (out.length || inc.length){
+  // Split outgoing edges: manifested-as-nama goes into the VSN bridge row,
+  // everything else into the standard Outgoing list.
+  const outNama = out.filter(e => e.type === 'manifested-as-nama');
+  const outRest = out.filter(e => e.type !== 'manifested-as-nama');
+  if (outRest.length || inc.length || outNama.length){
     html += `<section class="relations">`;
-    if (out.length){
+    if (outRest.length){
       html += `<h2>${escapeHtml(UI('outgoing'))}</h2><ul>`;
-      out.forEach(e=>{
+      outRest.forEach(e=>{
         const other = NODE_BY_ID[e.target];
         if (!other) return;
         const colorVar = `--e-${e.type}`;
@@ -489,6 +510,22 @@ function renderFocus(){
         </li>`;
       });
       html += `</ul>`;
+    }
+    // Bridge row — chips linking to VSN focus pages.
+    if (outNama.length){
+      html += `<h2>${escapeHtml(UI('relatedNamas'))}</h2><div class="vsn-row"><div class="vsn-chips">`;
+      outNama.forEach(e=>{
+        // target shape: "vsn:n_0024"
+        const namaId = String(e.target).replace(/^vsn:/, '');
+        // Derive position number from id (n_0024 → 24)
+        const m = namaId.match(/^n_0*(\d+)$/);
+        const pos = m ? m[1] : '';
+        // Devanāgarī label from edge.label.dev (strip the trailing prose after em-dash)
+        const labDev = (e.label && e.label.dev) ? e.label.dev.split('—')[0].split('-—')[0].trim() : namaId;
+        const url = `https://kvinayakpai.github.io/Vishnu-Sahasranamam/#focus:${namaId}`;
+        html += `<a class="vsn-chip" href="${escapeHtml(url)}" target="_blank" rel="noopener" data-nama="${escapeHtml(namaId)}">${escapeHtml(labDev)}${pos ? ` <span class="ref">(${pos})</span>` : ''}</a>`;
+      });
+      html += `</div></div>`;
     }
     if (inc.length){
       html += `<h2>${escapeHtml(UI('incoming'))}</h2><ul>`;

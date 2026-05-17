@@ -215,6 +215,22 @@ body.lang-dev .relations li .other{font-family:'Tiro Devanagari Sanskrit',serif;
 body.lang-hi  .relations li .other{font-family:'Tiro Devanagari Hindi',serif;font-size:17px}
 body.lang-kn  .relations li .other{font-family:'Tiro Kannada',serif;font-size:17px}
 
+/* ============ BRIDGE — Viṣṇu-sahasranāma chips ============ */
+.relations .vsn-row{margin:6px 0 0}
+.relations .vsn-chips{display:flex;flex-wrap:wrap;gap:6px;padding:6px 0 4px}
+.vsn-chip{
+  display:inline-flex;align-items:baseline;gap:6px;
+  padding:6px 10px;border-radius:14px;
+  background:#f0e3c4;border:1px solid #c8b486;
+  color:#5a3e22;font-family:'Tiro Devanagari Sanskrit','Noto Sans Devanagari',serif;
+  font-size:14px;font-weight:600;text-decoration:none;
+  transition:background .08s, transform .08s, border-color .08s;
+}
+.vsn-chip:hover{background:#e8d8b0;border-color:#a8945c;transform:translateY(-1px)}
+.vsn-chip .ref{font-family:'Cormorant Garamond',serif;font-size:11px;color:#8b6f3e;font-weight:500;letter-spacing:.04em}
+body.lang-kn .vsn-chip{font-family:'Tiro Kannada','Noto Sans Kannada',serif}
+body.lang-en .vsn-chip{font-family:'Cormorant Garamond',serif;font-style:italic}
+
 /* ============ MAP (full graph) ============ */
 .map-wrap{padding:10px 8px 80px;overflow:auto}
 .map-wrap svg{display:block;margin:0 auto;background:var(--paper);border:1px solid var(--rule);border-radius:8px}
@@ -1116,6 +1132,70 @@ const EDGES = [
   E('karma_yoga','jnana_yoga','leads-to',{en:'action purifies → knowledge',dev:'कर्म शुद्धि-द्वारा → ज्ञानम्',kn:'ಕರ್ಮ ಶುದ್ಧಿಯ ಮೂಲಕ → ಜ್ಞಾನ',hi:'कर्म शुद्ध करता → ज्ञान'}),
   E('dhyana_yoga','samadhi','leads-to',{en:'',dev:'',kn:'',hi:''}),
   E('vairagya','tyaga','is-a',{en:'',dev:'',kn:'',hi:''}),
+
+  // === Bridge edges — manifested-as-nāma → Viṣṇu-sahasranāma ===
+  // Doctrinal anchor: Mādhva siddhānta. Every Gītā concept tied to one or
+  // more nāmas where the same tattva is invoked. Targets use `vsn:` prefix
+  // to mark cross-graph edges; verify.js skips endpoint-existence for them.
+  E('purushottama','vsn:n_0024','manifested-as-nama',{en:'Pūrṇa Puruṣottama as nāma — BG 15.18 carama-śloka',dev:'पुरुषोत्तमः इति नाम — गी॰ १५।१८',kn:'ಪುರುಷೋತ್ತಮಃ ಎಂಬ ನಾಮ — ಗೀ॰ ೧೫।೧೮',hi:'पुरुषोत्तमः नाम — गीता १५.१८'}),
+  E('purushottama','vsn:n_0406','manifested-as-nama',{en:'Puruṣaḥ — the puruṣa beyond kṣara/akṣara',dev:'पुरुषः — क्षराक्षरातीतः',kn:'ಪುರುಷಃ — ಕ್ಷರಾಕ್ಷರಾತೀತ',hi:'पुरुषः — क्षर-अक्षर से परे'}),
+
+  E('brahman','vsn:n_0001','manifested-as-nama',{en:'Viśvam — Brahman as cosmic totality',dev:'विश्वम् — ब्रह्म-समग्रता-वाचकम्',kn:'ವಿಶ್ವಂ — ಬ್ರಹ್ಮ-ಸಮಗ್ರತಾ-ವಾಚಕ',hi:'विश्वम् — ब्रह्म की समग्रता'}),
+  E('brahman','vsn:n_0002','manifested-as-nama',{en:'Viṣṇuḥ — Mādhva: Brahman = Viṣṇu',dev:'विष्णुः — ब्रह्म = विष्णुः इति मध्व-मतम्',kn:'ವಿಷ್ಣುಃ — ಬ್ರಹ್ಮ = ವಿಷ್ಣು (ಮಧ್ವ)',hi:'विष्णुः — मध्व: ब्रह्म = विष्णु'}),
+  E('brahman','vsn:n_0667','manifested-as-nama',{en:'Brahma — direct name-form of Brahman',dev:'ब्रह्म — साक्षात् नाम-रूपम्',kn:'ಬ್ರಹ್ಮ — ಸಾಕ್ಷಾತ್ ನಾಮ-ರೂಪ',hi:'ब्रह्म — साक्षात् नाम'}),
+
+  E('paramatman','vsn:n_0012','manifested-as-nama',{en:'Paramātmā — direct nāma of Paramātman',dev:'परमात्मा — साक्षात् नाम',kn:'ಪರಮಾತ್ಮಾ — ಸಾಕ್ಷಾತ್ ನಾಮ',hi:'परमात्मा — साक्षात् नाम'}),
+  E('paramatman','vsn:n_0245','manifested-as-nama',{en:'Nārāyaṇaḥ — antaryāmin in all waters/beings',dev:'नारायणः — सर्वान्तर्यामी',kn:'ನಾರಾಯಣಃ — ಸರ್ವಾಂತರ್ಯಾಮಿ',hi:'नारायणः — सर्वान्तर्यामी'}),
+  E('paramatman','vsn:n_0007','manifested-as-nama',{en:'Bhūtātmā — inner self of all beings',dev:'भूतात्मा — सर्व-भूतान्तरात्मा',kn:'ಭೂತಾತ್ಮಾ — ಸರ್ವ-ಭೂತಾಂತರಾತ್ಮ',hi:'भूतात्मा — सर्व-भूतों का अंतरात्मा'}),
+  E('paramatman','vsn:n_0015','manifested-as-nama',{en:'Sākṣī — witness-self (BG 13.22 upadraṣṭā)',dev:'साक्षी — उपद्रष्टा (गी॰ १३।२२)',kn:'ಸಾಕ್ಷೀ — ಉಪದ್ರಷ್ಟಾ (ಗೀ॰ ೧೩।೨೨)',hi:'साक्षी — उपद्रष्टा (गीता १३.२२)'}),
+
+  E('avatara','vsn:n_0057','manifested-as-nama',{en:'Kṛṣṇaḥ — speaker of the Gītā, sva-icchā-avatāra',dev:'कृष्णः — गीतोपदेष्टा, स्वेच्छावतारः',kn:'ಕೃಷ್ಣಃ — ಗೀತೋಪದೇಷ್ಟಾ, ಸ್ವೇಚ್ಛಾವತಾರ',hi:'कृष्णः — गीतोपदेष्टा, स्वेच्छा-अवतार'}),
+  E('avatara','vsn:n_0394','manifested-as-nama',{en:'Rāmaḥ — Tretā-yuga avatāra',dev:'रामः — त्रेतायुगावतारः',kn:'ರಾಮಃ — ತ್ರೇತಾಯುಗಾವತಾರ',hi:'रामः — त्रेता-युग का अवतार'}),
+  E('avatara','vsn:n_0021','manifested-as-nama',{en:'Nārasiṃha-vapuḥ — man-lion avatāra-form',dev:'नारसिंहवपुः — नृसिंहावतारः',kn:'ನಾರಸಿಂಹವಪುಃ — ನೃಸಿಂಹಾವತಾರ',hi:'नारसिंहवपुः — नरसिंह अवतार'}),
+  E('avatara','vsn:n_0152','manifested-as-nama',{en:'Vāmanaḥ — dwarf avatāra',dev:'वामनः — वामनावतारः',kn:'ವಾಮನಃ — ವಾಮನಾವತಾರ',hi:'वामनः — वामन अवतार'}),
+  E('avatara','vsn:n_0539','manifested-as-nama',{en:'Mahā-varāhaḥ — boar avatāra',dev:'महावराहः — वराहावतारः',kn:'ಮಹಾವರಾಹಃ — ವರಾಹಾವತಾರ',hi:'महावराहः — वराह अवतार'}),
+  E('avatara','vsn:n_0570','manifested-as-nama',{en:'Khaṇḍa-paraśuḥ — Paraśu-rāma avatāra',dev:'खण्डपरशुः — परशुरामावतारः',kn:'ಖಂಡಪರಶುಃ — ಪರಶುರಾಮಾವತಾರ',hi:'खण्डपरशुः — परशुराम अवतार'}),
+
+  E('akshara_purusha','vsn:n_0016','manifested-as-nama',{en:'Akṣaraḥ — the imperishable (kūṭastha)',dev:'अक्षरः — कूटस्थः',kn:'ಅಕ್ಷರಃ — ಕೂಟಸ್ಥ',hi:'अक्षरः — कूटस्थ'}),
+  E('akshara_purusha','vsn:n_0017','manifested-as-nama',{en:'Akṣaraḥ — second occurrence, Lakṣmī-tier',dev:'अक्षरः — द्वितीयं नाम, लक्ष्मी-स्तरम्',kn:'ಅಕ್ಷರಃ — ದ್ವಿತೀಯ ನಾಮ, ಲಕ್ಷ್ಮೀ-ಸ್ತರ',hi:'अक्षरः — दूसरा नाम, लक्ष्मी-स्तर'}),
+
+  E('sarvottamatva','vsn:n_0002','manifested-as-nama',{en:'Viṣṇuḥ — sarvottama by Mādhva siddhānta',dev:'विष्णुः — मध्व-मते सर्वोत्तमः',kn:'ವಿಷ್ಣುಃ — ಮಧ್ವ-ಮತದಲ್ಲಿ ಸರ್ವೋತ್ತಮ',hi:'विष्णुः — मध्व मत में सर्वोत्तम'}),
+  E('sarvottamatva','vsn:n_0024','manifested-as-nama',{en:'Puruṣottamaḥ — supreme person, none higher',dev:'पुरुषोत्तमः — न तस्मात् परः कश्चित्',kn:'ಪುರುಷೋತ್ತಮಃ — ಇವನಿಗಿಂತ ಮೇಲಿಲ್ಲ',hi:'पुरुषोत्तमः — कोई उच्चतर नहीं'}),
+  E('sarvottamatva','vsn:n_0650','manifested-as-nama',{en:'Loka-trayāśrayaḥ — shelter of all three worlds',dev:'लोकत्रयाश्रयः — त्रिलोक-आश्रयः',kn:'ಲೋಕತ್ರಯಾಶ್ರಯಃ — ತ್ರಿಲೋಕ-ಆಶ್ರಯ',hi:'लोकत्रयाश्रयः — तीनों लोकों का आश्रय'}),
+  E('sarvottamatva','vsn:n_0656','manifested-as-nama',{en:'Hariḥ — sin-snatcher, sarvottama',dev:'हरिः — पाप-हारी, सर्वोत्तमः',kn:'ಹರಿಃ — ಪಾಪ-ಹಾರೀ, ಸರ್ವೋತ್ತಮ',hi:'हरिः — पाप-हारी, सर्वोत्तम'}),
+
+  E('bhakti_yoga','vsn:n_0739','manifested-as-nama',{en:'Bhakta-vatsalaḥ — affectionate to devotees',dev:'भक्तवत्सलः — भक्तेषु वात्सल्यवान्',kn:'ಭಕ್ತವತ್ಸಲಃ — ಭಕ್ತರ ಮೇಲೆ ವಾತ್ಸಲ್ಯ',hi:'भक्तवत्सलः — भक्तों पर वात्सल्य'}),
+  E('bhakti_yoga','vsn:n_0780','manifested-as-nama',{en:'Bhakta-vatsalaḥ — second occurrence, sealing emphasis',dev:'भक्तवत्सलः — द्वितीयं नाम, बलं-पुष्टिः',kn:'ಭಕ್ತವತ್ಸಲಃ — ಎರಡನೆಯ ಬಾರಿ, ಬಲ-ಪುಷ್ಟಿ',hi:'भक्तवत्सलः — दूसरी बार, बल-पुष्टि'}),
+  E('bhakti_yoga','vsn:n_0737','manifested-as-nama',{en:'Loka-nāthaḥ — Lord-of-bhakta-loka',dev:'लोकनाथः — भक्तानां नाथः',kn:'ಲೋಕನಾಥಃ — ಭಕ್ತರ ನಾಥ',hi:'लोकनाथः — भक्त-लोक के नाथ'}),
+
+  E('dhyana_yoga','vsn:n_0018','manifested-as-nama',{en:'Yogaḥ — yoga itself as name-form',dev:'योगः — योग-स्वरूपं नाम',kn:'ಯೋಗಃ — ಯೋಗ-ಸ್ವರೂಪ ನಾಮ',hi:'योगः — योग-स्वरूप नाम'}),
+  E('dhyana_yoga','vsn:n_0852','manifested-as-nama',{en:'Yogī — the yogin, dhyāna-locus',dev:'योगी — ध्यान-स्थानम्',kn:'ಯೋಗೀ — ಧ್ಯಾನ-ಸ್ಥಾನ',hi:'योगी — ध्यान-स्थान'}),
+  E('dhyana_yoga','vsn:n_0853','manifested-as-nama',{en:'Yogīśaḥ — Lord of yogins (BG 6 dhyāna-yoga)',dev:'योगीशः — योगिनां ईश्वरः',kn:'ಯೋಗೀಶಃ — ಯೋಗಿಗಳ ಈಶ್ವರ',hi:'योगीशः — योगियों के ईश्वर'}),
+
+  E('sharanagati','vsn:n_0086','manifested-as-nama',{en:'Śaraṇam — direct refuge-name (BG 18.66)',dev:'शरणम् — साक्षात् शरण-नाम (गी॰ १८।६६)',kn:'ಶರಣಂ — ಸಾಕ್ಷಾತ್ ಶರಣ-ನಾಮ (ಗೀ॰ ೧೮।೬೬)',hi:'शरणम् — साक्षात् शरण-नाम (गीता १८.६६)'}),
+  E('sharanagati','vsn:n_0928','manifested-as-nama',{en:'Vīrahā — slayer of devotees\' enemies (praṇata-rakṣaka)',dev:'वीरहा — भक्त-शत्रुहन्ता (प्रणत-रक्षकः)',kn:'ವೀರಹಾ — ಭಕ್ತ-ಶತ್ರು-ಹಂತ (ಪ್ರಣತ-ರಕ್ಷಕ)',hi:'वीरहा — भक्त-शत्रुहन्ता (प्रणत-रक्षक)'}),
+  E('sharanagati','vsn:n_0461','manifested-as-nama',{en:'Suhṛt — friend (śaraṇāgata-vatsala)',dev:'सुहृत् — शरणागत-वत्सलः',kn:'ಸುಹೃತ್ — ಶರಣಾಗತ-ವತ್ಸಲ',hi:'सुहृत् — शरणागत-वत्सल'}),
+
+  E('sarva_dharman_parityajya','vsn:n_0656','manifested-as-nama',{en:'Hariḥ — snatcher of sins (BG 18.66 sarva-pāpa-mokṣa)',dev:'हरिः — पाप-हारी (गी॰ १८।६६ सर्व-पाप-मोक्षः)',kn:'ಹರಿಃ — ಪಾಪ-ಹಾರೀ (ಗೀ॰ ೧೮।೬೬)',hi:'हरिः — पाप-हारी (गीता १८.६६)'}),
+  E('sarva_dharman_parityajya','vsn:n_0024','manifested-as-nama',{en:'Puruṣottamaḥ — the speaker of the carama-śloka',dev:'पुरुषोत्तमः — चरम-श्लोक-वक्ता',kn:'ಪುರುಷೋತ್ತಮಃ — ಚರಮ-ಶ್ಲೋಕ-ವಕ್ತ',hi:'पुरुषोत्तमः — चरम-श्लोक वक्ता'}),
+
+  E('moksha','vsn:n_0515','manifested-as-nama',{en:'Mukundaḥ — giver of mukti',dev:'मुकुन्दः — मुक्ति-प्रदः',kn:'ಮುಕುಂದಃ — ಮುಕ್ತಿ-ಪ್ರದ',hi:'मुकुन्दः — मुक्ति-प्रद'}),
+  E('moksha','vsn:n_0013','manifested-as-nama',{en:'Muktānāṃ paramā gatiḥ — supreme goal of the released',dev:'मुक्तानां परमा गतिः — मोक्ष-गत्यर्थः',kn:'ಮುಕ್ತಾನಾಂ ಪರಮಾ ಗತಿಃ — ಮುಕ್ತಿ-ಗತಿ',hi:'मुक्तानां परमा गतिः — मुक्ति-गति'}),
+
+  E('paramagati','vsn:n_0013','manifested-as-nama',{en:'Muktānāṃ paramā gatiḥ — direct paramagati nāma',dev:'मुक्तानां परमा गतिः — साक्षात् परमगति-नाम',kn:'ಮುಕ್ತಾನಾಂ ಪರಮಾ ಗತಿಃ — ಸಾಕ್ಷಾತ್ ಪರಮಗತಿ-ನಾಮ',hi:'मुक्तानां परमा गतिः — साक्षात् परमगति-नाम'}),
+  E('paramagati','vsn:n_0184','manifested-as-nama',{en:'Satāṃ gatiḥ — goal of the sat (sādhus)',dev:'सतां गतिः — साधूनां गतिः',kn:'ಸತಾಂ ಗತಿಃ — ಸಾಧುಗಳ ಗತಿ',hi:'सतां गतिः — साधुओं की गति'}),
+
+  E('salokya','vsn:n_0406','manifested-as-nama',{en:'Puruṣaḥ — sālokya-mukti tier (concept-tagged)',dev:'पुरुषः — सालोक्य-मुक्ति-स्तरम्',kn:'ಪುರುಷಃ — ಸಾಲೋಕ್ಯ-ಮುಕ್ತಿ-ಸ್ತರ',hi:'पुरुषः — सालोक्य-मुक्ति-स्तर'}),
+
+  E('sayujya','vsn:n_0954','manifested-as-nama',{en:'Puṣpa-hāsaḥ — sāyujya-mukti tier (concept-tagged)',dev:'पुष्पहासः — सायुज्य-मुक्ति-स्तरम्',kn:'ಪುಷ್ಪಹಾಸಃ — ಸಾಯುಜ್ಯ-ಮುಕ್ತಿ-ಸ್ತರ',hi:'पुष्पहासः — सायुज्य-मुक्ति-स्तर'}),
+
+  E('antaryamin','vsn:n_0002','manifested-as-nama',{en:'Viṣṇuḥ — pervader, antaryāmin par excellence',dev:'विष्णुः — सर्वान्तर्यामी',kn:'ವಿಷ್ಣುಃ — ಸರ್ವಾಂತರ್ಯಾಮಿ',hi:'विष्णुः — सर्वान्तर्यामी'}),
+  E('antaryamin','vsn:n_0007','manifested-as-nama',{en:'Bhūtātmā — inner self of all beings',dev:'भूतात्मा — सर्व-भूतान्तरात्मा',kn:'ಭೂತಾತ್ಮಾ — ಸರ್ವ-ಭೂತಾಂತರಾತ್ಮ',hi:'भूतात्मा — सर्व-भूतों का अंतरात्मा'}),
+  E('antaryamin','vsn:n_0047','manifested-as-nama',{en:'Hṛṣīkeśaḥ — Lord of indriyas, hṛdaya-stha',dev:'हृषीकेशः — इन्द्रियेशः, हृदय-स्थः',kn:'ಹೃಷೀಕೇಶಃ — ಇಂದ್ರಿಯೇಶ, ಹೃದಯ-ಸ್ಥ',hi:'हृषीकेशः — इन्द्रियेश, हृदय-स्थ'}),
+  E('antaryamin','vsn:n_0156','manifested-as-nama',{en:'Ūrjitaḥ — sūtrātman, thread-of-being',dev:'ऊर्जितः — सूत्रात्मा',kn:'ಊರ್ಜಿತಃ — ಸೂತ್ರಾತ್ಮ',hi:'ऊर्जितः — सूत्रात्मा'}),
+
+  E('vibhuti','vsn:n_0530','manifested-as-nama',{en:'Trivikramaḥ — three-stride vibhūti (BG 10)',dev:'त्रिविक्रमः — त्रिपाद-विभूतिः (गी॰ १०)',kn:'ತ್ರಿವಿಕ್ರಮಃ — ತ್ರಿಪಾದ-ವಿಭೂತಿ (ಗೀ॰ ೧೦)',hi:'त्रिविक्रमः — त्रिपाद-विभूति (गीता १०)'}),
+  E('vibhuti','vsn:n_0021','manifested-as-nama',{en:'Nārasiṃha-vapuḥ — narasiṃha as vibhūti-form',dev:'नारसिंहवपुः — नृसिंह-विभूतिः',kn:'ನಾರಸಿಂಹವಪುಃ — ನೃಸಿಂಹ-ವಿಭೂತಿ',hi:'नारसिंहवपुः — नरसिंह-विभूति'}),
 ];
 
 /* ============================================================================
@@ -1457,6 +1537,7 @@ const state = { lang:'en', view:'browse', focusId:null, q:'' };
 const UI_STRINGS = {
   outgoing:        { en:'Outgoing',       dev:'निर्गत-सम्बन्धाः',   kn:'ನಿರ್ಗತ-ಸಂಬಂಧಗಳು', hi:'बाहर जाने वाले संबंध' },
   incoming:        { en:'Incoming',       dev:'आगत-सम्बन्धाः',     kn:'ಆಗತ-ಸಂಬಂಧಗಳು', hi:'अंदर आने वाले संबंध' },
+  relatedNamas:    { en:'In the Sahasranāma', dev:'सहस्रनामे', kn:'ಸಹಸ್ರನಾಮದಲ್ಲಿ', hi:'सहस्रनाम में' },
   madhva:          { en:'Madhva',         dev:'माध्व',             kn:'ಮಾಧ್ವ', hi:'माध्व' },
   noMatch:         { en:'No concepts match',          dev:'न केऽपि सम्मताः',       kn:'ಯಾವ ಪರಿಕಲ್ಪನೆಗಳೂ ಹೊಂದಿಲ್ಲ', hi:'कोई अवधारणा नहीं मिली' },
   conceptNotFound: { en:'Concept not found.',          dev:'सम्मतम् न प्राप्तम्।',     kn:'ಪರಿಕಲ್ಪನೆ ಸಿಗಲಿಲ್ಲ.', hi:'अवधारणा नहीं मिली।' },
@@ -1646,11 +1727,15 @@ function renderFocus(){
   // relations
   const out = ADJ[n.id]?.out || [];
   const inc = ADJ[n.id]?.in || [];
-  if (out.length || inc.length){
+  // Split outgoing edges: manifested-as-nama goes into the VSN bridge row,
+  // everything else into the standard Outgoing list.
+  const outNama = out.filter(e => e.type === 'manifested-as-nama');
+  const outRest = out.filter(e => e.type !== 'manifested-as-nama');
+  if (outRest.length || inc.length || outNama.length){
     html += `<section class="relations">`;
-    if (out.length){
+    if (outRest.length){
       html += `<h2>${escapeHtml(UI('outgoing'))}</h2><ul>`;
-      out.forEach(e=>{
+      outRest.forEach(e=>{
         const other = NODE_BY_ID[e.target];
         if (!other) return;
         const colorVar = `--e-${e.type}`;
@@ -1661,6 +1746,22 @@ function renderFocus(){
         </li>`;
       });
       html += `</ul>`;
+    }
+    // Bridge row — chips linking to VSN focus pages.
+    if (outNama.length){
+      html += `<h2>${escapeHtml(UI('relatedNamas'))}</h2><div class="vsn-row"><div class="vsn-chips">`;
+      outNama.forEach(e=>{
+        // target shape: "vsn:n_0024"
+        const namaId = String(e.target).replace(/^vsn:/, '');
+        // Derive position number from id (n_0024 → 24)
+        const m = namaId.match(/^n_0*(\d+)$/);
+        const pos = m ? m[1] : '';
+        // Devanāgarī label from edge.label.dev (strip the trailing prose after em-dash)
+        const labDev = (e.label && e.label.dev) ? e.label.dev.split('—')[0].split('-—')[0].trim() : namaId;
+        const url = `https://kvinayakpai.github.io/Vishnu-Sahasranamam/#focus:${namaId}`;
+        html += `<a class="vsn-chip" href="${escapeHtml(url)}" target="_blank" rel="noopener" data-nama="${escapeHtml(namaId)}">${escapeHtml(labDev)}${pos ? ` <span class="ref">(${pos})</span>` : ''}</a>`;
+      });
+      html += `</div></div>`;
     }
     if (inc.length){
       html += `<h2>${escapeHtml(UI('incoming'))}</h2><ul>`;

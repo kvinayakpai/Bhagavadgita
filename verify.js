@@ -93,10 +93,19 @@ NODES.forEach((n,i)=>{
 const KNOWN_EDGE_TYPES = new Set([
   'is-a','includes','leads-to','opposite-of','antidote-to',
   'arises-from','predicates-on','transforms-into','grounded-in',
+  // bridge edges into the Viṣṇu-sahasranāma graph
+  'manifested-as-nama',
 ]);
+// Cross-graph target prefix → skip endpoint-existence check
+const CROSS_GRAPH_PREFIXES = ['vsn:'];
+function isCrossGraphTarget(id){
+  return CROSS_GRAPH_PREFIXES.some(p => typeof id === 'string' && id.startsWith(p));
+}
 EDGES.forEach((e,i)=>{
   if (!seenIds.has(e.source)) err(`EDGE[${i}] (${e.type}): unknown source "${e.source}"`);
-  if (!seenIds.has(e.target)) err(`EDGE[${i}] (${e.type}): unknown target "${e.target}"`);
+  if (!isCrossGraphTarget(e.target) && !seenIds.has(e.target)){
+    err(`EDGE[${i}] (${e.type}): unknown target "${e.target}"`);
+  }
   if (!KNOWN_EDGE_TYPES.has(e.type)) warn(`EDGE[${i}]: unfamiliar type "${e.type}"`);
   // 10 — label is optional. If absent (null/undefined) it's fine. If
   // present and all three scripts are empty strings, treat as 'no label'
