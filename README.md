@@ -4,13 +4,13 @@ A concept-centered knowledge graph of the Bhagavad Gītā, read through Madhva s
 
 ## Live viewer
 
-Open `index.html` in any browser (or, once GitHub Pages is enabled, visit `kvinayakpai.github.io/Bhagavadgita`).
+Open `index.html` in any browser — the SPA is a single file that pulls `data.js` and `positions.js` from the same folder. For a phone, a USB stick, or any file:// context with no relative-fetch worries, open `viewer-bundled.html` instead: it inlines the data and positions into one self-contained HTML.
 
 - **Browse** — every concept under its tier, with live tri-script search
-- **Focus** — concept detail card: title, doctrinal note, Madhva-distinctive callout, the anchor verse in the active script, every outgoing and incoming relation
+- **Focus** — concept detail card: title, doctrinal note, Madhva-distinctive callout, the anchor verse in the active script, every outgoing and incoming relation with localized type badges
 - **Map** — all 112 concepts on one canvas, color-coded by tier, with edges drawn between them; hand-laid as a ladder of being from paramārtha to phala
 
-One-click language toggle: English (IAST diacritics) · देवनागरी · ಕನ್ನಡ ಲಿಪಿ.
+One-click language toggle: English (IAST diacritics) · देवनागरी · ಕನ್ನಡ ಲಿಪಿ. The toggle swaps **everything** — masthead, chrome, edge badges, concept titles, notes, callouts, verses — not just the headings.
 
 ## What's inside
 
@@ -18,9 +18,26 @@ One-click language toggle: English (IAST diacritics) · देवनागरी
 |---|---|
 | Concepts | **112** |
 | Typed relations | **124** |
-| Anchor verses (tri-script) | **56** |
+| Anchor verses (tri-script) | **112** |
 | Tiers | **12** |
 | Madhva-distinctive callouts | **22** |
+
+Every concept now has its own anchor verse in all three scripts (up from 56 earlier). 115 of the 124 typed relations carry a tri-script gloss; the remaining 9 (`is-a` / `opposite-of` taxonomic edges whose meaning is given by the type badge alone) carry no per-edge gloss.
+
+## Tri-script localization
+
+The viewer is genuinely trilingual end-to-end. The pieces that get translated:
+
+- **Masthead brand & crumb** — `Bhagavad Gītā · Concept KG` / `भगवद्गीता · संकल्पना-कोशः` / `ಭಗವದ್ಗೀತಾ · ಸಂಕಲ್ಪನಾ-ಕೋಶ`, plus the `Madhva` / `माध्व` / `ಮಾಧ್ವ` crumb beside it.
+- **Concept title** — every node carries `title: { en, dev, kn }`. The browse list, focus card, and map labels all use the active script's title.
+- **Doctrinal note** — every node carries `note: { en, dev, kn }`. Same for the focus card body.
+- **Madhva callout** — the 22 distinctive callouts carry `madhva: { en, dev, kn }`. Prefix label (`Madhva` / `माध्व` / `ಮಾಧ್ವ`) is also translated.
+- **Anchor verse** — every shloka has `{ dev, kn, iast, ref }`. EN view shows IAST with diacritics; DEV and KN show their native scripts.
+- **Edge labels** — relations carry an optional `label: { en, dev, kn }` with the per-edge gloss (115 of 124 do).
+- **Edge type pill badges** — `IS-A` / `प्रकारः` / `ಪ್ರಕಾರ`, `INCLUDES` / `अन्तर्भवति` / `ಒಳಗೊಂಡಿದೆ`, and the other seven edge types.
+- **Chrome strings** — `Outgoing` / `Incoming`, the `Browse` / `Focus` / `Map` tab labels, the search placeholder, the footer counter words (`concepts` / `relations` / `shlokas` / `tiers`), the `No concepts match` and `Concept not found` empty-states.
+
+All of these live under `UI_STRINGS` in `viewer.html`. `verify.js` asserts that every UI string and every node field has all three scripts present and non-empty.
 
 ## Tier schema (12)
 
@@ -51,6 +68,7 @@ One-click language toggle: English (IAST diacritics) · देवनागरी
 | `arises-from` | genetic chain | krodha **arises-from** kāma |
 | `predicates-on` | subject-of-predication | kṣetrajña **predicates-on** kṣetra |
 | `transforms-into` | progression | saṅga **transforms-into** kāma |
+| `grounded-in` | scriptural / doctrinal grounding | jīva-bheda **grounded-in** pañca-bheda |
 
 ## Interpretive lens — Madhva siddhānta
 
@@ -70,40 +88,54 @@ The strict-grounding standard: every concept and its Madhva reading anchored to 
 ## Files
 
 ```
-data.js          112 concept nodes + 124 edges + 56 shlokas (tri-script)
-positions.js     hand-laid x,y,r coordinates for the celestial-map view
-index.html       single-file viewer — Browse / Focus / Map across 3 scripts
-viewer.html      identical to index.html (kept for backward compat)
-build-decks.js   PptxGenJS deck generator — 3 PPTX outputs in decks/
-decks/           Bhagavadgita_Concept_KG_{en,dev,kn}.pptx (16 slides each)
-verify.js        consistency audit — node structure, edges, refs, positions
-README.md        this file
+data.js                112 concept nodes + 124 edges + 112 shlokas (tri-script)
+positions.js           hand-laid x,y,r coordinates for the celestial-map view
+viewer.html            single-file SPA — Browse / Focus / Map, tri-script
+index.html             byte-identical mirror of viewer.html (entry point for hosts that serve index)
+viewer-bundled.html    self-contained: data.js + positions.js inlined for file:// / phones
+build-bundle.py        produces viewer-bundled.html from viewer.html + data.js + positions.js
+build-decks.js         PptxGenJS deck generator — 3 PPTX outputs in decks/
+build-videos.sh        renders decks/ → 1080p MP4 walkthroughs via libreoffice + pdftoppm + ffmpeg
+build-walkthroughs.py  Playwright-scripted screen-recorded walkthroughs of the live viewer (en/dev/kn)
+decks/                 Bhagavadgita_Concept_KG_{en,dev,kn}.pptx
+videos/                Bhagavadgita_Concept_KG_{en,dev,kn}.mp4 walkthroughs
+verify.js              consistency audit — structure, tri-script shape, refs, positions, file integrity
+README.md              this file
 ```
 
 ## Usage
 
 ```bash
 # Open the viewer (no build needed)
-open index.html         # macOS
-xdg-open index.html     # Linux
-start index.html        # Windows
+open viewer.html                # macOS — uses local data.js / positions.js
+open viewer-bundled.html        # macOS — single-file, no fetch deps (works on phones too)
+xdg-open viewer.html            # Linux
+start viewer.html               # Windows
 
-# Generate the decks
+# Rebuild the self-contained bundle after editing data.js or viewer.html
+python3 build-bundle.py
+
+# Generate the slide decks (3 PPTX, one per script)
 npm install pptxgenjs
 node build-decks.js
 
-# Verify the data
+# Render the decks to MP4 (requires libreoffice + pdftoppm + ffmpeg)
+bash build-videos.sh
+
+# Verify the data + viewer integrity
 node verify.js
 
 # Use as a library
 node -e "const d=require('./data.js'); console.log(d.NODES.length, 'concepts')"
 ```
 
-## Deployment — GitHub Pages
+## Hosting & deployment
 
-1. Repo Settings → Pages
-2. Source: `Deploy from a branch` → `main` / `(root)`
-3. Save. After ~1 minute the viewer is live at `https://kvinayakpai.github.io/Bhagavadgita/`.
+The repo is private on the free GitHub plan, so **GitHub Pages from this repo is not available** without either flipping the repo to public or upgrading the account. Three pragmatic options:
+
+1. **Open locally** — no host needed. `viewer-bundled.html` opens cleanly from file:// on any device (desktop, phone, USB stick). This is the path of least resistance.
+2. **Cloudflare Pages / Netlify / Vercel** — all three offer free hosting from private GitHub repos. Point them at this repo, set the build command to nothing (or `python3 build-bundle.py`), publish directory `.`, and you'll have a live URL within a minute.
+3. **Make the repo public** — then GitHub Pages from `main` / `(root)` works as usual, served at `https://kvinayakpai.github.io/Bhagavadgita/`.
 
 ## License
 
