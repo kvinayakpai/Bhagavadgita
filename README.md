@@ -94,11 +94,8 @@ viewer.html            single-file SPA — Browse / Focus / Map, tri-script
 index.html             byte-identical mirror of viewer.html (entry point for hosts that serve index)
 viewer-bundled.html    self-contained: data.js + positions.js inlined for file:// / phones
 build-bundle.py        produces viewer-bundled.html from viewer.html + data.js + positions.js
-build-decks.js         PptxGenJS deck generator — 3 PPTX outputs in decks/
-build-videos.sh        renders decks/ → 1080p MP4 walkthroughs via libreoffice + pdftoppm + ffmpeg
-build-walkthroughs.py  Playwright-scripted screen-recorded walkthroughs of the live viewer (en/dev/kn)
-decks/                 Bhagavadgita_Concept_KG_{en,dev,kn}.pptx
-videos/                Bhagavadgita_Concept_KG_{en,dev,kn}.mp4 walkthroughs
+build-decks.js         PptxGenJS deck generator — 4 narrative PPTX outputs in decks/ (en/dev/kn/hi)
+decks/                 Bhagavadgita_Concept_KG_{en,dev,kn,hi}.pptx + .pdf — 26-slide story decks meant to be READ at the reader's pace
 verify.js              consistency audit — structure, tri-script shape, refs, positions, file integrity
 README.md              this file
 ```
@@ -115,12 +112,14 @@ start viewer.html               # Windows
 # Rebuild the self-contained bundle after editing data.js or viewer.html
 python3 build-bundle.py
 
-# Generate the slide decks (3 PPTX, one per script)
+# Generate the slide decks (4 narrative PPTX, one per script)
 npm install pptxgenjs
 node build-decks.js
 
-# Render the decks to MP4 (requires libreoffice + pdftoppm + ffmpeg)
-bash build-videos.sh
+# (optional) Convert decks to PDF for non-PowerPoint readers
+for L in en dev kn hi; do
+  soffice --headless --convert-to pdf --outdir decks "decks/Bhagavadgita_Concept_KG_${L}.pptx"
+done
 
 # Verify the data + viewer integrity
 node verify.js
