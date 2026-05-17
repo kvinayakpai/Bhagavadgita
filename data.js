@@ -11,18 +11,18 @@
  */
 
 const TIERS = [
-  { id:'paramartha',   en:'Paramārtha',    dev:'परमार्थ',      kn:'ಪರಮಾರ್ಥ',     gloss:'Ultimate reality — Hari, the sarvottama' },
-  { id:'tattva',       en:'Tattva',        dev:'तत्त्व',         kn:'ತತ್ತ್ವ',         gloss:'Metaphysical categories — jīva, prakṛti, kāla' },
-  { id:'kshetra',      en:'Kṣetra-Kṣetrajña', dev:'क्षेत्र-क्षेत्रज्ञ', kn:'ಕ್ಷೇತ್ರ-ಕ್ಷೇತ್ರಜ್ಞ', gloss:'Field & field-knower — body, knower, 24 elements (Ch 13)' },
-  { id:'guna',         en:'Guṇa',          dev:'गुण',           kn:'ಗುಣ',          gloss:'The three modes of prakṛti — sattva, rajas, tamas' },
-  { id:'yoga',         en:'Yoga',          dev:'योग',           kn:'ಯೋಗ',         gloss:'Paths — karma, jñāna, bhakti, dhyāna, sannyāsa' },
-  { id:'sadhana',      en:'Sādhanā',       dev:'साधना',         kn:'ಸಾಧನಾ',         gloss:'Practices — śraddhā, vairāgya, yajña, tapas, tyāga' },
-  { id:'antahkarana',  en:'Antaḥkaraṇa',   dev:'अन्तःकरण',      kn:'ಅಂತಃಕರಣ',     gloss:'Inner instrument — manas, buddhi, ahaṅkāra, indriyas' },
-  { id:'dharma',       en:'Dharma',        dev:'धर्म',           kn:'ಧರ್ಮ',         gloss:'Ethics — svadharma, niṣkāma-karma, sthita-prajña' },
-  { id:'dosha',        en:'Doṣa',          dev:'दोष',           kn:'ದೋಷ',          gloss:'Defects — kāma, krodha, lobha, moha, asat-saṅga' },
-  { id:'phala',        en:'Phala',         dev:'फल',            kn:'ಫಲ',           gloss:'Goals & states — mokṣa, paramagati, brāhmī-sthiti' },
-  { id:'yajna',        en:'Yajña',         dev:'यज्ञ',           kn:'ಯಜ್ಞ',          gloss:'Sacrifice varieties — dravya, tapo, jñāna, svādhyāya' },
-  { id:'pratika',      en:'Pratīka',       dev:'प्रतीक',          kn:'ಪ್ರತೀಕ',        gloss:'Symbols & metaphors — aśvattha, ratha, praṇava' },
+  { id:'paramartha',   en:'Paramārtha',    dev:'परमार्थ',      kn:'ಪರಮಾರ್ಥ', hi:'परमार्थ',     gloss:'Ultimate reality — Hari, the sarvottama' },
+  { id:'tattva',       en:'Tattva',        dev:'तत्त्व',         kn:'ತತ್ತ್ವ', hi:'तत्त्व',         gloss:'Metaphysical categories — jīva, prakṛti, kāla' },
+  { id:'kshetra',      en:'Kṣetra-Kṣetrajña', dev:'क्षेत्र-क्षेत्रज्ञ', kn:'ಕ್ಷೇತ್ರ-ಕ್ಷೇತ್ರಜ್ಞ', hi:'क्षेत्र-क्षेत्रज्ञ', gloss:'Field & field-knower — body, knower, 24 elements (Ch 13)' },
+  { id:'guna',         en:'Guṇa',          dev:'गुण',           kn:'ಗುಣ', hi:'गुण',          gloss:'The three modes of prakṛti — sattva, rajas, tamas' },
+  { id:'yoga',         en:'Yoga',          dev:'योग',           kn:'ಯೋಗ', hi:'योग',         gloss:'Paths — karma, jñāna, bhakti, dhyāna, sannyāsa' },
+  { id:'sadhana',      en:'Sādhanā',       dev:'साधना',         kn:'ಸಾಧನಾ', hi:'साधना',         gloss:'Practices — śraddhā, vairāgya, yajña, tapas, tyāga' },
+  { id:'antahkarana',  en:'Antaḥkaraṇa',   dev:'अन्तःकरण',      kn:'ಅಂತಃಕರಣ', hi:'अंतःकरण',     gloss:'Inner instrument — manas, buddhi, ahaṅkāra, indriyas' },
+  { id:'dharma',       en:'Dharma',        dev:'धर्म',           kn:'ಧರ್ಮ', hi:'धर्म',         gloss:'Ethics — svadharma, niṣkāma-karma, sthita-prajña' },
+  { id:'dosha',        en:'Doṣa',          dev:'दोष',           kn:'ದೋಷ', hi:'दोष',          gloss:'Defects — kāma, krodha, lobha, moha, asat-saṅga' },
+  { id:'phala',        en:'Phala',         dev:'फल',            kn:'ಫಲ', hi:'फल',           gloss:'Goals & states — mokṣa, paramagati, brāhmī-sthiti' },
+  { id:'yajna',        en:'Yajña',         dev:'यज्ञ',           kn:'ಯಜ್ಞ', hi:'यज्ञ',          gloss:'Sacrifice varieties — dravya, tapo, jñāna, svādhyāya' },
+  { id:'pratika',      en:'Pratīka',       dev:'प्रतीक',          kn:'ಪ್ರತೀಕ', hi:'प्रतीक',        gloss:'Symbols & metaphors — aśvattha, ratha, praṇava' },
 ];
 
 const TIER_COLOR = {

@@ -121,6 +121,7 @@ ul.entry-list li .sub{font-size:11px;color:var(--ink-fade);margin-top:2px}
 ul.entry-list li .ref{font-size:10px;color:var(--ink-fade);letter-spacing:.04em}
 ul.entry-list li.dev .label,
 body.lang-dev ul.entry-list li .label{font-family:'Tiro Devanagari Sanskrit','Noto Sans Devanagari',serif;font-size:18px}
+body.lang-hi ul.entry-list li .label{font-family:'Tiro Devanagari Hindi','Noto Sans Devanagari',serif;font-size:18px}
 body.lang-kn ul.entry-list li .label{font-family:'Tiro Kannada','Noto Sans Kannada',serif;font-size:18px}
 .hl{background:var(--hl);padding:0 1px;border-radius:2px}
 
@@ -141,6 +142,7 @@ body.lang-kn ul.entry-list li .label{font-family:'Tiro Kannada','Noto Sans Kanna
   margin:6px 0 2px;line-height:1.1;
 }
 body.lang-dev .focus-card h1{font-family:'Tiro Devanagari Sanskrit',serif;font-size:30px}
+body.lang-hi  .focus-card h1{font-family:'Tiro Devanagari Hindi',serif;font-size:30px}
 body.lang-kn  .focus-card h1{font-family:'Tiro Kannada',serif;font-size:30px}
 .focus-card .subtitle{font-size:13px;color:var(--ink-soft);font-style:italic;margin-bottom:8px}
 .focus-card .note{font-size:14px;line-height:1.5;color:var(--ink);margin:8px 0}
@@ -210,6 +212,7 @@ body.lang-en .shloka .shloka-script{font-family:'Cormorant Garamond',serif;font-
   font-family:'Cormorant Garamond',serif;font-size:15px;font-weight:600;color:var(--ink);text-align:right;
 }
 body.lang-dev .relations li .other{font-family:'Tiro Devanagari Sanskrit',serif;font-size:17px}
+body.lang-hi  .relations li .other{font-family:'Tiro Devanagari Hindi',serif;font-size:17px}
 body.lang-kn  .relations li .other{font-family:'Tiro Kannada',serif;font-size:17px}
 
 /* ============ MAP (full graph) ============ */
@@ -241,6 +244,7 @@ footer{
   <div class="lang" id="lang-tabs">
     <button data-lang="en" class="on">EN</button>
     <button data-lang="dev">देव</button>
+    <button data-lang="hi">हिंदी</button>
     <button data-lang="kn">ಕನ್ನಡ</button>
   </div>
 </header>
@@ -279,34 +283,34 @@ const state = { lang:'en', view:'browse', focusId:null, q:'' };
    pill badges, footer counter, Madhva callout prefix). All values
    {en, dev, kn}. Keys mirror the English idiom used by the source. */
 const UI_STRINGS = {
-  outgoing:        { en:'Outgoing',       dev:'निर्गत-सम्बन्धाः',   kn:'ನಿರ್ಗತ-ಸಂಬಂಧಗಳು' },
-  incoming:        { en:'Incoming',       dev:'आगत-सम्बन्धाः',     kn:'ಆಗತ-ಸಂಬಂಧಗಳು' },
-  madhva:          { en:'Madhva',         dev:'माध्व',             kn:'ಮಾಧ್ವ' },
-  noMatch:         { en:'No concepts match',          dev:'न केऽपि सम्मताः',       kn:'ಯಾವ ಪರಿಕಲ್ಪನೆಗಳೂ ಹೊಂದಿಲ್ಲ' },
-  conceptNotFound: { en:'Concept not found.',          dev:'सम्मतम् न प्राप्तम्।',     kn:'ಪರಿಕಲ್ಪನೆ ಸಿಗಲಿಲ್ಲ.' },
+  outgoing:        { en:'Outgoing',       dev:'निर्गत-सम्बन्धाः',   kn:'ನಿರ್ಗತ-ಸಂಬಂಧಗಳು', hi:'बाहर जाने वाले संबंध' },
+  incoming:        { en:'Incoming',       dev:'आगत-सम्बन्धाः',     kn:'ಆಗತ-ಸಂಬಂಧಗಳು', hi:'अंदर आने वाले संबंध' },
+  madhva:          { en:'Madhva',         dev:'माध्व',             kn:'ಮಾಧ್ವ', hi:'माध्व' },
+  noMatch:         { en:'No concepts match',          dev:'न केऽपि सम्मताः',       kn:'ಯಾವ ಪರಿಕಲ್ಪನೆಗಳೂ ಹೊಂದಿಲ್ಲ', hi:'कोई अवधारणा नहीं मिली' },
+  conceptNotFound: { en:'Concept not found.',          dev:'सम्मतम् न प्राप्तम्।',     kn:'ಪರಿಕಲ್ಪನೆ ಸಿಗಲಿಲ್ಲ.', hi:'अवधारणा नहीं मिली।' },
   // footer counter pieces
-  concepts:        { en:'concepts',       dev:'सम्मताः',           kn:'ಪರಿಕಲ್ಪನೆಗಳು' },
-  relations:       { en:'relations',      dev:'सम्बन्धाः',          kn:'ಸಂಬಂಧಗಳು' },
-  shlokas:         { en:'shlokas',        dev:'श्लोकाः',           kn:'ಶ್ಲೋಕಗಳು' },
-  tiers:           { en:'tiers',          dev:'स्तराः',            kn:'ಸ್ತರಗಳು' },
+  concepts:        { en:'concepts',       dev:'सम्मताः',           kn:'ಪರಿಕಲ್ಪನೆಗಳು', hi:'अवधारणाएँ' },
+  relations:       { en:'relations',      dev:'सम्बन्धाः',          kn:'ಸಂಬಂಧಗಳು', hi:'संबंध' },
+  shlokas:         { en:'shlokas',        dev:'श्लोकाः',           kn:'ಶ್ಲೋಕಗಳು', hi:'श्लोक' },
+  tiers:           { en:'tiers',          dev:'स्तराः',            kn:'ಸ್ತರಗಳು', hi:'स्तर' },
   // edge type pill badges — keep tight (≤ ~12 chars) for pill display
-  'is-a':            { en:'IS-A',            dev:'प्रकारः',        kn:'ಪ್ರಕಾರ' },
-  'includes':        { en:'INCLUDES',        dev:'अन्तर्भवति',    kn:'ಒಳಗೊಂಡಿದೆ' },
-  'leads-to':        { en:'LEADS-TO',        dev:'→ फलम्',        kn:'→ ಫಲ' },
-  'opposite-of':     { en:'OPPOSITE-OF',     dev:'विरोधी',        kn:'ವಿರೋಧೀ' },
-  'antidote-to':     { en:'ANTIDOTE-TO',     dev:'प्रतिकारः',     kn:'ಪ್ರತಿಕಾರ' },
-  'arises-from':     { en:'ARISES-FROM',     dev:'उद्भवति',       kn:'ಉದ್ಭವಿಸುತ್ತದೆ' },
-  'predicates-on':   { en:'PREDICATES-ON',   dev:'विषयीकरोति',    kn:'ವಿಷಯೀಕರಿಸುತ್ತದೆ' },
-  'transforms-into': { en:'TRANSFORMS-INTO', dev:'परिणमते',       kn:'ಪರಿಣಮಿಸುತ್ತದೆ' },
-  'grounded-in':     { en:'GROUNDED-IN',     dev:'प्रतिष्ठितम्',  kn:'ಪ್ರತಿಷ್ಠಿತ' },
+  'is-a':            { en:'IS-A',            dev:'प्रकारः',        kn:'ಪ್ರಕಾರ', hi:'प्रकार' },
+  'includes':        { en:'INCLUDES',        dev:'अन्तर्भवति',    kn:'ಒಳಗೊಂಡಿದೆ', hi:'इसमें शामिल' },
+  'leads-to':        { en:'LEADS-TO',        dev:'→ फलम्',        kn:'→ ಫಲ', hi:'→ फल' },
+  'opposite-of':     { en:'OPPOSITE-OF',     dev:'विरोधी',        kn:'ವಿರೋಧೀ', hi:'विरोधी' },
+  'antidote-to':     { en:'ANTIDOTE-TO',     dev:'प्रतिकारः',     kn:'ಪ್ರತಿಕಾರ', hi:'प्रतिकार' },
+  'arises-from':     { en:'ARISES-FROM',     dev:'उद्भवति',       kn:'ಉದ್ಭವಿಸುತ್ತದೆ', hi:'से उत्पन्न' },
+  'predicates-on':   { en:'PREDICATES-ON',   dev:'विषयीकरोति',    kn:'ವಿಷಯೀಕರಿಸುತ್ತದೆ', hi:'के बारे में' },
+  'transforms-into': { en:'TRANSFORMS-INTO', dev:'परिणमते',       kn:'ಪರಿಣಮಿಸುತ್ತದೆ', hi:'में बदलता है' },
+  'grounded-in':     { en:'GROUNDED-IN',     dev:'प्रतिष्ठितम्',  kn:'ಪ್ರತಿಷ್ಠಿತ', hi:'पर आधारित' },
   // search + nav chrome
-  searchPlaceholder: { en:'Search concepts, tiers, verses…', dev:'सम्मतान्, स्तरान्, श्लोकान् अन्विष्यतु…', kn:'ಪರಿಕಲ್ಪನೆ, ಸ್ತರ, ಶ್ಲೋಕಗಳನ್ನು ಹುಡುಕಿ…' },
-  navBrowse:         { en:'Browse',           dev:'सूची',           kn:'ಸೂಚಿ' },
-  navFocus:          { en:'Focus',            dev:'विवरणम्',        kn:'ವಿವರಣೆ' },
-  navMap:            { en:'Map',              dev:'मानचित्रम्',     kn:'ನಕ್ಷೆ' },
+  searchPlaceholder: { en:'Search concepts, tiers, verses…', dev:'सम्मतान्, स्तरान्, श्लोकान् अन्विष्यतु…', kn:'ಪರಿಕಲ್ಪನೆ, ಸ್ತರ, ಶ್ಲೋಕಗಳನ್ನು ಹುಡುಕಿ…', hi:'अवधारणा, स्तर, श्लोक खोजें…' },
+  navBrowse:         { en:'Browse',           dev:'सूची',           kn:'ಸೂಚಿ', hi:'सूची' },
+  navFocus:          { en:'Focus',            dev:'विवरणम्',        kn:'ವಿವರಣೆ', hi:'विवरण' },
+  navMap:            { en:'Map',              dev:'मानचित्रम्',     kn:'ನಕ್ಷೆ', hi:'नक्शा' },
   // Masthead — uses innerHTML so EN can keep the italic Gītā.
-  brandName:         { en:'Bhagavad <em>Gītā</em> · Concept KG', dev:'भगवद्गीता · संकल्पना-कोशः', kn:'ಭಗವದ್ಗೀತಾ · ಸಂಕಲ್ಪನಾ-ಕೋಶ' },
-  brandCrumb:        { en:'Madhva',           dev:'माध्व',          kn:'ಮಾಧ್ವ' },
+  brandName:         { en:'Bhagavad <em>Gītā</em> · Concept KG', dev:'भगवद्गीता · संकल्पना-कोशः', kn:'ಭಗವದ್ಗೀತಾ · ಸಂಕಲ್ಪನಾ-ಕೋಶ', hi:'भगवद् <em>गीता</em> · अवधारणा कोश' },
+  brandCrumb:        { en:'Madhva',           dev:'माध्व',          kn:'ಮಾಧ್ವ', hi:'माध्व' },
 };
 function UI(key){
   const row = UI_STRINGS[key];
@@ -316,7 +320,7 @@ function UI(key){
 
 function setLang(lang){
   state.lang = lang;
-  document.body.classList.remove('lang-en','lang-dev','lang-kn');
+  document.body.classList.remove('lang-en','lang-dev','lang-kn','lang-hi');
   document.body.classList.add('lang-'+lang);
   document.querySelectorAll('#lang-tabs button').forEach(b=>{
     b.classList.toggle('on', b.dataset.lang===lang);
@@ -353,7 +357,7 @@ function setView(v, id){
 }
 
 function labelOf(n){
-  return state.lang==='dev' ? n.dev : state.lang==='kn' ? n.kn : n.en;
+  return state.lang==='hi' ? (n.hi || n.dev) : state.lang==='dev' ? n.dev : state.lang==='kn' ? n.kn : n.en;
 }
 
 /* getActive: read a field that may be either a flat string (English-only) OR a
@@ -414,7 +418,7 @@ function renderBrowse(){
     html += `<section class="tier-section">
       <div class="tier-head">
         <span class="tier-dot" style="background:var(--t-${tier.id})"></span>
-        <span class="tier-name">${escapeHtml(state.lang==='dev'?tier.dev:state.lang==='kn'?tier.kn:tier.en)}</span>
+        <span class="tier-name">${escapeHtml(state.lang==='hi'?(tier.hi||tier.dev):state.lang==='dev'?tier.dev:state.lang==='kn'?tier.kn:tier.en)}</span>
         <span class="tier-gloss">${escapeHtml(tier.gloss)}</span>
         <span class="tier-count">${nodes.length}</span>
       </div>
@@ -448,7 +452,7 @@ function renderFocus(){
   const tier = TIER_BY_ID[n.tier];
 
   const s = SHLOKAS[n.id];
-  const shlokaText = s ? (state.lang==='dev' ? s.dev : state.lang==='kn' ? s.kn : s.iast) : '';
+  const shlokaText = s ? (state.lang==='hi' ? (s.hi||s.dev) : state.lang==='dev' ? s.dev : state.lang==='kn' ? s.kn : s.iast) : '';
   const shlokaInline = s ? `<div class="focus-shloka">
       <div class="shloka-script">${escapeHtml(shlokaText)}</div>
       <div class="shloka-ref">— ${escapeHtml(s.ref)}</div>
@@ -457,7 +461,7 @@ function renderFocus(){
   let html = `<article class="focus-card">
     <span class="tier-badge" style="--tc:var(--t-${tier.id})">
       <style>.focus-card .tier-badge::before{background:var(--t-${tier.id})}</style>
-      ${escapeHtml(state.lang==='dev'?tier.dev:state.lang==='kn'?tier.kn:tier.en)}
+      ${escapeHtml(state.lang==='hi'?(tier.hi||tier.dev):state.lang==='dev'?tier.dev:state.lang==='kn'?tier.kn:tier.en)}
     </span>
     <h1>${escapeHtml(labelOf(n))}</h1>
     <div class="subtitle">${escapeHtml(getActive(n.title))}</div>
@@ -520,7 +524,7 @@ function renderMap(){
 function renderMapHandLaid(root){
   const W = 1000, H = 1500;
   const showSet = (typeof KG_SHOW_EDGE_TYPES !== 'undefined') ? KG_SHOW_EDGE_TYPES : null;
-  const fontFam = state.lang==='dev'?'Tiro Devanagari Sanskrit':state.lang==='kn'?'Tiro Kannada':'Cormorant Garamond';
+  const fontFam = state.lang==='hi'?'Tiro Devanagari Hindi':state.lang==='dev'?'Tiro Devanagari Sanskrit':state.lang==='kn'?'Tiro Kannada':'Cormorant Garamond';
   let svg = `<svg viewBox="0 0 ${W} ${H}" width="${W}" height="${H}" xmlns="http://www.w3.org/2000/svg">`;
 
   // tier bands (alternating washes, plus optional side-column for yajna)
@@ -530,7 +534,7 @@ function renderMapHandLaid(root){
     svg += `<rect x="${x}" y="${band.yTop}" width="${w}" height="${band.yBottom-band.yTop}" fill="${bi%2 ? 'rgba(214,197,153,.10)' : 'rgba(230,216,176,.18)'}"/>`;
     const tier = TIER_BY_ID[band.tier];
     if (!tier) return;
-    const lab = state.lang==='dev'?tier.dev:state.lang==='kn'?tier.kn:tier.en;
+    const lab = state.lang==='hi'?(tier.hi||tier.dev):state.lang==='dev'?tier.dev:state.lang==='kn'?tier.kn:tier.en;
     svg += `<text x="${band.label.x}" y="${band.label.y}" font-family="${fontFam}" font-size="13" fill="var(--ink-soft)" font-weight="600">${escapeHtml(lab)}</text>`;
   });
 
@@ -579,12 +583,12 @@ function renderMapAuto(root){
       pos[n.id] = { x, y, r:9 };
     });
   });
-  const fontFam = state.lang==='dev'?'Tiro Devanagari Sanskrit':state.lang==='kn'?'Tiro Kannada':'Cormorant Garamond';
+  const fontFam = state.lang==='hi'?'Tiro Devanagari Hindi':state.lang==='dev'?'Tiro Devanagari Sanskrit':state.lang==='kn'?'Tiro Kannada':'Cormorant Garamond';
   let svg = `<svg viewBox="0 0 ${W} ${H}" width="${W}" height="${H}" xmlns="http://www.w3.org/2000/svg">`;
   TIERS.forEach((tier,ti)=>{
     const y = 40 + ti*tierGap;
     svg += `<rect x="0" y="${y-22}" width="${W}" height="${tierGap}" fill="${ti%2 ? 'rgba(214,197,153,.10)' : 'rgba(230,216,176,.18)'}"/>`;
-    const lab = state.lang==='dev'?tier.dev:state.lang==='kn'?tier.kn:tier.en;
+    const lab = state.lang==='hi'?(tier.hi||tier.dev):state.lang==='dev'?tier.dev:state.lang==='kn'?tier.kn:tier.en;
     svg += `<text x="10" y="${y+4}" font-family="${fontFam}" font-size="12" fill="var(--ink-soft)" font-weight="600">${escapeHtml(lab)}</text>`;
   });
   EDGES.forEach(e=>{
