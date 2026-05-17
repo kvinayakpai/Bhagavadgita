@@ -43,9 +43,9 @@ function warn(msg){ warnings.push(msg); }
 // Helper: assert tri-script shape on an object at a particular field path.
 // Returns true if shape is OK, false otherwise (and pushes an err).
 function assertTriScript(obj, owner, fieldName, opts){
-  const STRICT_HI = process.env.STRICT_HI === '1';
-  let required = (opts && opts.required) || ['en','dev','kn'];
-  if (STRICT_HI && !(opts && opts.required)) required = required.concat(['hi']);
+  const STRICT_HI = process.env.STRICT_HI !== '0';
+  let required = (opts && opts.required) || ['en','dev','kn','hi'];
+  if (!STRICT_HI && !(opts && opts.required)) required = ['en','dev','kn'];
   if (obj === undefined || obj === null){
     if (opts && opts.optional) return true;
     err(`${owner}: ${fieldName} missing`);
@@ -109,7 +109,7 @@ EDGES.forEach((e,i)=>{
     if (!looksTriScript){
       err(`EDGE[${i}] ${e.source}→${e.target}: label is not tri-script (got ${typeof L})`);
     } else {
-      const langs = process.env.STRICT_HI === '1' ? ['en','dev','kn','hi'] : ['en','dev','kn'];
+      const langs = process.env.STRICT_HI === '0' ? ['en','dev','kn'] : ['en','dev','kn','hi'];
       const allEmpty = langs.every(k => typeof L[k] === 'string' && L[k].trim() === '');
       if (!allEmpty){
         assertTriScript(L, `EDGE[${i}] ${e.source}→${e.target}`, 'label');
@@ -127,7 +127,7 @@ NODES.forEach(n=>{
 Object.keys(SHLOKAS).forEach(id=>{
   if (!seenIds.has(id)) err(`SHLOKAS["${id}"]: no matching node`);
   const s = SHLOKAS[id];
-  const shlokaLangs = process.env.STRICT_HI === '1' ? ['dev','kn','iast','hi'] : ['dev','kn','iast'];
+  const shlokaLangs = process.env.STRICT_HI === '0' ? ['dev','kn','iast'] : ['dev','kn','iast','hi'];
   shlokaLangs.forEach(k=>{
     if (typeof s[k] !== 'string' || s[k].trim() === ''){
       err(`SHLOKAS["${id}"].${k}: missing or empty`);
@@ -176,7 +176,7 @@ function checkUiStrings(){
     entries++;
     // For each lang, look for `<lang>:` (bare or quoted) followed by a
     // non-empty string literal.
-    const uiLangs = process.env.STRICT_HI === '1' ? ['en','dev','kn','hi'] : ['en','dev','kn'];
+    const uiLangs = process.env.STRICT_HI === '0' ? ['en','dev','kn'] : ['en','dev','kn','hi'];
     uiLangs.forEach(lang=>{
       const kre = new RegExp(`(?:^|[\\s,])(?:['"]?)${lang}(?:['"]?)\\s*:\\s*(['"\`])((?:\\\\.|(?!\\1).)*)\\1`);
       const km = valBody.match(kre);
