@@ -7,3 +7,9 @@ dist/
 .vscode/
 node_modules/
 dist/
+
+# Private Bannanje commentary companion (in copyright; personal study only)
+bannanje_kn_private.js
+viewer-bundled-private.html
+_pdf_cache/
+_ocr_raw/
