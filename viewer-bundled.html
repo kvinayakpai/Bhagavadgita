@@ -153,6 +153,22 @@ body.lang-kn  .focus-card h1{font-family:'Tiro Kannada',serif;font-size:30px}
 }
 .focus-card .madhva .madhva-prefix{font-weight:600;color:var(--t-paramartha)}
 .focus-card .refs{font-size:11px;letter-spacing:.06em;color:var(--ink-fade);margin-top:10px}
+.focus-card .bannanje-private{
+  margin-top:14px;padding:10px 14px;
+  border-left:3px dashed var(--ink-fade);
+  background:rgba(0,0,0,0.02);
+  font-size:13px;line-height:1.5;color:var(--ink-soft);border-radius:0 6px 6px 0;
+}
+.focus-card .bannanje-private .bp-header{
+  font-size:10px;letter-spacing:.16em;text-transform:uppercase;color:var(--ink-fade);
+  margin-bottom:6px;font-style:italic;
+}
+.focus-card .bannanje-private .bp-verse{margin:8px 0;padding-left:6px;border-left:2px solid var(--rule-soft)}
+.focus-card .bannanje-private .bp-verse-ref{font-weight:600;color:var(--ink);font-size:11px;letter-spacing:.04em;margin-bottom:2px}
+.focus-card .bannanje-private .bp-bhashya{white-space:pre-wrap}
+.focus-card .bannanje-private .bp-source{font-size:10px;color:var(--ink-fade);letter-spacing:.04em;margin-top:4px}
+body.lang-kn .focus-card .bannanje-private{font-family:'Tiro Kannada','Noto Sans Kannada',serif}
+
 
 /* Shloka rendered INSIDE the focus card, between note/madhva and refs.
    Italicized in IAST mode; native script in dev/kn modes. Indented + ruled
@@ -287,6 +303,7 @@ footer{
   <span id="stats"></span>
 </footer>
 
+<script>window.BANNANJE_KN_PRIVATE = null;</script>
 <script>
 /* === inlined from data.js === */
 /* Bhagavad Gītā Concept Knowledge Graph — Madhva siddhānta reading
@@ -1561,6 +1578,7 @@ const UI_STRINGS = {
   navBrowse:         { en:'Browse',           dev:'सूची',           kn:'ಸೂಚಿ', hi:'सूची' },
   navFocus:          { en:'Focus',            dev:'विवरणम्',        kn:'ವಿವರಣೆ', hi:'विवरण' },
   navMap:            { en:'Map',              dev:'मानचित्रम्',     kn:'ನಕ್ಷೆ', hi:'नक्शा' },
+  bannanjeHeader:    { en:'Bannanje commentary (personal study only — not for redistribution)', dev:'बन्नंजे-भाष्य (केवल वैयक्तिक अध्ययनार्थम् — न पुनर्वितरणाय)', kn:'ಬನ್ನಂಜೆ-ಭಾಷ್ಯ (ಕೇವಲ ವೈಯಕ್ತಿಕ ಅಧ್ಯಯನಕ್ಕಾಗಿ — ಪುನರ್ವಿತರಣೆಗಲ್ಲ)', hi:'बन्नंजे-भाष्य (केवल व्यक्तिगत अध्ययन हेतु — पुनर्वितरण के लिए नहीं)' },
   // Masthead — uses innerHTML so EN can keep the italic Gītā.
   brandName:         { en:'Bhagavad <em>Gītā</em> · Concept KG', dev:'भगवद्गीता · संकल्पना-कोशः', kn:'ಭಗವದ್ಗೀತಾ · ಸಂಕಲ್ಪನಾ-ಕೋಶ', hi:'भगवद् <em>गीता</em> · अवधारणा कोश' },
   brandCrumb:        { en:'Madhva',           dev:'माध्व',          kn:'ಮಾಧ್ವ', hi:'माध्व' },
@@ -1696,6 +1714,22 @@ function renderBrowse(){
   root.innerHTML = html;
 }
 
+/* ---------- Bannanje optional private block ---------- */
+function renderBannanjePrivate(conceptId){
+  const entry = window.BANNANJE_KN_PRIVATE && BANNANJE_KN_PRIVATE[conceptId];
+  if (!entry || !entry.verses || !entry.verses.length) return '';
+  const verses = entry.verses.map(v => {
+    const verseRef = v.verse_ref ? `<div class="bp-verse-ref">${escapeHtml(v.verse_ref)}</div>` : '';
+    const bhashya = v.bhashya ? `<div class="bp-bhashya">${escapeHtml(v.bhashya)}</div>` : '';
+    const source = v.source_page ? `<div class="bp-source">— ${escapeHtml(v.source_page)}</div>` : '';
+    return `<div class="bp-verse">${verseRef}${bhashya}${source}</div>`;
+  }).join('');
+  return `<div class="bannanje-private">
+    <div class="bp-header">${escapeHtml(UI('bannanjeHeader'))}</div>
+    ${verses}
+  </div>`;
+}
+
 /* ---------- FOCUS ---------- */
 function renderFocus(){
   const root = document.getElementById('view-focus');
@@ -1722,6 +1756,7 @@ function renderFocus(){
     ${n.madhva ? `<div class="madhva"><span class="madhva-prefix">${escapeHtml(UI('madhva'))} · </span>${escapeHtml(getActive(n.madhva))}</div>` : ''}
     ${shlokaInline}
     <div class="refs">${escapeHtml(n.refs)}</div>
+    ${(typeof window !== 'undefined' && window.BANNANJE_KN_PRIVATE && BANNANJE_KN_PRIVATE[n.id]) ? renderBannanjePrivate(n.id) : ''}
   </article>`;
 
   // relations
