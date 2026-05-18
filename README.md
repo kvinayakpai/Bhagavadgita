@@ -139,3 +139,34 @@ The repo is private on the free GitHub plan, so **GitHub Pages from this repo is
 ## License
 
 Source content (concept definitions, verse selection, commentary attribution) under CC-BY-4.0. Code (JS, build scripts, viewer) under MIT.
+
+
+## Content provenance — public vs private companion
+
+The data shipped in this repo is designed to be source-grounded against canonical, public-domain
+material:
+
+- **Sanskrit verses** (`SHLOKAS` map): canonical Bhagavad Gītā mūla — public domain.
+- **Concept notes** (`note.en/dev/kn/hi` on each NODE): brief glosses derived from the BG mūla
+  itself in the active language. These are summaries of the verse, not commentary from any
+  in-copyright source.
+- **Tri-script + Hindi UI**: original to this repo.
+- **Edge vocabulary and Madhva-distinctive callouts** (`madhva` field on ~22 nodes): editorial
+  framing by the repository maintainer, drawing on broadly-attested Mādhva tradition.
+
+### Optional private companion — `bannanje_kn_private.js`
+
+For the actual Bannanje Govindacharya Gītā-bhāṣya commentary (4 volumes, in copyright,
+Padāvali Prakāśana / Bannanje estate), the viewer can optionally load a `bannanje_kn_private.js`
+file from your local clone. This file is **gitignored** and never pushed to this repo — it is
+intended for personal study by individuals who own the published volumes.
+
+If the file is present alongside the viewer, an additional "Bannanje commentary" block appears
+under each concept's focus card with the relevant per-verse exposition. A clearly-marked
+"Personal study only — not for redistribution" header reminds the reader of the constraint.
+
+`python3 build-bundle.py --private` produces `viewer-bundled-private.html` with the Bannanje
+content inlined. That file is also gitignored.
+
+Users who wish to consult the full Bannanje commentary should obtain the published volumes
+directly from Padāvali Prakāśana.
