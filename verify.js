@@ -272,6 +272,14 @@ if (intViewer && intBundle){
 }
 console.log('');
 
+// 15 — optional Bannanje private companion (informational only — graceful handling)
+const bannanjePath = path.join(__dirname, 'bannanje_kn_private.js');
+const bannanjePresent = fs.existsSync(bannanjePath);
+console.log('BANNANJE_KN_PRIVATE: ' + (bannanjePresent
+  ? 'loaded (' + Math.round(fs.statSync(bannanjePath).size / 1024) + ' KiB)'
+  : 'not loaded (public clone — expected)'));
+console.log('');
+
 console.log('Per-tier counts:');
 TIERS.forEach(t=>{
   const lab = t.en.padEnd(18);
