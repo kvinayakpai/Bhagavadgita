@@ -905,6 +905,77 @@ const EDGES = [
 
   E('vibhuti','vsn:n_0530','manifested-as-nama',{en:'Trivikramaḥ — three-stride vibhūti (BG 10)',dev:'त्रिविक्रमः — त्रिपाद-विभूतिः (गी॰ १०)',kn:'ತ್ರಿವಿಕ್ರಮಃ — ತ್ರಿಪಾದ-ವಿಭೂತಿ (ಗೀ॰ ೧೦)',hi:'त्रिविक्रमः — त्रिपाद-विभूति (गीता १०)'}),
   E('vibhuti','vsn:n_0021','manifested-as-nama',{en:'Nārasiṃha-vapuḥ — narasiṃha as vibhūti-form',dev:'नारसिंहवपुः — नृसिंह-विभूतिः',kn:'ನಾರಸಿಂಹವಪುಃ — ನೃಸಿಂಹ-ವಿಭೂತಿ',hi:'नारसिंहवपुः — नरसिंह-विभूति'}),
+
+  // === Orphan-repair edges — connect tier-root nodes and isolated children ===
+
+  // paramartha (tier root)
+  E('paramartha','brahman','includes',{en:'Brahman is paramārtha',dev:'ब्रह्म परमार्थः',kn:'ಬ್ರಹ್ಮ ಪರಮಾರ್ಥ',hi:'ब्रह्म परमार्थ है'}),
+  E('paramartha','sarvottamatva','includes',{en:'sarvottamatva is the axiomatic paramārtha',dev:'सर्वोत्तमत्वं परमार्थस्य मूलाधारः',kn:'ಸರ್ವೋತ್ತಮತ್ವ ಪರಮಾರ್ಥದ ಮೂಲ',hi:'सर्वोत्तमत्व परमार्थ का मूलाधार'}),
+  E('paramartha','taratamya','includes',{en:'tāratamya flows from paramārtha',dev:'तारतम्यं परमार्थात् प्रवहति',kn:'ತಾರತಮ್ಯ ಪರಮಾರ್ಥದಿಂದ ಹರಿಯುತ್ತದೆ',hi:'तारतम्य परमार्थ से उद्भूत'}),
+
+  // tattva (tier root)
+  E('tattva','jiva','includes',{en:'jīva is a tattva',dev:'जीवः तत्त्वम्',kn:'ಜೀವ ತತ್ತ್ವ',hi:'जीव एक तत्त्व है'}),
+  E('tattva','prakriti','includes',{en:'prakṛti is a tattva',dev:'प्रकृतिः तत्त्वम्',kn:'ಪ್ರಕೃತಿ ತತ್ತ್ವ',hi:'प्रकृति एक तत्त्व है'}),
+  E('tattva','kala','includes',{en:'kāla is a tattva',dev:'कालः तत्त्वम्',kn:'ಕಾಲ ತತ್ತ್ವ',hi:'काल एक तत्त्व है'}),
+  E('tattva','predicates-on','paramartha',{en:'tattvas describe paramārtha',dev:'तत्त्वानि परमार्थं वर्णयन्ति',kn:'ತತ್ತ್ವಗಳು ಪರಮಾರ್ಥವನ್ನು ವರ್ಣಿಸುತ್ತವೆ',hi:'तत्त्व परमार्थ का वर्णन करते हैं'}),
+
+  // guna (tier root)
+  E('guna','sattva','includes',{en:'sattva is a guṇa',dev:'सत्त्वं गुणः',kn:'ಸತ್ತ್ವ ಗುಣ',hi:'सत्त्व एक गुण है'}),
+  E('guna','rajas','includes',{en:'rajas is a guṇa',dev:'रजः गुणः',kn:'ರಜಸ್ ಗುಣ',hi:'रजस् एक गुण है'}),
+  E('guna','tamas','includes',{en:'tamas is a guṇa',dev:'तमः गुणः',kn:'ತಮಸ್ ಗುಣ',hi:'तमस् एक गुण है'}),
+  E('guna','arises-from','prakriti',{en:'guṇas arise from prakṛti',dev:'गुणाः प्रकृतेः उद्भवन्ति',kn:'ಗುಣಗಳು ಪ್ರಕೃತಿಯಿಂದ ಉದ್ಭವಿಸುತ್ತವೆ',hi:'गुण प्रकृति से उत्पन्न होते हैं'}),
+
+  // kshetra (tier root)
+  E('kshetra','kshetra_field','includes',{en:'body is the field',dev:'शरीरं क्षेत्रम्',kn:'ಶರೀರ ಕ್ಷೇತ್ರ',hi:'शरीर क्षेत्र है'}),
+  E('kshetra','kshetrajna','includes',{en:'field-knower is Bhagavān',dev:'क्षेत्रज्ञो भगवान्',kn:'ಕ್ಷೇತ್ರಜ್ಞ ಭಗವಂತ',hi:'क्षेत्रज्ञ भगवान् हैं'}),
+  E('kshetra','predicates-on','jiva',{en:'kshetra-frame applies to jīva',dev:'क्षेत्र-दर्शनं जीवे प्रयुज्यते',kn:'ಕ್ಷೇತ್ರ-ದರ್ಶನ ಜೀವಕ್ಕೆ ಅನ್ವಯಿಸುತ್ತದೆ',hi:'क्षेत्र-दर्शन जीव पर लागू'}),
+
+  // antahkarana (tier root)
+  E('antahkarana','manas','includes',{en:'manas is an inner organ',dev:'मनः अन्तःकरणम्',kn:'ಮನಸ್ ಅಂತಃಕರಣ',hi:'मन अंतःकरण है'}),
+  E('antahkarana','buddhi','includes',{en:'buddhi is an inner organ',dev:'बुद्धिः अन्तःकरणम्',kn:'ಬುದ್ಧಿ ಅಂತಃಕರಣ',hi:'बुद्धि अंतःकरण है'}),
+  E('antahkarana','ahankara','includes',{en:'ahaṅkāra is an inner organ',dev:'अहंकारः अन्तःकरणम्',kn:'ಅಹಂಕಾರ ಅಂತಃಕರಣ',hi:'अहंकार अंतःकरण है'}),
+  E('antahkarana','predicates-on','jiva',{en:'antaḥkaraṇa belongs to jīva',dev:'अन्तःकरणं जीवस्य',kn:'ಅಂತಃಕರಣ ಜೀವದ್ದು',hi:'अंतःकरण जीव का है'}),
+
+  // dharma (tier root)
+  E('dharma','svadharma','includes',{en:'svadharma is core dharma',dev:'स्वधर्मः धर्मस्य मूलम्',kn:'ಸ್ವಧರ್ಮ ಧರ್ಮದ ಮೂಲ',hi:'स्वधर्म मुख्य धर्म है'}),
+  E('dharma','nishkama_karma','includes',{en:'niṣkāma-karma is dharmic action',dev:'निष्कामकर्म धर्म्यं कर्म',kn:'ನಿಷ್ಕಾಮಕರ್ಮ ಧರ್ಮ್ಯ ಕರ್ಮ',hi:'निष्काम कर्म धर्म्य कर्म है'}),
+  E('dharma','leads-to','sadhana',{en:'dharma leads to sādhanā',dev:'धर्मः साधनां प्रति नयति',kn:'ಧರ್ಮ ಸಾಧನೆಯತ್ತ ನಡೆಸುತ್ತದೆ',hi:'धर्म साधना की ओर ले जाता है'}),
+
+  // dosha (tier root)
+  E('dosha','kama','includes',{en:'kāma is the root doṣa',dev:'कामः मूलदोषः',kn:'ಕಾಮ ಮೂಲ ದೋಷ',hi:'काम मूल दोष है'}),
+  E('dosha','krodha','includes',{en:'krodha arises from kāma',dev:'कामात् क्रोधः',kn:'ಕಾಮದಿಂದ ಕ್ರೋಧ',hi:'काम से क्रोध उत्पन्न'}),
+  E('dosha','lobha','includes',{en:'lobha is the third gate to naraka',dev:'लोभः तृतीयं नरकद्वारम्',kn:'ಲೋಭ ಮೂರನೇ ನರಕ-ದ್ವಾರ',hi:'लोभ नरक का तीसरा द्वार'}),
+  E('dosha','dvandva','includes',{en:'dvandva is a doṣa-root',dev:'द्वन्द्वं दोषमूलम्',kn:'ದ್ವಂದ್ವ ದೋಷಮೂಲ',hi:'द्वंद्व दोष का मूल'}),
+  E('dosha','opposite-of','sadhana',{en:'doṣa opposes sādhanā',dev:'दोषः साधनाया विपरीतः',kn:'ದೋಷ ಸಾಧನೆಗೆ ವಿರುದ್ಧ',hi:'दोष साधना का विरोधी'}),
+
+  // sadhana (tier root)
+  E('sadhana','shraddha','includes',{en:'śraddhā is a sādhanā',dev:'श्रद्धा साधना',kn:'ಶ್ರದ್ಧಾ ಸಾಧನೆ',hi:'श्रद्धा साधना है'}),
+  E('sadhana','vairagya','includes',{en:'vairāgya is a sādhanā',dev:'वैराग्यं साधना',kn:'ವೈರಾಗ್ಯ ಸಾಧನೆ',hi:'वैराग्य साधना है'}),
+  E('sadhana','tapas','includes',{en:'tapas is a sādhanā',dev:'तपः साधना',kn:'ತಪಸ್ ಸಾಧನೆ',hi:'तपस् साधना है'}),
+  E('sadhana','dana','includes',{en:'dāna is a sādhanā',dev:'दानं साधना',kn:'ದಾನ ಸಾಧನೆ',hi:'दान साधना है'}),
+  E('sadhana','leads-to','phala',{en:'sādhanā leads to phala',dev:'साधना फलं प्रति',kn:'ಸಾಧನೆ ಫಲದತ್ತ',hi:'साधना फल की ओर'}),
+
+  // yoga (tier root)
+  E('yoga','karma_yoga','includes',{en:'karma-yoga is a path',dev:'कर्मयोगः मार्गः',kn:'ಕರ್ಮ-ಯೋಗ ಮಾರ್ಗ',hi:'कर्मयोग एक मार्ग है'}),
+  E('yoga','jnana_yoga','includes',{en:'jñāna-yoga is a path',dev:'ज्ञानयोगः मार्गः',kn:'ಜ್ಞಾನ-ಯೋಗ ಮಾರ್ಗ',hi:'ज्ञानयोग एक मार्ग है'}),
+  E('yoga','bhakti_yoga','includes',{en:'bhakti-yoga is the substrate',dev:'भक्तियोगः आधारः',kn:'ಭಕ್ತಿ-ಯೋಗ ಆಧಾರ',hi:'भक्तियोग आधार है'}),
+  E('yoga','leads-to','phala',{en:'yoga leads to phala',dev:'योगः फलं प्रति',kn:'ಯೋಗ ಫಲದತ್ತ',hi:'योग फल की ओर'}),
+
+  // yajna (tier root)
+  E('yajna','dravya_yajna','includes',{en:'dravya-yajña is first of four',dev:'द्रव्ययज्ञः प्रथमः',kn:'ದ್ರವ್ಯ-ಯಜ್ಞ ಮೊದಲನೆಯದು',hi:'द्रव्य-यज्ञ पहला है'}),
+  E('yajna','tapo_yajna','includes',{en:'tapo-yajña is second of four',dev:'तपोयज्ञः द्वितीयः',kn:'ತಪೋ-ಯಜ್ಞ ಎರಡನೆಯದು',hi:'तपो-यज्ञ दूसरा है'}),
+  E('yajna','yoga_yajna','includes',{en:'yoga-yajña is third of four',dev:'योगयज्ञः तृतीयः',kn:'ಯೋಗ-ಯಜ್ಞ ಮೂರನೆಯದು',hi:'योग-यज्ञ तीसरा है'}),
+  E('yajna','is-a','sadhana',{en:'yajña is a form of sādhanā',dev:'यज्ञः साधनारूपः',kn:'ಯಜ್ಞ ಸಾಧನಾ-ರೂಪ',hi:'यज्ञ साधना का रूप है'}),
+
+  // phala (tier root)
+  E('phala','moksha','includes',{en:'mokṣa is the supreme phala',dev:'मोक्षः परमं फलम्',kn:'ಮೋಕ್ಷ ಪರಮ ಫಲ',hi:'मोक्ष परम फल है'}),
+  E('phala','paramagati','includes',{en:'paramagati is phala',dev:'परमगतिः फलम्',kn:'ಪರಮಗತಿ ಫಲ',hi:'परम गति फल है'}),
+  E('phala','arises-from','sadhana',{en:'phala arises from sādhanā',dev:'फलं साधनात् उद्भवति',kn:'ಫಲ ಸಾಧನೆಯಿಂದ ಉದ್ಭವಿಸುತ್ತದೆ',hi:'फल साधना से उत्पन्न'}),
+
+  // pratika (tier root)
+  E('pratika','ashvattha','includes',{en:'aśvattha is a pratīka',dev:'अश्वत्थः प्रतीकः',kn:'ಅಶ್ವತ್ಥ ಪ್ರತೀಕ',hi:'अश्वत्थ एक प्रतीक है'}),
+  E('pratika','pranava_om','includes',{en:'praṇava-Om is a pratīka',dev:'प्रणवः प्रतीकः',kn:'ಪ್ರಣವ-ಓಂ ಪ್ರತೀಕ',hi:'प्रणव-ओम एक प्रतीक है'}),
+  E('pratika','predicates-on','brahman',{en:'pratīkas point to Brahman',dev:'प्रतीकाः ब्रह्म सूचयन्ति',kn:'ಪ್ರತೀಕಗಳು ಬ್ರಹ್ಮವನ್ನು ಸೂಚಿಸುತ್ತವೆ',hi:'प्रतीक ब्रह्म की ओर संकेत करते हैं'}),
 ];
 
 /* ============================================================================
