@@ -2,6 +2,10 @@
 
 A concept-centered knowledge graph of the Bhagavad Gītā, read through Madhva siddhānta. Where a person-graph (Krishna, Arjuna, Brahmā…) maps the **dramatis personae**, this one maps the **ideas** — yogas, tattvas, doṣas, mukti-gradations — and the typed relations the Gītā itself draws between them.
 
+> **Source:** This entire project is based on the Kannada commentary on the Bhagavad Gītā available at
+> **[bhagavadgitakannada.blogspot.com](https://bhagavadgitakannada.blogspot.com/)** —
+> all concept definitions, verse selections, and doctrinal readings are grounded in that source.
+
 ## Live viewer
 
 Open `index.html` in any browser — the SPA is a single file that pulls `data.js` and `positions.js` from the same folder. For a phone, a USB stick, or any file:// context with no relative-fetch worries, open `viewer-bundled.html` instead: it inlines the data and positions into one self-contained HTML.
