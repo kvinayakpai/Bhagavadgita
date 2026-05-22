@@ -170,3 +170,9 @@ content inlined. That file is also gitignored.
 
 Users who wish to consult the full Bannanje commentary should obtain the published volumes
 directly from Padāvali Prakāśana.
+
+## Source Reference
+
+The Kannanje commentary content in `viewer-bundled-private.html` is sourced from the publicly available blog:
+
+- **Bhagavad Gita Kannada Commentary**: https://bhagavadgitakannada.blogspot.com/
