@@ -3104,6 +3104,41 @@ const EDGES = [
   E('pratika','pranava_om','includes',{en:'praṇava-Om is a pratīka',dev:'प्रणवः प्रतीकः',kn:'ಪ್ರಣವ-ಓಂ ಪ್ರತೀಕ',hi:'प्रणव-ओम एक प्रतीक है'}),
   E('pratika','predicates-on','brahman',{en:'pratīkas point to Brahman',dev:'प्रतीकाः ब्रह्म सूचयन्ति',kn:'ಪ್ರತೀಕಗಳು ಬ್ರಹ್ಮವನ್ನು ಸೂಚಿಸುತ್ತವೆ',hi:'प्रतीक ब्रह्म की ओर संकेत करते हैं'}),
 
+  // === Local-proximity edges — fix visually isolated nodes ===
+
+  // yajna siblings chained in ascending merit (BG 4.28 order, all at x≈950)
+  E('dravya_yajna','leads-to','tapo_yajna',{en:'ascending order of yajñas',dev:'यज्ञानाम् आरोह-क्रमः',kn:'ಯಜ್ಞಗಳ ಆರೋಹ ಕ್ರಮ',hi:'यज्ञों का आरोह क्रम'}),
+  E('tapo_yajna','leads-to','yoga_yajna',{en:'tapas leads to yoga-yajña',dev:'तपोयज्ञात् योगयज्ञः',kn:'ತಪೋಯಜ್ಞದಿಂದ ಯೋಗಯಜ್ಞ',hi:'तपो-यज्ञ से योग-यज्ञ'}),
+  E('yoga_yajna','leads-to','svadhyaya_yajna',{en:'yoga leads to svādhyāya-yajña',dev:'योगयज्ञात् स्वाध्याययज्ञः',kn:'ಯೋಗಯಜ್ಞದಿಂದ ಸ್ವಾಧ್ಯಾಯ-ಯಜ್ಞ',hi:'योग-यज्ञ से स्वाध्याय-यज्ञ'}),
+  E('svadhyaya_yajna','leads-to','jnana_yajna',{en:'svādhyāya leads to jñāna-yajña — highest',dev:'स्वाध्यायात् ज्ञानयज्ञः — श्रेष्ठः',kn:'ಸ್ವಾಧ್ಯಾಯದಿಂದ ಜ್ಞಾನ-ಯಜ್ಞ — ಶ್ರೇಷ್ಠ',hi:'स्वाध्याय से ज्ञान-यज्ञ — श्रेष्ठ'}),
+  E('brahmarpana','arises-from','jnana_yajna',{en:'brahmārpaṇa culminates jñāna-yajña',dev:'ब्रह्मार्पणं ज्ञानयज्ञस्य फलम्',kn:'ಬ್ರಹ್ಮಾರ್ಪಣ ಜ್ಞಾನ-ಯಜ್ಞದ ಫಲ',hi:'ब्रह्मार्पण ज्ञान-यज्ञ का फल'}),
+
+  // gunatita — beyond the modes (near tamas at x=560,y=600)
+  E('gunatita','leads-to','moksha',{en:'guṇātīta state leads to mokṣa',dev:'गुणातीतः मोक्षं प्रति',kn:'ಗುಣಾತೀತ ಮೋಕ್ಷದತ್ತ',hi:'गुणातीत मोक्ष की ओर'}),
+  E('gunatita','opposite-of','tamas',{en:'beyond tamas is guṇātīta',dev:'तमसः परं गुणातीतम्',kn:'ತಮಸ್ಸಿಗೆ ಮೀರಿದ್ದು ಗುಣಾತೀತ',hi:'तमस से परे गुणातीत'}),
+
+  // triguna_atita — Vedas as beyond-guṇa testimony (near buddhi_yoga)
+  E('triguna_atita','predicates-on','brahman',{en:'Vedas declare Brahman beyond guṇas',dev:'वेदाः ब्रह्म त्रिगुणातीतं वदन्ति',kn:'ವೇದಗಳು ಬ್ರಹ್ಮ ತ್ರಿಗುಣಾತೀತ ಎಂದು ಸಾರುತ್ತವೆ',hi:'वेद ब्रह्म को त्रिगुणातीत घोषित करते हैं'}),
+  E('triguna_atita','leads-to','gunatita',{en:'vedic testimony leads toward guṇātīta',dev:'वेद-प्रमाणं गुणातीतं प्रति नयति',kn:'ವೇದ-ಪ್ರಮಾಣ ಗುಣಾತೀತದತ್ತ ನಡೆಸುತ್ತದೆ',hi:'वेद-प्रमाण गुणातीत की ओर ले जाता है'}),
+
+  // buddhi_yoga — near sannyasa_yoga and triguna_atita
+  E('buddhi_yoga','is-a','jnana_yoga',{en:'buddhi-yoga is jñāna-yoga in action',dev:'बुद्धियोगः ज्ञानयोगस्वरूपः',kn:'ಬುದ್ಧಿ-ಯೋಗ ಜ್ಞಾನ-ಯೋಗ ರೂಪ',hi:'बुद्धि-योग ज्ञान-योग का स्वरूप'}),
+  E('buddhi_yoga','leads-to','sannyasa_yoga',{en:'buddhi-yoga matures into sannyāsa',dev:'बुद्धियोगात् संन्यासयोगः',kn:'ಬುದ್ಧಿ-ಯೋಗ ಸಂನ್ಯಾಸ-ಯೋಗವಾಗಿ ಮಾಗುತ್ತದೆ',hi:'बुद्धि-योग से संन्यास-योग'}),
+
+  // abhyasa_vairagya — already has 2 edges; add local link
+  E('abhyasa_vairagya','leads-to','buddhi_yoga',{en:'practice and dispassion lead to buddhi-yoga',dev:'अभ्यास-वैराग्याभ्यां बुद्धियोगः',kn:'ಅಭ್ಯಾಸ-ವೈರಾಗ್ಯದಿಂದ ಬುದ್ಧಿ-ಯೋಗ',hi:'अभ्यास-वैराग्य से बुद्धि-योग'}),
+
+  // kala — near svarupa_aikya (dist=120)
+  E('kala','predicates-on','svarupa_aikya',{en:'kāla expresses Hari nature',dev:'कालः हरेः स्वरूपं व्यनक्ति',kn:'ಕಾಲ ಹರಿಯ ಸ್ವರೂಪವನ್ನು ವ್ಯಕ್ತಪಡಿಸುತ್ತದೆ',hi:'काल हरि के स्वरूप को प्रकट करता है'}),
+
+  // samatva — near abhyasa (dist=82) and jnana_yoga (dist=92)
+  E('samatva','arises-from','abhyasa',{en:'equanimity arises from practice',dev:'अभ्यासात् समत्वम्',kn:'ಅಭ್ಯಾಸದಿಂದ ಸಮತ್ವ',hi:'अभ्यास से समत्व'}),
+  E('samatva','leads-to','jnana_yoga',{en:'samatva is the ground of jñāna-yoga',dev:'समत्वं ज्ञानयोगस्य भूमिः',kn:'ಸಮತ್ವ ಜ್ಞಾನ-ಯೋಗದ ಭೂಮಿ',hi:'समत्व ज्ञान-योग का आधार'}),
+
+  // sattvika_ahara — near sannyasa_yoga (dist=57)
+  E('sattvika_ahara','leads-to','sannyasa_yoga',{en:'sāttvika food supports renunciation',dev:'सात्त्विकाहारः संन्यासयोगाय',kn:'ಸಾತ್ತ್ವಿಕ ಆಹಾರ ಸಂನ್ಯಾಸ-ಯೋಗಕ್ಕೆ ಪೂರಕ',hi:'सात्त्विक आहार संन्यास-योग के लिए सहायक'}),
+
+
   // === Bundle-specific orphan-repair (private-bundle tier roots + children) ===
   E('paratattva','pancha_bheda','includes',{en:'pañca-bheda is a paratattva truth',dev:'पञ्चभेदः परतत्त्वसत्यम्',kn:'ಪಂಚಭೇದ ಪರತತ್ತ್ವ-ಸತ್ಯ',hi:'पञ्च-भेद परतत्त्व सत्य है'}),
   E('paratattva','svarupa_aikya','includes',{en:'svarūpa-aikya is paratattva doctrine',dev:'स्वरूप-ऐक्यं परतत्त्वसिद्धान्तः',kn:'ಸ್ವರೂಪ-ಐಕ್ಯ ಪರತತ್ತ್ವ-ಸಿದ್ಧಾಂತ',hi:'स्वरूप-ऐक्य परतत्त्व सिद्धांत है'}),
