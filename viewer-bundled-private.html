@@ -154,6 +154,29 @@ body.lang-kn  .focus-card h1{font-family:'Tiro Kannada',serif;font-size:30px}
 }
 .focus-card .madhva .madhva-prefix{font-weight:600;color:var(--t-paramartha)}
 .focus-card .refs{font-size:11px;letter-spacing:.06em;color:var(--ink-fade);margin-top:10px}
+.ch-grid{display:flex;flex-wrap:wrap;gap:4px;padding:12px 16px 0}
+.ch-btn{min-width:32px;padding:4px 8px;border:1px solid var(--rule);border-radius:4px;
+  background:var(--paper);color:var(--ink);font-size:13px;cursor:pointer;font-family:inherit}
+.ch-btn.active{background:var(--rust);color:#fff;border-color:var(--rust)}
+.ch-list-wrap{padding:12px 16px 40px}
+.ch-hd{font-size:15px;font-weight:700;color:var(--ink);margin:8px 0 4px}
+.ch-sub{font-size:11px;letter-spacing:.06em;color:var(--ink-fade);text-transform:uppercase;margin-bottom:10px}
+.ch-section-hd{font-size:11px;font-weight:600;letter-spacing:.08em;color:var(--ink-fade);
+  text-transform:uppercase;margin:16px 0 6px;border-top:1px solid var(--rule);padding-top:12px}
+.ch-concept-row{display:flex;justify-content:space-between;align-items:baseline;
+  padding:5px 0;border-bottom:1px solid var(--rule)}
+.ch-concept-label{font-size:14px;color:var(--rust);cursor:pointer;font-weight:500}
+.ch-concept-label:hover{text-decoration:underline}
+.ch-verses{font-size:11px;color:var(--ink-fade);letter-spacing:.04em}
+.sl-card{background:var(--card-bg,#fdf8f0);border:1px solid var(--rule);border-radius:6px;
+  padding:10px 12px;margin-bottom:8px}
+.sl-ref{font-size:11px;font-weight:700;letter-spacing:.08em;color:var(--rust);margin-bottom:4px}
+.sl-verse{font-size:14px;line-height:1.7;color:var(--ink);white-space:pre-wrap;margin-bottom:6px}
+.sl-verse.kn{font-family:"Tiro Kannada",serif}
+.sl-concepts{display:flex;flex-wrap:wrap;gap:4px;margin-top:6px}
+.sl-concept-chip{font-size:11px;background:var(--rust);color:#fff;border-radius:10px;
+  padding:2px 8px;cursor:pointer}
+.sl-concept-chip:hover{opacity:.85}
 .focus-card .bannanje-private{
   margin-top:14px;padding:10px 14px;
   border-left:3px dashed var(--ink-fade);
@@ -285,6 +308,7 @@ footer{
 <nav class="subhead" id="view-tabs">
   <button data-view="browse" class="on">Browse</button>
   <button data-view="focus">Focus</button>
+  <button data-view="chapters">Chapters</button>
   <button data-view="map">Map</button>
 </nav>
 
@@ -295,6 +319,7 @@ footer{
 <main>
   <div id="view-browse"></div>
   <div id="view-focus" hidden></div>
+  <div id="view-chapters" hidden></div>
   <div id="view-map" hidden></div>
 </main>
 
@@ -3530,7 +3555,7 @@ const KG_SHOW_EDGE_TYPES = new Set([
 /* ============================================================================
    Renderer
    ============================================================================ */
-const state = { lang:'en', view:'browse', focusId:null, q:'' };
+const state = { chapterSel: 2, lang:'en', view:'browse', focusId:null, q:'' };
 
 /* UI_STRINGS — tri-script translations for chrome labels (section headers,
    pill badges, footer counter, Madhva callout prefix). All values
@@ -3604,7 +3629,8 @@ function setView(v, id){
     b.classList.toggle('on', b.dataset.view===v);
   });
   document.getElementById('view-browse').hidden = v!=='browse';
-  document.getElementById('view-focus').hidden  = v!=='focus';
+  document.getElementById('view-focus').hidden    = v!=='focus';
+  document.getElementById('view-chapters').hidden = v!=='chapters';
   document.getElementById('view-map').hidden    = v!=='map';
   document.getElementById('search-bar').hidden  = v==='map';
   window.scrollTo({top:0, behavior:'instant'});
@@ -3822,6 +3848,110 @@ function renderFocus(){
                   falls back to auto-layout otherwise ---------- */
 const HAS_HANDLAID = (typeof KG_POSITIONS !== 'undefined') && (typeof KG_TIER_BANDS !== 'undefined');
 
+
+function buildChapterIndex() {
+  // Returns {chNum: [{node, refsRaw}]}
+  const idx = {};
+  NODES.forEach(n => {
+    if (!n.refs) return;
+    const nums = new Set();
+    n.refs.replace(/BG\s*(\d+)[\.·]/g, (_,c) => nums.add(+c));
+    nums.forEach(c => {
+      if (!idx[c]) idx[c] = [];
+      idx[c].push({node:n, refsRaw:n.refs});
+    });
+  });
+  return idx;
+}
+
+function buildShlokaChapterIndex() {
+  // Returns {chNum: [{ref, text, nodeIds}]}
+  const byRef = {};
+  Object.entries(SHLOKAS).forEach(([id, s]) => {
+    if (!s.ref) return;
+    const m = s.ref.match(/BG\s*(\d+)[\.·\-]([\d–]+)/);
+    if (!m) return;
+    const ch = +m[1];
+    const r = s.ref;
+    if (!byRef[r]) byRef[r] = {ref:r, ch, nodeIds:[], s};
+    byRef[r].nodeIds.push(id);
+  });
+  const idx = {};
+  Object.values(byRef).forEach(entry => {
+    const c = entry.ch;
+    if (!idx[c]) idx[c] = [];
+    idx[c].push(entry);
+  });
+  // Sort each chapter's shlokas by verse number
+  Object.values(idx).forEach(arr => arr.sort((a,b) => {
+    const va = parseFloat(a.ref.replace(/BG\s*\d+[\.·]/,''));
+    const vb = parseFloat(b.ref.replace(/BG\s*\d+[\.·]/,''));
+    return va - vb;
+  }));
+  return idx;
+}
+
+function renderChapters() {
+  const root = document.getElementById('view-chapters');
+  const idx  = buildChapterIndex();
+  const sidx = buildShlokaChapterIndex();
+  const chapters = [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18];
+  const sel = state.chapterSel || 2;
+  const isKn = (state.lang === 'kn');
+
+  const chTitle = {
+    1:'Arjuna-viṣāda', 2:'Sāṅkhya-yoga', 3:'Karma-yoga',
+    4:'Jñāna-karma-sannyāsa', 5:'Karma-sannyāsa', 6:'Dhyāna-yoga',
+    7:'Vijñāna-yoga', 8:'Akṣara-brahma', 9:'Rāja-vidyā-rāja-guhya',
+    10:'Vibhūti-yoga', 11:'Viśvarūpa-darśana', 12:'Bhakti-yoga',
+    13:'Kṣetra-kṣetrajña', 14:'Guṇa-traya-vibhāga', 15:'Puruṣottama',
+    16:'Daivāsura-sampad-vibhāga', 17:'Śraddhā-traya-vibhāga',
+    18:'Mokṣa-sannyāsa'
+  };
+
+  const btnRow = chapters.map(ch =>
+    `<button class="ch-btn${ch===sel?' active':''}" onclick="state.chapterSel=${ch};renderChapters()">${ch}</button>`
+  ).join('');
+
+  // ── Concepts section ──────────────────────────────────────────────────────
+  const conceptRows = (idx[sel]||[]).map(({node:n, refsRaw}) =>
+    `<div class="ch-concept-row">
+      <span class="ch-concept-label" onclick="setView('focus','${n.id}')">${escapeHtml(labelOf(n))}</span>
+      <span class="ch-verses">${escapeHtml(refsRaw)}</span>
+    </div>`
+  ).join('');
+  const conceptsSection = conceptRows
+    ? `<div class="ch-section-hd">Concepts</div>${conceptRows}`
+    : `<p style="color:var(--ink-fade);font-size:14px;padding:6px 0">No concepts indexed for this chapter.</p>`;
+
+  // ── Shlokas section ───────────────────────────────────────────────────────
+  const shlokaCards = (sidx[sel]||[]).map(({ref, s, nodeIds}) => {
+    const verse = isKn ? (s.kn||s.dev) : state.lang==='dev' ? s.dev : state.lang==='hi' ? (s.hi||s.dev) : s.iast;
+    const verseHtml = verse
+      ? `<div class="sl-verse${isKn?' kn':''}">${escapeHtml(verse)}</div>` : '';
+    const chips = nodeIds.map(id => {
+      const n = NODES.find(x=>x.id===id);
+      if (!n) return '';
+      return `<span class="sl-concept-chip" onclick="setView('focus','${id}')">${escapeHtml(labelOf(n))}</span>`;
+    }).filter(Boolean).join('');
+    return `<div class="sl-card">
+      <div class="sl-ref">${escapeHtml(ref)}</div>
+      ${verseHtml}
+      ${chips ? `<div class="sl-concepts">${chips}</div>` : ''}
+    </div>`;
+  }).join('');
+  const shlokaSection = shlokaCards
+    ? `<div class="ch-section-hd">Shlokas</div>${shlokaCards}`
+    : `<p style="color:var(--ink-fade);font-size:14px;padding:6px 0">No shlokas indexed for this chapter.</p>`;
+
+  root.innerHTML = `
+    <div class="ch-grid">${btnRow}</div>
+    <div class="ch-list-wrap">
+      <div class="ch-hd">Chapter ${sel} — ${chTitle[sel]||''}</div>
+      ${conceptsSection}
+      ${shlokaSection}
+    </div>`;
+}
 function renderMap(){
   const root = document.getElementById('view-map');
 
@@ -3924,6 +4054,7 @@ function renderMapAuto(root){
 function render(){
   if (state.view==='browse') renderBrowse();
   else if (state.view==='focus') renderFocus();
+  else if (state.view==='chapters') renderChapters();
   else if (state.view==='map') renderMap();
   const f = document.getElementById('stats');
   if (f) f.textContent = `${NODES.length} ${UI('concepts')} · ${EDGES.length} ${UI('relations')} · ${Object.keys(SHLOKAS).length} ${UI('shlokas')} · ${TIERS.length} ${UI('tiers')}`;
