@@ -5411,6 +5411,9 @@ function renderChapters() {
   const root = document.getElementById('view-chapters');
   const conceptIdx  = buildChapterIndex();       // ch → [{node, refsRaw}]
   const shlokaMap   = buildShlokaChapterIndex(); // "ch.v" → [{nodeId, s}]
+  // DEBUG: expose to console
+  console.log('[DEBUG] shlokaMap keys for ch'+sel+':', Object.keys(shlokaMap).filter(k=>k.split('.')[0]===String(sel)));
+  console.log('[DEBUG] shlokaMap[15.7]:', shlokaMap['15.7']);
   const chapters = [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18];
   const sel = state.chapterSel || 2;
   const isKn = (state.lang === 'kn');
@@ -5477,6 +5480,10 @@ function renderChapters() {
     <div class="ch-grid">${btnRow}</div>
     <div class="ch-list-wrap">
       <div class="ch-hd">Chapter ${sel} — ${chTitle[sel]||''}</div>
+      <div style="font-size:11px;color:var(--rust);padding:2px 0 6px">
+        DEBUG: ${Object.keys(shlokaMap).filter(k=>k.split('.')[0]===selStr).length} verses with concept links in ch${sel};
+        sample 15.7=${JSON.stringify(shlokaMap['15.7'])}
+      </div>
       ${conceptsSection}
       ${shlokaSection}
     </div>`;
