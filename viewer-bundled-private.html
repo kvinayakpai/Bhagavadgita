@@ -5357,6 +5357,56 @@ function devToKn(str) {
   const combined = Object.assign({}, V, M, C, S);
   return Array.from(str).map(ch => combined[ch] || ch).join('');
 }
+
+function devToIast(str) {
+  /* Devanagari → IAST transliteration for Sanskrit texts.
+     Handles inherent-'a' rule: consonant without following matra/virama → +a */
+  const IV = { // independent vowels
+    'अ':'a','आ':'ā','इ':'i','ई':'ī','उ':'u','ऊ':'ū',
+    'ऋ':'ṛ','ॠ':'ṝ','ऌ':'ḷ','ए':'e','ऐ':'ai','ओ':'o','औ':'au','ॐ':'oṃ',
+  };
+  const VM = { // vowel marks (matras)
+    '\u093E':'ā','\u093F':'i','\u0940':'ī','\u0941':'u','\u0942':'ū',
+    '\u0943':'ṛ','\u0944':'ṝ','\u0947':'e','\u0948':'ai',
+    '\u094B':'o','\u094C':'au',
+  };
+  const CO = { // consonants (base, without inherent 'a')
+    'क':'k','ख':'kh','ग':'g','घ':'gh','ङ':'ṅ',
+    'च':'c','छ':'ch','ज':'j','झ':'jh','ञ':'ñ',
+    'ट':'ṭ','ठ':'ṭh','ड':'ḍ','ढ':'ḍh','ण':'ṇ',
+    'त':'t','थ':'th','द':'d','ध':'dh','न':'n',
+    'प':'p','फ':'ph','ब':'b','भ':'bh','म':'m',
+    'य':'y','र':'r','ल':'l','व':'v',
+    'श':'ś','ष':'ṣ','स':'s','ह':'h','ळ':'ḷ',
+  };
+  const VIRAMA  = '\u094D'; // ् suppresses inherent vowel
+  const ANUSV   = '\u0902'; // ं
+  const VISARGA = '\u0903'; // ः
+  const CHANDRAB= '\u0901'; // ँ
+
+  const chars = Array.from(str);
+  let out = '';
+  let pending = null; // pending consonant string (IAST, awaiting vowel decision)
+
+  const flush = (vowel = 'a') => {
+    if (pending !== null) { out += pending + vowel; pending = null; }
+  };
+
+  for (let i = 0; i < chars.length; i++) {
+    const ch = chars[i];
+    if (ch in IV)          { flush(); out += IV[ch]; }
+    else if (ch in CO)     { flush(); pending = CO[ch]; }
+    else if (ch === VIRAMA){ if (pending !== null) { out += pending; pending = null; } }
+    else if (ch in VM)     { flush(VM[ch]); }
+    else if (ch === ANUSV) { flush(); out += 'ṃ'; }
+    else if (ch === VISARGA){ flush(); out += 'ḥ'; }
+    else if (ch === CHANDRAB){ flush(); out += 'ṃ'; }
+    else                   { flush(); out += ch; }
+  }
+  flush(); // flush any trailing consonant
+  return out;
+}
+
 function renderChapters() {
   const root = document.getElementById('view-chapters');
   const conceptIdx  = buildChapterIndex();       // ch → [{node, refsRaw}]
@@ -5399,21 +5449,11 @@ function renderChapters() {
   const shlokaCards = verseKeys.map(key => {
     const devText = FULL_GITA[key];
     const linked = shlokaMap[key] || [];
-    // Pick display text — look up rich text from SHLOKAS if available
-    let verse = devText;
-    if (isKn) {
-      const sh = linked.length > 0 ? SHLOKAS[linked[0].nodeId] : null;
-      verse = (sh && sh.kn) ? sh.kn : devToKn(devText);
-    } else if (state.lang === 'dev') {
-      verse = devText;
-    } else if (state.lang === 'hi') {
-      const sh = linked.length > 0 ? SHLOKAS[linked[0].nodeId] : null;
-      verse = (sh && sh.hi) ? sh.hi : devText;
-    } else {
-      // iast/en
-      const sh = linked.length > 0 ? SHLOKAS[linked[0].nodeId] : null;
-      verse = (sh && sh.iast) ? sh.iast : devText;
-    }
+    // Always render from FULL_GITA (complete text) — SHLOKAS used only for chips
+    let verse;
+    if (isKn)                { verse = devToKn(devText);   }
+    else if (state.lang==='dev'||state.lang==='hi') { verse = devText; }
+    else                     { verse = devToIast(devText); } // en / iast
     const verseHtml = verse
       ? `<div class="sl-verse${isKn?' kn':''}">${escapeHtml(verse)}</div>` : '';
     const chips = linked.map(({nodeId}) => {
