@@ -5283,6 +5283,40 @@ function buildShlokaChapterIndex() {
   return map;
 }
 
+
+function devToKn(str) {
+  /* Devanagari → Kannada script transliteration for Sanskrit texts */
+  const V = { /* independent vowels */
+    '\u0905':'ಅ','\u0906':'ಆ','\u0907':'ಇ','\u0908':'ಈ',
+    '\u0909':'ಉ','\u090A':'ಊ','\u090B':'ಋ','\u0960':'ೠ',
+    '\u090C':'ಌ','\u090F':'ಏ','\u0910':'ಐ','\u0913':'ಓ','\u0914':'ಔ',
+  };
+  const M = { /* vowel marks (matras) */
+    '\u093E':'ಾ','\u093F':'ಿ','\u0940':'ೀ','\u0941':'ು','\u0942':'ೂ',
+    '\u0943':'ೃ','\u0944':'ೄ','\u0947':'ೇ','\u0948':'ೈ',
+    '\u094B':'ೋ','\u094C':'ೌ','\u094D':'್',
+    '\u0902':'ಂ','\u0903':'ಃ','\u0901':'ಁ','\u0900':'ಀ',
+  };
+  const C = { /* consonants */
+    '\u0915':'ಕ','\u0916':'ಖ','\u0917':'ಗ','\u0918':'ಘ','\u0919':'ಙ',
+    '\u091A':'ಚ','\u091B':'ಛ','\u091C':'ಜ','\u091D':'ಝ','\u091E':'ಞ',
+    '\u091F':'ಟ','\u0920':'ಠ','\u0921':'ಡ','\u0922':'ಢ','\u0923':'ಣ',
+    '\u0924':'ತ','\u0925':'ಥ','\u0926':'ದ','\u0927':'ಧ','\u0928':'ನ',
+    '\u092A':'ಪ','\u092B':'ಫ','\u092C':'ಬ','\u092D':'ಭ','\u092E':'ಮ',
+    '\u092F':'ಯ','\u0930':'ರ','\u0932':'ಲ','\u0935':'ವ',
+    '\u0936':'ಶ','\u0937':'ಷ','\u0938':'ಸ','\u0939':'ಹ',
+    '\u0933':'ಳ','\u0929':'ನ','\u0931':'ರ','\u0934':'ಳ',
+  };
+  const S = { /* specials */
+    '\u0950':'ಓಂ', /* ॐ */
+    '\u0964':'।','\u0965':'॥',
+    '\u0966':'೦','\u0967':'೧','\u0968':'೨','\u0969':'೩',
+    '\u096A':'೪','\u096B':'೫','\u096C':'೬','\u096D':'೭',
+    '\u096E':'೮','\u096F':'೯',
+  };
+  const combined = Object.assign({}, V, M, C, S);
+  return Array.from(str).map(ch => combined[ch] || ch).join('');
+}
 function renderChapters() {
   const root = document.getElementById('view-chapters');
   const conceptIdx  = buildChapterIndex();       // ch → [{node, refsRaw}]
@@ -5327,7 +5361,17 @@ function renderChapters() {
     const linked = shlokaMap[key] || [];
     // Pick display text
     let verse = devText;
-    if (isKn && linked.length > 0 && linked[0].s.kn) verse = linked[0].s.kn;
+    if (isKn) {
+      // Use kn from SHLOKAS if available, else transliterate Devanagari → Kannada
+      verse = (linked.length > 0 && linked[0].s.kn) ? linked[0].s.kn : devToKn(devText);
+    } else if (state.lang === 'dev') {
+      verse = devText;
+    } else if (state.lang === 'hi') {
+      verse = (linked.length > 0 && linked[0].s.hi) ? linked[0].s.hi : devText;
+    } else {
+      // iast/en: use SHLOKAS iast if available, else show dev
+      verse = (linked.length > 0 && linked[0].s.iast) ? linked[0].s.iast : devText;
+    }
     const verseHtml = verse
       ? `<div class="sl-verse${isKn?' kn':''}">${escapeHtml(verse)}</div>` : '';
     const chips = linked.map(({nodeId}) => {
