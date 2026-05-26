@@ -6518,7 +6518,7 @@ function renderChat() {
   const emptyHTML = chatState.msgs.length === 0 ? `
     <div class="chat-empty">${escapeHtml(ui.intro)}</div>
     <div class="chat-suggestions">${ui.sugg.map(s =>
-      `<button class="chat-suggestion" onclick="chatSend(${JSON.stringify(s)})">${escapeHtml(s)}</button>`
+      `<button class="chat-suggestion" data-q="${escapeHtml(s)}" onclick="chatSend(this.dataset.q)">${escapeHtml(s)}</button>`
     ).join('')}</div>` : '';
 
   const typingHTML = chatState.loading ?
