@@ -6470,39 +6470,63 @@ const CHAT_UI = {
   }
 };
 
-/* Voice input language codes */
-const VOICE_LANGS = { en:'en-US', dev:'sa-IN', hi:'hi-IN', kn:'kn-IN' };
+/* Voice input — sa-IN unsupported by browsers; dev mode uses hi-IN (same Devanagari) */
+const VOICE_LANGS = { en:'en-IN', dev:'hi-IN', hi:'hi-IN', kn:'kn-IN' };
 let voiceRec = null;
 
 function startVoice() {
   const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
-  if (!SR) { alert('Voice input not supported in this browser'); return; }
-  if (voiceRec) { voiceRec.stop(); return; }
+  if (!SR) {
+    const inp = document.getElementById('chat-input');
+    if (inp) { inp.placeholder = 'Voice not supported — type instead'; }
+    return;
+  }
+  /* Stop if already recording */
+  if (voiceRec) { try { voiceRec.stop(); } catch(e){} return; }
 
   const mic = document.getElementById('chat-mic');
   const inp = document.getElementById('chat-input');
+
   voiceRec = new SR();
-  voiceRec.lang = VOICE_LANGS[state.lang] || 'en-US';
+  voiceRec.lang = VOICE_LANGS[state.lang] || 'en-IN';
   voiceRec.continuous = false;
   voiceRec.interimResults = true;
+  voiceRec.maxAlternatives = 1;
 
-  voiceRec.onstart = () => { if (mic) mic.classList.add('recording'); };
+  voiceRec.onstart = () => {
+    if (mic) { mic.classList.add('recording'); mic.title = 'Tap to stop'; }
+    if (inp) inp.placeholder = '🎙 Listening…';
+  };
   voiceRec.onresult = (e) => {
-    const t = Array.from(e.results).map(r=>r[0].transcript).join('');
+    const t = Array.from(e.results).map(r => r[0].transcript).join('');
     if (inp) { inp.value = t; inp.dispatchEvent(new Event('input')); }
   };
   voiceRec.onend = () => {
     voiceRec = null;
-    if (mic) mic.classList.remove('recording');
+    if (mic) { mic.classList.remove('recording'); mic.title = 'Voice input'; }
+    const ui = CHAT_UI[state.lang] || CHAT_UI.en;
+    if (inp) inp.placeholder = ui.placeholder;
     const send = document.getElementById('chat-send');
-    const inp2 = document.getElementById('chat-input');
-    if (send && inp2) send.disabled = !inp2.value.trim() || chatState.loading;
+    if (send && inp) send.disabled = !inp.value.trim() || chatState.loading;
   };
   voiceRec.onerror = (e) => {
     voiceRec = null;
-    if (mic) mic.classList.remove('recording');
+    if (mic) { mic.classList.remove('recording'); mic.title = 'Voice input'; }
+    const ui = CHAT_UI[state.lang] || CHAT_UI.en;
+    if (inp) {
+      inp.placeholder = e.error === 'not-allowed'
+        ? '⚠️ Microphone permission denied'
+        : e.error === 'network'
+        ? '⚠️ Voice needs internet connection'
+        : '⚠️ Voice error — try again';
+    }
+    setTimeout(() => { if (inp) inp.placeholder = (CHAT_UI[state.lang]||CHAT_UI.en).placeholder; }, 3000);
   };
-  voiceRec.start();
+  try { voiceRec.start(); }
+  catch(e) {
+    voiceRec = null;
+    if (inp) inp.placeholder = '⚠️ Could not start mic — ' + e.message;
+  }
 }
 
 function renderChat() {
