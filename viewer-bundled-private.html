@@ -6424,7 +6424,7 @@ async function chatSend(text) {
     let body;
     try {
       body = JSON.stringify({
-        model: 'claude-sonnet-4-20250514',
+        model: 'claude-sonnet-4-6',
         max_tokens: 2048,
         system: getChatSystem(),
         messages: chatState.msgs.map(m => ({ role: m.role, content: m.content })),
@@ -6653,7 +6653,7 @@ async function chatSend(text) {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
-        model: 'claude-sonnet-4-20250514',
+        model: 'claude-sonnet-4-6',
         max_tokens: 2048,
         system: getChatSystem(),
         messages: chatState.msgs.map(m => ({ role: m.role, content: m.content })),
