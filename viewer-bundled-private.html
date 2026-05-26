@@ -6412,9 +6412,21 @@ async function chatSend(text) {
   renderChat();
 
   try {
+    const apiKey = getChatApiKey();
+    if (!apiKey) {
+      chatState.msgs.pop(); // remove user msg
+      chatState.loading = false;
+      chatPromptKey();
+      return;
+    }
     const res = await fetch('https://api.anthropic.com/v1/messages', {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
+      headers: {
+        'Content-Type': 'application/json',
+        'x-api-key': apiKey,
+        'anthropic-version': '2023-06-01',
+        'anthropic-dangerous-direct-browser-access': 'true',
+      },
       body: JSON.stringify({
         model: 'claude-sonnet-4-20250514',
         max_tokens: 2048,
@@ -6433,6 +6445,17 @@ async function chatSend(text) {
   renderChat();
 }
 
+function chatPromptKey() {
+  const current = getChatApiKey();
+  const msg = current
+    ? 'Update your Anthropic API key (leave blank to remove):'
+    : 'Enter your Anthropic API key\n(get one at console.anthropic.com):';
+  const val = prompt(msg, current);
+  if (val === null) return; // cancelled
+  setChatApiKey(val);
+  renderChat();
+}
+
 function chatReset() {
   chatState.msgs = [];
   chatState.loading = false;
@@ -6441,6 +6464,13 @@ function chatReset() {
 
 
 const chatState = { msgs: [], loading: false };
+
+function getChatApiKey() {
+  return localStorage.getItem('gita_api_key') || '';
+}
+function setChatApiKey(k) {
+  localStorage.setItem('gita_api_key', k.trim());
+}
 
 /* Multilingual UI strings for the chat panel */
 const CHAT_UI = {
@@ -6539,11 +6569,17 @@ function renderChat() {
     `<div class="chat-bubble ${m.role==='user'?'user':'bot'}">${escapeHtml(m.content)}</div>`
   ).join('');
 
+  const hasKey = !!getChatApiKey();
+  const keyBadge = hasKey
+    ? `<span style="font-size:11px;color:var(--ink-fade);cursor:pointer" onclick="chatPromptKey()">🔑 API key set ✕</span>`
+    : `<button class="chat-suggestion" onclick="chatPromptKey()" style="border-color:var(--rust);color:var(--rust)">🔑 Set Anthropic API key to enable chat</button>`;
+
   const emptyHTML = chatState.msgs.length === 0 ? `
     <div class="chat-empty">${escapeHtml(ui.intro)}</div>
+    <div style="margin-bottom:8px">${keyBadge}</div>
     <div class="chat-suggestions">${ui.sugg.map(s =>
       `<button class="chat-suggestion" data-q="${escapeHtml(s)}" onclick="chatSend(this.dataset.q)">${escapeHtml(s)}</button>`
-    ).join('')}</div>` : '';
+    ).join('')}</div>` : `<div style="text-align:right;padding:0 0 4px">${keyBadge}</div>`;
 
   const typingHTML = chatState.loading ?
     `<div class="chat-typing"><span></span><span></span><span></span></div>` : '';
