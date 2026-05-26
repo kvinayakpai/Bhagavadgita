@@ -310,6 +310,9 @@ footer{
 .chat-empty{color:var(--ink-soft);font-size:14px;line-height:1.7;padding:4px 0 10px}
 .chat-reset{background:none;border:none;color:var(--ink-fade);font-size:12px;cursor:pointer;padding:0 0 8px;font-family:inherit}
 .chat-error{background:#fff0ed;border:1px solid #f0a090;border-radius:8px;padding:9px 13px;font-size:13px;color:var(--rust);margin:0 0 8px}
+.chat-mic{background:var(--paper);border:1px solid var(--rule);color:var(--ink);border-radius:12px;width:40px;height:40px;font-size:18px;cursor:pointer;flex-shrink:0;display:flex;align-items:center;justify-content:center;transition:background .2s}
+.chat-mic.recording{background:var(--rust);color:#fff;animation:mic-pulse 1s infinite}
+@keyframes mic-pulse{0%,100%{opacity:1}50%{opacity:.6}}
 </style>
 </head>
 <body class="lang-en">
@@ -6439,18 +6442,71 @@ function chatReset() {
 
 const chatState = { msgs: [], loading: false };
 
-const CHAT_SUGGESTIONS = [
-  "What is Bannanje's view of Brahman?",
-  "Difference between kṣara and akṣara puruṣa?",
-  "What does BG 2.47 teach?",
-  "Explain sthitaprajña",
-  "What is tāratamya?",
-  "How do the guṇas bind the soul?",
-  "What is pañca-bheda?",
-  "How does bhakti lead to mokṣa?",
-];
+/* Multilingual UI strings for the chat panel */
+const CHAT_UI = {
+  en: {
+    intro: "Ask any question about the Bhagavad Gītā — concepts, shlokas, Bannanje's commentary, Madhva philosophy.",
+    placeholder: "Ask about a concept, verse, or teaching…",
+    newConv: "↺ New conversation",
+    sugg: ["What is Bannanje's view of Brahman?","Kṣara vs akṣara puruṣa?","What does BG 2.47 teach?","Explain sthitaprajña","What is tāratamya?","How do guṇas bind the soul?","What is pañca-bheda?","How does bhakti lead to mokṣa?"]
+  },
+  dev: {
+    intro: "भगवद्गीतायाः विषये प्रश्नं पृच्छतु — संकल्पनाः, श्लोकाः, बन्नञ्जेयोः भाष्यम्, माध्वदर्शनम्।",
+    placeholder: "संकल्पनां, श्लोकं वा पृच्छतु…",
+    newConv: "↺ नूतनः संवादः",
+    sugg: ["ब्रह्मणः विषये बन्नञ्जेयोः मतं किम्?","क्षर-पुरुषः अक्षर-पुरुषश्च — भेदः कः?","BG २.४७ किं शिक्षयति?","स्थितप्रज्ञस्य लक्षणं किम्?","तारतम्यं किम्?","गुणाः जीवं कथं बध्नन्ति?","पञ्चभेदः किम्?","भक्तिः मोक्षं कथं ददाति?"]
+  },
+  hi: {
+    intro: "भगवद्गीता के विषय में कोई भी प्रश्न पूछें — संकल्पनाएँ, श्लोक, बन्नञ्जे का भाष्य, माध्व दर्शन।",
+    placeholder: "संकल्पना, श्लोक या उपदेश पूछें…",
+    newConv: "↺ नई बातचीत",
+    sugg: ["ब्रह्म पर बन्नञ्जे का मत क्या है?","क्षर-पुरुष और अक्षर-पुरुष में अंतर?","BG २.४७ क्या सिखाता है?","स्थितप्रज्ञ की व्याख्या","तारतम्य क्या है?","गुण जीव को कैसे बाँधते हैं?","पञ्चभेद क्या है?","भक्ति से मोक्ष कैसे मिलता है?"]
+  },
+  kn: {
+    intro: "ಭಗವದ್ಗೀತೆಯ ಬಗ್ಗೆ ಯಾವುದೇ ಪ್ರಶ್ನೆ ಕೇಳಿ — ಸಂಕಲ್ಪನೆಗಳು, ಶ್ಲೋಕಗಳು, ಬನ್ನಂಜೆ ವ್ಯಾಖ್ಯಾನ, ಮಾಧ್ವ ದರ್ಶನ.",
+    placeholder: "ಸಂಕಲ್ಪನೆ, ಶ್ಲೋಕ ಅಥವಾ ಉಪದೇಶ ಕೇಳಿ…",
+    newConv: "↺ ಹೊಸ ಸಂವಾದ",
+    sugg: ["ಬ್ರಹ್ಮನ ಬಗ್ಗೆ ಬನ್ನಂಜೆ ಅಭಿಪ್ರಾಯ?","ಕ್ಷರ-ಪುರುಷ ಮತ್ತು ಅಕ್ಷರ-ಪುರುಷ ಭೇದ?","BG ೨.೪೭ ಏನು ಕಲಿಸುತ್ತದೆ?","ಸ್ಥಿತಪ್ರಜ್ಞ ಎಂದರೇನು?","ತಾರತಮ್ಯ ಎಂದರೇನು?","ಗುಣಗಳು ಜೀವ ಬಂಧನ ಹೇಗೆ?","ಪಂಚಭೇದ ಎಂದರೇನು?","ಭಕ್ತಿಯಿಂದ ಮೋಕ್ಷ ಹೇಗೆ?"]
+  }
+};
+
+/* Voice input language codes */
+const VOICE_LANGS = { en:'en-US', dev:'sa-IN', hi:'hi-IN', kn:'kn-IN' };
+let voiceRec = null;
+
+function startVoice() {
+  const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
+  if (!SR) { alert('Voice input not supported in this browser'); return; }
+  if (voiceRec) { voiceRec.stop(); return; }
+
+  const mic = document.getElementById('chat-mic');
+  const inp = document.getElementById('chat-input');
+  voiceRec = new SR();
+  voiceRec.lang = VOICE_LANGS[state.lang] || 'en-US';
+  voiceRec.continuous = false;
+  voiceRec.interimResults = true;
+
+  voiceRec.onstart = () => { if (mic) mic.classList.add('recording'); };
+  voiceRec.onresult = (e) => {
+    const t = Array.from(e.results).map(r=>r[0].transcript).join('');
+    if (inp) { inp.value = t; inp.dispatchEvent(new Event('input')); }
+  };
+  voiceRec.onend = () => {
+    voiceRec = null;
+    if (mic) mic.classList.remove('recording');
+    const send = document.getElementById('chat-send');
+    const inp2 = document.getElementById('chat-input');
+    if (send && inp2) send.disabled = !inp2.value.trim() || chatState.loading;
+  };
+  voiceRec.onerror = (e) => {
+    voiceRec = null;
+    if (mic) mic.classList.remove('recording');
+  };
+  voiceRec.start();
+}
 
 function renderChat() {
+  const ui = CHAT_UI[state.lang] || CHAT_UI.en;
   const root = document.getElementById('view-chat');
   root.style.display = 'flex';
   root.style.flexDirection = 'column';
@@ -6460,8 +6516,8 @@ function renderChat() {
   ).join('');
 
   const emptyHTML = chatState.msgs.length === 0 ? `
-    <div class="chat-empty">Ask any question about the Bhagavad Gītā — concepts, shlokas, Bannanje's commentary, Madhva philosophy.</div>
-    <div class="chat-suggestions">${CHAT_SUGGESTIONS.map(s =>
+    <div class="chat-empty">${escapeHtml(ui.intro)}</div>
+    <div class="chat-suggestions">${ui.sugg.map(s =>
       `<button class="chat-suggestion" onclick="chatSend(${JSON.stringify(s)})">${escapeHtml(s)}</button>`
     ).join('')}</div>` : '';
 
@@ -6469,7 +6525,7 @@ function renderChat() {
     `<div class="chat-typing"><span></span><span></span><span></span></div>` : '';
 
   const resetBtn = chatState.msgs.length > 0 ?
-    `<button class="chat-reset" onclick="chatReset()">↺ New conversation</button>` : '';
+    `<button class="chat-reset" onclick="chatReset()">${escapeHtml(ui.newConv)}</button>` : '';
 
   root.innerHTML = `
     <div class="chat-msgs" id="chat-msgs">
@@ -6478,11 +6534,12 @@ function renderChat() {
     <div class="chat-input-wrap">
       <div style="flex:1;display:flex;flex-direction:column">
         ${resetBtn}
-        <textarea id="chat-input" rows="2" placeholder="Ask about a concept, verse, or teaching…"
+        <textarea id="chat-input" rows="2" placeholder="${escapeHtml(ui.placeholder)}"
           onkeydown="if(event.key==='Enter'&&!event.shiftKey){event.preventDefault();chatSend()}"
           oninput="document.getElementById('chat-send').disabled=!this.value.trim()||chatState.loading"
         ></textarea>
       </div>
+      <button id="chat-mic" class="chat-mic" onclick="startVoice()" title="Voice input">🎙</button>
       <button id="chat-send" class="chat-send" disabled onclick="chatSend()">➤</button>
     </div>`;
 
