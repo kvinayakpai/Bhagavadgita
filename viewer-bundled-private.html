@@ -6412,42 +6412,66 @@ async function chatSend(text) {
   renderChat();
 
   try {
-    if (!getChatApiKey()) {
+    const apiKey = getChatApiKey();
+    if (!apiKey) {
       chatState.msgs.pop();
       chatState.loading = false;
       renderChat();
       return;
     }
-    const apiKey = getChatApiKey();
-    const res = await fetch('https://api.anthropic.com/v1/messages', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'x-api-key': apiKey,
-        'anthropic-version': '2023-06-01',
-        'anthropic-dangerous-direct-browser-access': 'true',
-      },
-      body: JSON.stringify({
+
+    // Build request body
+    let body;
+    try {
+      body = JSON.stringify({
         model: 'claude-sonnet-4-20250514',
         max_tokens: 2048,
         system: getChatSystem(),
         messages: chatState.msgs.map(m => ({ role: m.role, content: m.content })),
-      })
-    });
-    if (!res.ok) { const t=await res.text(); throw new Error('API '+res.status+': '+t.slice(0,200)); }
-    const data = await res.json();
-    const reply = (data.content || []).find(b => b.type === 'text')?.text || '';
+      });
+    } catch(jsonErr) {
+      throw new Error('Failed to build request: ' + jsonErr.message);
+    }
+
+    let res;
+    try {
+      res = await fetch('https://api.anthropic.com/v1/messages', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'x-api-key': apiKey,
+          'anthropic-version': '2023-06-01',
+          'anthropic-dangerous-direct-browser-access': 'true',
+        },
+        body,
+      });
+    } catch(fetchErr) {
+      // "Failed to fetch" — network or CORS
+      throw new Error('Could not reach Anthropic API.\n\nPossible causes:\n• Your API key may be invalid — tap ⚙️ to re-enter\n• Check your internet connection\n• Try reloading the page\n\nError detail: ' + fetchErr.message);
+    }
+
+    if (res.status === 401) {
+      throw new Error('Invalid API key (401). Tap ⚙️ to re-enter your key from console.anthropic.com');
+    }
+    if (res.status === 429) {
+      throw new Error('Rate limit reached (429). Wait a moment and try again.');
+    }
+    if (!res.ok) {
+      const t = await res.text().catch(()=>'');
+      throw new Error('API error ' + res.status + ': ' + t.slice(0, 200));
+    }
+
+    let data;
+    try {
+      data = await res.json();
+    } catch(jsonErr) {
+      throw new Error('Invalid response from API: ' + jsonErr.message);
+    }
+
+    const reply = (data.content || []).find(b => b.type === 'text')?.text || '(no response)';
     chatState.msgs.push({ role: 'assistant', content: reply });
   } catch (e) {
-    let errTxt = e.message || String(e);
-    if (errTxt.toLowerCase().includes('failed to fetch') || errTxt.includes('network')) {
-      errTxt = 'Network error. Possible causes:\n• Invalid API key (re-enter via ⚙️)\n• Check internet connection\n• API key might have extra spaces — try re-pasting it';
-    } else if (errTxt.includes('401')) {
-      errTxt = 'Invalid API key. Tap ⚙️ to re-enter it.';
-    } else if (errTxt.includes('429')) {
-      errTxt = 'Rate limit reached. Wait a moment and try again.';
-    }
-    chatState.msgs.push({ role: 'assistant', content: '⚠️ ' + errTxt });
+    chatState.msgs.push({ role: 'assistant', content: '⚠️ ' + (e.message || String(e)) });
   }
   chatState.loading = false;
   renderChat();
