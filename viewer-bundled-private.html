@@ -287,6 +287,29 @@ footer{
   border-top:1px solid var(--rule);
   font-size:10px;color:var(--ink-fade);letter-spacing:.06em;text-align:center;
 }
+
+/* ============ CHAT ============ */
+#view-chat{display:flex;flex-direction:column;height:calc(100vh - 120px);padding:0}
+.chat-msgs{flex:1;overflow-y:auto;padding:14px 14px 8px;display:flex;flex-direction:column;gap:12px}
+.chat-bubble{max-width:86%;padding:10px 14px;border-radius:16px;font-size:14px;line-height:1.7;white-space:pre-wrap;word-break:break-word}
+.chat-bubble.user{align-self:flex-end;background:var(--ink);color:var(--paper);border-radius:16px 16px 4px 16px}
+.chat-bubble.bot{align-self:flex-start;background:var(--paper);color:var(--ink);border:1px solid var(--rule);border-radius:16px 16px 16px 4px}
+.chat-typing{align-self:flex-start;display:flex;gap:5px;align-items:center;padding:12px 16px;background:var(--paper);border:1px solid var(--rule);border-radius:16px 16px 16px 4px}
+.chat-typing span{width:7px;height:7px;border-radius:50%;background:var(--rust);display:inline-block;animation:chat-bounce 1.2s infinite}
+.chat-typing span:nth-child(2){animation-delay:.2s}
+.chat-typing span:nth-child(3){animation-delay:.4s}
+@keyframes chat-bounce{0%,80%,100%{transform:translateY(0)}40%{transform:translateY(-5px)}}
+.chat-input-wrap{padding:10px 14px 14px;border-top:1px solid var(--rule);display:flex;gap:8px;align-items:flex-end;background:var(--bg)}
+.chat-input-wrap textarea{flex:1;border:1px solid var(--rule);border-radius:12px;padding:9px 13px;font-family:inherit;font-size:14px;resize:none;background:var(--paper);color:var(--ink);outline:none;line-height:1.6;max-height:120px}
+.chat-input-wrap textarea:focus{border-color:var(--rust)}
+.chat-send{background:var(--rust);color:#fff;border:none;border-radius:12px;width:40px;height:40px;font-size:18px;cursor:pointer;flex-shrink:0;display:flex;align-items:center;justify-content:center}
+.chat-send:disabled{background:#ccc;cursor:not-allowed}
+.chat-suggestions{display:flex;flex-wrap:wrap;gap:7px;padding:4px 0 2px}
+.chat-suggestion{background:var(--paper);border:1px solid var(--rule);border-radius:20px;padding:5px 13px;font-size:12px;color:var(--ink-soft);cursor:pointer;font-family:inherit;line-height:1.4}
+.chat-suggestion:hover{border-color:var(--rust);color:var(--rust)}
+.chat-empty{color:var(--ink-soft);font-size:14px;line-height:1.7;padding:4px 0 10px}
+.chat-reset{background:none;border:none;color:var(--ink-fade);font-size:12px;cursor:pointer;padding:0 0 8px;font-family:inherit}
+.chat-error{background:#fff0ed;border:1px solid #f0a090;border-radius:8px;padding:9px 13px;font-size:13px;color:var(--rust);margin:0 0 8px}
 </style>
 </head>
 <body class="lang-en">
@@ -310,6 +333,7 @@ footer{
   <button data-view="focus">Focus</button>
   <button data-view="chapters">Chapters</button>
   <button data-view="map">Map</button>
+  <button data-view="chat">Chat</button>
 </nav>
 
 <section class="search" id="search-bar">
@@ -321,6 +345,7 @@ footer{
   <div id="view-focus" hidden></div>
   <div id="view-chapters" hidden></div>
   <div id="view-map" hidden></div>
+  <div id="view-chat" hidden></div>
 </main>
 
 </div>
@@ -4843,7 +4868,8 @@ function setView(v, id){
   document.getElementById('view-focus').hidden    = v!=='focus';
   document.getElementById('view-chapters').hidden = v!=='chapters';
   document.getElementById('view-map').hidden    = v!=='map';
-  document.getElementById('search-bar').hidden  = v==='map';
+  document.getElementById('view-chat').hidden   = v!=='chat';
+  document.getElementById('search-bar').hidden  = v==='map' || v==='chat';
   window.scrollTo({top:0, behavior:'instant'});
   render();
 }
@@ -5429,6 +5455,7 @@ function render(){
   else if (state.view==='focus') renderFocus();
   else if (state.view==='chapters') renderChapters();
   else if (state.view==='map') renderMap();
+  else if (state.view==='chat') renderChat();
   const f = document.getElementById('stats');
   if (f) f.textContent = `${NODES.length} ${UI('concepts')} · ${EDGES.length} ${UI('relations')} · ${Object.keys(FULL_GITA).length} ${UI('shlokas')} · ${TIERS.length} ${UI('tiers')}`;
 }
@@ -5460,6 +5487,1001 @@ document.addEventListener('click', (ev)=>{
   const g = ev.target.closest('g.map-node[data-id]');
   if (g){ setView('focus', g.dataset.id); return; }
 });
+
+
+/* ============ CHAT ASSISTANT ============ */
+const CHAT_SYSTEM = `You are a Bhagavad Gītā scholar specialising in the Madhva Vedānta tradition, drawing on Bannanje Govindacharya's commentary. Answer questions clearly and faithfully, grounded in the knowledge base below. Quote verse references (e.g. BG 2.47) when applicable. Explain Bannanje's specific interpretation where available.
+
+BHAGAVAD GĪTĀ KNOWLEDGE BASE — MADHVA / BANNANJE GOVINDACHARYA TRADITION
+
+=== CONCEPTS (117 nodes, 12 tiers) ===
+
+[brahman] Brahman
+  Verses: BG 8.3 · 14.27 · 15.18
+  Title: Brahman — the supreme imperishable
+  Bannanje commentary: Bannanje (BG 8.3): the word 'Brahman' here means the supreme imperishable (paramākṣara) — Bhagavān who is greater than all. He sets out a four-fold gradation: 'brahma' = jīvas; 'parabrahma' = liberated jīvas; 'paramabrahma' = Śrī-tattva, the ever-liberated Śrī-Lakṣmī; 'parama-mahā-brahma' = Nārāyaṇa. Bhagavān is supreme even over the parāyaṇas, i.e., the tattvābhimāni devatās who sustain us; He is the master of all devatās. (BG 14.27): 'I am the support (pratiṣṭhā) of the imperishable, unchanging cit-prakṛti, and of sanātana-dharma and of the one-pointed bliss of mokṣa.' (BG 15.18) — quoted via Madhvācārya's Viṣṇutattvanirṇaya maṅgalācaraṇa: 'samatīta-kṣarākṣaram Nārāyaṇam'.
+
+[paramatman] Paramātman
+  Verses: BG 13.22 · 15.17
+  Title: Paramātman — upadraṣṭā, bhartā, parama-puruṣa within the body
+  Bannanje commentary: Bannanje (BG 13.22): the Paramātman is the all-seeing upadraṣṭā, anumantā ('one who consents as He wills'), bhartā ('upholder of all'), bhoktā ('eater of the essence'), and Maheśvara — the parama-puruṣa who is with the jīva in this body. While cit-prakṛti with jaḍa-prakṛti forms the body and the jīva there enjoys sukha-duḥkha through the indriyas, He stands above all as their impeller, witnessing everything from closest range; knowing our karma and what is to come from which karma; sitting within and impelling, by which the body stands — if He departs, the body falls. He is within us, untouched by any sorrow, the ever-blissful enjoyer of bliss. Bannanje (BG 15.17): Higher than the kṣara and the akṣara is the uttama-puruṣa, called 'Paramātmā' — the avyaya Īśvara who, entering the three worlds, sustains them.
+
+[purushottama] Puruṣottama
+  Verses: BG 15.18–19
+  Title: Puruṣottama — beyond kṣara, higher even than akṣara
+  Bannanje commentary: Bannanje (BG 15.18): Having said in the previous verse 'he who is beyond both kṣara and akṣara is puruṣottama,' here Krishna plainly declares 'that distinct Puruṣottama is myself.' Two words 'atīta' and 'uttama' are used together for a special reason: the kṣara-puruṣa's existence extends only within this brahmāṇḍa, while Lakṣmī and Nārāyaṇa stand beyond this brahmāṇḍa — that is what 'atīta' explains; and Bhagavān is also higher than the akṣarā Lakṣmī. The joint use of 'api' and 'ca' declares Bhagavān's sarva-śreṣṭhatva: there is no tattva higher than Him. The full meaning of the word 'puruṣottama' applies primarily only to Bhagavān; in 'loka' (pauruṣeya purāṇa-granthas such as Rāmāyaṇa, Mahābhārata, Pāñcarātra, Purāṇas) and in the Veda, what is called puruṣottama is He. Bannanje quotes here Madhvācārya's Viṣṇutattva-nirṇaya maṅgalācaraṇa: 'sadāgamaika-vijñeyaṃ, samatīta-kṣarākṣaraṃ, Nārāyaṇaṃ sadā vande, nirdoṣa-aśeṣa-sadguṇam'.
+
+[ksara_purusha] Kṣara-puruṣa
+  Verses: BG 15.16
+  Title: Kṣara-puruṣa — Brahmā and all jīvas with falling bodies
+  Bannanje commentary: Bannanje (BG 15.16): kṣara-puruṣas are those whose body one day falls — all jīvas including Brahmā. Even all the devatās headed by Brahmā cannot go to mokṣa together with their body. Caturmukha Brahmā's lifespan is one kalpa (31,104 thousand crore human years); after that his body too is reduced to ashes. Bannanje cites Īśopaniṣat 17 — 'vāyur anilam amṛtam athedaṃ bhasmāntaṃ śarīram': 'the Prāṇa-devatā, substratum for Bhagavān, is amṛta; yet his body too must one day become ashes.' Thus all devatās and all jīva-jātas are kṣara-puruṣas. (All kṣara-puruṣas, however, become akṣara in mokṣa.)
+
+[akshara_purusha] Akṣara-puruṣa
+  Verses: BG 15.16
+  Title: Akṣara-puruṣa — Śrī-Lakṣmī, the kūṭasthā
+  Bannanje commentary: Bannanje (BG 15.16): Śrī-Lakṣmī, who has the indestructible jñāna-ānanda-maya svarūpa-body, is the akṣara-puruṣā. All kṣara-puruṣas become akṣara in mokṣa, but Lakṣmī is ever akṣarā. Here Lakṣmī is described as 'kūṭasthā'. 'Kūṭa' means 'joining together': the mother who is the cause of the joining of jīva and body is Śrī-Lakṣmī — Jaganmātā Śrī-Lakṣmī, the śakti who, ever-unattached, without any tinge, sets the world in order. She is the akṣara-puruṣā. (Bannanje glosses 'kūṭasthaḥ akṣaraḥ' of the verse as referring to her — the cit-prakṛti who holds together the chara-acara assembly.)
+
+[avatara] Avatāra
+  Verses: BG 4.6–8
+  Title: Avatāra — birthless Bhagavān descending by His own will
+  Bannanje commentary: Bannanje (BG 4.6): Bhagavān is the lord of all jīvas; many times He descends to the earth. There is no birth for Him, yet He is born; He is avyaya, He does not assume a perishable body and take birth — therefore birth-and-death through a body do not apply to Him. The word 'ātma-māyayā' here has several senses: the curtain of moha that covers the jīva is ātma-māyā; Bhagavān's mahimā is ātma-māyā; Bhagavān's own will and knowledge are ātma-māyā. Bhagavān comes down to earth by the mahimā of His knowledge, not as one subject to some māyā. To fulfil the longing of His devotees, by His own will He uses the prakṛti He Himself has fashioned as the medium and descends. This is His mahimā. To us who live within the curtain of moha it appears as an ordinary birth, because we cannot see His jñāna-ānanda-maya body. Just as some animals do not see colour (because their eyes lack that capacity, everything appears black-and-white though colour actually exists), so we, living under the curtain of moha
+
+[svarupa_aikya] Svarūpa-aikya
+  Verses: BG 10.20 · 11.24
+  Title: Bhagavān as antaryāmi-ātman of all jīvas — not jīvātmā-paramātmā identity
+  Bannanje commentary: Bannanje (BG 10.20): Krishna says, 'I am filled within each jīva as ātmā; I am the ātmā of all jīvas.' Some mistakenly take this as saying 'jīvātmā and paramātmā are one,' but here Krishna says 'I am filled as the ātmā of the jīvātmās,' not 'I myself am the jīvātmā.' This points to the bimba-rūpī Bhagavān who is antaryāmī within each jīva. Bhagavān is sarva-bhūta-āśaya-sthitaḥ — He stands within the heart-cave of every jīva-jāta as antaryāmī, the dweller in the middle of the heart-lotus. This is His greatest vibhūti. Within infinite jīvas Bhagavān manifests in infinite vibhūti-rūpas; therefore we see a unique śakti-vaiśiṣṭya in each jīva. Bhagavān stands within all jīvas before they are born as their niyāmaka, as the cause of their creation, sustaining them, and even at the time of pralaya He guards everything — He is the śakti that protects from within in every state. Bannanje (BG 11.24): Arjuna, beholding the form pervading earth and sky — a mass of light without any touch of darknes
+
+[sarvottamatva] Sarvottamatva
+  Verses: BG 7.7 · 11.43 · 18.65
+  Title: Sarvottamatva — none equal to or greater than Hari in the three lokas
+  Bannanje commentary: Bannanje (BG 11.43): 'You who have created all and sustain all are the father of the world. As Jagad-guru — to whom I behaved with utter familiarity. There is no one equal to you. There is no second example to compare you with. In the whole world there is no other śakti that surpasses you.' [The 'three lokas' here means the group of lokas below the earth, the earth-loka, and the group of lokas above the earth.] 'You are the cause of all causes. Who is greater than you?' Bannanje (BG 18.65): Summarizing sādhanā, Krishna says, 'Set your mind in me alone' — our undivided contemplation in sādhanā must be one-pointed bhakti only towards Bhagavān. With knowledge, remember Bhagavān as 'Bhagavān is sarvōttama.' Let pure love towards Bhagavān be there. All karmas we do should be a loving offering to Bhagavān. Knowing the truth 'sarva-deva-namaskāraḥ keśavaṃ prati-gacchati', worship the sarvāntaryāmi Bhagavān. If in every upāsanā one sees Bhagavān thus, Krishna says: 'You will come and reach me 
+
+[taratamya] Tāratamya
+  Verses: BG 7.7 · 15.16–18
+  Title: Three-fold rank: kṣara, akṣarā Lakṣmī, Puruṣottama
+  Bannanje commentary: Bannanje (BG 15.16): In the sentient world there are two kinds of puruṣas — kṣara-puruṣas (all jīvas including Brahmā, whose bodies must fall — even Caturmukha Brahmā's body becomes ashes at the end of one kalpa), and the akṣara-puruṣā, Śrī-Lakṣmī, who has the indestructible jñāna-ānanda-maya svarūpa-body. All kṣara-puruṣas become akṣara in mokṣa, but Lakṣmī is ever akṣarā; she is called kūṭasthā because she joins (kūṭa) jīva and body. Beyond both of these (subsequent verses 15.17–18) stands the Uttama-puruṣa, the Paramātmā, who enters the three worlds and bears them, beyond kṣara, higher even than the akṣara — He alone is called Puruṣottama in loka and Veda. Thus Bannanje sets out a definite, structured rank in this passage: kṣara → akṣarā Lakṣmī (kūṭasthā) → Puruṣottama Hari, with Hari beyond Lakṣmī, and Lakṣmī beyond all kṣara-jīvas.
+
+[pancha_bheda] Pañca-bheda
+  Verses: BG 7.4–5 · 15.7 · 15.16–18
+  Title: Bhagavān\\
+  Bannanje commentary: Bannanje (BG 7.4): The eight-fold jaḍa-prakṛti under Bhagavān — earth, water, fire, air, ākāśa, manas, buddhi, ahaṅkāra (with supta-prajñā). Pre-creation, the whole world is in subtle form in Bhagavān's belly; then He fashions creation, jaḍa-prakṛti being made first. From the five mahābhūtas the entire sthūla-prapañca is a vikāra. With each element a corresponding abhimāni-devatā arises: 'manas being created' means the abhimāni-devatā of manas is created; 'earth being created' means the abhimāni-devatā of earth is created along with the inert earth; with vāyu, forty-nine devatās are created (the forty-nine layers of air around the earth — divisions according to pressure, regulated by their abhimāni-devatās; cf. Bhāradvāja-saṃhitā). Thus the eight-fold akṣara-prakṛti is formed under Bhagavān, and into the eightfold world Bhagavān enters as aṣṭākṣara-vācya. The first creation of sound is Oṃkāra; eight akṣaras (akāra, ukāra, makāra, nāda, bindu, kalā, śānta, atiśānta); Bhagavān, named by 
+
+[isvara] Īśvara
+  Verses: BG 18.61
+  Title: Īśvara — the indweller who turns all beings
+  Bannanje commentary: Bannanje (BG 18.61): The all-powerful Bhagavān resides in the heart-lotus of every being. Seated within the wondrous machine of the piṇḍāṇḍa and brahmāṇḍa, He keeps it ceaselessly turning by prakṛti's māyā, by His own will. He is the master of both the cosmic and the bodily order, the great consciousness within everyone giving them experience and controlling them. All action proceeds from His glory according to His will.
+
+[prakriti] Prakṛti
+  Verses: BG 7.4–5 · 9.10
+  Title: Prakṛti — the eightfold material substrate under Hari
+  Bannanje commentary: Bannanje (BG 7.4, 9.10): Before sṛṣṭi the whole world rests in subtle form in Bhagavān's belly; He then unfolds the eightfold jaḍa-prakṛti — earth, water, fire, air, ākāśa, manas, buddhi, ahaṅkāra — the root material of all gross things. Each element's creation is also the creation of its abhimāni-devatā. The Lord pervades this aṣṭa-vidha prakṛti as Viśva, Taijasa, Prājña, Turīya, Ātma, Antarātma, Paramātma, Jñānātma. Standing as adhyakṣa, He produces moving and unmoving through jaḍa-prakṛti and the cetana-prakṛti Lakṣmī.
+
+[para_prakriti] Para-prakṛti
+  Verses: BG 7.5
+  Title: Para-prakṛti — Śrī-tattva, the cetana mother of the world
+  Bannanje commentary: Bannanje (BG 7.5): Beyond the eightfold jaḍa-prakṛti is a higher prakṛti — the cetana-prakṛti, Śrī-tattva, eternal support of all jīvas; this is what upholds the world. The Veda calls jaḍa-prakṛti 'akṣara', this cetana-prakṛti 'paramākṣara', and Bhagavān 'parataḥ paramākṣara'. Lakṣmī thus mediates between Bhagavān and the world and is called Lokamātā. Both prakṛtis are nitya, never destroyed; only form (vikṛti) perishes. From the three akṣara-tattvas — Bhagavān, jaḍa, cit — the 'kṣara' world arises.
+
+[kala] Kāla
+  Verses: BG 10.30 · 11.32
+  Title: Kāla — Bhagavān as reckoner and destroyer
+  Bannanje commentary: Bannanje (BG 10.30, 11.32): 'kālaḥ kalayatām aham' — Among reckoners Bhagavān is Kāla; the word kāla (from the dhātu kala) carries the senses of reckoning, mṛtyu, Śiva, Durgā, Kālāgni — in all of these the Lord's special vibhūti is hidden. Bhagavān as 'Kālaḥ' has gathered all guṇas and capacities within Himself (kalayati). When we forget this tattva and become ahaṅkārī, the same tattva becomes 'Kāla-puruṣa' and brings about our destruction. Through jñāna-avatāras He is 'kāla' for ajñāna; through bala-avatāras 'Kāla' for ahaṅkāra. At BG 11.32, as charioteer He stands as Kāla-puruṣa drinking in everyone's life-span with His eyes — the deaths of both armies were already determined.
+
+[karma_tattva] Karma
+  Verses: BG 3.5 · 4.17
+  Title: Karma — its mysterious course
+  Bannanje commentary: Bannanje (BG 4.17): One must know about karma, vikarma (the opposite) and akarma (renunciation of action); the course of karma is gahana — most secret. Even great jñānīs find it hard to discern what is karma and what is akarma; history (Vyāsa born of an unmarried fisher-girl, his sons Pāṇḍu and Dhṛtarāṣṭra born of widows, the Pāṇḍavas born to wives via others) shows the dharma/adharma distinction is not obvious. We must be alert that behind our karma, akarma and vikarma the infinite Bhagavad-śakti is operating; without this jñāna karma's marma cannot be grasped. Bhagavān, present in the one body in many forms, makes karma happen. Karma must be learnt from Bhagavān Himself.
+
+[svabhava] Svabhāva
+  Verses: BG 5.14 · 8.3 · 18.41
+  Title: Svabhāva — the jīva\\
+  Bannanje commentary: Bannanje (BG 5.14, 8.3, 18.41): The jīva is anādi-nitya — not created by Bhagavān; to this anādi-nitya jīva belongs an anādi-nitya extraordinary svabhāva (quality of soul). The jīva moves according to its svabhāva, as a mango-seed yields only mango. The svabhāva is a sāttvika-rājasa-tāmasa-saṁmiśraṇa; one belongs to the group of whichever guṇa is pradhāna. Bhagavān, like a gardener, plants the jīva-seed; the bitter/sour/sweet fruit unfolds according to the jīva's own svabhāva. The four varṇas — brāhmaṇa, kṣatriya, vaiśya, śūdra — and their distinct karmas issue from svabhāva-prabhava-guṇas; this concerns jīva-svarūpa, not jāti (which is body-bound). Knowing one's jīva-svabhāva (BG 8.3 'svabhāvo'dhyātmam ucyate') is adhyātma.
+
+[aksharam_param_brahma] Akṣaraṃ Brahma
+  Verses: BG 8.3 · 8.21
+  Title: Akṣaraṁ paramaṁ Brahma — the supreme imperishable
+  Bannanje commentary: Bannanje (BG 8.3, 8.21): 'akṣaraṁ paramaṁ brahma' — Bhagavān Himself is Paramākṣara, the greatest of all, the paramaṁ brahma. The Viṣṇu-sahasranāma calls Him paramaṁ mahat-tejaḥ, mahat-tapaḥ, mahad-brahma, paraṁ parāyaṇam — light of lights, final goal of all thought, gamya of all jñāna. A graded usage: brahma = jīvas; parabrahma = mukta-jīvas; paramabrahma = Śrī-tattva, the nitya-mukta Śrī-Lakṣmī; parama-mahā-brahma = Nārāyaṇa. At BG 8.21 the avyakta-tattva is 'Akṣara'-named Bhagavān, parama-gati, attaining whom one does not return — that is His hiridāda svarūpa: indestructible, all-pervasive, granting whatever is sought, sarva-samartha, source of indriya-experience, sarva-śabda-vācya. Such mokṣa is reached only by ananya-eka-bhakti.
+
+[kshetrajna] Kṣetrajña
+  Verses: BG 13.2
+  Title: Kṣetrajña — Bhagavān residing in every field
+  Bannanje commentary: Bannanje (BG 13.2): Kṛṣṇa says "māṃ viddhi" — "know Me as the kṣetrajña in all kṣetras." The Bhagavān who fills the kṣetra inside and out and knows it comprehensively is the kṣetrajña. The jīva is not a kṣetrajña; the jīva is kṣetra-stha (resident in the kṣetra). Knowing kṣetra and kṣetrajña distinctly is the true jñāna.
+
+[mahabhutas] Mahābhūtas
+  Verses: BG 13.5
+  Title: The five gross elements
+
+[avyakta] Avyakta
+  Verses: BG 13.5 · 8.18
+  Title: Avyakta — the unmanifest Bhagavān
+  Bannanje commentary: Bannanje (BG 8.18): "avyakta" here is Bhagavān in his unmanifest aspect. From the unmanifest Bhagavān all manifest things take form at the start of his "day" (cosmic dawn); at "night" (cosmic dissolution) they vanish back into the same unmanifest Bhagavān. At mahā-pralaya the manifest world contracts into paramāṇu-form and rests in him; at sṛṣṭi-kāla it expands from sūkṣma to sthūla form again.
+
+[indriyas] Indriyas
+  Verses: BG 13.6 · 15.7
+  Title: The eleven indriyas + five viṣayas
+  Bannanje commentary: Bannanje (BG 13.6): The ten indriyas — ear, skin, eye, tongue, nose (jñānendriyas); voice, two hands, two feet, pāyu, upastha (karmendriyas) — plus manas as the eleventh. Their five viṣayas are śabda, sparśa, rūpa, rasa, gandha. Each is associated with a presiding devatā: e.g., manas — Indra, Kāma, Aniruddha; eye — Sūrya; tongue — Varuṇa; nose — the Aśvins; mouth — Agni; hands — the two Vāyu-sons; feet — Indra-sons Yajña and Śambhu.
+
+[icchā_dveṣa] Icchā–Dveṣa
+  Verses: BG 13.6 · 7.27
+  Title: Icchā and Dveṣa — desire and aversion
+  Bannanje commentary: Bannanje (BG 13.6): icchā (desire) and dveṣa (aversion) are listed among the seven vikāras of the kṣetra (the others being sukha, duḥkha, saṃghāta, cetanā, dhṛti). Bannanje names the abhimāni-devatās: icchā is presided over by Śrī and Bhāratī; dveṣa is associated with Dvāpara-Śakuni.
+
+[sanghata_cetana_dhrti] Saṅghāta-Cetanā-Dhṛti
+  Verses: BG 13.6
+  Title: Saṃghāta, Cetanā, Dhṛti — three of the kṣetra-vikāras
+  Bannanje commentary: Bannanje (BG 13.6): of the seven kṣetra-vikāras, three are saṃghāta (the body-aggregate, in which the abhimāni-jīva and all abhimāni-devatās dwell), cetanā (the spread of memory, presided over by Śrī), and dhṛti (steadfastness, presided over by Sarasvatī and Bhāratī).
+
+[kshetra_jnana] Kṣetra-jñāna
+  Verses: BG 13.2 · 13.34
+  Title: Kṣetra-jñāna — the capstone of Adhyāya 13
+  Bannanje commentary: Bannanje (BG 13.2, 13.34): the upasaṃhāra of Adhyāya 13 — knowing what kṣetra is, what kṣetrajña is, the distinction between them, and the mokṣa-sādhaka guṇas the jīva needs to be freed from inert prakṛti — together constitute the jñāna. Those who realise this and live by it attain the supreme Bhagavān.
+
+[rajas] Rajas
+  Verses: BG 14.7 · 14.12
+  Title: Rajas — rāgātmaka; born of tṛṣṇā and saṅga; binds through karma-saṅga
+  Bannanje commentary: Bannanje (BG 14.7, 14.12): Rajas means rāga — strong liking for an object, an endless chain of desires; the cravings of all five indriyas come from rajas. Tṛṣṇā is the 'want-want' thirst, saṅga is constant association with an object; rajas first kindles desire, then association, then clinging — step by step it puts us in a bond hard to undo (hence 'nibadhnāti'). It drives us into karma-saṅga divorced from jñāna — fighting for money, taking it as the whole world. When rajas grows, lobha (miserliness, even toward charity), restless pravṛtti, ceaseless undertakings, no shamana (peace) and unceasing spṛhā arise. Vyāsa addresses Arjuna here as 'Bharatarṣabha' — Aitareya Brāhmaṇa says 'vāyur vāva bharataḥ': Vāyudeva, ever absorbed in Bhagavān, is 'Bharata'; surrender to Prāṇadeva (Vāyu) can free us from rajas.
+
+[tamas] Tamas
+  Verses: BG 14.8 · 14.13
+  Title: Tamas — ajñānaja, mohana; binds through pramāda, ālasya, nidrā
+  Bannanje commentary: Bannanje (BG 14.8, 14.13): Tamas is 'not knowing anything' — and so terrible that it can hide even the fact that one is ignorant ('I do not know that I do not know'). It deludes all embodied beings and binds them by three knots that cannot be slipped: nidrā (sleep), ālasya (idleness), and pramāda — living without awareness even while awake; the fault is not making a mistake but failing to correct it. When tamas grows, aprakāśa (darkness), apravṛtti (lack of zeal), pramāda and moha appear. Tamas will not let one rise before sunrise and keeps one craving darkness. To escape, Vyāsa addresses Arjuna as 'Kurunandana' — fix oneself in some duty and habituate it (e.g. rising before sunrise), and the mind itself will not let go.
+
+[gunatita] Guṇātīta
+  Verses: BG 14.22–25
+  Title: Guṇātīta — neither hates nor desires guṇa-states; sees Bhagavān\\
+  Bannanje commentary: Bannanje (BG 14.22): One who has crossed the three guṇas does not hate prakāśa, pravṛtti or moha when they come, nor desire them when they recede. His attitude is 'Bhagavān knows what is to be and what is not better than I — why trouble my head?' — a nirlipti that welcomes whatever life brings. Vyāsa cites Śāntiparva: 'evam apy aśubhaṃ karma na bhūtaṃ na bhaviṣyati' (MBh 12.32.18) — what should not happen has not and will not; what must happen, happens. Such a one sees others' guṇa-conditions and is unmoved, takes everything as 'bhagavato līlā, his vyavasthā,' speaks truth as seen but never debates. The same description Krishna gave of the true bhakta in Ch 12 he gives here — rising beyond external guṇas IS real bhakti. Vyāsa uses 'Pāṇḍava': 'Pāṇḍā' means jñānī; 'Pāṇḍava' is one who recognises jñāna and bows — before becoming triguṇātīta, one must first become a Pāṇḍava.
+
+[sattvika_jnana] Sāttvika jñāna
+  Verses: BG 18.20
+  Title: Sāttvika jñāna — seeing one Bhagavān, undivided, in all distinct beings
+  Bannanje commentary: Bannanje (BG 18.20): The knowledge that sees, in all beings (sarva-bhūteṣu) — mutually distinct, none like another, vilakṣaṇa — one same Bhagavān, untouched by any bheda, abiding as the akhaṇḍa-satya in their full guṇa-kriyā. He cites Bṛhadāraṇyaka (4.5.11) 'asya mahato bhūtasya niśvasitam' — the whole world is the breath of that mahā-bhūta — and Viṣṇu-sahasranāma 'eko viṣṇur mahad-bhūtaṃ pṛthag-bhūtāny anekaśaḥ' — one Viṣṇu is the mahā-cetana, the alpa-cetanas are many. The traiguṇya-varjita Bhagavān-tattva, one in the ananta, whose vision is sāttvika jñāna.
+
+[sattvika_karma] Sāttvika karma
+  Verses: BG 18.23
+  Title: Sāttvika karma — niyata kartavya done as bhagavad-pūjā, free of rāga-dveṣa, no phala
+  Bannanje commentary: Bannanje (BG 18.23): The niyata kartavya that has come to us, performed as bhagavān's pūjā, becomes sāttvika karma. In it there is no rāga-dveṣa, no phala-apekṣā, no clinging of any kind. Done with śraddhā and bhakti, with nirlipti, the kartavya carried out with no deceit and in the spirit of bhagavad-arpaṇa — that is sāttvika karma.
+
+[sattvika_karta] Sāttvika kartā
+  Verses: BG 18.26
+  Title: Sāttvika kartā — free of saṅga and ahaṃkāra, dhṛti-utsāha-yukta, unmoved by siddhi-asiddhi
+  Bannanje commentary: Bannanje (BG 18.26): The sāttvika kartā does not cling to anything. Just as every pūjā ends with 'śrī-kṛṣṇārpaṇam astu,' so the sāttvika does every karma of his life with bhagavad-bhakti, in the spirit of bhagavad-arpaṇa. He has no ahaṃkāra of 'I did it.' Whatever the work, he does it with utmost utsāha; he does not collapse when it fails, does not strut when it succeeds — he does all nirvikāra. Ācārya (Madhva) in the Dvādaśa-stotra states this beautifully: 'kuru bhuṅkṣva ca karma nijaṃ niyataṃ hari-pāda-vinamra-dhiyā satataṃ | harir eva paro harir eva guruḥ harir eva jagat-pitṛ-mātṛ-gatiḥ' — do the work that is yours, eat what comes, never let smaraṇa of hari-pāda lapse — this is the sāttvika's mūla-mantra.
+
+[triguna_atita] Trairguṇya-viṣayā vedāḥ
+  Verses: BG 2.45
+  Title: Trai-guṇya viṣayāḥ vedāḥ — cross the guṇa-domain to reach the Veda\\
+  Bannanje commentary: Bannanje (BG 2.45): The vedas on their surface seem to deal in tri-guṇa (sattva-rajas-tamas) worldly matters — like santāna-vṛddhi, cattle, wealth, rājasūya, aśvamedha, puruṣamedha — as if to one wearing red spectacles all looks red. But to understand the veda we must first cross the prāpañcika influence. So Krishna tells Arjuna: nis-trai-guṇyo bhava, nir-dvandvaḥ, nitya-sattva-sthaḥ, nir-yogakṣemaḥ, ātmavān bhava — drop the bond of the three guṇas, drop the dvandvas, abide in pure sattva fixed on Bhagavān, hand over yoga-kṣema to Him, walk trusting Him as svāmin. Yoga is gaining what one lacks, kṣema is keeping what one has; the whole life is spent in laukika yoga-kṣema. Only in nir-yogakṣema does satya-sākṣātkāra happen — Bhagavān, the antaryāmin in all, ever protects. In such a stage any granth read becomes bhagavat-stuti; without it Vedānta is not grasped. Krishna's deeper point in following ślokas: the veda has only one face — its karma, upāsanā are all for jñāna; the entire veda 
+
+[rajasa_shraddha] Rājasa śraddhā
+  Verses: BG 17.4
+  Title: Rājasī śraddhā — pūjā driven by fear and bargain; received by yakṣa-rākṣasas
+  Bannanje commentary: Bannanje (BG 17.4): 'Yakṣa-rakṣāṃsi rājasāḥ' does not mean rājasas worship yakṣa-rākṣasas — they worship bhagavān or devatās, but generally without awareness of bhagavān's paramatva, out of fear, with a hark-sandāya (vow-payment) attitude: 'devatās, do not trouble me.' Such pūjā meant for the devatās gets intercepted: yakṣa-rākṣasas come in the devatās' names and receive it. The hallmark is sva-uddeśa with phala-apekṣā — yajña 'so my business prospers,' pūjā 'so my daughter gets a good groom.' Handing bhagavān a kāmanā-paṭṭa makes the pūjā vyāpāra — pūjā of god is not commerce.
+
+[tamasa_shraddha] Tāmasa śraddhā
+  Verses: BG 17.4
+  Title: Tāmasī śraddhā — pūjā done with ḍambha for status; received by bhūta-pretas
+  Bannanje commentary: Bannanje (BG 17.4): The third class are tāmasas — they too perform pūjā, but only to display their status. Bannanje cites the example of Duryodhana who, to outdo the Pāṇḍavas' Aśvamedha, had a Pauṇḍrika-yāga performed. Such pūjā done with durudeśa (ill motive) is received, in the devatās' names, by bhūta-pretas. Mere śraddhā is not enough — its kind matters. Sāttvika śraddhā with no śāstra-knowledge ('Bhagavān, I know nothing, I worship in bhakti, forgive my mistakes') is accepted by Bhagavān himself; but pūjā done with svārtha, ahaṃkāra and ḍambha is neither received by Bhagavān nor by his parivāra-devatās.
+
+[sattvika_ahara] Sāttvika āhāra
+  Verses: BG 17.7–10
+  Title: Sāttvika āhāra — distributed by Prāṇa and Vaiśvānara; foods that nourish buddhi
+  Bannanje commentary: Bannanje (BG 17.7): The āhāra we eat is also three-fold — sāttvika, rājasa, tāmasa. As Chāndogya 5.1 says 'annam aśitaṃ tredhā vidhīyate' — the prāṇa and vaiśvānara within us divide whatever we eat into three (sūkṣma, madhya, sthūla) and distribute it to the various parts of the body. There is a direct relation between our āhāra and our manas; our ancestors knew this and prohibited foods that disturb the mind for daily use. E.g. garlic is medicinal but its daily use is prohibited because it does not support the growth of buddhi; the same for muruṅge-kāyi (drumstick), toṇḍe-kāyi (ivy gourd) etc. — they are prohibited for students of adhyayana (though usable as medicine). Krishna is the first to have given the world this teaching on what kind of food suits a person's buddhi. The same three-fold division applies to god's pūjā, tapas, ways of thinking, dāna, walk of life, speech — in everything; Krishna will explain the differences in āhāra, yajña, tapas, dāna in following ślokas.
+
+[jnana_yoga] Jñāna-yoga
+  Verses: BG 3.3 · 4.33–38
+  Title: Jnana-yoga — knowing-based path; karma\\
+  Bannanje commentary: Bannanje (BG 3.3, 4.33): mokṣa is reached by jnana alone, so karma exists for jnana; without jnana, even ritual is wasted. The 'jnana-yajna' is therefore superior to mere dravyamaya yajna — every karma performed with the awareness of the Lord behind it culminates in jnana ('sarvaṁ karmākhilaṁ ... jñāne parisamāpyate'). Calling Arjuna 'Parantapa' Krishna signals that battle done with God-awareness, not for self-aggrandisement, becomes jnana-yajna itself.
+
+[bhakti_yoga] Bhakti-yoga
+  Verses: BG 9.22 · 11.54 · 18.55
+  Title: Bhakti-yoga — ananya devotion; the Lord bears the bhakta\\
+  Bannanje commentary: Bannanje (BG 9.22): bhāgavatas desire nothing beyond contemplation of the Lord; they worship Him ananya, not under the spell of any wish, and do not perform ahuti to any other devatā as principal — they see only the Lord within every devatā. This is eka-bhakti, the way to reach Paramātmā and mokṣa. In our saṅkalpa we should never set worldly wants before the Lord; let the saṅkalpa be only jnana, bhakti and mokṣa. The Lord knows our needs better than we do and never abandons us; when worship is offered solely for His pleasure with ananya bhakti, He loves us and Himself carries our yoga-kṣema — what greater assurance? Whatever He gives is mahā-prasāda; full surrender brings unshakeable ānanda, and accepting every event as 'bhagavantana cittadante' is the great gateway to mokṣa.
+
+[dhyana_yoga] Dhyāna-yoga
+  Verses: BG 6.10–15
+  Title: Dhyana-yoga — solitary mind-focusing in Brahma-muhurta
+  Bannanje commentary: Bannanje (BG 6.10): the dhyana-yogi must engage his mind continually in dhyana, alone, where there is no crowd. Brahma-muhūrta (the 96-minute span before sunrise, ruled by Caturmukha Brahma — the devatā of our citta) is best, when nature is at peace. Dhyāna is intensely intimate: only the Lord and the sādhaka — no third companion — for a polluted mind around poisons the atmosphere. Control citta and manas, keep all wants away, and sit content for meditation.
+
+[sannyasa_yoga] Sannyāsa-yoga
+  Verses: BG 5.2 · 6.1–2 · 18.2
+  Title: Sannyasa-yoga — total offering of karma to Hari, not its abandonment
+  Bannanje commentary: Bannanje (BG 5.2, 6.1, 18.2): saṁ-nyāsa is 'placing the whole (saṁ) of karma in the Lord' — not leaving home for the forest, not abandoning action, not merely renouncing the sacrificial fire. The true sannyāsi is also a karma-yogi and vice versa; each varṇa-āśrama has its kāryam karma. There are two angles: kavis (knowers of word-meaning) call giving up kāmya-karmas 'sannyāsa', while vicakṣaṇas (those who realise and live the word) call the giving up of all karma-phalas 'tyāga' — i.e. not leaving veda-adhyayana, sandhyāvandana or vrata-anuṣṭhāna, but doing every karma for the Lord's pleasure without claiming its fruit. Karma-sannyāsa and karma-yoga both lead to niḥśreyasa, but karma-yoga is the higher of the two.
+
+[buddhi_yoga] Buddhi-yoga
+  Verses: BG 2.49 · 10.10
+  Title: Buddhi-yoga — taking refuge in jnana, surrendering to the Lord
+  Bannanje commentary: Bannanje (BG 2.49, 10.10): karma is 'far inferior' to buddhi-yoga; karma serves jnana, not its equal. Take refuge in jnana and do karma supportive of jnana; those who act for the fruit without jnana are pitiable. With this attitude, ahaṅkāra dissolves and one rests in the Lord as one's protector — that conviction is śaraṇāgati. Calling Arjuna 'Dhanañjaya' Krishna invokes both his outer conquests and his inner spiritual wealth (jñāna), saying 'such a jñāni as you must surrender to the Lord and act buddhi-pūrvaka'. The Lord Himself grants the buddhi-yoga — the mind, the buddhi, and the niścaya-jñāna — to those who serve Him with prīti.
+
+[abhyasa_vairagya] Abhyāsa & Vairāgya
+  Verses: BG 6.35
+  Title: Abhyasa & Vairagya — the only grip on the unsteady mind
+  Bannanje commentary: Bannanje (BG 6.35): Krishna concedes Arjuna's point — the mind is indeed unsteady and hard to grip — but says it can be brought under control by abhyāsa and vairāgya. Vairāgya is keeping what the mind must not lean towards away from it; God has given us the buddhi to distinguish good from bad — using it, keep the mind away from what is bad, not even introducing it. Alongside, do the abhyāsa for ekāgratā unfailingly. We currently train the mind in unwanted things (serials, films, gossip); instead, before letting the mind dwell on a matter, sift it through three filters (the Socrates story Bannanje cites: is it true? is it good? is it useful?) — and only then. With this, dhyāna-yoga becomes possible.
+
+[samatva] Samatva
+  Verses: BG 2.48
+  Title: Samatva — equipoise in success and failure as worship of the Lord
+  Bannanje commentary: Bannanje (BG 2.48): Krishna defines yoga as samatva — sthāna in 'yoga', doing karma free of attachment to the fruit, sama-bhāva whether the work succeeds or fails. Even mahā-yajna without this anusandhāna is not pūjā. The Lord is the giver of the fruit and the doer of karma through us; what fruit, how much, when — all belong to Him. Joy if it comes, joy if it does not — this is bhautika samatolana. Karma offered with this anusandhāna becomes the Lord's pūjā — this is karma-yoga. Our mind joining the Lord is yoga; every karma supporting and informed by that anusandhāna is karma-yoga.
+
+[sharanagati] Śaraṇāgati
+  Verses: BG 18.66
+  Title: Sharanagati — sole refuge in Hari, who liberates from all sins
+  Bannanje commentary: Bannanje (BG 18.66): 'sarva-dharmān parityajya' means doing all puṇya-karmas yet not expecting any fruit from them; our dharma-kārya must not become a transaction. Bannanje cites the Dharmarāja–Draupadī dialogue: Draupadī asks why dharma did not protect a dharma-rakṣaka like Dharmarāja; he answers, 'I am not a trader in dharma; I practise dharma for my own ātma-santoṣa, not from any phalāpekṣā.' So any dharma is mere ārādhanā of the Lord, with no expectation of fruit. Living thus, the Lord burns the sins of all our births; surrendering fully to Him we live safe in His hands — this is the last assurance Krishna gives in the Gītā, and with this the Lord's upadeśa-portion of the Gītā ends.
+
+[vairagya] Vairāgya
+  Verses: BG 6.35 · 13.8–11
+  Title: Vairagya — non-attachment, with abhyasa
+  Bannanje commentary: Bannanje (BG 6.35, 13.8): Krishna concedes that the mind is hard to restrain and unsteady, but says it can be held by abhyasa and vairagya. Vairagya is keeping away from the mind what should not be fed to it — using the buddhi God gave to discriminate good from bad and to deny the bad even an introduction. In BG 13.8 vairagya in indriya-arthas means stopping the indriyas from running outward and settling the mind in the Lord (sama-dama). Withdraw the senses from shabda-sparsha-rupa-rasa-gandha and accept whatever comes as Bhagavan's prasada, without the tongue's chapala.
+
+[abhyasa] Abhyāsa
+  Verses: BG 6.26 · 12.9
+  Title: Abhyasa — repeated practice of fixing the mind on the Lord
+  Bannanje commentary: Bannanje (BG 6.26, 12.9): The mind is very fickle and slips everywhere; at every slipping-place place the dam called Bhagavan and bring it back to rest in Him — this demands continuous effort. In 12.9, when sthira-smarana is still not coming, Krishna says: pray to me for the power to lead the mind toward ekagrata; whatever wish is made on the adhyatma-path I will fulfil. With abhyasa and iccha together, ekagrata is certain. Just as we train children, the mind too must be coaxed, instructed, and trained step by step. Stop chasing laukika wealth; become the Dhananjaya who wins Bhagavan, the priceless wealth.
+
+[tapas] Tapas
+  Verses: BG 17.14–19
+  Title: Tapas — shariira-tapas (bodily austerity)
+  Bannanje commentary: Bannanje (BG 17.14): Shariira-tapas — bowing wherever a divine pratika is seen; giving honour to jnanis; bowing to the guru; honouring prajnas who have experienced Bhagavan through bhagavad-bhuti. With these, keeping shaucitva, straightforward conduct in walk and speech, observance of brahmacarya, and living without causing harm to others — these together are shariira-tapas. (Shauca, arjava, ahimsa are detailed in BG 16.3.) Brahmacarya here means settling the mind in the Lord, with vedadhyayana as its support and dehika brahmacarya as a support to adhyayana. Full dehika brahmacarya applies to sannyasins and brahmacarins; for grihasthas it means not being svachchhanda-kamins but living within the framework of grihastha-dharma.
+
+[dana] Dāna
+  Verses: BG 17.20–22
+  Title: Dana — sattvika giving
+  Bannanje commentary: Bannanje (BG 17.20): Sattvika dana is given without any expectation of return, with atma-santosha, manahpurvaka, with love; to a fit person, at a fit time, in a fit place; given with the bhavana 'this is my kartavya.' Full details are in BG 16.3 (the opening verse of chapter 16).
+
+[tyaga] Tyāga
+  Verses: BG 18.2–11
+  Title: Tyaga — renouncing only the fruit, not the karma
+  Bannanje commentary: Bannanje (BG 18.2): Kavis call abandoning kamya-karmas sannyasa; vichakshanas call the abandoning of only the fruit of all karmas tyaga. This sannyasa applies to all sadhakas, including grihasthas. There are two kinds — (a) renouncing the fruit of karma, (b) renouncing karma itself when it is desire-driven. Tyaga here does not mean abandoning karma but doing whatever karma it is without desiring any fruit. So karma-tyaga does not mean stopping vedadhyayana, sandhya-vandana, or vratanushthana; rather, doing sat-karma and not seeking its fruit. Do every karma bhagavat-prityartham, not from phala-desire. The two terms 'kavayah' (those who know shabda-artha) and 'vichakshanah' (those who know it, experience it and live it) are deliberate.
+
+[indriya_nigraha] Indriya-nigraha
+  Verses: BG 2.58 · 2.67–68
+  Title: Indriya-nigraha — restraining the senses to steady prajna
+  Bannanje commentary: Bannanje (BG 2.67): The mind by its very make follows wherever the indriyas have been trained, so the indriyas chasing their objects steal away the prajna of the sadhaka — as wind drives a ship astray on the sea. The mind has been built by Bhagavan to relish what the indriyas keep seeing; if its nature is not known, it harms us. The sadhaka is like a sailor on a sail-boat — the mind is the sail; without the art of turning it to direct the boat, we go wherever the wind blows. Therefore train the indriyas first; without that, controlling the mind is hard. Good samskaras from childhood are crucial, so that indriyas do not lead the mind astray. Then mind becomes firm, ekagrata is possible, and prajna stands established.
+
+[samadhi] Samādhi
+  Verses: BG 2.53 · 6.13–15
+  Title: Samadhi — unwavering buddhi attuned to shruti
+  Bannanje commentary: Bannanje (BG 2.53, 6.13): 'Vipratipanna' means abhipraya-bheda. From shruti (shravana) first comes confusion; when one goes from there to the Veda, the mind thinks against what the Veda says. But once the mind clears, it settles firmly in the trigunatita-tattva spoken in shruti. What was at first trigunya-vishaa later resolves the very poison of trigunya. With a nirmala mind, our thinking becomes shruti-attuned to the Veda; no gap remains between the Veda's vichara and ours. The mind settles in vaidika vangmaya. Dhyana in this state lodges the mind always in Bhagavan. Beyond this, in nishchala samadhi-sthiti, in svarupa-chintana, the true rupa of Bhagavan is realised. There the mind does not work — the atma works. By the eye of the atma, sakshatkara of Bhagavan happens. This is the full phala of sadhana.
+
+[svadhyaya] Svādhyāya
+  Verses: BG 17.15
+  Title: Svadhyaya — speech-tapas: shastra-study and benevolent speech
+  Bannanje commentary: Bannanje (BG 17.15): Saying what is, as it is, is not by itself satya. Krishna explains satya: where there is real sajjanika, recognising it, and in keeping with it, without wounding another, speaking in a way that is hita to them — that is vaak-tapas. Speaking what is both priya and hita to another is hard, because often what is priya is not hita; in such occasions silence is best. (Krishna's own actions in his lila that look like falsehood are seen, on noticing the karunya and hita-chintana behind them, to be not false.) Therefore never speak words that wound another; rather than indulging in idle gossip, engage in svadhyaya — chintana of the Veda's meaning, gita-chintana, vishnu-sahasranama-parayana — this is vaak-tapas.
+
+[amanitva] Amānitva
+  Verses: BG 13.7
+  Title: Amanitva — absence of self-importance
+  Bannanje commentary: Bannanje (BG 13.7): Amanitva — absence of self-importance — is the first quality Krishna names while defining what knowledge actually is. (At BG 13.8 Bannanje treats anahankara as the highest of all gunas — the close conceptual twin: 'whatever guna we have, before ahankara it is wasted; ahankara destroys every guna in us. Where ahankara is, the Lord is not.') So letting go of 'I did, by me it happened' and showing gratitude that Bhagavan did it through one's hand is at the root of amanitva-anahankara.
+
+[arjava] Ārjava
+  Verses: BG 13.7 · 17.14
+  Title: Arjava — straightness of conduct and speech
+  Bannanje commentary: Bannanje (BG 17.14, 16.3): Arjava is straight walk and straight speech — pramanikata. Not saying one thing and doing another. Listed in the shariira-tapas of BG 17.14 (with deva-dvija-guru-prajna-pujana, shauca, brahmacarya, ahimsa). Bannanje notes: 'arjavam — naera nade-nudi.'
+
+[shauca] Śauca
+  Verses: BG 13.7 · 16.3 · 17.14
+  Title: Shauca — outer and inner cleanliness
+  Bannanje commentary: Bannanje (BG 16.3 §24, 17.14): Shauca is being clean inside and outside. We should not cause trouble to others by us. We must keep our deha-mana clean. (Of old, daily clean clothes, mrttika-snana so that bodily smell would not arise, sandalwood on the body — were practised so others would not turn away.) Our mind must be clean: well-clothed outside while the mind is full of kashmala silently spoils our surrounding environment. Therefore both inside and outside must be clean.
+
+[ksanti] Kṣānti
+  Verses: BG 13.7 · 16.3
+  Title: Kshanti — forbearance, no thought of revenge
+  Bannanje commentary: Bannanje (BG 16.3 §22, kshama): Kshama is not nursing the thought of revenge — even toward those who have done wrong. The thought of retaliation must never arise in our mind. As the shastra says: 'forgive even when another does apakara to you.' Pray, 'God, give them good sense,' but never harbour retaliation. Kshama becomes possible only when we are free of the ahankara that 'everyone must approve of me.'
+
+[ananya_yoga] Ananya-yoga
+  Verses: BG 9.22 · 13.10 · 12.6–7
+  Title: Ananya-yoga — single-pointed worship; the Lord bears yoga-kshema
+  Bannanje commentary: Bannanje (BG 9.22, 13.10, 12.6): Bhagavatas seek nothing but Bhagavan; their cintana is of Him alone, ananyavat. They do not perform puja bound to some wish; they do not offer ahuti to any devata as primary other than Bhagavan; in every devata they see only Bhagavan. This is eka-bhakti, the path to reach Paramatma and moksha. In the puja-samkalpa one should never place laukika wishes — only jnana, bhakti, moksha. Bhagavan, who knows what we need better than we, never abandons us. Krishna assures: 'tesham nityabhiyuktanam yogakshemam vahamy aham' — the yoga-kshema of such bhaktas is my burden. With firm faith, surrender to whatever He has given as maha-prasada; the goal is only to reach Him. (At BG 13.10 ananya-yoga appears as 'avyabhicarini bhakti' — among the jnana-angas — and at BG 12.6 the Lord becomes the samuddharta from mrtyu-samsara-sagara for those of avesita-cetas in Him.)
+
+[vivikta_seva] Vivikta-deśa-sevitvam
+  Verses: BG 13.10
+  Title: Vivikta-desha-sevitva — dwelling in a sattvika, secluded place
+  Bannanje commentary: Bannanje (BG 13.10/§17): Try to live, as much as possible, in places with strong sattvika spandana, with sattvika people. A place with full, unbroken sattvika spandana is a punya-kshetra. In such a place, live with sajjana who speak good and think good. If this is not possible, practise ekanta-vasa as much as possible. Do not waste the precious birth in idle talk with a crowd of four. (Listed as the verse-text in the BG 13.10 quote referenced under this concept; the unfolding is from Bannanje's exposition of the same enumeration.)
+
+[adhyatma_jnana_nityatvam] Adhyātma-jñāna-nityatvam
+  Verses: BG 13.11
+  Title: Adhyatma-jnana-nityatva — continuous standing in the knowledge of the self
+  Bannanje commentary: Bannanje (BG 13.11 §19): Be ever in the arivu of adhyatma. First know the pindanda and brahmanda; then the wonder of the apurva mind that knows them; then know what 'I' is (awareness of self); having known this, know the Paramatma who controls this atma. This is adhyatma-jnana. Let the goal of all your study be adhyatma-jnana.
+
+[tattva_jnanartha_darshanam] Tattva-jñānārtha-darśanam
+  Verses: BG 13.11
+  Title: Tattva-jnanartha-darshanam — seeing the goal of tattva-jnana, sakshatkara of Bhagavan
+  Bannanje commentary: Bannanje (BG 13.11 §20): Let your adhyayana be devoted to knowing the mulabhuta-satya of the world. By all the above gunas, attain sakshatkara of Bhagavan, who is the vishaya-bhuta of all shastras and is pratipadita by all shastras. The gunas enumerated here are themselves jnana and jnana-sadhanas; what is other than this is ajnana and the goal of ajnana.
+
+[buddhi] Buddhi
+  Verses: BG 18.30–32
+  Title: Sāttvika buddhi — the discriminating intellect
+  Bannanje commentary: Bannanje (BG 18.30): Sāttvika buddhi is the faculty that knows pravṛtti and nivṛtti, kārya and akārya, that of which one should be afraid and that of which one should not, the path of bondage and the path of release. Bannanje glosses "Pārtha" as that consciousness which is free of self-interest (apārtha-prajñā) and which arises when the buddhi expands deeply into knowledge — a discerning, conscience-rooted prajñā that never deceives. The conscience-verdict (ātmasākṣi's decision) is always firm and is itself sāttvika.
+
+[ahankara] Ahaṅkāra
+  Verses: BG 3.27 · 7.4
+  Title: Ahaṅkāra — the bewildered \\
+  Bannanje commentary: Bannanje (BG 3.27, 7.4): All works proceed through the guṇas of prakṛti — through the indriyas which are limbs of prakṛti and dependent on Bhagavān. The man bewildered by ahaṅkāra thinks "I myself did it." Bannanje stresses that we have icchā but not icchā-svātantrya — only Bhagavān has independent will. At BG 7.4, ahaṅkāra is the eighth limb of Bhagavān's eightfold jaḍa-prakṛti (bhūmi, āpaḥ, analaḥ, vāyuḥ, kham, manas, buddhi, ahaṅkāra), here described as "endowed with subliminal consciousness" (supta-prajñā-yukta), and forms the vijñānamaya-kośa; in each tattva's creation an abhimāni-devatā is created together with the jaḍa element.
+
+[citta] Citta
+  Verses: BG 8.7 · 12.9
+  Title: Citta — manas-buddhi fixed on the Lord
+  Bannanje commentary: Bannanje (BG 8.7, 12.9): Kṛṣṇa says "at all times remember me" — there is no special time for smaraṇa; the very moment His remembrance arises is the puṇya-kāla, and remembrance in the mind is itself ritual purity (maḍi). With manas-buddhi offered to Him (mayy arpita-mano-buddhi), one infallibly reaches Him; the bhāva in action decides dharma–adharma (Dharmavyādha lived as a meat-seller yet became paramadhārmika by purity of anusandhāna). When citta cannot be steadied directly, Bannanje says (BG 12.9): pray for the strength of one-pointedness — "whatever you wish on the spiritual path, fulfilling it is My responsibility," assures Kṛṣṇa; abhyāsa with desire infallibly produces ekāgratā.
+
+[antaryamin] Antaryāmin
+  Verses: BG 18.61
+  Title: Antaryāmin — Bhagavān seated in every heart
+  Bannanje commentary: Bannanje (BG 18.61): All-powerful Bhagavān stands seated in the heart-region of every being (hṛd-deśa). He makes the wondrous yantra of piṇḍāṇḍa and brahmāṇḍa revolve continually by his own will, through prakṛti's māyā. He is master of both piṇḍāṇḍa and brahmāṇḍa — the mahā-caitanya within everyone, granting them their experience and controlling them. All karma proceeds by his glory and at his will. The next verse therefore enjoins total śaraṇāgati to him alone.
+
+[jnanendriyas_karmendriyas] Jñāna- & Karma-indriyas
+  Verses: BG 3.28 · 15.9
+  Title: Indriyas — guṇa-bheda and karma-bheda known by the tattva-vit
+  Bannanje commentary: Bannanje (BG 3.28, 15.9): The tattva-vit understands the difference of guṇas and the difference of karmas — in the indriyas, action proceeds through the three guṇas (sāttvika, rājasa, tāmasa). He observes his own action as a neutral witness; "the indriyas roam in their objects" — so understanding, he does not cling. The hierarchy of causation in any action: indriyas — over them, prakṛti's three guṇas — over them, jīva-svabhāva — over all, Bhagavān's jñānānanda. Mere kṛti in jaḍa; icchā plus kṛti in jīva; svatantra-icchā-kṛti in Bhagavān — this is karma-bheda. At BG 15.9 Bannanje stresses (drawing on the words upa-sevate and adhiṣṭhāya): Bhagavān stands as the niyāmaka within each indriya — śrotra, cakṣus, sparśana, rasana, ghrāṇa, and manas — in his special form, grasping objects without the smear of duḥkha and granting us the experience. The word "upa" means "above" — while we drown in sukha-duḥkha, Bhagavān transcends and experiences all without the smear of sorrow. The combination "
+
+[varnashrama] Varṇa-svabhāva
+  Verses: BG 4.13 · 18.41–44
+  Title: Varṇa — colour of the jīva\\
+  Bannanje commentary: Bannanje (BG 4.13, 18.41): Krishna divides humanity into four varṇas — brāhmaṇa, kṣatriya, vaiśya, śūdra — by guṇa-karma-vibhāga. 'Varṇa' (colour) marks the inner svabhāva of the jīva, not jāti (the birth-family). Sāttvika is white, rājasa red, tāmasa black. Varṇa relates to the jīva-svarūpa; jāti relates to the body. The four varṇas exist worldwide; the śāstrakāras only named them. From the svabhāva-born guṇas arise the distinct karmas of the four varṇas.
+
+[nishkama_karma] Niṣkāma karma
+  Verses: BG 2.47 · 4.20
+  Title: Niṣkāma karma — no claim on the fruit
+  Bannanje commentary: Bannanje (BG 2.47, 4.20): Krishna does not say 'do not desire the fruit'; he says 'do not claim authority over the fruit.' Karma is in your hand, but the fruit is in Bhagavān's hand. Never sit idle; act, but with the awareness that He is the fruit-giver. Whatever fruit comes, receive it as prasāda. Excessive attachment to fruit breeds frustration; one who knows 'Bhagavān is my support' acts yet does nothing.
+
+[sthitaprajna] Sthita-prajña
+  Verses: BG 2.55–72
+  Title: Sthita-prajña — one of steady wisdom
+  Bannanje commentary: Bannanje (BG 2.55–72): [No paraphrase for this concept is included in the bannanje_verses provided for the present extract; therefore no source-grounded note can be offered here. Refer to BG 2.55–72 in the Bannanje commentary for the closing portrait of the sthita-prajña.]
+
+[daivi_sampad] Daivī sampad
+  Verses: BG 16.1–3 · 16.5
+  Title: Daivī sampat — the path of release
+  Bannanje commentary: Bannanje (BG 16.1, 16.5): Krishna lists daivī-sampat — ahiṃsā, satya, akrodha, tyāga, śānti, apaiśuna, dayā, aloluptva, mārdava, hrī, acāpala. Daivī-sampat leads to vi-mokṣa, āsurī to ni-bandha. 'Vi-mokṣa' is personality-development and liberation in varied stages according to one's sādhana; 'ni-bandha' is not the bondage of saṃsāra — it is the low bondage that pushes one into the darkness of tamas. Krishna assures Arjuna: 'You are a full manifestation of daivī-sampat; you have sought a daivī-sampat household to be born in; do not grieve.'
+
+[ahimsa] Ahiṃsā
+  Verses: BG 10.5 · 13.7 · 16.2
+  Title: Ahiṃsā — non-injury in body, word and mind
+  Bannanje commentary: Bannanje (BG 10.5, 16.2): living so that another is not harmed is ahiṃsā. It is to be practised not only in body but in mind and speech — taunting, cursing, mentally reviling another is also hiṃsā. Sometimes hiṃsā becomes ahiṃsā: killing a man-eating tiger to save a village's lives is ahiṃsā; small violence done to prevent great violence is ahiṃsā. By speech, deed and mind, conduct yourself so that no one is harmed. Bannanje also lists ahiṃsā among daivī-sampat (BG 16.2 alongside tejas, kṣamā, dhṛti, śauca, adroha, nātimānitā).
+
+[satya] Satya
+  Verses: BG 10.4 · 17.15
+  Title: Satya — prāmāṇikatā, sincerity in speech
+  Bannanje commentary: Bannanje (BG 10.4, 17.15): satya is prāmāṇikatā — sincerity. Speaking one thing to a person's face and another behind his back is apramāṇikatā. Saying what is, just as it is, is not yet satya. Satya is speech that is not provocative (anudvegakara), true (satyam), pleasant (priya) and beneficial (hita) for the listener's life — together with svādhyāya, this is vāṅmaya tapas. Where the pleasant is not the beneficial, silence is best.
+
+[samatva_dharma] Sama-darśana
+  Verses: BG 5.18
+  Title: Sama-darśana — the paṇḍita sees Bhagavān in all
+  Bannanje commentary: Bannanje (BG 5.18): the paṇḍita is sama-darśī — he sees the one indwelling Bhagavān equally in the vidyā-vinaya-sampanna, in a brāhmaṇa, in a cow, an elephant, a dog, and a śvapāka. Three grades of humans (vidyā-vinaya-sampanna at the top, then brāhmaṇa-varṇa, then śvapāka at the bottom) and three grades of animals (cow highest, elephant middle, dog lowest) are juxtaposed. Bhagavān is sarvāntaryāmin — present in all; only his abhivyakti (manifestation) differs in each. The aparokṣa-jñānī sees him as the inner ruler shining with a unique guṇa-dharma in every being.
+
+[krodha] Krodha
+  Verses: BG 2.62–63 · 3.37
+  Title: Krodha — kāma\\
+  Bannanje commentary: Bannanje (BG 2.62 & 3.37): One who dwells on objects develops attachment to them; from attachment desire is kindled, and when desire is blocked anger arises. Krodha is nothing but kāma in another form; behind every krodha is an empty kāma. From krodha comes sammoha (the urge to do what should not be done), from sammoha smṛti-vibhrama (forgetting what is enjoined and forbidden), and so on down to total ruin.
+
+[lobha] Lobha
+  Verses: BG 16.21
+  Title: Lobha — one of the three gates of naraka
+  Bannanje commentary: Bannanje (BG 16.21): Kāma, krodha and lobha are the three causes of ātma-nāśa — the gates of man's own naraka. Krodha is the offspring of kāma; many hidden desires within make us angry when they go unfulfilled. These three are our fundamental enemies that destroy our personality, and every other vice is their offspring. Letting go of them brings happiness here and hereafter.
+
+[moha] Moha
+  Verses: BG 2.7 · 2.63 · 18.73
+  Title: Moha — bewilderment of dharma-discernment
+  Bannanje commentary: Bannanje (BG 2.7, 2.63, 18.73): Arjuna confesses that kārpaṇya-doṣa has dulled his innate valour and his thinking power on dharma has become a tangle — he cannot tell right from wrong. From contact comes attachment, then desire to possess, then krodha when desire is blocked, then sammoha (incongruous urges to do what should not be done), loss of discrimination, and final ruin. At the end Arjuna says, by Acyuta's grace 'naṣṭaḥ mohaḥ, smṛtir labdhā' — the wrong understanding is gone and memory has returned.
+
+[asatsanga] Asat-saṅga
+  Verses: BG 2.62
+  Title: Saṅga in viṣayas — the start of the chain
+  Bannanje commentary: Bannanje (BG 2.62): For the person who keeps dwelling on objects, attachment (saṅga) to them grows; from saṅga, desire is kindled; when desire is blocked, anger erupts. The downward chain begins exactly here. After that follow sammoha, smṛti-vibhrama, buddhi-nāśa and total ruin.
+
+[avidya] Avidyā
+  Verses: BG 5.15 · 14.8
+  Title: Ajñāna — the veil over knowledge
+  Bannanje commentary: Bannanje (BG 5.15, 14.8): The vibhu — here taken either as the jīva (special, with iccha, vicāra, jñāna, varied across births) or as Bhagavān (sarvasamartha, sarvagata) — does not take on anyone's pāpa or puṇya. What we experience is the fruit of our own karma; the wrong is to blame others. People do not see this because jñāna is covered by ajñāna and they sink into moha and bhrānti. Tamoguṇa is the source of this ajñāna: it can hide from us even the fact that we do not know, and binds us through pramāda, ālasya and nidrā.
+
+[dvandva] Dvandva
+  Verses: BG 2.45 · 7.27
+  Title: Dvandva-moha — the pull of opposites
+  Bannanje commentary: Bannanje (BG 2.45, 7.27): Vedas appear outwardly to be about the three guṇas, but inwardly cure us of that very entanglement. Arjuna is told to be 'nir-dvandvaḥ' — to cast off the strain of opposites — and 'nir-yoga-kṣemaḥ' — to entrust acquisition and preservation to Bhagavān. We are born already carrying icchā-dveṣa, and from this rise the dvandvas (sukha-duḥkha, jīveśvara distinction etc.); the confusion is so strong that man calls a duḥkha 'sukha' and chases it. The cure is to live as 'Bhārata-Parantapa' — moving on the path of light and contemplating Paratattva.
+
+[asuri_sampad] Āsurī sampad
+  Verses: BG 16.4 · 16.7–20
+  Title: Āsurī sampat — the six contrary qualities
+  Bannanje commentary: Bannanje (BG 16.4, 16.7): Against the twenty-six divine qualities, Kṛṣṇa sets out six āsurī ones — ḍambha (parading what is not there), darpa (the mindset that does not shrink from any wrong), atimāna (exaggerated self-image), krodha, pāruṣya (harsh, contemptuous speech) and ajñāna (the emperor of all these). The āsurī-svabhāva does not know what should be done and what should not; lacks śauca, ācāra and satya; lives outwardly as if pure but is never honest. Mahābhārata's example is Duryodhana.
+
+[paramagati] Paramā gati
+  Verses: BG 15.6 · 8.21
+  Title: Paramā gati — Bhagavān\\
+  Bannanje commentary: Bannanje (BG 15.6, 8.21): the place where Bhagavān is forever visible to the jñānis is paramadhāma, and that itself is mokṣa. There the sun, moon and fire do not shine; rather it is from this paramadhāma that they themselves draw their light. He who recognises the ātma-jyoti and sees within the ātman the Paramātman reaches this paramadhāma from which there is no return. At 8.21 Bannanje glosses 'akṣara' as Bhagavān — imperishable, all-pervading, granting whatever is sought, attainable only by ananya-bhakti.
+
+[brahmi_sthiti] Brāhmī sthiti
+  Verses: BG 2.72
+  Title: Brāhmī sthiti — the mark of the brahma-jñānī
+  Bannanje commentary: Bannanje (BG 2.72): brāhmī sthiti is the mark of one who has come to rest in Bhagavān. All that has been described till now is the lakṣaṇa of a brahma-jñānī — of one in whom brahma-prajñā is awake and who stands settled in Brahman. Such a brahma-jñānī cannot be recognised by outer activity or dress; only his mental state reveals where he stands. If even at the last moment of his death the consciousness of Bhagavān is awake, he goes straight to that mokṣa from which there is no rebirth.
+
+[jivanmukti] Jīvanmukti
+  Verses: BG 5.19–21 · 12.13–19 · 14.22–25
+  Title: Living settled in Bhagavān — won the saṃsāra here itself
+  Bannanje commentary: Bannanje (BG 5.19, 14.22): those whose mind is fixed on the ekarūpatā of Bhagavān — that He is one nirdoṣa form pervading every place and every thing — have won this life right here; they remain established in Bhagavān and never fall back into bondage. At 14.22 he describes the one beyond the three guṇas: he neither hates what is unwanted when it comes nor craves what is wanted when it is absent; "Bhagavān knows better than I what is to be and what is not" — with this niḥsaṅgatā he welcomes whatever comes, like a full pot that does not spill.
+
+[naishkarmya_siddhi] Naiṣkarmya-siddhi
+  Verses: BG 18.49
+  Title: Naiṣkarmya-siddhi — perfection through nyāsa of desires
+  Bannanje commentary: Bannanje (BG 18.49): the siddhi that is the means to mokṣa — the state in which there are no pāpa-karmas — is not reached merely by engaging in svakarma. One must control the mind, do karma free of fruit-craving, free of the ahaṅkāra 'I did it', and offer everything to Bhagavān (bhagavad-arpaṇa-bhāva). Ahaṅkāra is the great enemy of adhyātma; we must be alert to it. To sum up: by giving up the 'I did it' ahaṅkāra everywhere, by winning the mind, by wiping desire for fruit out of the intellect, by making nyāsa of desires, and by performing one's svakarma offering all to Bhagavān, the siddhi needed to reach mokṣa is obtained.
+
+[archiradi_marga] Arciradi-mārga
+  Verses: BG 8.24
+  Title: Path of Agni and Jyoti — devatās escorting the mokṣa-jīva
+  Bannanje commentary: Bannanje (BG 8.24): the abhimāni-devatās of fire and light (Agni and Jyoti, the children of Vaiśvānara, the principal agni), of the day, of the bright fortnight, of the saṅkrānti, and of the six months of uttarāyaṇa — together with the abhimāni of midday and that of the full moon — successively welcome and pass on the mokṣa-yogya jīva that has come out of the body. Those who travel by this path, knowers of Bhagavān, reach Bhagavān and never return.
+
+[dhumadi_marga] Dhūmādi-mārga
+  Verses: BG 8.25
+  Title: Path of Dhūma and Rātri — return through soma-loka
+  Bannanje commentary: Bannanje (BG 8.25): the jīva who is not mokṣa-yogya, on leaving the body, is welcomed by the abhimāni-devatās of smoke and darkness, then by the kṛṣṇa-pakṣa devatā, then by dakṣiṇāyana and the abhimāni-devatās of the six months of dakṣiṇāyana, who take the jīva to soma-loka. Here the jīva enjoys until his puṇya is exhausted, then re-enters the cloud, comes down with rain to the earth, enters a woman's womb through a male body, and is born again on earth.
+
+[sarva_dharman_parityajya] Carama-śloka phala
+  Verses: BG 18.66
+  Title: Sarva-dharmān parityajya — Kṛṣṇa\\
+  Bannanje commentary: Bannanje (BG 18.66): 'sarva-dharmān parityajya' means doing all puṇya-karmas while expecting no fruit from them — our dharma-work must not become a trade. He illustrates with Yudhiṣṭhira's reply to Draupadī: "I am no trader in dharma; I practise dharma for my own ātma-saṃtoṣa, not out of any phala-apekṣā." Whatever dharma one performs is only Bhagavān's ārādhana; when one lives thus, Bhagavān burns away the sins of all our births. Wholly surrendered to Bhagavān we are safe in His hands — this is the final assurance Kṛṣṇa gives us in the Gītā's upadeśa. With this the Bhagavān-upadeśa portion of the Gītā concludes; what follows is the phala-śruti.
+
+[tapo_yajna] Tapo-yajña
+  Verses: BG 4.28
+  Title: Tapo-yajna — offering one\\
+  Bannanje commentary: Bannanje (BG 4.28): Tapo-yajna has two faces, external and internal. One is continuous dhyana, needing no external apparatus; the other supplies the support that contemplation of the Lord requires. Atma-samyama is called tapas — for example, brahmacarya-palana and vrata-anushthana. Such offering of tapas into the Lord is yajna.
+
+[yoga_yajna] Yoga-yajña
+  Verses: BG 4.28–30
+  Title: Yoga-yajna — karma-yoga as worship
+  Bannanje commentary: Bannanje (BG 4.28): Yoga-yajna is undertaking the various forms of karma-yoga for the pleasure of the Lord. This is worship of the Lord through external acts — for example, 108 pradakshinas to God, archana, and so on. It also includes the observance of the yama-niyamas spoken of in the yoga-shastra.
+
+[svadhyaya_yajna] Svādhyāya-jñāna-yajña
+  Verses: BG 4.28
+  Title: Svadhyaya-jnana-yajna — study as worship
+  Bannanje commentary: Bannanje (BG 4.28): Svadhyaya-jnana-yajna is the yajna most dear to the Lord. Svadhyaya means reading what pertains to oneself, vedadhyayana of one's own sakha, and discovering — through study, in all granthas — the gunas of the Lord who is sarvottama and independent everywhere. Sharing what is known is also dear to the Lord; jnana is the one wealth that grows by being shared. To do this one must be a yati — not a sannyasi, but one ever-striving — with a sharp vrata, i.e., a clean and honest life.
+
+[jnana_yajna] Jñāna-yajña
+  Verses: BG 4.33
+  Title: Jnana-yajna — knowledge surpasses substance-sacrifice
+  Bannanje commentary: Bannanje (BG 4.33): 'shreyan dravyamayad yajnaj jnana-yajnah parantapa' — jnana-yajna is greater than the external yajna of oblating substances. 'sarvam karma'khilam partha jnane parisamapyate' — every act, fully done, finds completion in knowledge; without jnana behind it, karma is useless, like a leaky boat. The two readings 'sarva-karma akhilam' (every act made complete) and 'sarva-karma a-khilam' (every act without jnana is only a fragment) both stress that karma must be done with awareness of the Lord. Krishna addresses Arjuna as 'parantapa' (the great warrior; also 'one who constantly contemplates the Supreme') and 'partha' (one who has reached the far shore of the ocean of knowledge), indicating that his action, done with jnana, is itself jnana-yajna and not mere dravya-yajna.
+
+[brahmarpana] Brahmārpaṇa
+  Verses: BG 4.24
+  Title: Brahmarpana — offering, oblation, fire, and offerer all are the Lord
+  Bannanje commentary: Bannanje (BG 4.24): The arpana, the havis, the agni, and the act of offering — all are the Lord (or under his control). The Lord seated within the giver gives, and seated within the receiver receives; everything proceeds by the Lord's will. Agni here is not mere insentient fire but agnyabhimani-devata (a cetana), within whom, as taraka-shakti, the Lord himself is present. When karma is done with this anusandhana — abandoning ahamta and with jnana — every act becomes brahma-karma; the gati too is Brahman alone. Such a life, devoted to bhagavac-cintana, is itself a maha-yajna.
+
+[pranava_om] Praṇava (Om)
+  Verses: BG 8.13 · 17.23
+  Title: Oṃ — ekākṣaraṃ Brahma uttered at departure
+  Bannanje commentary: Bannanje (BG 8.13, 17.23): At departure the yogī closes every nāḍī-dvāra, fixes the mind on Bhagavān in the heart, raises the prāṇa to the sahasrāra, utters 'Oṃ' — the one syllable that is vācya of the paratattva — remembers Me, and reaching the place of no return attains paramā gati. This is the hard hatha-yoga path. Oṃ, tat, sat are the three names of Brahman. Oṃ = he who bears the world and fills it (the whole jagat is woven 'ota' in Him); tat = he who is known only parokṣa, through the Vedas; sat = he who is pūrṇa with every śubha-guṇa and free of every doṣa. By this triple name jñānīs invoke and remember Bhagavān; 'Hariḥ Oṃ' said at the start means 'all I am about to do is offered to Bhagavān.' That Bhagavān created the Vedas, made vedajñas, and ordained yajñas. (As to pauruṣeya/apauruṣeya — the Veda is pauruṣeya as uttered by the paramapuruṣa before sṛṣṭi, and apauruṣeya as eternally uttered by Bhagavān in every kalpa, so the dispute is fruitless.)
+
+[akshara_a] Akṣarāṇām akāraḥ
+  Verses: BG 10.33
+  Title: Among letters, the A — and among compounds, the dvandva
+  Bannanje commentary: Bannanje (BG 10.33): Kṛṣṇa names His vibhūti in language itself. 'A' (a-kāra) — the special letter that holds all the guṇas of Bhagavān: 'a' means 'alla' (He is not any known thing — vilakṣaṇa from the world) and also 'illa' (in Him no doṣa is — sarva-doṣa-dūra, sarva-guṇa-pūrṇa); thus sarva-vilakṣaṇa, sarva-doṣa-dūra, sarva-guṇa-pūrṇa Bhagavān is a-kāra-vācya and fills the letter 'a'. Among compounds He is the dvandva: in other compounds one or both words may lose principal status, but in dvandva both words are principal — ubhaya-pada-pradhāna. As Dvandvaḥ-nāmaka, Bhagavān in two forms fills us inside and outside. He alone is the akṣaya kāla-puruṣa who devours all, the dhātā who bears and nourishes all; viśvato-mukhaḥ — there is no place without Him, no edge where He is unseen.
+
+[jyotir_jyoti] Jyotiṣām jyotiḥ
+  Verses: BG 13.17
+  Title: Bhagavān — the light of every light, beyond darkness
+  Bannanje commentary: Bannanje (BG 13.17): Bhagavān is the great jyoti — the light that gives light to every light. He is jñāna-rūpa, self-knowing, attainable by jñāna, and dwells in everyone's heart. Since the earlier subtle vivaraṇa is hard to hold in dhyāna, Kṛṣṇa here describes Himself bhāvanātmaka. He is light without darkness, anantam — beyond limit. He is the mahā-jyoti who gives light to every other light. In dhyāna one may see one's iṣṭa person or object, then try to see Bhagavān within that person/object (since He is sarvāntaryāmī, inside and outside everything); then anusandhāna 'Bhagavān is in the sun, solar śakti is His gift', then attempt to see His foot at the centre of the sun, and finally feel the light streaming from the tip of His toe entering one's own heart. Bhagavān's light is jñānānanda-svarūpa; He alone fully knows Himself; we strive yathāśakti. He dwells in our heart, vilakṣaṇa beyond all, sūkṣma beyond the sūkṣma in our hṛt-kamala — known only by bhakti-pūrvaka jñāna.
+
+[vibhuti] Vibhūti
+  Verses: BG 10.41
+  Title: Vibhūti — sparks of Bhagavān\\
+  Bannanje commentary: Bannanje (BG 10.41): Whatever in any group is mighty, whatever in any sampatti is great, whatever has stood out in height — know all of that as having sprung from a spark of the light of My glory. The special guṇa that is in one person, or in one object, that is not in another — that is one spark (kiḍi) of the light of Bhagavān's hirimā; it is one tuṇuku (a fragment) of His ananta tejas.
+
+[adhidaiva] Adhidaiva
+  Verses: BG 8.4
+
+[adhiyajna] Adhiyajña
+  Verses: BG 8.4
+
+[shat_prameya] Ṣaṭ-prameya
+  Verses: BG 8.1-4
+
+[dvividha_nishtha] Dvividhā niṣṭhā
+  Verses: BG 3.3
+
+[kalanemi_kama_abhimani] Kālanemi — abhimāni of kāma
+  Verses: BG 3.37
+
+[pindanda_brahmanda] Piṇḍāṇḍa to Brahmāṇḍa
+  Verses: BG 13.1 · 8.3 · 7.4
+
+[jiva_svabhava] Jīva-svabhāva
+  Verses: BG 18.41 · 8.3
+
+[ananya_eka_bhakti] Ananya eka-bhakti
+  Verses: BG 9.22 · 8.21 · 18.65
+
+[antima_ashvasana] Antima āśvāsana
+  Verses: BG 18.66
+
+
+=== CONCEPT RELATIONSHIPS ===
+  brahman --[is-a: same referent — Hari]--> paramatman
+  paramatman --[is-a: supreme person]--> purushottama
+  purushottama --[predicates-on: beyond perishable]--> ksara_purusha
+  purushottama --[predicates-on: beyond imperishable]--> akshara_purusha
+  avatara --[is-a: descent of]--> purushottama
+  sarvottamatva --[predicates-on: axiomatic property]--> purushottama
+  jiva --[is-a: bound jīva = kṣara]--> ksara_purusha
+  isvara --[is-a: Hari as indweller]--> antaryamin
+  prakriti --[includes: 5 of 8 components]--> mahabhutas
+  prakriti --[includes: manas as evolute of prakṛti]--> manas
+  prakriti --[includes: buddhi as evolute of prakṛti]--> buddhi
+  prakriti --[includes: ahaṅkāra as evolute of prakṛti]--> ahankara
+  karma_tattva --[arises-from: action expresses nature]--> svabhava
+  aksharam_param_brahma --[is-a: imperishable Brahman]--> brahman
+  kshetra_field --[includes: first five tattvas]--> mahabhutas
+  kshetra_field --[includes: sixth tattva]--> avyakta
+  kshetra_field --[includes: eleven indriyas]--> indriyas
+  kshetra_field --[includes: vikāra pair]--> icchā_dveṣa
+  kshetra_field --[includes: subtle vikāras]--> sanghata_cetana_dhrti
+  kshetrajna --[predicates-on: knower of field]--> kshetra_field
+  kshetra_jnana --[predicates-on: knowing the knower]--> kshetrajna
+  kshetra_jnana --[antidote-to: removes ignorance about self]--> jiva
+  rajas --[opposite-of: active vs inert]--> tamas
+  sattva --[opposite-of: clarity vs darkness]--> tamas
+  sattva --[transforms-into: mode → its knowledge]--> sattvika_jnana
+  sattva --[transforms-into: mode → its action]--> sattvika_karma
+  sattva --[transforms-into: mode → its agent]--> sattvika_karta
+  triguna_atita --[is-a: same state in 2.45]--> gunatita
+  sharanagati --[is-a: culmination of bhakti]--> bhakti_yoga
+  karma_yoga --[transforms-into: same goal, different posture]--> sannyasa_yoga
+  tyaga --[is-a: fruit-renunciation as sannyāsa]--> sannyasa_yoga
+  indriya_nigraha --[leads-to: sense-restraint → steady-wisdom]--> sthitaprajna
+  samadhi --[leads-to: absorption → release]--> moksha
+  svadhyaya --[is-a: recitation as yajña]--> svadhyaya_yajna
+  manas --[is-a: 11th indriya]--> indriyas
+  ahankara --[transforms-into: bewilders the jīva]--> jiva
+  citta --[leads-to: steady citta → samādhi]--> samadhi
+  svadharma --[arises-from: duty from nature]--> svabhava
+  varnashrama --[arises-from: varṇa from intrinsic nature]--> svabhava
+  nishkama_karma --[is-a: desireless action = karma-yoga]--> karma_yoga
+  sthitaprajna --[includes: sense-restraint]--> indriya_nigraha
+  daivi_sampad --[leads-to: divine endowment → release]--> moksha
+  ahimsa --[is-a: divine virtue]--> daivi_sampad
+  satya --[is-a: divine virtue]--> daivi_sampad
+  asatsanga --[transforms-into: BG 2.62 — saṅga → kāma]--> kama
+  kama --[transforms-into: BG 2.63 — kāma-vighāta → krodha]--> krodha
+  krodha --[transforms-into: BG 2.63 — krodha → moha]--> moha
+  moha --[is-a: delusion as ignorance-form]--> avidya
+  kama --[arises-from: born of rajas]--> rajas
+  lobha --[is-a: gate of hell]--> asuri_sampad
+  kama --[is-a: gate of hell]--> asuri_sampad
+  krodha --[is-a: gate of hell]--> asuri_sampad
+  avidya --[opposite-of: ignorance vs discrimination]--> kshetra_jnana
+  moksha --[is-a: liberation as supreme destination]--> paramagati
+  brahmi_sthiti --[leads-to: established → released]--> moksha
+  jivanmukti --[leads-to: embodied liberation → mukti]--> moksha
+  archiradi_marga --[leads-to: path of light → no return]--> moksha
+  dhumadi_marga --[opposite-of: return vs no-return]--> archiradi_marga
+  sarva_dharman_parityajya --[leads-to: carama-śloka guarantee]--> moksha
+  sharanagati --[is-a: surrender = carama-upadeśa]--> sarva_dharman_parityajya
+  jnana_angas --[leads-to: 20 virtues that constitute knowledge]--> jnana_yoga
+  amanitva --[is-a: first of the 20]--> jnana_angas
+  arjava --[is-a: 3rd of the 20]--> jnana_angas
+  shauca --[is-a: 6th of the 20]--> jnana_angas
+  ksanti --[is-a: 4th of the 20]--> jnana_angas
+  ahimsa --[is-a: 2nd of the 20]--> jnana_angas
+  vairagya --[is-a: 11th of the 20]--> jnana_angas
+  ananya_yoga --[is-a: 16th of the 20]--> jnana_angas
+  ananya_yoga --[is-a: undeviating bhakti]--> bhakti_yoga
+  vivikta_seva --[is-a: 17th of the 20]--> jnana_angas
+  adhyatma_jnana_nityatvam --[is-a: 19th of the 20]--> jnana_angas
+  tattva_jnanartha_darshanam --[is-a: 20th — the capstone]--> jnana_angas
+  sattvika_shraddha --[is-a: faith in sattva]--> shraddha
+  rajasa_shraddha --[is-a: faith in rajas]--> shraddha
+  tamasa_shraddha --[is-a: faith in tamas]--> shraddha
+  sattvika_shraddha --[arises-from: expresses sattva]--> sattva
+  rajasa_shraddha --[arises-from: expresses rajas]--> rajas
+  tamasa_shraddha --[arises-from: expresses tamas]--> tamas
+  sattvika_ahara --[arises-from: food expressing sattva]--> sattva
+  pravritti_nivritti --[predicates-on: sāttvika buddhi knows both]--> buddhi
+  pravritti_nivritti --[leads-to: knowing pravṛtti = knowing one\\]--> svadharma
+  ashvattha --[is-a: tree as metaphor for embodiment]--> kshetra_field
+  pranava_om --[is-a: syllable identifying Brahman]--> brahman
+  akshara_a --[is-a: first phoneme]--> pranava_om
+  jyotir_jyoti --[is-a: light of lights = Hari]--> paramatman
+  vibhuti --[predicates-on: glory expresses supremacy]--> sarvottamatva
+  kshetra_jnana --[includes: Ch 13 culminates jñāna]--> jnana_yoga
+  bhakti_yoga --[leads-to: devotion culminates in surrender]--> sharanagati
+  jnana_yoga --[leads-to: knowledge → release]--> moksha
+  karma_yoga --[leads-to: action purifies → knowledge]--> jnana_yoga
+  purushottama --[manifested-as-nama: Pūrṇa Puruṣottama as nāma — BG 15.18 carama-śloka]--> vsn:n_0024
+  purushottama --[manifested-as-nama: Puruṣaḥ — the puruṣa beyond kṣara/akṣara]--> vsn:n_0406
+  brahman --[manifested-as-nama: Viśvam — Brahman as cosmic totality]--> vsn:n_0001
+  brahman --[manifested-as-nama: Viṣṇuḥ — Mādhva: Brahman = Viṣṇu]--> vsn:n_0002
+  brahman --[manifested-as-nama: Brahma — direct name-form of Brahman]--> vsn:n_0667
+  paramatman --[manifested-as-nama: Paramātmā — direct nāma of Paramātman]--> vsn:n_0012
+  paramatman --[manifested-as-nama: Nārāyaṇaḥ — antaryāmin in all waters/beings]--> vsn:n_0245
+  paramatman --[manifested-as-nama: Bhūtātmā — inner self of all beings]--> vsn:n_0007
+  paramatman --[manifested-as-nama: Sākṣī — witness-self (BG 13.22 upadraṣṭā)]--> vsn:n_0015
+  avatara --[manifested-as-nama: Kṛṣṇaḥ — speaker of the Gītā, sva-icchā-avatāra]--> vsn:n_0057
+  avatara --[manifested-as-nama: Rāmaḥ — Tretā-yuga avatāra]--> vsn:n_0394
+  avatara --[manifested-as-nama: Nārasiṃha-vapuḥ — man-lion avatāra-form]--> vsn:n_0021
+  avatara --[manifested-as-nama: Vāmanaḥ — dwarf avatāra]--> vsn:n_0152
+  avatara --[manifested-as-nama: Mahā-varāhaḥ — boar avatāra]--> vsn:n_0539
+  avatara --[manifested-as-nama: Khaṇḍa-paraśuḥ — Paraśu-rāma avatāra]--> vsn:n_0570
+  akshara_purusha --[manifested-as-nama: Akṣaraḥ — the imperishable (kūṭastha)]--> vsn:n_0016
+  akshara_purusha --[manifested-as-nama: Akṣaraḥ — second occurrence, Lakṣmī-tier]--> vsn:n_0017
+  sarvottamatva --[manifested-as-nama: Viṣṇuḥ — sarvottama by Mādhva siddhānta]--> vsn:n_0002
+  sarvottamatva --[manifested-as-nama: Puruṣottamaḥ — supreme person, none higher]--> vsn:n_0024
+  sarvottamatva --[manifested-as-nama: Loka-trayāśrayaḥ — shelter of all three worlds]--> vsn:n_0650
+  sarvottamatva --[manifested-as-nama: Hariḥ — sin-snatcher, sarvottama]--> vsn:n_0656
+  bhakti_yoga --[manifested-as-nama: Bhakta-vatsalaḥ — affectionate to devotees]--> vsn:n_0739
+  bhakti_yoga --[manifested-as-nama: Bhakta-vatsalaḥ — second occurrence, sealing emphasis]--> vsn:n_0780
+  bhakti_yoga --[manifested-as-nama: Loka-nāthaḥ — Lord-of-bhakta-loka]--> vsn:n_0737
+  dhyana_yoga --[manifested-as-nama: Yogaḥ — yoga itself as name-form]--> vsn:n_0018
+  dhyana_yoga --[manifested-as-nama: Yogī — the yogin, dhyāna-locus]--> vsn:n_0852
+  dhyana_yoga --[manifested-as-nama: Yogīśaḥ — Lord of yogins (BG 6 dhyāna-yoga)]--> vsn:n_0853
+  sharanagati --[manifested-as-nama: Śaraṇam — direct refuge-name (BG 18.66)]--> vsn:n_0086
+  sharanagati --[manifested-as-nama: Vīrahā — slayer of devotees\\]--> vsn:n_0928
+  sharanagati --[manifested-as-nama: Suhṛt — friend (śaraṇāgata-vatsala)]--> vsn:n_0461
+  sarva_dharman_parityajya --[manifested-as-nama: Hariḥ — snatcher of sins (BG 18.66 sarva-pāpa-mokṣa)]--> vsn:n_0656
+  sarva_dharman_parityajya --[manifested-as-nama: Puruṣottamaḥ — the speaker of the carama-śloka]--> vsn:n_0024
+  moksha --[manifested-as-nama: Mukundaḥ — giver of mukti]--> vsn:n_0515
+  moksha --[manifested-as-nama: Muktānāṃ paramā gatiḥ — supreme goal of the released]--> vsn:n_0013
+  paramagati --[manifested-as-nama: Muktānāṃ paramā gatiḥ — direct paramagati nāma]--> vsn:n_0013
+  paramagati --[manifested-as-nama: Satāṃ gatiḥ — goal of the sat (sādhus)]--> vsn:n_0184
+  antaryamin --[manifested-as-nama: Viṣṇuḥ — pervader, antaryāmin par excellence]--> vsn:n_0002
+  antaryamin --[manifested-as-nama: Bhūtātmā — inner self of all beings]--> vsn:n_0007
+  antaryamin --[manifested-as-nama: Hṛṣīkeśaḥ — Lord of indriyas, hṛdaya-stha]--> vsn:n_0047
+  antaryamin --[manifested-as-nama: Ūrjitaḥ — sūtrātman, thread-of-being]--> vsn:n_0156
+  vibhuti --[manifested-as-nama: Trivikramaḥ — three-stride vibhūti (BG 10)]--> vsn:n_0530
+  vibhuti --[manifested-as-nama: Nārasiṃha-vapuḥ — narasiṃha as vibhūti-form]--> vsn:n_0021
+  pancha_bheda --[leads-to: pañca-bheda grounds tāratamya]--> taratamya
+  pancha_bheda --[predicates-on: pañca-bheda asserts difference from Īśvara]--> isvara
+  taratamya --[predicates-on: tāratamya orders grades of jīvas]--> jiva
+  taratamya --[includes: tāratamya encompasses pañca-bheda]--> pancha_bheda
+  naishkarmya_siddhi --[predicates-on: naiṣkarmya-siddhi manifests as vibhūti]--> vibhuti
+  naishkarmya_siddhi --[leads-to: naiṣkarmya-siddhi culminates in jīvanmukti]--> jivanmukti
+  jivanmukti --[leads-to: jīvanmukti leads to sāyujya]--> sayujya
+  jivanmukti --[predicates-on: jīvanmukta sees jyotir among jyotis]--> jyotir_jyoti
+  jyotir_jyoti --[is-a: jyotir-jyoti and aśvattha are both pratīkas]--> ashvattha
+  vibhuti --[is-a: ratha-rūpaka is a vibhūti-pratīka]--> ratha_rupaka
+  paramartha --[includes: Brahman is paramārtha]--> brahman
+  paramartha --[includes: sarvottamatva is the axiomatic paramārtha]--> sarvottamatva
+  paramartha --[includes: tāratamya flows from paramārtha]--> taratamya
+  tattva --[includes: jīva is a tattva]--> jiva
+  tattva --[includes: prakṛti is a tattva]--> prakriti
+  tattva --[includes: kāla is a tattva]--> kala
+  tattva --[predicates-on: tattvas describe paramārtha]--> paramartha
+  guna --[includes: sattva is a guṇa]--> sattva
+  guna --[includes: rajas is a guṇa]--> rajas
+  guna --[includes: tamas is a guṇa]--> tamas
+  guna --[arises-from: guṇas arise from prakṛti]--> prakriti
+  kshetra --[includes: body is the field]--> kshetra_field
+  kshetra --[includes: field-knower is Bhagavān]--> kshetrajna
+  kshetra --[predicates-on: kshetra-frame applies to jīva]--> jiva
+  antahkarana --[includes: manas is an inner organ]--> manas
+  antahkarana --[includes: buddhi is an inner organ]--> buddhi
+  antahkarana --[includes: ahaṅkāra is an inner organ]--> ahankara
+  antahkarana --[predicates-on: antaḥkaraṇa belongs to jīva]--> jiva
+  dharma --[includes: svadharma is core dharma]--> svadharma
+  dharma --[includes: niṣkāma-karma is dharmic action]--> nishkama_karma
+  dharma --[leads-to: dharma leads to sādhanā]--> sadhana
+  dosha --[includes: kāma is the root doṣa]--> kama
+  dosha --[includes: krodha arises from kāma]--> krodha
+  dosha --[includes: lobha is the third gate to naraka]--> lobha
+  dosha --[includes: dvandva is a doṣa-root]--> dvandva
+  dosha --[opposite-of: doṣa opposes sādhanā]--> sadhana
+  sadhana --[includes: śraddhā is a sādhanā]--> shraddha
+  sadhana --[includes: vairāgya is a sādhanā]--> vairagya
+  sadhana --[includes: tapas is a sādhanā]--> tapas
+  sadhana --[includes: dāna is a sādhanā]--> dana
+  sadhana --[leads-to: sādhanā leads to phala]--> phala
+  yoga --[includes: karma-yoga is a path]--> karma_yoga
+  yoga --[includes: jñāna-yoga is a path]--> jnana_yoga
+  yoga --[includes: bhakti-yoga is the substrate]--> bhakti_yoga
+  yoga --[leads-to: yoga leads to phala]--> phala
+  yajna --[includes: dravya-yajña is first of four]--> dravya_yajna
+  yajna --[includes: tapo-yajña is second of four]--> tapo_yajna
+  yajna --[includes: yoga-yajña is third of four]--> yoga_yajna
+  yajna --[is-a: yajña is a form of sādhanā]--> sadhana
+  phala --[includes: mokṣa is the supreme phala]--> moksha
+  phala --[includes: paramagati is phala]--> paramagati
+  phala --[arises-from: phala arises from sādhanā]--> sadhana
+  pratika --[includes: aśvattha is a pratīka]--> ashvattha
+  pratika --[includes: praṇava-Om is a pratīka]--> pranava_om
+  pratika --[predicates-on: pratīkas point to Brahman]--> brahman
+  dravya_yajna --[leads-to: ascending order of yajñas]--> tapo_yajna
+  tapo_yajna --[leads-to: tapas leads to yoga-yajña]--> yoga_yajna
+  yoga_yajna --[leads-to: yoga leads to svādhyāya-yajña]--> svadhyaya_yajna
+  svadhyaya_yajna --[leads-to: svādhyāya leads to jñāna-yajña — highest]--> jnana_yajna
+  brahmarpana --[arises-from: brahmārpaṇa culminates jñāna-yajña]--> jnana_yajna
+  gunatita --[leads-to: guṇātīta state leads to mokṣa]--> moksha
+  gunatita --[opposite-of: beyond tamas is guṇātīta]--> tamas
+  triguna_atita --[predicates-on: Vedas declare Brahman beyond guṇas]--> brahman
+  triguna_atita --[leads-to: vedic testimony leads toward guṇātīta]--> gunatita
+  buddhi_yoga --[is-a: buddhi-yoga is jñāna-yoga in action]--> jnana_yoga
+  buddhi_yoga --[leads-to: buddhi-yoga matures into sannyāsa]--> sannyasa_yoga
+  abhyasa_vairagya --[leads-to: practice and dispassion lead to buddhi-yoga]--> buddhi_yoga
+  kala --[predicates-on: kāla expresses Hari nature]--> svarupa_aikya
+  samatva --[arises-from: equanimity arises from practice]--> abhyasa
+  samatva --[leads-to: samatva is the ground of jñāna-yoga]--> jnana_yoga
+  sattvika_ahara --[leads-to: sāttvika food supports renunciation]--> sannyasa_yoga
+  paratattva --[includes: pañca-bheda is a paratattva truth]--> pancha_bheda
+  paratattva --[includes: svarūpa-aikya is paratattva doctrine]--> svarupa_aikya
+  paratattva --[predicates-on: paratattva centres on Brahman]--> brahman
+  shat_prameya --[includes: jīva-svabhāva is second prameya]--> jiva_svabhava
+  shat_prameya --[includes: adhibhūta is fourth prameya]--> adhibhuta
+  shat_prameya --[includes: adhidaiva is fifth prameya]--> adhidaiva
+  shat_prameya --[includes: adhiyajña is sixth prameya]--> adhiyajna
+  shat_prameya --[predicates-on: ṣaṭ-prameya begins with Brahman]--> brahman
+  ashta_prakriti --[includes: parā-prakṛti is higher nature]--> para_prakriti
+  ashta_prakriti --[predicates-on: aṣṭa-prakṛti elaborates prakṛti]--> prakriti
+  dvividha_nishtha --[includes: buddhi-yoga supports both niṣṭhās]--> buddhi_yoga
+  dvividha_nishtha --[predicates-on: karma-niṣṭhā is one of two]--> karma_yoga
+  ananya_bhakti_sharanagati --[includes: ananya-bhakti is the means]--> ananya_eka_bhakti
+  ananya_bhakti_sharanagati --[includes: antima-āśvāsana is final promise]--> antima_ashvasana
+  ananya_bhakti_sharanagati --[leads-to: bhakti-śaraṇāgati leads to mokṣa]--> moksha
+  kshetra_kshetrajna --[includes: piṇḍāṇḍa-brahmāṇḍa — span of the field]--> pindanda_brahmanda
+  kshetra_kshetrajna --[predicates-on: kshetra-kshetrajña frame applies to jīva]--> jiva
+  phala_gati --[includes: naiṣkarmya-siddhi is a phala]--> naishkarmya_siddhi
+  phala_gati --[predicates-on: phala-gati encompasses mokṣa]--> moksha
+  sadhana_angas --[includes: samatva is a sādhana-aṅga]--> samatva
+  sadhana_angas --[predicates-on: sādhana-aṅgas support sādhanā]--> sadhana
+  triguna --[includes: sattva is a guṇa]--> sattva
+  triguna --[includes: rajas is a guṇa]--> rajas
+  triguna --[includes: tamas is a guṇa]--> tamas
+  triguna --[arises-from: triguṇa arises from prakṛti]--> prakriti
+  yajna_pratika --[includes: brahmārpaṇa is a yajña-pratīka]--> brahmarpana
+  yajna_pratika --[includes: jñāna-yajña is highest yajña]--> jnana_yajna
+  yajna_pratika --[predicates-on: yajña-pratīkas point to Brahman]--> brahman
+  samatva_dharma --[predicates-on: samatva is a jñāna-aṅga]--> jnana_angas
+  kalanemi_kama_abhimani --[predicates-on: Kālanemi is abhimāni of kāma]--> kama
+
+
+=== KEY ANCHOR SHLOKAS (IAST) ===
+
+BG 8.3 (brahman):
+  akṣaraṃ brahma paramaṃ svabhāvo'dhyātmam ucyate |\\nbhūta-bhāvodbhava-karo visargaḥ karma-saṃjñitaḥ ||
+
+BG 13.22 (paramatman):
+  upadraṣṭānumantā ca bhartā bhoktā maheśvaraḥ |\\nparamātmeti cāpy ukto dehe 'smin puruṣaḥ paraḥ ||
+
+BG 15.18 (purushottama):
+  yasmāt kṣaram atīto 'ham akṣarād api cottamaḥ |\\nato 'smi loke vede ca prasiddhaḥ puruṣottamaḥ ||
+
+BG 15.16 (ksara_purusha):
+  dvāv imau puruṣau loke kṣaraś cākṣara eva ca |\\nkṣaraḥ sarvāṇi bhūtāni kūṭastho 'kṣara ucyate ||
+
+BG 15.16 (akshara_purusha):
+  dvāv imau puruṣau loke kṣaraś cākṣara eva ca |\\nkṣaraḥ sarvāṇi bhūtāni kūṭastho 'kṣara ucyate ||
+
+BG 4.7 (avatara):
+  yadā yadā hi dharmasya glānir bhavati bhārata |\\nabhyutthānam adharmasya tadātmānaṃ sṛjāmy aham ||
+
+BG 7.7 (svarupa_aikya):
+  mattaḥ parataraṃ nānyat kiñcid asti dhanañjaya |\\nmayi sarvam idaṃ protaṃ sūtre maṇi-gaṇā iva ||
+
+BG 7.7 (sarvottamatva):
+  mattaḥ parataraṃ nānyat kiñcid asti dhanañjaya |
+
+BG 15.7 (jiva):
+  mamaivāṃśo jīva-loke jīva-bhūtaḥ sanātanaḥ |\\nmanaḥ-ṣaṣṭhānīndriyāṇi prakṛti-sthāni karṣati ||
+
+BG 18.61 (isvara):
+  īśvaraḥ sarva-bhūtānāṃ hṛd-deśe 'rjuna tiṣṭhati |\\nbhrāmayan sarva-bhūtāni yantrārūḍhāni māyayā ||
+
+BG 7.4 (prakriti):
+  bhūmir āpo 'nalo vāyuḥ khaṃ mano buddhir eva ca |\\nahaṅkāra itīyaṃ me bhinnā prakṛtir aṣṭadhā ||
+
+BG 7.5 (para_prakriti):
+  apareyam itas tv anyāṃ prakṛtiṃ viddhi me parām |\\njīva-bhūtāṃ mahā-bāho yayedaṃ dhāryate jagat ||
+
+BG 11.32 (kala):
+  kālo 'smi loka-kṣaya-kṛt pravṛddho lokān samāhartum iha pravṛttaḥ |
+
+BG 18.48 (svabhava):
+  sahajaṃ karma kaunteya sa-doṣam api na tyajet |\\nsarvārambhā hi doṣeṇa dhūmenāgnir ivāvṛtāḥ ||
+
+BG 13.1 (kshetra_field):
+  idaṃ śarīraṃ kaunteya kṣetram ity abhidhīyate |\\netad yo vetti taṃ prāhuḥ kṣetrajña iti tad-vidaḥ ||
+
+BG 13.2 (kshetrajna):
+  kṣetrajñaṃ cāpi māṃ viddhi sarva-kṣetreṣu bhārata |\\nkṣetra-kṣetrajñayor jñānaṃ yat taj jñānaṃ mataṃ mama ||
+
+BG 14.6 (sattva):
+  tatra sattvaṃ nirmalatvāt prakāśakam anāmayam |\\nsukha-saṅgena badhnāti jñāna-saṅgena cānagha ||
+
+BG 14.7 (rajas):
+  rajo rāgātmakaṃ viddhi tṛṣṇā-saṅga-samudbhavam |\\ntan nibadhnāti kaunteya karma-saṅgena dehinam ||
+
+BG 14.8 (tamas):
+  tamas tv ajñāna-jaṃ viddhi mohanaṃ sarva-dehinām |\\npramādālasya-nidrābhis tan nibadhnāti bhārata ||
+
+BG 14.24 (gunatita):
+  sama-duḥkha-sukhaḥ sva-sthaḥ sama-loṣṭāśma-kāñcanaḥ |\\ntulya-priyāpriyo dhīras tulya-nindātma-saṃstutiḥ ||
+
+BG 2.47 (karma_yoga):
+  karmaṇy evādhikāras te mā phaleṣu kadācana |\\nmā karma-phala-hetur bhūr mā te saṅgo 'stv akarmaṇi ||
+
+BG 4.38 (jnana_yoga):
+  na hi jñānena sadṛśaṃ pavitram iha vidyate |\\ntat svayaṃ yoga-saṃsiddhaḥ kālenātmani vindati ||
+
+BG 18.65 (bhakti_yoga):
+  man-manā bhava mad-bhakto mad-yājī māṃ namaskuru |\\nmām evaiṣyasi satyaṃ te pratijāne priyo 'si me ||
+
+BG 6.10 (dhyana_yoga):
+  yogī yuñjīta satatam ātmānaṃ rahasi sthitaḥ |\\nekākī yata-cittātmā nirāśīr aparigrahaḥ ||
+
+BG 2.48 (samatva):
+  yoga-sthaḥ kuru karmāṇi saṅgaṃ tyaktvā dhanañjaya |\\nsiddhy-asiddhyoḥ samo bhūtvā samatvaṃ yoga ucyate ||
+
+BG 18.66 (sharanagati):
+  sarva-dharmān parityajya mām ekaṃ śaraṇaṃ vraja |\\nahaṃ tvā sarva-pāpebhyo mokṣayiṣyāmi mā śucaḥ ||
+
+BG 2.56 (sthitaprajna):
+  duḥkheṣv anudvigna-manāḥ sukheṣu vigata-spṛhaḥ |\\nvīta-rāga-bhaya-krodhaḥ sthita-dhīr munir ucyate ||
+
+BG 3.35 (svadharma):
+  śreyān sva-dharmo viguṇaḥ para-dharmāt sv-anuṣṭhitāt |\\nsva-dharme nidhanaṃ śreyaḥ para-dharmo bhayāvahaḥ ||
+
+BG 2.47 (nishkama_karma):
+  karmaṇy evādhikāras te mā phaleṣu kadācana |
+
+BG 16.5 (daivi_sampad):
+  daivī sampad vimokṣāya nibandhāyāsurī matā |\\nmā śucaḥ sampadaṃ daivīm abhijāto 'si pāṇḍava ||
+
+BG 3.37 (kama):
+  kāma eṣa krodha eṣa rajo-guṇa-samudbhavaḥ |\\nmahāśano mahā-pāpmā viddhy enam iha vairiṇam ||
+
+BG 2.63 (krodha):
+  krodhād bhavati sammohaḥ sammohāt smṛti-vibhramaḥ |\\nsmṛti-bhraṃśād buddhi-nāśo buddhi-nāśāt praṇaśyati ||
+
+BG 2.62 (asatsanga):
+  dhyāyato viṣayān puṃsaḥ saṅgas teṣūpajāyate |\\nsaṅgāt sañjāyate kāmaḥ kāmāt krodho 'bhijāyate ||
+
+BG 16.21 (asuri_sampad):
+  tri-vidhaṃ narakasyedaṃ dvāraṃ nāśanam ātmanaḥ |\\nkāmaḥ krodhas tathā lobhas tasmād etat trayaṃ tyajet ||
+
+BG 6.1 (moksha):
+  anāśritaḥ karma-phalaṃ kāryaṃ karma karoti yaḥ |\\nsa sannyāsī ca yogī ca na niragnir na cākriyaḥ ||
+
+BG 15.6 (paramagati):
+  yad gatvā na nivartante tad dhāma paramaṃ mama |
+
+BG 2.72 (brahmi_sthiti):
+  eṣā brāhmī sthitiḥ pārtha naināṃ prāpya vimuhyati |\\nsthitvāsyām anta-kāle 'pi brahma-nirvāṇam ṛcchati ||
+
+BG 4.33 (jnana_yajna):
+  śreyān dravyamayād yajñāj jñāna-yajñaḥ parantapa |\\nsarvaṃ karmākhilaṃ pārtha jñāne parisamāpyate ||
+
+BG 4.24 (brahmarpana):
+  brahmārpaṇaṃ brahma havir brahmāgnau brahmaṇā hutam |\\nbrahmaiva tena gantavyaṃ brahma-karma-samādhinā ||
+
+BG 15.1 (ashvattha):
+  ūrdhva-mūlam adhaḥ-śākham aśvatthaṃ prāhur avyayam |\\nchandāṃsi yasya parṇāni yas taṃ veda sa vedavit ||
+
+BG 8.13 (pranava_om):
+  om ity ekākṣaraṃ brahma vyāharan mām anusmaran |\\nyaḥ prayāti tyajan dehaṃ sa yāti paramāṃ gatim ||
+
+BG 13.17 (jyotir_jyoti):
+  jyotiṣām api taj jyotis tamasaḥ param ucyate |\\njñānaṃ jñeyaṃ jñāna-gamyaṃ hṛdi sarvasya viṣṭhitam ||
+
+BG 15.9 (antahkarana):
+  śrotraṃ cakṣuḥ sparśanaṃ ca rasanaṃ ghrāṇam eva ca |\\nadhiṣṭhāya manaś cāyaṃ viṣayān upasevate ||
+
+BG 4.7 (dharma):
+  yadā yadā hi dharmasya glānir bhavati bhārata |\\nabhyutthānam adharmasya tadātmānaṃ sṛjāmy aham ||
+
+BG 3.37 (dosha):
+  kāma eṣa krodha eṣa rajo-guṇa-samudbhavaḥ |\\nmahāśano mahā-pāpmā viddhy enam iha vairiṇam ||
+
+BG 14.5 (guna):
+  sattvaṃ rajas tama iti guṇāḥ prakṛti-sambhavāḥ |\\nnibadhnanti mahā-bāho dehe dehinam avyayam ||
+
+BG 13.1 (kshetra):
+  idaṃ śarīraṃ kaunteya kṣetram ity abhidhīyate |\\netad yo vetti taṃ prāhuḥ kṣetrajña iti tad-vidaḥ ||
+
+BG 15.17 (paramartha):
+  uttamaḥ puruṣas tv anyaḥ paramātmety udāhṛtaḥ |\\nyo loka-trayam āviśya bibharty avyaya īśvaraḥ ||
+
+BG 18.54 (phala):
+  brahma-bhūtaḥ prasannātmā na śocati na kāṅkṣati |\\nsamaḥ sarveṣu bhūteṣu mad-bhaktiṃ labhate parām ||
+
+BG 15.1 (pratika):
+  ūrdhva-mūlam adhaḥ-śākham aśvatthaṃ prāhur avyayam |\\nchandāṃsi yasya parṇāni yas taṃ veda sa vedavit ||
+
+BG 4.28 (sadhana):
+  dravya-yajñās tapo-yajñā yoga-yajñās tathāpare |\\nsvādhyāya-jñāna-yajñāś ca yatayaḥ saṃśita-vratāḥ ||
+
+BG 7.4 (tattva):
+  bhūmir āpo 'nalo vāyuḥ khaṃ mano buddhir eva ca |\\nahaṅkāra itīyaṃ me bhinnā prakṛtir aṣṭadhā ||
+
+BG 3.10 (yajna):
+  saha-yajñāḥ prajāḥ sṛṣṭvā puro-vāca prajāpatiḥ |\\nanena prasaviṣyadhvam eṣa vo 'stv iṣṭa-kāma-dhuk ||
+
+BG 6.46 (yoga):
+  tapasvibhyo 'dhiko yogī jñānibhyo 'pi mato 'dhikaḥ |\\nkarmibhyaś cādhiko yogī tasmād yogī bhavārjuna ||`;
+
+const chatState = { msgs: [], loading: false };
+const CHAT_SUGGESTIONS = [
+  "What is Bannanje's view of Brahman?",
+  "Difference between kṣara and akṣara puruṣa?",
+  "What does BG 2.47 teach?",
+  "Explain sthitaprajña",
+  "What is tāratamya?",
+  "How do the guṇas bind the soul?",
+  "What is pañca-bheda?",
+  "How does bhakti lead to mokṣa?",
+];
+
+function renderChat() {
+  const root = document.getElementById('view-chat');
+  root.style.display = 'flex';
+  root.style.flexDirection = 'column';
+
+  const msgsHTML = chatState.msgs.map(m =>
+    `<div class="chat-bubble ${m.role==='user'?'user':'bot'}">${escapeHtml(m.content)}</div>`
+  ).join('');
+
+  const emptyHTML = chatState.msgs.length === 0 ? `
+    <div class="chat-empty">Ask any question about the Bhagavad Gītā — concepts, shlokas, Bannanje's commentary, Madhva philosophy.</div>
+    <div class="chat-suggestions">${CHAT_SUGGESTIONS.map(s =>
+      `<button class="chat-suggestion" onclick="chatSend(${JSON.stringify(s)})">${escapeHtml(s)}</button>`
+    ).join('')}</div>` : '';
+
+  const typingHTML = chatState.loading ?
+    `<div class="chat-typing"><span></span><span></span><span></span></div>` : '';
+
+  const resetBtn = chatState.msgs.length > 0 ?
+    `<button class="chat-reset" onclick="chatReset()">↺ New conversation</button>` : '';
+
+  root.innerHTML = `
+    <div class="chat-msgs" id="chat-msgs">
+      ${emptyHTML}${msgsHTML}${typingHTML}
+    </div>
+    <div class="chat-input-wrap">
+      <div style="flex:1;display:flex;flex-direction:column">
+        ${resetBtn}
+        <textarea id="chat-input" rows="2" placeholder="Ask about a concept, verse, or teaching…"
+          onkeydown="if(event.key==='Enter'&&!event.shiftKey){event.preventDefault();chatSend()}"
+          oninput="document.getElementById('chat-send').disabled=!this.value.trim()||chatState.loading"
+        ></textarea>
+      </div>
+      <button id="chat-send" class="chat-send" disabled onclick="chatSend()">➤</button>
+    </div>`;
+
+  // Scroll to bottom
+  const msgsEl = document.getElementById('chat-msgs');
+  if (msgsEl) msgsEl.scrollTop = msgsEl.scrollHeight;
+
+  // Focus input
+  const inp = document.getElementById('chat-input');
+  if (inp) setTimeout(() => inp.focus(), 50);
+}
+
+async function chatSend(text) {
+  const inp = document.getElementById('chat-input');
+  const q = (text || (inp && inp.value) || '').trim();
+  if (!q || chatState.loading) return;
+  if (inp) inp.value = '';
+
+  chatState.msgs.push({ role: 'user', content: q });
+  chatState.loading = true;
+  renderChat();
+
+  try {
+    const res = await fetch('https://api.anthropic.com/v1/messages', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        model: 'claude-sonnet-4-20250514',
+        max_tokens: 1000,
+        system: CHAT_SYSTEM,
+        messages: chatState.msgs.map(m => ({ role: m.role, content: m.content })),
+      })
+    });
+    if (!res.ok) throw new Error('API error ' + res.status);
+    const data = await res.json();
+    const reply = (data.content || []).find(b => b.type === 'text')?.text || '';
+    chatState.msgs.push({ role: 'assistant', content: reply });
+  } catch (e) {
+    chatState.msgs.push({ role: 'assistant', content: '⚠️ ' + e.message });
+  }
+  chatState.loading = false;
+  renderChat();
+}
+
+function chatReset() {
+  chatState.msgs = [];
+  chatState.loading = false;
+  renderChat();
+}
 
 /* Initial render */
 render();
