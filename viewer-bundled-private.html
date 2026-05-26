@@ -6439,7 +6439,15 @@ async function chatSend(text) {
     const reply = (data.content || []).find(b => b.type === 'text')?.text || '';
     chatState.msgs.push({ role: 'assistant', content: reply });
   } catch (e) {
-    chatState.msgs.push({ role: 'assistant', content: '⚠️ ' + e.message });
+    let errTxt = e.message || String(e);
+    if (errTxt.toLowerCase().includes('failed to fetch') || errTxt.includes('network')) {
+      errTxt = 'Network error. Possible causes:\n• Invalid API key (re-enter via ⚙️)\n• Check internet connection\n• API key might have extra spaces — try re-pasting it';
+    } else if (errTxt.includes('401')) {
+      errTxt = 'Invalid API key. Tap ⚙️ to re-enter it.';
+    } else if (errTxt.includes('429')) {
+      errTxt = 'Rate limit reached. Wait a moment and try again.';
+    }
+    chatState.msgs.push({ role: 'assistant', content: '⚠️ ' + errTxt });
   }
   chatState.loading = false;
   renderChat();
@@ -6454,9 +6462,10 @@ function chatReset() {
 
 const chatState = { msgs: [], loading: false };
 
-function getChatApiKey() { return localStorage.getItem('gita_api_key') || ''; }
+function getChatApiKey() { return (localStorage.getItem('gita_api_key') || '').replace(/\s+/g,''); }
 function setChatApiKey(k) {
-  if (k.trim()) localStorage.setItem('gita_api_key', k.trim());
+  const clean = k.replace(/\s+/g, ''); // strip all whitespace incl newlines
+  if (clean) localStorage.setItem('gita_api_key', clean);
   else localStorage.removeItem('gita_api_key');
 }
 function chatToggleKey() {
