@@ -6412,22 +6412,9 @@ async function chatSend(text) {
   renderChat();
 
   try {
-    const apiKey = getChatApiKey();
-    if (!apiKey) {
-      chatState.msgs.pop();
-      chatState.loading = false;
-      renderChat();
-      setTimeout(chatPromptKey, 100);
-      return;
-    }
     const res = await fetch('https://api.anthropic.com/v1/messages', {
       method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'x-api-key': apiKey,
-        'anthropic-version': '2023-06-01',
-        'anthropic-dangerous-direct-browser-access': 'true',
-      },
+      headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
         model: 'claude-sonnet-4-20250514',
         max_tokens: 2048,
@@ -6440,8 +6427,9 @@ async function chatSend(text) {
     const reply = (data.content || []).find(b => b.type === 'text')?.text || '';
     chatState.msgs.push({ role: 'assistant', content: reply });
   } catch (e) {
-    const errMsg = e.message.includes('fetch')
-      ? '⚠️ Cannot reach Anthropic API. Check your internet connection or API key.'
+    const isFetchErr = e.message.toLowerCase().includes('fetch') || e.message.includes('network');
+    const errMsg = isFetchErr
+      ? '💡 Chat works when this file is opened via claude.ai. On other browsers it needs a backend connection.\n\nOpen the file in a new Claude.ai conversation to use the chat feature.'
       : '⚠️ ' + e.message;
     chatState.msgs.push({ role: 'assistant', content: errMsg });
   }
@@ -6458,18 +6446,6 @@ function chatReset() {
 
 const chatState = { msgs: [], loading: false };
 
-function getChatApiKey() { return localStorage.getItem('gita_api_key') || ''; }
-function setChatApiKey(k) { localStorage.setItem('gita_api_key', k.trim()); }
-function chatPromptKey() {
-  const cur = getChatApiKey();
-  const val = prompt(
-    cur ? 'Update Anthropic API key (blank to remove):' : 'Enter Anthropic API key (console.anthropic.com):',
-    cur
-  );
-  if (val === null) return;
-  setChatApiKey(val);
-  renderChat();
-}
 
 /* Multilingual UI strings for the chat panel */
 const CHAT_UI = {
@@ -6568,17 +6544,11 @@ function renderChat() {
     `<div class="chat-bubble ${m.role==='user'?'user':'bot'}">${escapeHtml(m.content)}</div>`
   ).join('');
 
-  const hasKey = !!getChatApiKey();
-  const keyBtn = hasKey
-    ? `<span style="font-size:11px;color:var(--ink-fade);cursor:pointer;display:block;text-align:right;margin-bottom:6px" onclick="chatPromptKey()">🔑 API key set &nbsp;✕ change</span>`
-    : `<button class="chat-suggestion" onclick="chatPromptKey()" style="border-color:var(--rust);color:var(--rust);margin-bottom:8px">🔑 Set API key to enable chat</button>`;
-
   const emptyHTML = chatState.msgs.length === 0 ? `
     <div class="chat-empty">${escapeHtml(ui.intro)}</div>
-    ${keyBtn}
     <div class="chat-suggestions">${ui.sugg.map(s =>
       `<button class="chat-suggestion" data-q="${escapeHtml(s)}" onclick="chatSend(this.dataset.q)">${escapeHtml(s)}</button>`
-    ).join('')}</div>` : `<div style="text-align:right;padding:0 0 4px">${keyBtn}</div>`;
+    ).join('')}</div>` : '';
 
   const typingHTML = chatState.loading ?
     `<div class="chat-typing"><span></span><span></span><span></span></div>` : '';
