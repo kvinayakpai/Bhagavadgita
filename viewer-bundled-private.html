@@ -6436,6 +6436,87 @@ function chatReset() {
   renderChat();
 }
 
+
+function renderChat() {
+  const root = document.getElementById('view-chat');
+  root.style.display = 'flex';
+  root.style.flexDirection = 'column';
+
+  const msgsHTML = chatState.msgs.map(m =>
+    `<div class="chat-bubble ${m.role==='user'?'user':'bot'}">${escapeHtml(m.content)}</div>`
+  ).join('');
+
+  const emptyHTML = chatState.msgs.length === 0 ? `
+    <div class="chat-empty">Ask any question about the Bhagavad Gītā — concepts, shlokas, Bannanje's commentary, Madhva philosophy.</div>
+    <div class="chat-suggestions">${CHAT_SUGGESTIONS.map(s =>
+      `<button class="chat-suggestion" onclick="chatSend(${JSON.stringify(s)})">${escapeHtml(s)}</button>`
+    ).join('')}</div>` : '';
+
+  const typingHTML = chatState.loading ?
+    `<div class="chat-typing"><span></span><span></span><span></span></div>` : '';
+
+  const resetBtn = chatState.msgs.length > 0 ?
+    `<button class="chat-reset" onclick="chatReset()">↺ New conversation</button>` : '';
+
+  root.innerHTML = `
+    <div class="chat-msgs" id="chat-msgs">
+      ${emptyHTML}${msgsHTML}${typingHTML}
+    </div>
+    <div class="chat-input-wrap">
+      <div style="flex:1;display:flex;flex-direction:column">
+        ${resetBtn}
+        <textarea id="chat-input" rows="2" placeholder="Ask about a concept, verse, or teaching…"
+          onkeydown="if(event.key==='Enter'&&!event.shiftKey){event.preventDefault();chatSend()}"
+          oninput="document.getElementById('chat-send').disabled=!this.value.trim()||chatState.loading"
+        ></textarea>
+      </div>
+      <button id="chat-send" class="chat-send" disabled onclick="chatSend()">➤</button>
+    </div>`;
+
+  const msgsEl = document.getElementById('chat-msgs');
+  if (msgsEl) msgsEl.scrollTop = msgsEl.scrollHeight;
+  const inp = document.getElementById('chat-input');
+  if (inp) setTimeout(() => inp.focus(), 50);
+}
+
+async function chatSend(text) {
+  const inp = document.getElementById('chat-input');
+  const q = (text || (inp && inp.value) || '').trim();
+  if (!q || chatState.loading) return;
+  if (inp) inp.value = '';
+
+  chatState.msgs.push({ role: 'user', content: q });
+  chatState.loading = true;
+  renderChat();
+
+  try {
+    const res = await fetch('https://api.anthropic.com/v1/messages', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        model: 'claude-sonnet-4-20250514',
+        max_tokens: 2048,
+        system: getChatSystem(),
+        messages: chatState.msgs.map(m => ({ role: m.role, content: m.content })),
+      })
+    });
+    if (!res.ok) { const t=await res.text(); throw new Error('API '+res.status+': '+t.slice(0,200)); }
+    const data = await res.json();
+    const reply = (data.content || []).find(b => b.type === 'text')?.text || '';
+    chatState.msgs.push({ role: 'assistant', content: reply });
+  } catch (e) {
+    chatState.msgs.push({ role: 'assistant', content: '⚠️ ' + e.message });
+  }
+  chatState.loading = false;
+  renderChat();
+}
+
+function chatReset() {
+  chatState.msgs = [];
+  chatState.loading = false;
+  renderChat();
+}
+
 /* Initial render */
 render();
 </script>
