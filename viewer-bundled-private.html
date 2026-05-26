@@ -5254,28 +5254,38 @@ function renderChapters() {
 
   /* Helper: given a "ch.v" key, return all NODES whose refs cover that verse */
   function linkedConceptsFor(ch, v) {
-    const out = [];
-    const seen = new Set();
-    // Scan all nodes
-    (NODES||[]).forEach(n => {
-      if (!n.refs || seen.has(n.id)) return;
-      (n.refs + '').split(/[·,]/).forEach(seg => {
+    const out = [], seen = new Set();
+    function testNode(refsStr, nodeId, node) {
+      if (seen.has(nodeId)) return;
+      let lastCh = null;
+      refsStr.split(/[·,]/).forEach(function(seg) {
         seg = seg.trim();
-        const m = seg.match(/BG\s*(\d+)[\.·](\d+)(?:[–\-](\d+))?/);
-        if (!m) return;
-        if (parseInt(m[1]) !== ch) return;
-        const vs = parseInt(m[2]), ve = m[3] ? parseInt(m[3]) : vs;
-        if (v >= vs && v <= ve && !seen.has(n.id)) { out.push(n); seen.add(n.id); }
+        var m = seg.match(/BG\s*(\d+)[.\u00b7](\d+)(?:[\u2013\-](\d+))?/);
+        if (m) {
+          lastCh = parseInt(m[1]);
+          if (lastCh === ch) {
+            var vs=parseInt(m[2]), ve=m[3]?parseInt(m[3]):vs;
+            if (v>=vs && v<=ve && !seen.has(nodeId)) { out.push(node); seen.add(nodeId); }
+          }
+        } else if (lastCh !== null) {
+          var m2 = seg.match(/(\d+)[.\u00b7](\d+)(?:[\u2013\-](\d+))?/);
+          if (m2) {
+            var ch2=parseInt(m2[1]);
+            if (ch2===ch) {
+              var vs2=parseInt(m2[2]), ve2=m2[3]?parseInt(m2[3]):vs2;
+              if (v>=vs2 && v<=ve2 && !seen.has(nodeId)) { out.push(node); seen.add(nodeId); }
+            }
+            lastCh = ch2;
+          }
+        }
       });
-    });
-    // Also check SHLOKAS.ref
-    Object.entries(SHLOKAS||{}).forEach(([id, s]) => {
-      if (!s.ref || seen.has(id)) return;
-      const m = (s.ref+'').match(/BG\s*(\d+)[\.·](\d+)/);
-      if (m && parseInt(m[1])===ch && parseInt(m[2])===v) {
-        const n = (NODES||[]).find(x=>x.id===id);
-        if (n && !seen.has(id)) { out.push(n); seen.add(id); }
-      }
+    }
+    (NODES||[]).forEach(function(n){ if(n.refs) testNode(n.refs+'', n.id, n); });
+    Object.entries(SHLOKAS||{}).forEach(function(e){
+      var id=e[0], s=e[1];
+      if(!s.ref || seen.has(id)) return;
+      var n=(NODES||[]).find(function(x){return x.id===id;});
+      if(n) testNode(s.ref+'', id, n);
     });
     return out;
   }
