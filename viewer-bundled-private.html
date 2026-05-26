@@ -6433,40 +6433,31 @@ async function chatSend(text) {
       throw new Error('Failed to build request: ' + jsonErr.message);
     }
 
-    let res;
-    try {
-      res = await fetch('https://api.anthropic.com/v1/messages', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'x-api-key': apiKey,
-          'anthropic-version': '2023-06-01',
-          'anthropic-dangerous-direct-browser-access': 'true',
-        },
-        body,
-      });
-    } catch(fetchErr) {
-      // "Failed to fetch" — network or CORS
-      throw new Error('Could not reach Anthropic API.\n\nPossible causes:\n• Your API key may be invalid — tap ⚙️ to re-enter\n• Check your internet connection\n• Try reloading the page\n\nError detail: ' + fetchErr.message);
-    }
-
-    if (res.status === 401) {
-      throw new Error('Invalid API key (401). Tap ⚙️ to re-enter your key from console.anthropic.com');
-    }
-    if (res.status === 429) {
-      throw new Error('Rate limit reached (429). Wait a moment and try again.');
-    }
-    if (!res.ok) {
-      const t = await res.text().catch(()=>'');
-      throw new Error('API error ' + res.status + ': ' + t.slice(0, 200));
-    }
-
-    let data;
-    try {
-      data = await res.json();
-    } catch(jsonErr) {
-      throw new Error('Invalid response from API: ' + jsonErr.message);
-    }
+    // Use XMLHttpRequest for better cross-origin compatibility on Android Chrome
+    const data = await new Promise((resolve, reject) => {
+      const xhr = new XMLHttpRequest();
+      xhr.open('POST', 'https://api.anthropic.com/v1/messages', true);
+      xhr.setRequestHeader('Content-Type', 'application/json');
+      xhr.setRequestHeader('x-api-key', apiKey);
+      xhr.setRequestHeader('anthropic-version', '2023-06-01');
+      xhr.setRequestHeader('anthropic-dangerous-direct-browser-access', 'true');
+      xhr.timeout = 60000; // 60 second timeout
+      xhr.onload = () => {
+        if (xhr.status === 401) { reject(new Error('Invalid API key (401). Tap ⚙️ to re-enter your key.')); return; }
+        if (xhr.status === 429) { reject(new Error('Rate limit reached. Wait a moment and try again.')); return; }
+        if (xhr.status >= 400) { reject(new Error('API error ' + xhr.status + ': ' + xhr.responseText.slice(0,150))); return; }
+        try { resolve(JSON.parse(xhr.responseText)); }
+        catch(e) { reject(new Error('Bad response from API: ' + e.message)); }
+      };
+      xhr.onerror = () => reject(new Error(
+        'Network error — cannot reach api.anthropic.com\n' +
+        '• Check your internet connection\n' +
+        '• Try reloading the page\n' +
+        '• Re-enter your API key via ⚙️ (it may have invisible characters)'
+      ));
+      xhr.ontimeout = () => reject(new Error('Request timed out (60s). Try again.'));
+      xhr.send(body);
+    });
 
     const reply = (data.content || []).find(b => b.type === 'text')?.text || '(no response)';
     chatState.msgs.push({ role: 'assistant', content: reply });
@@ -6484,6 +6475,7 @@ function chatReset() {
 }
 
 
+/* v2.1 — XHR chat */
 const chatState = { msgs: [], loading: false };
 
 function getChatApiKey() { return (localStorage.getItem('gita_api_key') || '').replace(/\s+/g,''); }
