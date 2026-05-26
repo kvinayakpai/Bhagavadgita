@@ -6437,6 +6437,19 @@ function chatReset() {
 }
 
 
+const chatState = { msgs: [], loading: false };
+
+const CHAT_SUGGESTIONS = [
+  "What is Bannanje's view of Brahman?",
+  "Difference between kṣara and akṣara puruṣa?",
+  "What does BG 2.47 teach?",
+  "Explain sthitaprajña",
+  "What is tāratamya?",
+  "How do the guṇas bind the soul?",
+  "What is pañca-bheda?",
+  "How does bhakti lead to mokṣa?",
+];
+
 function renderChat() {
   const root = document.getElementById('view-chat');
   root.style.display = 'flex';
