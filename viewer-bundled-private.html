@@ -5463,7 +5463,7 @@ function render(){
   else if (state.view==='map') renderMap();
   else if (state.view==='chat') renderChat();
   const f = document.getElementById('stats');
-  if (f) f.textContent = `${NODES.length} ${UI('concepts')} · ${EDGES.length} ${UI('relations')} · ${Object.keys(FULL_GITA).length} ${UI('shlokas')} · ${TIERS.length} ${UI('tiers')}`;
+  if (f) f.textContent = `v3 · ${NODES.length} ${UI('concepts')} · ${EDGES.length} ${UI('relations')} · ${Object.keys(FULL_GITA).length} ${UI('shlokas')} · ${TIERS.length} ${UI('tiers')}`;
 }
 
 /* ---------- WIRING ---------- */
