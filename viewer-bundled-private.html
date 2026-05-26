@@ -6641,38 +6641,6 @@ function renderChat() {
   if (inp) setTimeout(() => inp.focus(), 50);
 }
 
-async function chatSend(text) {
-  const inp = document.getElementById('chat-input');
-  const q = (text || (inp && inp.value) || '').trim();
-  if (!q || chatState.loading) return;
-  if (inp) inp.value = '';
-
-  chatState.msgs.push({ role: 'user', content: q });
-  chatState.loading = true;
-  renderChat();
-
-  try {
-    const res = await fetch('https://api.anthropic.com/v1/messages', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        model: 'claude-sonnet-4-6',
-        max_tokens: 2048,
-        system: getChatSystem(),
-        messages: chatState.msgs.map(m => ({ role: m.role, content: m.content })),
-      })
-    });
-    if (!res.ok) { const t=await res.text(); throw new Error('API '+res.status+': '+t.slice(0,200)); }
-    const data = await res.json();
-    const reply = (data.content || []).find(b => b.type === 'text')?.text || '';
-    chatState.msgs.push({ role: 'assistant', content: reply });
-  } catch (e) {
-    chatState.msgs.push({ role: 'assistant', content: '⚠️ ' + e.message });
-  }
-  chatState.loading = false;
-  renderChat();
-}
-
 function chatReset() {
   chatState.msgs = [];
   chatState.loading = false;
