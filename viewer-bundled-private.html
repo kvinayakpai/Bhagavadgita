@@ -6428,7 +6428,7 @@ async function chatSend(text) {
     try {
       body = JSON.stringify({
         model: 'claude-sonnet-4-6',
-        max_tokens: 2048,
+        max_tokens: 4096,
         system: getChatSystem(),
         messages: chatState.msgs.map(m => ({ role: m.role, content: m.content })),
       });
@@ -6530,6 +6530,17 @@ const VOICE_LANGS = { en:'en-IN', dev:'sa-IN', hi:'hi-IN', kn:'kn-IN' };
 const TTS_LANGS   = { en:'en-IN', dev:'sa-IN', hi:'hi-IN', kn:'kn-IN' };
 let voiceRec = null;
 let voiceUtterance = null;
+let wakeLock = null;
+
+async function acquireWakeLock() {
+  if (!('wakeLock' in navigator) || wakeLock) return;
+  try { wakeLock = await navigator.wakeLock.request('screen'); } catch(e) {}
+}
+function releaseWakeLock() {
+  if (!wakeLock) return;
+  wakeLock.release().catch(()=>{});
+  wakeLock = null;
+}
 
 function speakReply(text) {
   if (!window.speechSynthesis) return;
@@ -6588,8 +6599,10 @@ function startVoice() {
     voiceUtterance = null;
     const mic = document.getElementById('chat-mic');
     if (mic) { mic.textContent = '🎙'; mic.title = 'Voice input'; }
+    releaseWakeLock();
     return;
   }
+  acquireWakeLock();
   const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
   if (!SR) {
     const inp = document.getElementById('chat-input');
@@ -6655,6 +6668,8 @@ function startVoice() {
     /* Auto-submit if text was captured */
     if (inp && inp.value.trim()) {
       setTimeout(() => chatSend(), 100);
+    } else {
+      releaseWakeLock();
     }
   };
   voiceRec.onerror = (e) => {
