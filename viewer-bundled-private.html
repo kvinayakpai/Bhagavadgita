@@ -54,16 +54,19 @@ header.top{
   background:#f4ead8;
   border-bottom:1px solid var(--rule);
 }
-header .brand{flex:1;min-width:0;display:flex;align-items:baseline;gap:8px;overflow:hidden}
+header .brand{flex:1;min-width:0;display:flex;align-items:baseline;gap:6px;flex-wrap:wrap}
 header .brand .name{
-  font-family:'Cormorant Garamond',serif;font-weight:600;font-size:18px;line-height:1;
-  white-space:nowrap;overflow:hidden;text-overflow:ellipsis;
+  font-family:'Cormorant Garamond',serif;font-weight:600;font-size:17px;line-height:1.2;
+  white-space:normal;word-break:break-word;
 }
 header .brand .name em{font-style:italic;color:var(--ink-soft);font-weight:500}
 header .brand .crumb{
   font-size:11px;letter-spacing:.16em;text-transform:uppercase;
   color:var(--ink-fade);white-space:nowrap;flex:0 0 auto;
 }
+body.lang-dev header .brand .name,
+body.lang-hi  header .brand .name{ font-family:'Noto Sans Devanagari',sans-serif; font-size:14px; }
+body.lang-kn  header .brand .name{ font-family:'Noto Sans Kannada',sans-serif; font-size:14px; }
 header .lang{
   display:flex;gap:0;background:var(--paper);border:1px solid var(--rule);
   border-radius:8px;overflow:hidden;font-size:11px;letter-spacing:.06em;
@@ -4828,7 +4831,9 @@ const UI_STRINGS = {
   searchPlaceholder: { en:'Search concepts, tiers, verses…', dev:'सम्मतान्, स्तरान्, श्लोकान् अन्विष्यतु…', kn:'ಪರಿಕಲ್ಪನೆ, ಸ್ತರ, ಶ್ಲೋಕಗಳನ್ನು ಹುಡುಕಿ…', hi:'अवधारणा, स्तर, श्लोक खोजें…' },
   navBrowse:         { en:'Browse',           dev:'सूची',           kn:'ಸೂಚಿ', hi:'सूची' },
   navFocus:          { en:'Focus',            dev:'विवरणम्',        kn:'ವಿವರಣೆ', hi:'विवरण' },
+  navChapters:       { en:'Chapters',         dev:'अध्यायाः',       kn:'ಅಧ್ಯಾಯಗಳು', hi:'अध्याय' },
   navMap:            { en:'Map',              dev:'मानचित्रम्',     kn:'ನಕ್ಷೆ', hi:'नक्शा' },
+  navChat:           { en:'Chat',             dev:'संवादः',         kn:'ಸಂವಾದ', hi:'संवाद' },
   bannanjeHeader:    { en:'Bannanje commentary (personal study only — not for redistribution)', dev:'बन्नंजे-भाष्य (केवल वैयक्तिक अध्ययनार्थम् — न पुनर्वितरणाय)', kn:'ಬನ್ನಂಜೆ-ಭಾಷ್ಯ (ಕೇವಲ ವೈಯಕ್ತಿಕ ಅಧ್ಯಯನಕ್ಕಾಗಿ — ಪುನರ್ವಿತರಣೆಗಲ್ಲ)', hi:'बन्नंजे-भाष्य (केवल व्यक्तिगत अध्ययन हेतु — पुनर्वितरण के लिए नहीं)' },
   // Masthead — uses innerHTML so EN can keep the italic Gītā.
   brandName:         { en:'Bhagavad <em>Gītā</em> · Concept KG', dev:'भगवद्गीता · संकल्पना-कोशः', kn:'ಭಗವದ್ಗೀತಾ · ಸಂಕಲ್ಪನಾ-ಕೋಶ', hi:'भगवद् <em>गीता</em> · अवधारणा कोश' },
@@ -4851,9 +4856,11 @@ function setLang(lang){
   const qEl = document.getElementById('q');
   if (qEl) qEl.placeholder = UI('searchPlaceholder');
   document.querySelectorAll('#view-tabs button[data-view]').forEach(b=>{
-    const k = b.dataset.view==='browse' ? 'navBrowse'
-            : b.dataset.view==='focus'  ? 'navFocus'
-            : b.dataset.view==='map'    ? 'navMap' : null;
+    const k = b.dataset.view==='browse'   ? 'navBrowse'
+            : b.dataset.view==='focus'    ? 'navFocus'
+            : b.dataset.view==='chapters' ? 'navChapters'
+            : b.dataset.view==='map'      ? 'navMap'
+            : b.dataset.view==='chat'     ? 'navChat' : null;
     if (k) b.textContent = UI(k);
   });
   // Masthead brand strings
