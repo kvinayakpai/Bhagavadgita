@@ -6464,6 +6464,7 @@ async function chatSend(text) {
 
     const reply = (data.content || []).find(b => b.type === 'text')?.text || '(no response)';
     chatState.msgs.push({ role: 'assistant', content: reply });
+    speakReply(reply);
   } catch (e) {
     chatState.msgs.push({ role: 'assistant', content: '⚠️ ' + (e.message || String(e)) });
   }
@@ -6526,9 +6527,48 @@ const CHAT_UI = {
 
 /* Voice input — sa-IN unsupported by browsers; dev mode uses hi-IN (same Devanagari) */
 const VOICE_LANGS = { en:'en-IN', dev:'hi-IN', hi:'hi-IN', kn:'kn-IN' };
+const TTS_LANGS   = { en:'en-IN', dev:'hi-IN', hi:'hi-IN', kn:'kn-IN' };
 let voiceRec = null;
+let voiceUtterance = null;
+
+function speakReply(text) {
+  if (!window.speechSynthesis) return;
+  /* Stop any ongoing speech */
+  window.speechSynthesis.cancel();
+  const lang = TTS_LANGS[state.lang] || 'en-IN';
+  const utt = new SpeechSynthesisUtterance(text);
+  utt.lang = lang;
+  utt.rate = 0.95;
+  utt.pitch = 1.0;
+  /* Pick best voice for the language */
+  const voices = window.speechSynthesis.getVoices();
+  const base = lang.split('-')[0];
+  utt.voice = voices.find(v => v.lang === lang)
+           || voices.find(v => v.lang.startsWith(base))
+           || null;
+  const mic = document.getElementById('chat-mic');
+  if (mic) { mic.textContent = '🔊'; mic.title = 'Tap to stop'; }
+  utt.onend = () => {
+    voiceUtterance = null;
+    if (mic) { mic.textContent = '🎙'; mic.title = 'Voice input'; }
+  };
+  utt.onerror = () => {
+    voiceUtterance = null;
+    if (mic) { mic.textContent = '🎙'; mic.title = 'Voice input'; }
+  };
+  voiceUtterance = utt;
+  window.speechSynthesis.speak(utt);
+}
 
 function startVoice() {
+  /* If TTS is currently speaking, stop it first */
+  if (voiceUtterance) {
+    window.speechSynthesis.cancel();
+    voiceUtterance = null;
+    const mic = document.getElementById('chat-mic');
+    if (mic) { mic.textContent = '🎙'; mic.title = 'Voice input'; }
+    return;
+  }
   const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
   if (!SR) {
     const inp = document.getElementById('chat-input');
@@ -6562,6 +6602,10 @@ function startVoice() {
     if (inp) inp.placeholder = ui.placeholder;
     const send = document.getElementById('chat-send');
     if (send && inp) send.disabled = !inp.value.trim() || chatState.loading;
+    /* Auto-submit if text was captured */
+    if (inp && inp.value.trim()) {
+      setTimeout(() => chatSend(), 100);
+    }
   };
   voiceRec.onerror = (e) => {
     voiceRec = null;
