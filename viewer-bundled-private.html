@@ -6468,12 +6468,15 @@ async function chatSend(text) {
 
     const reply = (data.content || []).find(b => b.type === 'text')?.text || '(no response)';
     chatState.msgs.push({ role: 'assistant', content: reply });
-    speakReply(reply);
+    chatState.loading = false;
+    renderChat();
+    /* Speak AFTER DOM settles — focus/render events kill Android TTS if spoken before */
+    if (voiceMode) setTimeout(() => speakReply(reply), 300);
   } catch (e) {
     chatState.msgs.push({ role: 'assistant', content: '⚠️ ' + (e.message || String(e)) });
+    chatState.loading = false;
+    renderChat();
   }
-  chatState.loading = false;
-  renderChat();
 }
 
 function chatReset() {
@@ -6777,7 +6780,7 @@ function renderChat() {
   const msgsEl = document.getElementById('chat-msgs');
   if (msgsEl) msgsEl.scrollTop = msgsEl.scrollHeight;
   const inp = document.getElementById('chat-input');
-  if (inp) setTimeout(() => inp.focus(), 50);
+  if (inp && !voiceMode) setTimeout(() => inp.focus(), 50);
 }
 
 function chatReset() {
