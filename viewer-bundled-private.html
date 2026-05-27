@@ -6565,54 +6565,78 @@ function stripForSpeech(text) {
     .trim();
 }
 
+function setVoiceStatus(msg) {
+  let el = document.getElementById('voice-status');
+  if (!el) {
+    el = document.createElement('div');
+    el.id = 'voice-status';
+    el.style.cssText = 'text-align:center;font-size:12px;color:#888;padding:4px 0;min-height:18px';
+    const wrap = document.querySelector('.chat-input-wrap') || document.getElementById('chat-send')?.parentNode;
+    if (wrap) wrap.parentNode.insertBefore(el, wrap);
+  }
+  el.textContent = msg || '';
+}
+
 function speakReply(text) {
-  if (!window.speechSynthesis) return;
+  if (!window.speechSynthesis) { setVoiceStatus('TTS not supported'); return; }
   const synth = window.speechSynthesis;
   synth.cancel();
 
   const spokenText = stripForSpeech(text);
-  if (!spokenText) return;
+  if (!spokenText) { setVoiceStatus('Nothing to speak'); return; }
+
+  /* Split into sentences — Android cuts off long utterances */
+  const chunks = spokenText.match(/[^।.!?]+[।.!?]*/g)?.map(s => s.trim()).filter(Boolean) || [spokenText];
 
   const lang = TTS_LANGS[state.lang] || 'en-IN';
   const base = lang.split('-')[0];
   const mic = document.getElementById('chat-mic');
 
-  function fire(voices) {
-    const utt = new SpeechSynthesisUtterance(spokenText);
-    utt.lang = lang;
-    utt.rate = 0.92;
-    utt.pitch = 1.0;
-    /* Pick best voice — generous fallback chain */
-    utt.voice = voices.find(v => v.lang === lang)
-             || voices.find(v => v.lang.startsWith(base))
-             || voices.find(v => v.lang === 'hi-IN')
-             || voices.find(v => v.lang.startsWith('hi'))
-             || voices[0]
-             || null;
+  function fireChunks(voices) {
+    setVoiceStatus('Speaking…');
     if (mic) { mic.textContent = '🔊'; mic.title = 'Tap to stop'; }
-    utt.onend = () => {
-      voiceUtterance = null;
-      if (mic) { mic.textContent = '🎙'; mic.title = 'Voice input'; }
-      setTimeout(() => startVoice(), 500);
-    };
-    utt.onerror = (e) => {
-      voiceUtterance = null;
-      if (mic) { mic.textContent = '🎙'; mic.title = 'Voice input'; }
-      /* On interrupted error just restart listening */
-      if (e.error === 'interrupted') setTimeout(() => startVoice(), 500);
-    };
-    voiceUtterance = utt;
-    synth.speak(utt);
+
+    let idx = 0;
+    function speakNext() {
+      if (!voiceUtterance && idx > 0) return; /* stopped externally */
+      if (idx >= chunks.length) {
+        voiceUtterance = null;
+        if (mic) { mic.textContent = '🎙'; mic.title = 'Voice input'; }
+        setVoiceStatus('');
+        setTimeout(() => startVoice(), 500);
+        return;
+      }
+      const utt = new SpeechSynthesisUtterance(chunks[idx++]);
+      utt.lang = lang;
+      utt.rate = 0.92;
+      utt.pitch = 1.0;
+      utt.voice = voices.find(v => v.lang === lang)
+               || voices.find(v => v.lang.startsWith(base))
+               || voices.find(v => v.lang === 'hi-IN')
+               || voices.find(v => v.lang.startsWith('hi'))
+               || voices[0] || null;
+      utt.onend = speakNext;
+      utt.onerror = (e) => {
+        if (e.error === 'interrupted' || e.error === 'canceled') return;
+        setVoiceStatus('TTS error: ' + e.error);
+        voiceUtterance = null;
+        if (mic) { mic.textContent = '🎙'; mic.title = 'Voice input'; }
+      };
+      voiceUtterance = utt;
+      synth.speak(utt);
+    }
+    speakNext();
   }
 
-  /* Android Chrome: voices often not ready — poll until available */
+  setVoiceStatus('Loading voice…');
   let attempts = 0;
   function trySpeak() {
     const voices = synth.getVoices();
-    if (voices.length > 0 || attempts++ > 10) {
-      fire(voices);
+    setVoiceStatus('Loading voice… ' + voices.length + ' found');
+    if (voices.length > 0 || attempts++ > 15) {
+      fireChunks(voices);
     } else {
-      setTimeout(trySpeak, 100);
+      setTimeout(trySpeak, 150);
     }
   }
   trySpeak();
@@ -6629,11 +6653,13 @@ function startVoice() {
     return;
   }
   acquireWakeLock();
-  /* Prime Android speechSynthesis — must be called within a user gesture */
+  /* Prime Android speechSynthesis within user gesture — volume 0 so inaudible */
   if (window.speechSynthesis) {
-    const primer = new SpeechSynthesisUtterance('');
+    const primer = new SpeechSynthesisUtterance('.');
+    primer.volume = 0;
+    primer.rate = 10;
     window.speechSynthesis.speak(primer);
-    window.speechSynthesis.cancel();
+    /* Do NOT cancel — cancelling removes the unlock */
   }
   const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
   if (!SR) {
