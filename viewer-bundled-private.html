@@ -6525,9 +6525,9 @@ const CHAT_UI = {
   }
 };
 
-/* Voice input — sa-IN unsupported by browsers; dev mode uses hi-IN (same Devanagari) */
-const VOICE_LANGS = { en:'en-IN', dev:'hi-IN', hi:'hi-IN', kn:'kn-IN' };
-const TTS_LANGS   = { en:'en-IN', dev:'hi-IN', hi:'hi-IN', kn:'kn-IN' };
+/* Voice input — try sa-IN for Sanskrit; fall back to hi-IN if unsupported */
+const VOICE_LANGS = { en:'en-IN', dev:'sa-IN', hi:'hi-IN', kn:'kn-IN' };
+const TTS_LANGS   = { en:'en-IN', dev:'sa-IN', hi:'hi-IN', kn:'kn-IN' };
 let voiceRec = null;
 let voiceUtterance = null;
 
@@ -6544,6 +6544,8 @@ function speakReply(text) {
     utt.pitch = 1.0;
     utt.voice = voices.find(v => v.lang === lang)
              || voices.find(v => v.lang.startsWith(base))
+             || voices.find(v => v.lang === 'hi-IN')
+             || voices.find(v => v.lang.startsWith('hi'))
              || null;
     const mic = document.getElementById('chat-mic');
     if (mic) { mic.textContent = '🔊'; mic.title = 'Tap to stop'; }
@@ -6605,6 +6607,35 @@ function startVoice() {
   voiceRec.continuous = false;
   voiceRec.interimResults = true;
   voiceRec.maxAlternatives = 1;
+
+  /* If sa-IN is unsupported, browser fires 'language-not-supported'; retry with hi-IN */
+  const _origLang = voiceRec.lang;
+  voiceRec.onerror = (e) => {
+    if (e.error === 'language-not-supported' && _origLang === 'sa-IN') {
+      voiceRec = null;
+      const SR2 = window.SpeechRecognition || window.webkitSpeechRecognition;
+      const rec2 = new SR2();
+      rec2.lang = 'hi-IN';
+      rec2.continuous = false;
+      rec2.interimResults = true;
+      rec2.onstart = voiceRec?.onstart;
+      rec2.onresult = (e2) => {
+        const t = Array.from(e2.results).map(r => r[0].transcript).join('');
+        const inp2 = document.getElementById('chat-input');
+        if (inp2) { inp2.value = t; inp2.dispatchEvent(new Event('input')); }
+      };
+      rec2.onend = voiceRec?.onend || (() => {
+        const inp2 = document.getElementById('chat-input');
+        if (inp2 && inp2.value.trim()) setTimeout(() => chatSend(), 100);
+      });
+      voiceRec = rec2;
+      try { rec2.start(); } catch(err) { voiceRec = null; }
+      return;
+    }
+    voiceRec = null;
+    const mic2 = document.getElementById('chat-mic');
+    if (mic2) { mic2.classList.remove('recording'); mic2.textContent = '🎙'; }
+  };
 
   voiceRec.onstart = () => {
     if (mic) { mic.classList.add('recording'); mic.title = 'Tap to stop'; }
