@@ -6412,7 +6412,7 @@ async function chatSend(text) {
   const q = (text || (inp && inp.value) || '').trim();
   if (!q || chatState.loading) return;
   if (inp) inp.value = '';
-  if (!text) voiceMode = false; /* typed send resets voice mode */
+  if (text) voiceMode = false; /* suggestion-click send (has text arg) resets voice mode */
 
   chatState.msgs.push({ role: 'user', content: q });
   chatState.loading = true;
@@ -6748,7 +6748,7 @@ function renderChat() {
         ${resetBtn}
         <textarea id="chat-input" rows="2" placeholder="${escapeHtml(ui.placeholder)}"
           onkeydown="if(event.key==='Enter'&&!event.shiftKey){event.preventDefault();chatSend()}"
-          oninput="document.getElementById('chat-send').disabled=!this.value.trim()||chatState.loading"
+          oninput="voiceMode=false;document.getElementById('chat-send').disabled=!this.value.trim()||chatState.loading"
         ></textarea>
       </div>
       <button id="chat-mic" class="chat-mic" onclick="startVoice()" title="Voice input">🎙</button>
