@@ -6396,11 +6396,14 @@ function getChatSystem() {
   };
   const lang = (typeof state !== 'undefined' && state.lang) ? state.lang : 'en';
   const instr = L[lang] || L.en;
+  const voiceInstr = (typeof voiceMode !== 'undefined' && voiceMode)
+    ? '\n\nVOICE MODE: This response will be read aloud. Write as natural spoken language only. Use NO markdown — no #, **, *, >, ---, bullet points, or numbered lists. Use short flowing sentences and natural pauses. Structure with words like First, Also, Finally instead of lists or headers.'
+    : '';
   return `You are a Bhagavad Gītā scholar specialising in the Madhva Vedānta tradition, drawing on Bannanje Govindacharya's commentary. Answer faithfully, grounded in the knowledge base. Always cite verse references (BG x.y). Follow the LANGUAGE instruction strictly.
 
 ${instr}
 
-${CHAT_SYSTEM_BASE}`;
+${CHAT_SYSTEM_BASE}${voiceInstr}`;
 }
 
 
@@ -6409,6 +6412,7 @@ async function chatSend(text) {
   const q = (text || (inp && inp.value) || '').trim();
   if (!q || chatState.loading) return;
   if (inp) inp.value = '';
+  if (!text) voiceMode = false; /* typed send resets voice mode */
 
   chatState.msgs.push({ role: 'user', content: q });
   chatState.loading = true;
@@ -6531,6 +6535,7 @@ const TTS_LANGS   = { en:'en-IN', dev:'sa-IN', hi:'hi-IN', kn:'kn-IN' };
 let voiceRec = null;
 let voiceUtterance = null;
 let wakeLock = null;
+let voiceMode = false;
 
 async function acquireWakeLock() {
   if (!('wakeLock' in navigator) || wakeLock) return;
@@ -6683,6 +6688,7 @@ function startVoice() {
     if (send && inp) send.disabled = !inp.value.trim() || chatState.loading;
     /* Auto-submit if text was captured */
     if (inp && inp.value.trim()) {
+      voiceMode = true;
       setTimeout(() => chatSend(), 100);
     } else {
       releaseWakeLock();
