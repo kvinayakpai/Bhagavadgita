@@ -234,6 +234,10 @@ body.lang-en .focus-card .focus-shloka .shloka-script{
 body.lang-kn .shloka .shloka-script{font-family:'Tiro Kannada',serif}
 body.lang-en .shloka .shloka-script{font-family:'Cormorant Garamond',serif;font-style:italic;font-size:16px}
 .shloka .shloka-ref{font-size:11px;color:var(--ink-fade);margin-top:6px;letter-spacing:.06em;text-align:right}
+/* Shloka attribution / placeholder styles */
+.sl-source{font-size:10px;color:var(--ink-fade);letter-spacing:.03em;margin-top:5px;font-style:italic;line-height:1.4}
+.sl-placeholder-badge{display:inline-block;font-size:8.5px;background:var(--paper);border:1px solid var(--rust);color:var(--rust);border-radius:3px;padding:1px 5px;margin-left:6px;letter-spacing:.05em;vertical-align:middle;font-style:normal}
+.focus-shloka .shloka-attr{font-size:10px;color:var(--ink-fade);letter-spacing:.03em;margin-top:4px;font-style:italic}
 
 .relations{margin:0 14px 80px}
 .relations h2{
@@ -4795,6 +4799,28 @@ const FULL_GITA = {
 तत्र श्रीर्विजयो भूतिर्ध्रुवा नीतिर्मतिर्मम ॥`,
 };
 
+/* ── SHLOKA ATTRIBUTION ────────────────────────────────────────────────────
+   All 701 Sanskrit verses in FULL_GITA are sourced from the standard
+   critical edition of the Bhagavad Gītā, aligned with the Gita Press,
+   Gorakhpur edition (a widely accepted reference text).
+
+   The Bhagavad Gītā is ancient scripture composed c. 200 BCE – 200 CE
+   and is in the public domain worldwide.
+
+   ⚠  PLACEHOLDER STATUS: Every entry below awaits replacement with
+   Bannanje Govindacharya's version once extracted from BhagavadGitaShloka.pdf.
+   When replacing, set SHLOKA_PLACEHOLDER = false for that verse key.
+   ──────────────────────────────────────────────────────────────────────── */
+const SHLOKA_SOURCE = {
+  text:   'Gita Press, Gorakhpur (standard Sanskrit critical edition)',
+  lang:   'Sanskrit (Devanāgarī)',
+  status: 'Placeholder — awaiting Bannanje Govindacharya version',
+  url:    'https://www.gitapress.org',
+  note:   'Ancient scripture; public domain worldwide',
+};
+/* Keys present in this set have been replaced with Bannanje version */
+const BANNANJE_DONE = new Set([]);
+
 /* Export for the renderer */
 
 /* ============================================================================
@@ -5019,6 +5045,10 @@ function renderFocus(){
   const shlokaInline = s ? `<div class="focus-shloka">
       <div class="shloka-script">${escapeHtml(shlokaText)}</div>
       <div class="shloka-ref">— ${escapeHtml(s.ref)}</div>
+      <div class="shloka-attr">${BANNANJE_DONE.has(n.id)
+        ? '✓ Bannanje Govindacharya version'
+        : `📖 ${SHLOKA_SOURCE.text} · <span style="color:var(--rust);font-style:normal">Placeholder</span>`
+      }</div>
     </div>` : '';
 
   let html = `<article class="focus-card">
@@ -5345,10 +5375,16 @@ function renderChapters() {
     const chips = conceptNodes.map(n =>
       `<span class="sl-concept-chip" onclick="setView('focus','${n.id}')">${escapeHtml(labelOf(n))}</span>`
     ).join('');
+    const isBannanje = BANNANJE_DONE.has(key);
+    const sourceLine = `<div class="sl-source">${isBannanje
+      ? '✓ Bannanje Govindacharya version'
+      : `📖 ${SHLOKA_SOURCE.text}<span class="sl-placeholder-badge">Placeholder</span>`
+    }</div>`;
     return `<div class="sl-card">
       <div class="sl-ref">BG ${key}</div>
       ${verseHtml}
       ${chips ? `<div class="sl-concepts">${chips}</div>` : ''}
+      ${sourceLine}
     </div>`;
   }).join('');
 
