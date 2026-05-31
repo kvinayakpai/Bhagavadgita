@@ -379,7 +379,6 @@ body.lang-kn .sl-meaning {
   <span id="stats"></span>
 </footer>
 
-<script src="bannanje_kn_private.js" onerror="window.BANNANJE_KN_PRIVATE = null;"></script>
 <script src="data.js"></script>
 <script src="positions.js"></script>
 <script>
@@ -1982,7 +1981,7 @@ function renderBrowse(){
 
 /* ---------- Bannanje optional private block ---------- */
 function renderBannanjePrivate(conceptId){
-  const entry = window.BANNANJE_KN_PRIVATE && BANNANJE_KN_PRIVATE[conceptId];
+  const entry = BANNANJE_KN && BANNANJE_KN[conceptId];
   if (!entry || !entry.verses || !entry.verses.length) return '';
   const verses = entry.verses.map(v => {
     const verseRef = v.verse_ref ? `<div class="bp-verse-ref">${escapeHtml(v.verse_ref)}</div>` : '';
@@ -2039,7 +2038,7 @@ function renderFocus(){
     ${n.madhva ? `<div class="madhva"><span class="madhva-prefix">${escapeHtml(UI('madhva'))} · </span>${escapeHtml(getActive(n.madhva))}</div>` : ''}
     ${shlokaInline}
     <div class="refs">${escapeHtml(n.refs)}</div>
-    ${(typeof window !== 'undefined' && window.BANNANJE_KN_PRIVATE && BANNANJE_KN_PRIVATE[n.id]) ? renderBannanjePrivate(n.id) : ''}
+    ${(typeof window !== 'undefined' && BANNANJE_KN && BANNANJE_KN[n.id]) ? renderBannanjePrivate(n.id) : ''}
   </article>`;
 
   // relations
@@ -2349,7 +2348,7 @@ function renderChapters() {
       ? `<div class="sl-verse${isKn?' kn':''}">${escapeHtml(verse)}</div>` : '';
     
     // Kannada meaning/commentary under the shloka directly
-    const meaning = (window.BANNANJE_VERSE_MEANINGS && BANNANJE_VERSE_MEANINGS[key]) || '';
+    const meaning = (BANNANJE_VERSE_MEANINGS && BANNANJE_VERSE_MEANINGS[key]) || '';
     const meaningHtml = meaning ? `<div class="sl-meaning">${escapeHtml(meaning)}</div>` : '';
 
     // Concept chips — computed inline, no pre-built map
