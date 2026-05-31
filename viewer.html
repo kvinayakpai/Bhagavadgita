@@ -22,7 +22,7 @@
   --e-is-a:#5a5a5a;       --e-includes:#3a6a3a; --e-leads-to:#2e6a7a;
   --e-opposite-of:#8a3a3a; --e-antidote-to:#3a6a7a; --e-arises-from:#7a4a2a;
   --e-predicates-on:#4a3a7a; --e-transforms-into:#7a5a3a;
-}
+--rust:#9e3a1a;}
 *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
 html,body{height:100%;min-height:100svh;margin:0;padding:0}
 body{
@@ -50,16 +50,19 @@ header.top{
   background:#f4ead8;
   border-bottom:1px solid var(--rule);
 }
-header .brand{flex:1;min-width:0;display:flex;align-items:baseline;gap:8px;overflow:hidden}
+header .brand{flex:1;min-width:0;display:flex;align-items:baseline;gap:6px;flex-wrap:wrap}
 header .brand .name{
-  font-family:'Cormorant Garamond',serif;font-weight:600;font-size:18px;line-height:1;
-  white-space:nowrap;overflow:hidden;text-overflow:ellipsis;
+  font-family:'Cormorant Garamond',serif;font-weight:600;font-size:17px;line-height:1.2;
+  white-space:normal;word-break:break-word;
 }
 header .brand .name em{font-style:italic;color:var(--ink-soft);font-weight:500}
 header .brand .crumb{
   font-size:11px;letter-spacing:.16em;text-transform:uppercase;
   color:var(--ink-fade);white-space:nowrap;flex:0 0 auto;
 }
+body.lang-dev header .brand .name,
+body.lang-hi  header .brand .name{ font-family:'Noto Sans Devanagari',sans-serif; font-size:14px; }
+body.lang-kn  header .brand .name{ font-family:'Noto Sans Kannada',sans-serif; font-size:14px; }
 header .lang{
   display:flex;gap:0;background:var(--paper);border:1px solid var(--rule);
   border-radius:8px;overflow:hidden;font-size:11px;letter-spacing:.06em;
@@ -153,6 +156,29 @@ body.lang-kn  .focus-card h1{font-family:'Tiro Kannada',serif;font-size:30px}
 }
 .focus-card .madhva .madhva-prefix{font-weight:600;color:var(--t-paramartha)}
 .focus-card .refs{font-size:11px;letter-spacing:.06em;color:var(--ink-fade);margin-top:10px}
+.ch-grid{display:flex;flex-wrap:wrap;gap:4px;padding:12px 16px 0}
+.ch-btn{min-width:32px;padding:4px 8px;border:1px solid var(--rule);border-radius:4px;
+  background:var(--paper);color:var(--ink);font-size:13px;cursor:pointer;font-family:inherit}
+.ch-btn.active{background:var(--rust);color:#fff;border-color:var(--rust)}
+.ch-list-wrap{padding:12px 16px 40px}
+.ch-hd{font-size:15px;font-weight:700;color:var(--ink);margin:8px 0 4px}
+.ch-sub{font-size:11px;letter-spacing:.06em;color:var(--ink-fade);text-transform:uppercase;margin-bottom:10px}
+.ch-section-hd{font-size:11px;font-weight:600;letter-spacing:.08em;color:var(--ink-fade);
+  text-transform:uppercase;margin:16px 0 6px;border-top:1px solid var(--rule);padding-top:12px}
+.ch-concept-row{display:flex;justify-content:space-between;align-items:baseline;
+  padding:5px 0;border-bottom:1px solid var(--rule)}
+.ch-concept-label{font-size:14px;color:var(--rust);cursor:pointer;font-weight:500}
+.ch-concept-label:hover{text-decoration:underline}
+.ch-verses{font-size:11px;color:var(--ink-fade);letter-spacing:.04em}
+.sl-card{background:var(--card-bg,#fdf8f0);border:1px solid var(--rule);border-radius:6px;
+  padding:10px 12px;margin-bottom:8px}
+.sl-ref{font-size:11px;font-weight:700;letter-spacing:.08em;color:var(--rust);margin-bottom:4px}
+.sl-verse{font-size:14px;line-height:1.7;color:var(--ink);white-space:pre-wrap;margin-bottom:6px}
+.sl-verse.kn{font-family:"Tiro Kannada",serif}
+.sl-concepts{display:flex;flex-wrap:wrap;gap:4px;margin-top:6px}
+.sl-concept-chip{font-size:11px;background:var(--rust);color:#fff;border-radius:10px;
+  padding:2px 8px;cursor:pointer}
+.sl-concept-chip:hover{opacity:.85}
 .focus-card .bannanje-private{
   margin-top:14px;padding:10px 14px;
   border-left:3px dashed var(--ink-fade);
@@ -204,6 +230,9 @@ body.lang-en .focus-card .focus-shloka .shloka-script{
 body.lang-kn .shloka .shloka-script{font-family:'Tiro Kannada',serif}
 body.lang-en .shloka .shloka-script{font-family:'Cormorant Garamond',serif;font-style:italic;font-size:16px}
 .shloka .shloka-ref{font-size:11px;color:var(--ink-fade);margin-top:6px;letter-spacing:.06em;text-align:right}
+/* Shloka attribution */
+.sl-source{font-size:10px;color:var(--ink-fade);letter-spacing:.03em;margin-top:5px;font-style:italic}
+.focus-shloka .shloka-attr{font-size:10px;color:var(--ink-fade);letter-spacing:.03em;margin-top:4px;font-style:italic}
 
 .relations{margin:0 14px 80px}
 .relations h2{
@@ -263,6 +292,49 @@ footer{
   border-top:1px solid var(--rule);
   font-size:10px;color:var(--ink-fade);letter-spacing:.06em;text-align:center;
 }
+
+/* ============ CHAT ============ */
+#view-chat{display:flex;flex-direction:column;height:calc(100vh - 120px);padding:0}
+.chat-msgs{flex:1;overflow-y:auto;padding:14px 14px 8px;display:flex;flex-direction:column;gap:12px}
+.chat-bubble{max-width:86%;padding:10px 14px;border-radius:16px;font-size:14px;line-height:1.7;white-space:pre-wrap;word-break:break-word}
+.chat-bubble.user{align-self:flex-end;background:var(--ink);color:var(--paper);border-radius:16px 16px 4px 16px}
+.chat-bubble.bot{align-self:flex-start;background:var(--paper);color:var(--ink);border:1px solid var(--rule);border-radius:16px 16px 16px 4px}
+.chat-typing{align-self:flex-start;display:flex;gap:5px;align-items:center;padding:12px 16px;background:var(--paper);border:1px solid var(--rule);border-radius:16px 16px 16px 4px}
+.chat-typing span{width:7px;height:7px;border-radius:50%;background:var(--rust);display:inline-block;animation:chat-bounce 1.2s infinite}
+.chat-typing span:nth-child(2){animation-delay:.2s}
+.chat-typing span:nth-child(3){animation-delay:.4s}
+@keyframes chat-bounce{0%,80%,100%{transform:translateY(0)}40%{transform:translateY(-5px)}}
+.chat-input-wrap{padding:10px 14px 14px;border-top:1px solid var(--rule);display:flex;gap:8px;align-items:flex-end;background:var(--bg)}
+.chat-input-wrap textarea{flex:1;border:1px solid var(--rule);border-radius:12px;padding:9px 13px;font-family:inherit;font-size:14px;resize:none;background:var(--paper);color:var(--ink);outline:none;line-height:1.6;max-height:120px}
+.chat-input-wrap textarea:focus{border-color:var(--rust)}
+.chat-send{background:var(--rust);color:#fff;border:none;border-radius:12px;width:40px;height:40px;font-size:18px;cursor:pointer;flex-shrink:0;display:flex;align-items:center;justify-content:center}
+.chat-send:disabled{background:#ccc;cursor:not-allowed}
+.chat-suggestions{display:flex;flex-wrap:wrap;gap:7px;padding:4px 0 2px}
+.chat-suggestion{background:var(--paper);border:1px solid var(--rule);border-radius:20px;padding:5px 13px;font-size:12px;color:var(--ink-soft);cursor:pointer;font-family:inherit;line-height:1.4}
+.chat-suggestion:hover{border-color:var(--rust);color:var(--rust)}
+.chat-empty{color:var(--ink-soft);font-size:14px;line-height:1.7;padding:4px 0 10px}
+.chat-reset{background:none;border:none;color:var(--ink-fade);font-size:12px;cursor:pointer;padding:0 0 8px;font-family:inherit}
+.chat-error{background:#fff0ed;border:1px solid #f0a090;border-radius:8px;padding:9px 13px;font-size:13px;color:var(--rust);margin:0 0 8px}
+.chat-mic{background:var(--paper);border:1px solid var(--rule);color:var(--ink);border-radius:12px;width:40px;height:40px;font-size:18px;cursor:pointer;flex-shrink:0;display:flex;align-items:center;justify-content:center;transition:background .2s}
+.chat-mic.recording{background:var(--rust);color:#fff;animation:mic-pulse 1s infinite}
+@keyframes mic-pulse{0%,100%{opacity:1}50%{opacity:.6}}
+
+.sl-meaning {
+  font-size: 13.5px;
+  line-height: 1.65;
+  color: var(--ink-soft);
+  white-space: pre-wrap;
+  margin-top: 10px;
+  padding: 10px 12px;
+  background: rgba(0,0,0,0.018);
+  border-left: 3px solid var(--rule);
+  border-radius: 0 6px 6px 0;
+  font-family: inherit;
+}
+body.lang-kn .sl-meaning {
+  font-family: 'Tiro Kannada', 'Noto Sans Kannada', serif;
+  font-size: 15.5px;
+}
 </style>
 </head>
 <body class="lang-en">
@@ -284,7 +356,9 @@ footer{
 <nav class="subhead" id="view-tabs">
   <button data-view="browse" class="on">Browse</button>
   <button data-view="focus">Focus</button>
+  <button data-view="chapters">Chapters</button>
   <button data-view="map">Map</button>
+  <button data-view="chat">Chat</button>
 </nav>
 
 <section class="search" id="search-bar">
@@ -294,7 +368,9 @@ footer{
 <main>
   <div id="view-browse"></div>
   <div id="view-focus" hidden></div>
+  <div id="view-chapters" hidden></div>
   <div id="view-map" hidden></div>
+  <div id="view-chat" hidden></div>
 </main>
 
 </div>
@@ -307,10 +383,25 @@ footer{
 <script src="data.js"></script>
 <script src="positions.js"></script>
 <script>
+/* ── SHLOKA ATTRIBUTION ────────────────────────────────────────────────────
+   All 701 Sanskrit verses in FULL_GITA are sourced from
+   Bannanje Govindacharya's Bhagavad Gītā (BhagavadGitaShloka.pdf).
+   © Bannanje Govindacharya — included for private study only.
+   Not for redistribution.
+   ──────────────────────────────────────────────────────────────────────── */
+const SHLOKA_SOURCE = {
+  text:   'Bannanje Govindacharya, Bhagavad Gītā',
+  lang:   'Sanskrit (Devanāgarī)',
+  status: 'Complete',
+};
+const BANNANJE_DONE = new Set(Object.keys(FULL_GITA)); /* all verses are Bannanje */
+
+/* Export for the renderer */
+
 /* ============================================================================
    Renderer
    ============================================================================ */
-const state = { lang:'en', view:'browse', focusId:null, q:'' };
+const state = { chapterSel: 2, lang:'en', view:'browse', focusId:null, q:'' };
 
 /* UI_STRINGS — tri-script translations for chrome labels (section headers,
    pill badges, footer counter, Madhva callout prefix). All values
@@ -341,10 +432,12 @@ const UI_STRINGS = {
   searchPlaceholder: { en:'Search concepts, tiers, verses…', dev:'सम्मतान्, स्तरान्, श्लोकान् अन्विष्यतु…', kn:'ಪರಿಕಲ್ಪನೆ, ಸ್ತರ, ಶ್ಲೋಕಗಳನ್ನು ಹುಡುಕಿ…', hi:'अवधारणा, स्तर, श्लोक खोजें…' },
   navBrowse:         { en:'Browse',           dev:'सूची',           kn:'ಸೂಚಿ', hi:'सूची' },
   navFocus:          { en:'Focus',            dev:'विवरणम्',        kn:'ವಿವರಣೆ', hi:'विवरण' },
+  navChapters:       { en:'Chapters',         dev:'अध्यायाः',       kn:'ಅಧ್ಯಾಯಗಳು', hi:'अध्याय' },
   navMap:            { en:'Map',              dev:'मानचित्रम्',     kn:'ನಕ್ಷೆ', hi:'नक्शा' },
+  navChat:           { en:'Chat',             dev:'संवादः',         kn:'ಸಂವಾದ', hi:'संवाद' },
   bannanjeHeader:    { en:'Bannanje commentary (personal study only — not for redistribution)', dev:'बन्नंजे-भाष्य (केवल वैयक्तिक अध्ययनार्थम् — न पुनर्वितरणाय)', kn:'ಬನ್ನಂಜೆ-ಭಾಷ್ಯ (ಕೇವಲ ವೈಯಕ್ತಿಕ ಅಧ್ಯಯನಕ್ಕಾಗಿ — ಪುನರ್ವಿತರಣೆಗಲ್ಲ)', hi:'बन्नंजे-भाष्य (केवल व्यक्तिगत अध्ययन हेतु — पुनर्वितरण के लिए नहीं)' },
   // Masthead — uses innerHTML so EN can keep the italic Gītā.
-  brandName:         { en:'Bhagavad <em>Gītā</em> · Concept KG', dev:'भगवद्गीता · संकल्पना-कोशः', kn:'ಭಗವದ್ಗೀತಾ · ಸಂಕಲ್ಪನಾ-ಕೋಶ', hi:'भगवद् <em>गीता</em> · अवधारणा कोश' },
+  brandName:         { en:'Bhagavad <em>Gītā</em> · Tatvam Jalam', dev:'भगवद्गीता · तत्त्व-जालम्', kn:'ಭಗವದ್ಗೀತಾ · ತತ್ತ್ವ-ಜಾಲ', hi:'भगवद् <em>गीता</em> · तत्त्व-जाल' },
   brandCrumb:        { en:'Madhva',           dev:'माध्व',          kn:'ಮಾಧ್ವ', hi:'माध्व' },
 };
 function UI(key){
@@ -364,9 +457,11 @@ function setLang(lang){
   const qEl = document.getElementById('q');
   if (qEl) qEl.placeholder = UI('searchPlaceholder');
   document.querySelectorAll('#view-tabs button[data-view]').forEach(b=>{
-    const k = b.dataset.view==='browse' ? 'navBrowse'
-            : b.dataset.view==='focus'  ? 'navFocus'
-            : b.dataset.view==='map'    ? 'navMap' : null;
+    const k = b.dataset.view==='browse'   ? 'navBrowse'
+            : b.dataset.view==='focus'    ? 'navFocus'
+            : b.dataset.view==='chapters' ? 'navChapters'
+            : b.dataset.view==='map'      ? 'navMap'
+            : b.dataset.view==='chat'     ? 'navChat' : null;
     if (k) b.textContent = UI(k);
   });
   // Masthead brand strings
@@ -384,9 +479,11 @@ function setView(v, id){
     b.classList.toggle('on', b.dataset.view===v);
   });
   document.getElementById('view-browse').hidden = v!=='browse';
-  document.getElementById('view-focus').hidden  = v!=='focus';
+  document.getElementById('view-focus').hidden    = v!=='focus';
+  document.getElementById('view-chapters').hidden = v!=='chapters';
   document.getElementById('view-map').hidden    = v!=='map';
-  document.getElementById('search-bar').hidden  = v==='map';
+  document.getElementById('view-chat').hidden   = v!=='chat';
+  document.getElementById('search-bar').hidden  = v==='map' || v==='chat';
   window.scrollTo({top:0, behavior:'instant'});
   render();
 }
@@ -454,7 +551,7 @@ function renderBrowse(){
       <div class="tier-head">
         <span class="tier-dot" style="background:var(--t-${tier.id})"></span>
         <span class="tier-name">${escapeHtml(state.lang==='hi'?(tier.hi||tier.dev):state.lang==='dev'?tier.dev:state.lang==='kn'?tier.kn:tier.en)}</span>
-        <span class="tier-gloss">${escapeHtml(tier.gloss)}</span>
+        <span class="tier-gloss">${escapeHtml(typeof tier.gloss==='object'?(tier.gloss[state.lang]||tier.gloss.en):tier.gloss)}</span>
         <span class="tier-count">${nodes.length}</span>
       </div>
     </section>
@@ -484,9 +581,25 @@ function renderBannanjePrivate(conceptId){
   if (!entry || !entry.verses || !entry.verses.length) return '';
   const verses = entry.verses.map(v => {
     const verseRef = v.verse_ref ? `<div class="bp-verse-ref">${escapeHtml(v.verse_ref)}</div>` : '';
-    const bhashya = v.bhashya ? `<div class="bp-bhashya">${escapeHtml(v.bhashya)}</div>` : '';
+    // bhashya: string (legacy) or {kn,en,dev,hi}. If active lang missing, fall back to kn with a notice.
+    let bhashyaText = '';
+    let pendingNotice = '';
+    if (v.bhashya) {
+      if (typeof v.bhashya === 'string') {
+        bhashyaText = v.bhashya;
+      } else {
+        bhashyaText = v.bhashya[state.lang] || '';
+        if (!bhashyaText) {
+          bhashyaText = v.bhashya.kn || '';
+          if (state.lang !== 'kn' && bhashyaText) {
+            pendingNotice = `<div class="bp-source" style="color:#a33;font-style:italic">[translation pending — showing Kannada source]</div>`;
+          }
+        }
+      }
+    }
+    const bhashya = bhashyaText ? `<div class="bp-bhashya">${escapeHtml(bhashyaText)}</div>` : '';
     const source = v.source_page ? `<div class="bp-source">— ${escapeHtml(v.source_page)}</div>` : '';
-    return `<div class="bp-verse">${verseRef}${bhashya}${source}</div>`;
+    return `<div class="bp-verse">${verseRef}${pendingNotice}${bhashya}${source}</div>`;
   }).join('');
   return `<div class="bannanje-private">
     <div class="bp-header">${escapeHtml(UI('bannanjeHeader'))}</div>
@@ -507,6 +620,7 @@ function renderFocus(){
   const shlokaInline = s ? `<div class="focus-shloka">
       <div class="shloka-script">${escapeHtml(shlokaText)}</div>
       <div class="shloka-ref">— ${escapeHtml(s.ref)}</div>
+      <div class="shloka-attr">— ${SHLOKA_SOURCE.text}</div>
     </div>` : '';
 
   let html = `<article class="focus-card">
@@ -586,6 +700,278 @@ function renderFocus(){
                   falls back to auto-layout otherwise ---------- */
 const HAS_HANDLAID = (typeof KG_POSITIONS !== 'undefined') && (typeof KG_TIER_BANDS !== 'undefined');
 
+
+function buildChapterIndex() {
+  // Returns {chNum: [{node, refsRaw}]}
+  const idx = {};
+  NODES.forEach(n => {
+    if (!n.refs) return;
+    const nums = new Set();
+    n.refs.replace(/BG\s*(\d+)[\.·]/g, (_,c) => nums.add(+c));
+    nums.forEach(c => {
+      if (!idx[c]) idx[c] = [];
+      idx[c].push({node:n, refsRaw:n.refs});
+    });
+  });
+  return idx;
+}
+
+function buildShlokaChapterIndex() {
+  /* Returns {"ch.v": [{nodeId, label}]} for ALL nodes, expanding ranges.
+     Handles: "BG 4.7"  "BG 8.3 · 14.27 · 15.18"  "BG 4.6–8"  "BG 7.4–5 · 9.10" */
+  const map = {};
+
+  function addEntry(ch, v, nodeId) {
+    const key = ch + '.' + v;
+    if (!map[key]) map[key] = [];
+    // Avoid duplicates
+    if (!map[key].find(e => e.nodeId === nodeId)) {
+      map[key].push({nodeId});
+    }
+  }
+
+  function parseRefs(refsStr, nodeId) {
+    if (!refsStr) return;
+    // Split on · (middle dot) or comma
+    const segments = refsStr.split(/[·,]/).map(s => s.trim()).filter(Boolean);
+    let lastCh = null;
+    segments.forEach(seg => {
+      // Match: BG <ch>.<vStart>[–<vEnd>]
+      const m = seg.match(/BG\s*(\d+)[\.·](\d+)(?:[–\-](\d+))?/);
+      if (m) {
+        lastCh = parseInt(m[1]);
+        const vStart = parseInt(m[2]);
+        const vEnd   = m[3] ? parseInt(m[3]) : vStart;
+        for (let v = vStart; v <= vEnd; v++) addEntry(lastCh, v, nodeId);
+      } else if (lastCh) {
+        // Continuation like "15.16–18" without "BG" prefix
+        const m2 = seg.match(/(\d+)[\.·](\d+)(?:[–\-](\d+))?/);
+        if (m2) {
+          const ch2 = parseInt(m2[1]);
+          const vS  = parseInt(m2[2]);
+          const vE  = m2[3] ? parseInt(m2[3]) : vS;
+          for (let v = vS; v <= vE; v++) addEntry(ch2, v, nodeId);
+          lastCh = ch2;
+        }
+      }
+    });
+  }
+
+  // Scan every node's refs field
+  NODES.forEach(n => {
+    if (n.refs) parseRefs(n.refs, n.id);
+  });
+
+  // Also cover SHLOKAS ref field (some nodes may be outside NODES list)
+  Object.entries(SHLOKAS).forEach(([id, s]) => {
+    if (s.ref) parseRefs(s.ref, id);
+  });
+
+  return map;
+}
+
+
+function devToKn(str) {
+  /* Devanagari → Kannada script transliteration for Sanskrit texts */
+  const V = { /* independent vowels */
+    '\u0905':'ಅ','\u0906':'ಆ','\u0907':'ಇ','\u0908':'ಈ',
+    '\u0909':'ಉ','\u090A':'ಊ','\u090B':'ಋ','\u0960':'ೠ',
+    '\u090C':'ಌ','\u090F':'ಏ','\u0910':'ಐ','\u0913':'ಓ','\u0914':'ಔ',
+  };
+  const M = { /* vowel marks (matras) */
+    '\u093E':'ಾ','\u093F':'ಿ','\u0940':'ೀ','\u0941':'ು','\u0942':'ೂ',
+    '\u0943':'ೃ','\u0944':'ೄ','\u0947':'ೇ','\u0948':'ೈ',
+    '\u094B':'ೋ','\u094C':'ೌ','\u094D':'್',
+    '\u0902':'ಂ','\u0903':'ಃ','\u0901':'ಁ','\u0900':'ಀ',
+  };
+  const C = { /* consonants */
+    '\u0915':'ಕ','\u0916':'ಖ','\u0917':'ಗ','\u0918':'ಘ','\u0919':'ಙ',
+    '\u091A':'ಚ','\u091B':'ಛ','\u091C':'ಜ','\u091D':'ಝ','\u091E':'ಞ',
+    '\u091F':'ಟ','\u0920':'ಠ','\u0921':'ಡ','\u0922':'ಢ','\u0923':'ಣ',
+    '\u0924':'ತ','\u0925':'ಥ','\u0926':'ದ','\u0927':'ಧ','\u0928':'ನ',
+    '\u092A':'ಪ','\u092B':'ಫ','\u092C':'ಬ','\u092D':'ಭ','\u092E':'ಮ',
+    '\u092F':'ಯ','\u0930':'ರ','\u0932':'ಲ','\u0935':'ವ',
+    '\u0936':'ಶ','\u0937':'ಷ','\u0938':'ಸ','\u0939':'ಹ',
+    '\u0933':'ಳ','\u0929':'ನ','\u0931':'ರ','\u0934':'ಳ',
+  };
+  const S = { /* specials */
+    '\u0950':'ಓಂ', /* ॐ */
+    '\u0964':'।','\u0965':'॥',
+    '\u0966':'೦','\u0967':'೧','\u0968':'೨','\u0969':'೩',
+    '\u096A':'೪','\u096B':'೫','\u096C':'೬','\u096D':'೭',
+    '\u096E':'೮','\u096F':'೯',
+  };
+  const combined = Object.assign({}, V, M, C, S);
+  return Array.from(str).map(ch => combined[ch] || ch).join('');
+}
+
+function devToIast(str) {
+  /* Devanagari → IAST transliteration for Sanskrit texts.
+     Handles inherent-'a' rule: consonant without following matra/virama → +a */
+  const IV = { // independent vowels
+    'अ':'a','आ':'ā','इ':'i','ई':'ī','उ':'u','ऊ':'ū',
+    'ऋ':'ṛ','ॠ':'ṝ','ऌ':'ḷ','ए':'e','ऐ':'ai','ओ':'o','औ':'au','ॐ':'oṃ',
+  };
+  const VM = { // vowel marks (matras)
+    '\u093E':'ā','\u093F':'i','\u0940':'ī','\u0941':'u','\u0942':'ū',
+    '\u0943':'ṛ','\u0944':'ṝ','\u0947':'e','\u0948':'ai',
+    '\u094B':'o','\u094C':'au',
+  };
+  const CO = { // consonants (base, without inherent 'a')
+    'क':'k','ख':'kh','ग':'g','घ':'gh','ङ':'ṅ',
+    'च':'c','छ':'ch','ज':'j','झ':'jh','ञ':'ñ',
+    'ट':'ṭ','ठ':'ṭh','ड':'ḍ','ढ':'ḍh','ण':'ṇ',
+    'त':'t','थ':'th','द':'d','ध':'dh','न':'n',
+    'प':'p','फ':'ph','ब':'b','भ':'bh','म':'m',
+    'य':'y','र':'r','ल':'l','व':'v',
+    'श':'ś','ष':'ṣ','स':'s','ह':'h','ळ':'ḷ',
+  };
+  const VIRAMA  = '\u094D'; // ् suppresses inherent vowel
+  const ANUSV   = '\u0902'; // ं
+  const VISARGA = '\u0903'; // ः
+  const CHANDRAB= '\u0901'; // ँ
+
+  const chars = Array.from(str);
+  let out = '';
+  let pending = null; // pending consonant string (IAST, awaiting vowel decision)
+
+  const flush = (vowel = 'a') => {
+    if (pending !== null) { out += pending + vowel; pending = null; }
+  };
+
+  for (let i = 0; i < chars.length; i++) {
+    const ch = chars[i];
+    if (ch in IV)          { flush(); out += IV[ch]; }
+    else if (ch in CO)     { flush(); pending = CO[ch]; }
+    else if (ch === VIRAMA){ if (pending !== null) { out += pending; pending = null; } }
+    else if (ch in VM)     { flush(VM[ch]); }
+    else if (ch === ANUSV) { flush(); out += 'ṃ'; }
+    else if (ch === VISARGA){ flush(); out += 'ḥ'; }
+    else if (ch === CHANDRAB){ flush(); out += 'ṃ'; }
+    else                   { flush(); out += ch; }
+  }
+  flush(); // flush any trailing consonant
+  return out;
+}
+
+function renderChapters() {
+  const root = document.getElementById('view-chapters');
+  const conceptIdx  = buildChapterIndex();       // ch → [{node, refsRaw}]
+  const shlokaMap   = buildShlokaChapterIndex(); // "ch.v" → [{nodeId, s}]
+  const chapters = [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18];
+  const sel = state.chapterSel || 2;
+  const isKn = (state.lang === 'kn');
+
+  const chTitle = {
+    1:'Arjuna-viṣāda', 2:'Sāṅkhya-yoga', 3:'Karma-yoga',
+    4:'Jñāna-karma-sannyāsa', 5:'Karma-sannyāsa', 6:'Dhyāna-yoga',
+    7:'Vijñāna-yoga', 8:'Akṣara-brahma', 9:'Rāja-vidyā-rāja-guhya',
+    10:'Vibhūti-yoga', 11:'Viśvarūpa-darśana', 12:'Bhakti-yoga',
+    13:'Kṣetra-kṣetrajña', 14:'Guṇa-traya-vibhāga', 15:'Puruṣottama',
+    16:'Daivāsura-sampad-vibhāga', 17:'Śraddhā-traya-vibhāga',
+    18:'Mokṣa-sannyāsa'
+  };
+
+  const btnRow = chapters.map(ch =>
+    `<button class="ch-btn${ch===sel?' active':''}" onclick="state.chapterSel=${ch};renderChapters()">${ch}</button>`
+  ).join('');
+
+  // ── Concepts section ──────────────────────────────────────────────────────
+  const conceptRows = (conceptIdx[sel]||[]).map(({node:n, refsRaw}) =>
+    `<div class="ch-concept-row">
+      <span class="ch-concept-label" onclick="setView('focus','${n.id}')">${escapeHtml(labelOf(n))}</span>
+      <span class="ch-verses">${escapeHtml(refsRaw)}</span>
+    </div>`
+  ).join('');
+  const conceptsSection = conceptRows
+    ? `<div class="ch-section-hd">Concepts</div>${conceptRows}`
+    : '';
+
+  // ── Full Shlokas section from FULL_GITA ───────────────────────────────────
+  const selStr = String(sel);
+  const verseKeys = Object.keys(FULL_GITA)
+    .filter(k => k.split('.')[0] === selStr)
+    .sort((a,b) => parseInt(a.split('.')[1]) - parseInt(b.split('.')[1]));
+
+  /* Helper: given a "ch.v" key, return all NODES whose refs cover that verse */
+  function linkedConceptsFor(ch, v) {
+    const out = [], seen = new Set();
+    function testNode(refsStr, nodeId, node) {
+      if (seen.has(nodeId)) return;
+      let lastCh = null;
+      refsStr.split(/[·,]/).forEach(function(seg) {
+        seg = seg.trim();
+        var m = seg.match(/BG\s*(\d+)[.\u00b7](\d+)(?:[\u2013\-](\d+))?/);
+        if (m) {
+          lastCh = parseInt(m[1]);
+          if (lastCh === ch) {
+            var vs=parseInt(m[2]), ve=m[3]?parseInt(m[3]):vs;
+            if (v>=vs && v<=ve && !seen.has(nodeId)) { out.push(node); seen.add(nodeId); }
+          }
+        } else if (lastCh !== null) {
+          var m2 = seg.match(/(\d+)[.\u00b7](\d+)(?:[\u2013\-](\d+))?/);
+          if (m2) {
+            var ch2=parseInt(m2[1]);
+            if (ch2===ch) {
+              var vs2=parseInt(m2[2]), ve2=m2[3]?parseInt(m2[3]):vs2;
+              if (v>=vs2 && v<=ve2 && !seen.has(nodeId)) { out.push(node); seen.add(nodeId); }
+            }
+            lastCh = ch2;
+          }
+        }
+      });
+    }
+    (NODES||[]).forEach(function(n){ if(n.refs) testNode(n.refs+'', n.id, n); });
+    Object.entries(SHLOKAS||{}).forEach(function(e){
+      var id=e[0], s=e[1];
+      if(!s.ref || seen.has(id)) return;
+      var n=(NODES||[]).find(function(x){return x.id===id;});
+      if(n) testNode(s.ref+'', id, n);
+    });
+    return out;
+  }
+
+  const shlokaCards = verseKeys.map(key => {
+    const [chS, vS] = key.split('.');
+    const chN = parseInt(chS), vN = parseInt(vS);
+    const devText = FULL_GITA[key];
+    // Render text
+    let verse;
+    if (isKn)                                       { verse = devToKn(devText); }
+    else if (state.lang==='dev'||state.lang==='hi') { verse = devText; }
+    else                                            { verse = devToIast(devText); }
+    const verseHtml = verse
+      ? `<div class="sl-verse${isKn?' kn':''}">${escapeHtml(verse)}</div>` : '';
+    
+    // Kannada meaning/commentary under the shloka directly
+    const meaning = (window.BANNANJE_VERSE_MEANINGS && BANNANJE_VERSE_MEANINGS[key]) || '';
+    const meaningHtml = meaning ? `<div class="sl-meaning">${escapeHtml(meaning)}</div>` : '';
+
+    // Concept chips — computed inline, no pre-built map
+    const conceptNodes = linkedConceptsFor(chN, vN);
+    const chips = conceptNodes.map(n =>
+      `<span class="sl-concept-chip" onclick="setView('focus','${n.id}')">${escapeHtml(labelOf(n))}</span>`
+    ).join('');
+    return `<div class="sl-card">
+      <div class="sl-ref">BG ${key}</div>
+      ${verseHtml}
+      ${meaningHtml}
+      ${chips ? `<div class="sl-concepts">${chips}</div>` : ''}
+    </div>`;
+  }).join('');
+
+  const shlokaSection = shlokaCards
+    ? `<div class="ch-section-hd">Shlokas (${verseKeys.length})</div>${shlokaCards}`
+    : `<p style="color:var(--ink-fade);font-size:14px;padding:6px 0">No shlokas for this chapter.</p>`;
+
+  root.innerHTML = `
+    <div class="ch-grid">${btnRow}</div>
+    <div class="ch-list-wrap">
+      <div class="ch-hd">Chapter ${sel} — ${chTitle[sel]||''}</div>
+      ${conceptsSection}
+      ${shlokaSection}
+    </div>`;
+}
 function renderMap(){
   const root = document.getElementById('view-map');
 
@@ -688,9 +1074,11 @@ function renderMapAuto(root){
 function render(){
   if (state.view==='browse') renderBrowse();
   else if (state.view==='focus') renderFocus();
+  else if (state.view==='chapters') renderChapters();
   else if (state.view==='map') renderMap();
+  else if (state.view==='chat') renderChat();
   const f = document.getElementById('stats');
-  if (f) f.textContent = `${NODES.length} ${UI('concepts')} · ${EDGES.length} ${UI('relations')} · ${Object.keys(SHLOKAS).length} ${UI('shlokas')} · ${TIERS.length} ${UI('tiers')}`;
+  if (f) f.textContent = `v3 · ${NODES.length} ${UI('concepts')} · ${EDGES.length} ${UI('relations')} · ${Object.keys(FULL_GITA).length} ${UI('shlokas')} · ${TIERS.length} ${UI('tiers')}`;
 }
 
 /* ---------- WIRING ---------- */
@@ -721,8 +1109,1498 @@ document.addEventListener('click', (ev)=>{
   if (g){ setView('focus', g.dataset.id); return; }
 });
 
+
+/* ============ CHAT ASSISTANT ============ */
+const CHAT_SYSTEM_BASE = `BHAGAVAD GĪTĀ — MADHVA / BANNANJE GOVINDACHARYA KNOWLEDGE BASE
+
+=== CONCEPTS ===
+
+[brahman] Brahman  |  Verses: BG 8.3 · 14.27 · 15.18
+  Title: Brahman — the supreme imperishable
+  Bannanje: Bannanje (BG 8.3): the word 'Brahman' here means the supreme imperishable (paramākṣara) — Bhagavān who is greater than all. He sets out a four-fold gradation: 'brahma' = jīvas; 'parabrahma' = liberated jīvas; 'paramabrahma' = Śrī-tattva, the ever-liberated Śrī-Lakṣmī; 'parama-mahā-brahma' = Nārāyaṇa. Bhagavān is supreme even over the parāyaṇas, i.e., the tattvābhimāni devatās who sustain us; He is
+
+[paramatman] Paramātman  |  Verses: BG 13.22 · 15.17
+  Title: Paramātman — upadraṣṭā, bhartā, parama-puruṣa within the body
+  Bannanje: Bannanje (BG 13.22): the Paramātman is the all-seeing upadraṣṭā, anumantā ('one who consents as He wills'), bhartā ('upholder of all'), bhoktā ('eater of the essence'), and Maheśvara — the parama-puruṣa who is with the jīva in this body. While cit-prakṛti with jaḍa-prakṛti forms the body and the jīva there enjoys sukha-duḥkha through the indriyas, He stands above all as their impeller, witnessing 
+
+[purushottama] Puruṣottama  |  Verses: BG 15.18–19
+  Title: Puruṣottama — beyond kṣara, higher even than akṣara
+  Bannanje: Bannanje (BG 15.18): Having said in the previous verse 'he who is beyond both kṣara and akṣara is puruṣottama,' here Krishna plainly declares 'that distinct Puruṣottama is myself.' Two words 'atīta' and 'uttama' are used together for a special reason: the kṣara-puruṣa's existence extends only within this brahmāṇḍa, while Lakṣmī and Nārāyaṇa stand beyond this brahmāṇḍa — that is what 'atīta' explai
+
+[ksara_purusha] Kṣara-puruṣa  |  Verses: BG 15.16
+  Title: Kṣara-puruṣa — Brahmā and all jīvas with falling bodies
+  Bannanje: Bannanje (BG 15.16): kṣara-puruṣas are those whose body one day falls — all jīvas including Brahmā. Even all the devatās headed by Brahmā cannot go to mokṣa together with their body. Caturmukha Brahmā's lifespan is one kalpa (31,104 thousand crore human years); after that his body too is reduced to ashes. Bannanje cites Īśopaniṣat 17 — 'vāyur anilam amṛtam athedaṃ bhasmāntaṃ śarīram': 'the Prāṇa-d
+
+[akshara_purusha] Akṣara-puruṣa  |  Verses: BG 15.16
+  Title: Akṣara-puruṣa — Śrī-Lakṣmī, the kūṭasthā
+  Bannanje: Bannanje (BG 15.16): Śrī-Lakṣmī, who has the indestructible jñāna-ānanda-maya svarūpa-body, is the akṣara-puruṣā. All kṣara-puruṣas become akṣara in mokṣa, but Lakṣmī is ever akṣarā. Here Lakṣmī is described as 'kūṭasthā'. 'Kūṭa' means 'joining together': the mother who is the cause of the joining of jīva and body is Śrī-Lakṣmī — Jaganmātā Śrī-Lakṣmī, the śakti who, ever-unattached, without any ti
+
+[avatara] Avatāra  |  Verses: BG 4.6–8
+  Title: Avatāra — birthless Bhagavān descending by His own will
+  Bannanje: Bannanje (BG 4.6): Bhagavān is the lord of all jīvas; many times He descends to the earth. There is no birth for Him, yet He is born; He is avyaya, He does not assume a perishable body and take birth — therefore birth-and-death through a body do not apply to Him. The word 'ātma-māyayā' here has several senses: the curtain of moha that covers the jīva is ātma-māyā; Bhagavān's mahimā is ātma-māyā; B
+
+[svarupa_aikya] Svarūpa-aikya  |  Verses: BG 10.20 · 11.24
+  Title: Bhagavān as antaryāmi-ātman of all jīvas — not jīvātmā-paramātmā identity
+  Bannanje: Bannanje (BG 10.20): Krishna says, 'I am filled within each jīva as ātmā; I am the ātmā of all jīvas.' Some mistakenly take this as saying 'jīvātmā and paramātmā are one,' but here Krishna says 'I am filled as the ātmā of the jīvātmās,' not 'I myself am the jīvātmā.' This points to the bimba-rūpī Bhagavān who is antaryāmī within each jīva. Bhagavān is sarva-bhūta-āśaya-sthitaḥ — He stands within t
+
+[sarvottamatva] Sarvottamatva  |  Verses: BG 7.7 · 11.43 · 18.65
+  Title: Sarvottamatva — none equal to or greater than Hari in the three lokas
+  Bannanje: Bannanje (BG 11.43): 'You who have created all and sustain all are the father of the world. As Jagad-guru — to whom I behaved with utter familiarity. There is no one equal to you. There is no second example to compare you with. In the whole world there is no other śakti that surpasses you.' [The 'three lokas' here means the group of lokas below the earth, the earth-loka, and the group of lokas abo
+
+[taratamya] Tāratamya  |  Verses: BG 7.7 · 15.16–18
+  Title: Three-fold rank: kṣara, akṣarā Lakṣmī, Puruṣottama
+  Bannanje: Bannanje (BG 15.16): In the sentient world there are two kinds of puruṣas — kṣara-puruṣas (all jīvas including Brahmā, whose bodies must fall — even Caturmukha Brahmā's body becomes ashes at the end of one kalpa), and the akṣara-puruṣā, Śrī-Lakṣmī, who has the indestructible jñāna-ānanda-maya svarūpa-body. All kṣara-puruṣas become akṣara in mokṣa, but Lakṣmī is ever akṣarā; she is called kūṭasthā 
+
+[pancha_bheda] Pañca-bheda  |  Verses: BG 7.4–5 · 15.7 · 15.16–18
+  Title: Bhagavān\\
+  Bannanje: Bannanje (BG 7.4): The eight-fold jaḍa-prakṛti under Bhagavān — earth, water, fire, air, ākāśa, manas, buddhi, ahaṅkāra (with supta-prajñā). Pre-creation, the whole world is in subtle form in Bhagavān's belly; then He fashions creation, jaḍa-prakṛti being made first. From the five mahābhūtas the entire sthūla-prapañca is a vikāra. With each element a corresponding abhimāni-devatā arises: 'manas be
+
+[isvara] Īśvara  |  Verses: BG 18.61
+  Title: Īśvara — the indweller who turns all beings
+  Bannanje: Bannanje (BG 18.61): The all-powerful Bhagavān resides in the heart-lotus of every being. Seated within the wondrous machine of the piṇḍāṇḍa and brahmāṇḍa, He keeps it ceaselessly turning by prakṛti's māyā, by His own will. He is the master of both the cosmic and the bodily order, the great consciousness within everyone giving them experience and controlling them. All action proceeds from His glor
+
+[prakriti] Prakṛti  |  Verses: BG 7.4–5 · 9.10
+  Title: Prakṛti — the eightfold material substrate under Hari
+  Bannanje: Bannanje (BG 7.4, 9.10): Before sṛṣṭi the whole world rests in subtle form in Bhagavān's belly; He then unfolds the eightfold jaḍa-prakṛti — earth, water, fire, air, ākāśa, manas, buddhi, ahaṅkāra — the root material of all gross things. Each element's creation is also the creation of its abhimāni-devatā. The Lord pervades this aṣṭa-vidha prakṛti as Viśva, Taijasa, Prājña, Turīya, Ātma, Antarātma,
+
+[para_prakriti] Para-prakṛti  |  Verses: BG 7.5
+  Title: Para-prakṛti — Śrī-tattva, the cetana mother of the world
+  Bannanje: Bannanje (BG 7.5): Beyond the eightfold jaḍa-prakṛti is a higher prakṛti — the cetana-prakṛti, Śrī-tattva, eternal support of all jīvas; this is what upholds the world. The Veda calls jaḍa-prakṛti 'akṣara', this cetana-prakṛti 'paramākṣara', and Bhagavān 'parataḥ paramākṣara'. Lakṣmī thus mediates between Bhagavān and the world and is called Lokamātā. Both prakṛtis are nitya, never destroyed; only
+
+[kala] Kāla  |  Verses: BG 10.30 · 11.32
+  Title: Kāla — Bhagavān as reckoner and destroyer
+  Bannanje: Bannanje (BG 10.30, 11.32): 'kālaḥ kalayatām aham' — Among reckoners Bhagavān is Kāla; the word kāla (from the dhātu kala) carries the senses of reckoning, mṛtyu, Śiva, Durgā, Kālāgni — in all of these the Lord's special vibhūti is hidden. Bhagavān as 'Kālaḥ' has gathered all guṇas and capacities within Himself (kalayati). When we forget this tattva and become ahaṅkārī, the same tattva becomes 'Kā
+
+[karma_tattva] Karma  |  Verses: BG 3.5 · 4.17
+  Title: Karma — its mysterious course
+  Bannanje: Bannanje (BG 4.17): One must know about karma, vikarma (the opposite) and akarma (renunciation of action); the course of karma is gahana — most secret. Even great jñānīs find it hard to discern what is karma and what is akarma; history (Vyāsa born of an unmarried fisher-girl, his sons Pāṇḍu and Dhṛtarāṣṭra born of widows, the Pāṇḍavas born to wives via others) shows the dharma/adharma distinction 
+
+[svabhava] Svabhāva  |  Verses: BG 5.14 · 8.3 · 18.41
+  Title: Svabhāva — the jīva\\
+  Bannanje: Bannanje (BG 5.14, 8.3, 18.41): The jīva is anādi-nitya — not created by Bhagavān; to this anādi-nitya jīva belongs an anādi-nitya extraordinary svabhāva (quality of soul). The jīva moves according to its svabhāva, as a mango-seed yields only mango. The svabhāva is a sāttvika-rājasa-tāmasa-saṁmiśraṇa; one belongs to the group of whichever guṇa is pradhāna. Bhagavān, like a gardener, plants the jīv
+
+[aksharam_param_brahma] Akṣaraṃ Brahma  |  Verses: BG 8.3 · 8.21
+  Title: Akṣaraṁ paramaṁ Brahma — the supreme imperishable
+  Bannanje: Bannanje (BG 8.3, 8.21): 'akṣaraṁ paramaṁ brahma' — Bhagavān Himself is Paramākṣara, the greatest of all, the paramaṁ brahma. The Viṣṇu-sahasranāma calls Him paramaṁ mahat-tejaḥ, mahat-tapaḥ, mahad-brahma, paraṁ parāyaṇam — light of lights, final goal of all thought, gamya of all jñāna. A graded usage: brahma = jīvas; parabrahma = mukta-jīvas; paramabrahma = Śrī-tattva, the nitya-mukta Śrī-Lakṣmī;
+
+[kshetrajna] Kṣetrajña  |  Verses: BG 13.2
+  Title: Kṣetrajña — Bhagavān residing in every field
+  Bannanje: Bannanje (BG 13.2): Kṛṣṇa says "māṃ viddhi" — "know Me as the kṣetrajña in all kṣetras." The Bhagavān who fills the kṣetra inside and out and knows it comprehensively is the kṣetrajña. The jīva is not a kṣetrajña; the jīva is kṣetra-stha (resident in the kṣetra). Knowing kṣetra and kṣetrajña distinctly is the true jñāna.
+
+[mahabhutas] Mahābhūtas  |  Verses: BG 13.5
+  Title: The five gross elements
+
+[avyakta] Avyakta  |  Verses: BG 13.5 · 8.18
+  Title: Avyakta — the unmanifest Bhagavān
+  Bannanje: Bannanje (BG 8.18): "avyakta" here is Bhagavān in his unmanifest aspect. From the unmanifest Bhagavān all manifest things take form at the start of his "day" (cosmic dawn); at "night" (cosmic dissolution) they vanish back into the same unmanifest Bhagavān. At mahā-pralaya the manifest world contracts into paramāṇu-form and rests in him; at sṛṣṭi-kāla it expands from sūkṣma to sthūla form again.
+
+[indriyas] Indriyas  |  Verses: BG 13.6 · 15.7
+  Title: The eleven indriyas + five viṣayas
+  Bannanje: Bannanje (BG 13.6): The ten indriyas — ear, skin, eye, tongue, nose (jñānendriyas); voice, two hands, two feet, pāyu, upastha (karmendriyas) — plus manas as the eleventh. Their five viṣayas are śabda, sparśa, rūpa, rasa, gandha. Each is associated with a presiding devatā: e.g., manas — Indra, Kāma, Aniruddha; eye — Sūrya; tongue — Varuṇa; nose — the Aśvins; mouth — Agni; hands — the two Vāyu-sons;
+
+[icchā_dveṣa] Icchā–Dveṣa  |  Verses: BG 13.6 · 7.27
+  Title: Icchā and Dveṣa — desire and aversion
+  Bannanje: Bannanje (BG 13.6): icchā (desire) and dveṣa (aversion) are listed among the seven vikāras of the kṣetra (the others being sukha, duḥkha, saṃghāta, cetanā, dhṛti). Bannanje names the abhimāni-devatās: icchā is presided over by Śrī and Bhāratī; dveṣa is associated with Dvāpara-Śakuni.
+
+[sanghata_cetana_dhrti] Saṅghāta-Cetanā-Dhṛti  |  Verses: BG 13.6
+  Title: Saṃghāta, Cetanā, Dhṛti — three of the kṣetra-vikāras
+  Bannanje: Bannanje (BG 13.6): of the seven kṣetra-vikāras, three are saṃghāta (the body-aggregate, in which the abhimāni-jīva and all abhimāni-devatās dwell), cetanā (the spread of memory, presided over by Śrī), and dhṛti (steadfastness, presided over by Sarasvatī and Bhāratī).
+
+[kshetra_jnana] Kṣetra-jñāna  |  Verses: BG 13.2 · 13.34
+  Title: Kṣetra-jñāna — the capstone of Adhyāya 13
+  Bannanje: Bannanje (BG 13.2, 13.34): the upasaṃhāra of Adhyāya 13 — knowing what kṣetra is, what kṣetrajña is, the distinction between them, and the mokṣa-sādhaka guṇas the jīva needs to be freed from inert prakṛti — together constitute the jñāna. Those who realise this and live by it attain the supreme Bhagavān.
+
+[rajas] Rajas  |  Verses: BG 14.7 · 14.12
+  Title: Rajas — rāgātmaka; born of tṛṣṇā and saṅga; binds through karma-saṅga
+  Bannanje: Bannanje (BG 14.7, 14.12): Rajas means rāga — strong liking for an object, an endless chain of desires; the cravings of all five indriyas come from rajas. Tṛṣṇā is the 'want-want' thirst, saṅga is constant association with an object; rajas first kindles desire, then association, then clinging — step by step it puts us in a bond hard to undo (hence 'nibadhnāti'). It drives us into karma-saṅga divor
+
+[tamas] Tamas  |  Verses: BG 14.8 · 14.13
+  Title: Tamas — ajñānaja, mohana; binds through pramāda, ālasya, nidrā
+  Bannanje: Bannanje (BG 14.8, 14.13): Tamas is 'not knowing anything' — and so terrible that it can hide even the fact that one is ignorant ('I do not know that I do not know'). It deludes all embodied beings and binds them by three knots that cannot be slipped: nidrā (sleep), ālasya (idleness), and pramāda — living without awareness even while awake; the fault is not making a mistake but failing to correct 
+
+[gunatita] Guṇātīta  |  Verses: BG 14.22–25
+  Title: Guṇātīta — neither hates nor desires guṇa-states; sees Bhagavān\\
+  Bannanje: Bannanje (BG 14.22): One who has crossed the three guṇas does not hate prakāśa, pravṛtti or moha when they come, nor desire them when they recede. His attitude is 'Bhagavān knows what is to be and what is not better than I — why trouble my head?' — a nirlipti that welcomes whatever life brings. Vyāsa cites Śāntiparva: 'evam apy aśubhaṃ karma na bhūtaṃ na bhaviṣyati' (MBh 12.32.18) — what should no
+
+[sattvika_jnana] Sāttvika jñāna  |  Verses: BG 18.20
+  Title: Sāttvika jñāna — seeing one Bhagavān, undivided, in all distinct beings
+  Bannanje: Bannanje (BG 18.20): The knowledge that sees, in all beings (sarva-bhūteṣu) — mutually distinct, none like another, vilakṣaṇa — one same Bhagavān, untouched by any bheda, abiding as the akhaṇḍa-satya in their full guṇa-kriyā. He cites Bṛhadāraṇyaka (4.5.11) 'asya mahato bhūtasya niśvasitam' — the whole world is the breath of that mahā-bhūta — and Viṣṇu-sahasranāma 'eko viṣṇur mahad-bhūtaṃ pṛthag-b
+
+[sattvika_karma] Sāttvika karma  |  Verses: BG 18.23
+  Title: Sāttvika karma — niyata kartavya done as bhagavad-pūjā, free of rāga-dveṣa, no phala
+  Bannanje: Bannanje (BG 18.23): The niyata kartavya that has come to us, performed as bhagavān's pūjā, becomes sāttvika karma. In it there is no rāga-dveṣa, no phala-apekṣā, no clinging of any kind. Done with śraddhā and bhakti, with nirlipti, the kartavya carried out with no deceit and in the spirit of bhagavad-arpaṇa — that is sāttvika karma.
+
+[sattvika_karta] Sāttvika kartā  |  Verses: BG 18.26
+  Title: Sāttvika kartā — free of saṅga and ahaṃkāra, dhṛti-utsāha-yukta, unmoved by siddhi-asiddhi
+  Bannanje: Bannanje (BG 18.26): The sāttvika kartā does not cling to anything. Just as every pūjā ends with 'śrī-kṛṣṇārpaṇam astu,' so the sāttvika does every karma of his life with bhagavad-bhakti, in the spirit of bhagavad-arpaṇa. He has no ahaṃkāra of 'I did it.' Whatever the work, he does it with utmost utsāha; he does not collapse when it fails, does not strut when it succeeds — he does all nirvikāra. Ā
+
+[triguna_atita] Trairguṇya-viṣayā vedāḥ  |  Verses: BG 2.45
+  Title: Trai-guṇya viṣayāḥ vedāḥ — cross the guṇa-domain to reach the Veda\\
+  Bannanje: Bannanje (BG 2.45): The vedas on their surface seem to deal in tri-guṇa (sattva-rajas-tamas) worldly matters — like santāna-vṛddhi, cattle, wealth, rājasūya, aśvamedha, puruṣamedha — as if to one wearing red spectacles all looks red. But to understand the veda we must first cross the prāpañcika influence. So Krishna tells Arjuna: nis-trai-guṇyo bhava, nir-dvandvaḥ, nitya-sattva-sthaḥ, nir-yogakṣem
+
+[rajasa_shraddha] Rājasa śraddhā  |  Verses: BG 17.4
+  Title: Rājasī śraddhā — pūjā driven by fear and bargain; received by yakṣa-rākṣasas
+  Bannanje: Bannanje (BG 17.4): 'Yakṣa-rakṣāṃsi rājasāḥ' does not mean rājasas worship yakṣa-rākṣasas — they worship bhagavān or devatās, but generally without awareness of bhagavān's paramatva, out of fear, with a hark-sandāya (vow-payment) attitude: 'devatās, do not trouble me.' Such pūjā meant for the devatās gets intercepted: yakṣa-rākṣasas come in the devatās' names and receive it. The hallmark is sva-ud
+
+[tamasa_shraddha] Tāmasa śraddhā  |  Verses: BG 17.4
+  Title: Tāmasī śraddhā — pūjā done with ḍambha for status; received by bhūta-pretas
+  Bannanje: Bannanje (BG 17.4): The third class are tāmasas — they too perform pūjā, but only to display their status. Bannanje cites the example of Duryodhana who, to outdo the Pāṇḍavas' Aśvamedha, had a Pauṇḍrika-yāga performed. Such pūjā done with durudeśa (ill motive) is received, in the devatās' names, by bhūta-pretas. Mere śraddhā is not enough — its kind matters. Sāttvika śraddhā with no śāstra-knowled
+
+[sattvika_ahara] Sāttvika āhāra  |  Verses: BG 17.7–10
+  Title: Sāttvika āhāra — distributed by Prāṇa and Vaiśvānara; foods that nourish buddhi
+  Bannanje: Bannanje (BG 17.7): The āhāra we eat is also three-fold — sāttvika, rājasa, tāmasa. As Chāndogya 5.1 says 'annam aśitaṃ tredhā vidhīyate' — the prāṇa and vaiśvānara within us divide whatever we eat into three (sūkṣma, madhya, sthūla) and distribute it to the various parts of the body. There is a direct relation between our āhāra and our manas; our ancestors knew this and prohibited foods that dist
+
+[jnana_yoga] Jñāna-yoga  |  Verses: BG 3.3 · 4.33–38
+  Title: Jnana-yoga — knowing-based path; karma\\
+  Bannanje: Bannanje (BG 3.3, 4.33): mokṣa is reached by jnana alone, so karma exists for jnana; without jnana, even ritual is wasted. The 'jnana-yajna' is therefore superior to mere dravyamaya yajna — every karma performed with the awareness of the Lord behind it culminates in jnana ('sarvaṁ karmākhilaṁ ... jñāne parisamāpyate'). Calling Arjuna 'Parantapa' Krishna signals that battle done with God-awareness,
+
+[bhakti_yoga] Bhakti-yoga  |  Verses: BG 9.22 · 11.54 · 18.55
+  Title: Bhakti-yoga — ananya devotion; the Lord bears the bhakta\\
+  Bannanje: Bannanje (BG 9.22): bhāgavatas desire nothing beyond contemplation of the Lord; they worship Him ananya, not under the spell of any wish, and do not perform ahuti to any other devatā as principal — they see only the Lord within every devatā. This is eka-bhakti, the way to reach Paramātmā and mokṣa. In our saṅkalpa we should never set worldly wants before the Lord; let the saṅkalpa be only jnana, b
+
+[dhyana_yoga] Dhyāna-yoga  |  Verses: BG 6.10–15
+  Title: Dhyana-yoga — solitary mind-focusing in Brahma-muhurta
+  Bannanje: Bannanje (BG 6.10): the dhyana-yogi must engage his mind continually in dhyana, alone, where there is no crowd. Brahma-muhūrta (the 96-minute span before sunrise, ruled by Caturmukha Brahma — the devatā of our citta) is best, when nature is at peace. Dhyāna is intensely intimate: only the Lord and the sādhaka — no third companion — for a polluted mind around poisons the atmosphere. Control citta a
+
+[sannyasa_yoga] Sannyāsa-yoga  |  Verses: BG 5.2 · 6.1–2 · 18.2
+  Title: Sannyasa-yoga — total offering of karma to Hari, not its abandonment
+  Bannanje: Bannanje (BG 5.2, 6.1, 18.2): saṁ-nyāsa is 'placing the whole (saṁ) of karma in the Lord' — not leaving home for the forest, not abandoning action, not merely renouncing the sacrificial fire. The true sannyāsi is also a karma-yogi and vice versa; each varṇa-āśrama has its kāryam karma. There are two angles: kavis (knowers of word-meaning) call giving up kāmya-karmas 'sannyāsa', while vicakṣaṇas (t
+
+[buddhi_yoga] Buddhi-yoga  |  Verses: BG 2.49 · 10.10
+  Title: Buddhi-yoga — taking refuge in jnana, surrendering to the Lord
+  Bannanje: Bannanje (BG 2.49, 10.10): karma is 'far inferior' to buddhi-yoga; karma serves jnana, not its equal. Take refuge in jnana and do karma supportive of jnana; those who act for the fruit without jnana are pitiable. With this attitude, ahaṅkāra dissolves and one rests in the Lord as one's protector — that conviction is śaraṇāgati. Calling Arjuna 'Dhanañjaya' Krishna invokes both his outer conquests a
+
+[abhyasa_vairagya] Abhyāsa & Vairāgya  |  Verses: BG 6.35
+  Title: Abhyasa & Vairagya — the only grip on the unsteady mind
+  Bannanje: Bannanje (BG 6.35): Krishna concedes Arjuna's point — the mind is indeed unsteady and hard to grip — but says it can be brought under control by abhyāsa and vairāgya. Vairāgya is keeping what the mind must not lean towards away from it; God has given us the buddhi to distinguish good from bad — using it, keep the mind away from what is bad, not even introducing it. Alongside, do the abhyāsa for ek
+
+[samatva] Samatva  |  Verses: BG 2.48
+  Title: Samatva — equipoise in success and failure as worship of the Lord
+  Bannanje: Bannanje (BG 2.48): Krishna defines yoga as samatva — sthāna in 'yoga', doing karma free of attachment to the fruit, sama-bhāva whether the work succeeds or fails. Even mahā-yajna without this anusandhāna is not pūjā. The Lord is the giver of the fruit and the doer of karma through us; what fruit, how much, when — all belong to Him. Joy if it comes, joy if it does not — this is bhautika samatolana
+
+[sharanagati] Śaraṇāgati  |  Verses: BG 18.66
+  Title: Sharanagati — sole refuge in Hari, who liberates from all sins
+  Bannanje: Bannanje (BG 18.66): 'sarva-dharmān parityajya' means doing all puṇya-karmas yet not expecting any fruit from them; our dharma-kārya must not become a transaction. Bannanje cites the Dharmarāja–Draupadī dialogue: Draupadī asks why dharma did not protect a dharma-rakṣaka like Dharmarāja; he answers, 'I am not a trader in dharma; I practise dharma for my own ātma-santoṣa, not from any phalāpekṣā.' S
+
+[vairagya] Vairāgya  |  Verses: BG 6.35 · 13.8–11
+  Title: Vairagya — non-attachment, with abhyasa
+  Bannanje: Bannanje (BG 6.35, 13.8): Krishna concedes that the mind is hard to restrain and unsteady, but says it can be held by abhyasa and vairagya. Vairagya is keeping away from the mind what should not be fed to it — using the buddhi God gave to discriminate good from bad and to deny the bad even an introduction. In BG 13.8 vairagya in indriya-arthas means stopping the indriyas from running outward and s
+
+[abhyasa] Abhyāsa  |  Verses: BG 6.26 · 12.9
+  Title: Abhyasa — repeated practice of fixing the mind on the Lord
+  Bannanje: Bannanje (BG 6.26, 12.9): The mind is very fickle and slips everywhere; at every slipping-place place the dam called Bhagavan and bring it back to rest in Him — this demands continuous effort. In 12.9, when sthira-smarana is still not coming, Krishna says: pray to me for the power to lead the mind toward ekagrata; whatever wish is made on the adhyatma-path I will fulfil. With abhyasa and iccha tog
+
+[tapas] Tapas  |  Verses: BG 17.14–19
+  Title: Tapas — shariira-tapas (bodily austerity)
+  Bannanje: Bannanje (BG 17.14): Shariira-tapas — bowing wherever a divine pratika is seen; giving honour to jnanis; bowing to the guru; honouring prajnas who have experienced Bhagavan through bhagavad-bhuti. With these, keeping shaucitva, straightforward conduct in walk and speech, observance of brahmacarya, and living without causing harm to others — these together are shariira-tapas. (Shauca, arjava, ahims
+
+[dana] Dāna  |  Verses: BG 17.20–22
+  Title: Dana — sattvika giving
+  Bannanje: Bannanje (BG 17.20): Sattvika dana is given without any expectation of return, with atma-santosha, manahpurvaka, with love; to a fit person, at a fit time, in a fit place; given with the bhavana 'this is my kartavya.' Full details are in BG 16.3 (the opening verse of chapter 16).
+
+[tyaga] Tyāga  |  Verses: BG 18.2–11
+  Title: Tyaga — renouncing only the fruit, not the karma
+  Bannanje: Bannanje (BG 18.2): Kavis call abandoning kamya-karmas sannyasa; vichakshanas call the abandoning of only the fruit of all karmas tyaga. This sannyasa applies to all sadhakas, including grihasthas. There are two kinds — (a) renouncing the fruit of karma, (b) renouncing karma itself when it is desire-driven. Tyaga here does not mean abandoning karma but doing whatever karma it is without desiring a
+
+[indriya_nigraha] Indriya-nigraha  |  Verses: BG 2.58 · 2.67–68
+  Title: Indriya-nigraha — restraining the senses to steady prajna
+  Bannanje: Bannanje (BG 2.67): The mind by its very make follows wherever the indriyas have been trained, so the indriyas chasing their objects steal away the prajna of the sadhaka — as wind drives a ship astray on the sea. The mind has been built by Bhagavan to relish what the indriyas keep seeing; if its nature is not known, it harms us. The sadhaka is like a sailor on a sail-boat — the mind is the sail; w
+
+[samadhi] Samādhi  |  Verses: BG 2.53 · 6.13–15
+  Title: Samadhi — unwavering buddhi attuned to shruti
+  Bannanje: Bannanje (BG 2.53, 6.13): 'Vipratipanna' means abhipraya-bheda. From shruti (shravana) first comes confusion; when one goes from there to the Veda, the mind thinks against what the Veda says. But once the mind clears, it settles firmly in the trigunatita-tattva spoken in shruti. What was at first trigunya-vishaa later resolves the very poison of trigunya. With a nirmala mind, our thinking becomes 
+
+[svadhyaya] Svādhyāya  |  Verses: BG 17.15
+  Title: Svadhyaya — speech-tapas: shastra-study and benevolent speech
+  Bannanje: Bannanje (BG 17.15): Saying what is, as it is, is not by itself satya. Krishna explains satya: where there is real sajjanika, recognising it, and in keeping with it, without wounding another, speaking in a way that is hita to them — that is vaak-tapas. Speaking what is both priya and hita to another is hard, because often what is priya is not hita; in such occasions silence is best. (Krishna's own
+
+[amanitva] Amānitva  |  Verses: BG 13.7
+  Title: Amanitva — absence of self-importance
+  Bannanje: Bannanje (BG 13.7): Amanitva — absence of self-importance — is the first quality Krishna names while defining what knowledge actually is. (At BG 13.8 Bannanje treats anahankara as the highest of all gunas — the close conceptual twin: 'whatever guna we have, before ahankara it is wasted; ahankara destroys every guna in us. Where ahankara is, the Lord is not.') So letting go of 'I did, by me it happ
+
+[arjava] Ārjava  |  Verses: BG 13.7 · 17.14
+  Title: Arjava — straightness of conduct and speech
+  Bannanje: Bannanje (BG 17.14, 16.3): Arjava is straight walk and straight speech — pramanikata. Not saying one thing and doing another. Listed in the shariira-tapas of BG 17.14 (with deva-dvija-guru-prajna-pujana, shauca, brahmacarya, ahimsa). Bannanje notes: 'arjavam — naera nade-nudi.'
+
+[shauca] Śauca  |  Verses: BG 13.7 · 16.3 · 17.14
+  Title: Shauca — outer and inner cleanliness
+  Bannanje: Bannanje (BG 16.3 §24, 17.14): Shauca is being clean inside and outside. We should not cause trouble to others by us. We must keep our deha-mana clean. (Of old, daily clean clothes, mrttika-snana so that bodily smell would not arise, sandalwood on the body — were practised so others would not turn away.) Our mind must be clean: well-clothed outside while the mind is full of kashmala silently spoil
+
+[ksanti] Kṣānti  |  Verses: BG 13.7 · 16.3
+  Title: Kshanti — forbearance, no thought of revenge
+  Bannanje: Bannanje (BG 16.3 §22, kshama): Kshama is not nursing the thought of revenge — even toward those who have done wrong. The thought of retaliation must never arise in our mind. As the shastra says: 'forgive even when another does apakara to you.' Pray, 'God, give them good sense,' but never harbour retaliation. Kshama becomes possible only when we are free of the ahankara that 'everyone must approve
+
+[ananya_yoga] Ananya-yoga  |  Verses: BG 9.22 · 13.10 · 12.6–7
+  Title: Ananya-yoga — single-pointed worship; the Lord bears yoga-kshema
+  Bannanje: Bannanje (BG 9.22, 13.10, 12.6): Bhagavatas seek nothing but Bhagavan; their cintana is of Him alone, ananyavat. They do not perform puja bound to some wish; they do not offer ahuti to any devata as primary other than Bhagavan; in every devata they see only Bhagavan. This is eka-bhakti, the path to reach Paramatma and moksha. In the puja-samkalpa one should never place laukika wishes — only jnana,
+
+[vivikta_seva] Vivikta-deśa-sevitvam  |  Verses: BG 13.10
+  Title: Vivikta-desha-sevitva — dwelling in a sattvika, secluded place
+  Bannanje: Bannanje (BG 13.10/§17): Try to live, as much as possible, in places with strong sattvika spandana, with sattvika people. A place with full, unbroken sattvika spandana is a punya-kshetra. In such a place, live with sajjana who speak good and think good. If this is not possible, practise ekanta-vasa as much as possible. Do not waste the precious birth in idle talk with a crowd of four. (Listed as t
+
+[adhyatma_jnana_nityatvam] Adhyātma-jñāna-nityatvam  |  Verses: BG 13.11
+  Title: Adhyatma-jnana-nityatva — continuous standing in the knowledge of the self
+  Bannanje: Bannanje (BG 13.11 §19): Be ever in the arivu of adhyatma. First know the pindanda and brahmanda; then the wonder of the apurva mind that knows them; then know what 'I' is (awareness of self); having known this, know the Paramatma who controls this atma. This is adhyatma-jnana. Let the goal of all your study be adhyatma-jnana.
+
+[tattva_jnanartha_darshanam] Tattva-jñānārtha-darśanam  |  Verses: BG 13.11
+  Title: Tattva-jnanartha-darshanam — seeing the goal of tattva-jnana, sakshatkara of Bhagavan
+  Bannanje: Bannanje (BG 13.11 §20): Let your adhyayana be devoted to knowing the mulabhuta-satya of the world. By all the above gunas, attain sakshatkara of Bhagavan, who is the vishaya-bhuta of all shastras and is pratipadita by all shastras. The gunas enumerated here are themselves jnana and jnana-sadhanas; what is other than this is ajnana and the goal of ajnana.
+
+[buddhi] Buddhi  |  Verses: BG 18.30–32
+  Title: Sāttvika buddhi — the discriminating intellect
+  Bannanje: Bannanje (BG 18.30): Sāttvika buddhi is the faculty that knows pravṛtti and nivṛtti, kārya and akārya, that of which one should be afraid and that of which one should not, the path of bondage and the path of release. Bannanje glosses "Pārtha" as that consciousness which is free of self-interest (apārtha-prajñā) and which arises when the buddhi expands deeply into knowledge — a discerning, conscien
+
+[ahankara] Ahaṅkāra  |  Verses: BG 3.27 · 7.4
+  Title: Ahaṅkāra — the bewildered \\
+  Bannanje: Bannanje (BG 3.27, 7.4): All works proceed through the guṇas of prakṛti — through the indriyas which are limbs of prakṛti and dependent on Bhagavān. The man bewildered by ahaṅkāra thinks "I myself did it." Bannanje stresses that we have icchā but not icchā-svātantrya — only Bhagavān has independent will. At BG 7.4, ahaṅkāra is the eighth limb of Bhagavān's eightfold jaḍa-prakṛti (bhūmi, āpaḥ, anal
+
+[citta] Citta  |  Verses: BG 8.7 · 12.9
+  Title: Citta — manas-buddhi fixed on the Lord
+  Bannanje: Bannanje (BG 8.7, 12.9): Kṛṣṇa says "at all times remember me" — there is no special time for smaraṇa; the very moment His remembrance arises is the puṇya-kāla, and remembrance in the mind is itself ritual purity (maḍi). With manas-buddhi offered to Him (mayy arpita-mano-buddhi), one infallibly reaches Him; the bhāva in action decides dharma–adharma (Dharmavyādha lived as a meat-seller yet became 
+
+[antaryamin] Antaryāmin  |  Verses: BG 18.61
+  Title: Antaryāmin — Bhagavān seated in every heart
+  Bannanje: Bannanje (BG 18.61): All-powerful Bhagavān stands seated in the heart-region of every being (hṛd-deśa). He makes the wondrous yantra of piṇḍāṇḍa and brahmāṇḍa revolve continually by his own will, through prakṛti's māyā. He is master of both piṇḍāṇḍa and brahmāṇḍa — the mahā-caitanya within everyone, granting them their experience and controlling them. All karma proceeds by his glory and at his wil
+
+[jnanendriyas_karmendriyas] Jñāna- & Karma-indriyas  |  Verses: BG 3.28 · 15.9
+  Title: Indriyas — guṇa-bheda and karma-bheda known by the tattva-vit
+  Bannanje: Bannanje (BG 3.28, 15.9): The tattva-vit understands the difference of guṇas and the difference of karmas — in the indriyas, action proceeds through the three guṇas (sāttvika, rājasa, tāmasa). He observes his own action as a neutral witness; "the indriyas roam in their objects" — so understanding, he does not cling. The hierarchy of causation in any action: indriyas — over them, prakṛti's three gu
+
+[varnashrama] Varṇa-svabhāva  |  Verses: BG 4.13 · 18.41–44
+  Title: Varṇa — colour of the jīva\\
+  Bannanje: Bannanje (BG 4.13, 18.41): Krishna divides humanity into four varṇas — brāhmaṇa, kṣatriya, vaiśya, śūdra — by guṇa-karma-vibhāga. 'Varṇa' (colour) marks the inner svabhāva of the jīva, not jāti (the birth-family). Sāttvika is white, rājasa red, tāmasa black. Varṇa relates to the jīva-svarūpa; jāti relates to the body. The four varṇas exist worldwide; the śāstrakāras only named them. From the svabh
+
+[nishkama_karma] Niṣkāma karma  |  Verses: BG 2.47 · 4.20
+  Title: Niṣkāma karma — no claim on the fruit
+  Bannanje: Bannanje (BG 2.47, 4.20): Krishna does not say 'do not desire the fruit'; he says 'do not claim authority over the fruit.' Karma is in your hand, but the fruit is in Bhagavān's hand. Never sit idle; act, but with the awareness that He is the fruit-giver. Whatever fruit comes, receive it as prasāda. Excessive attachment to fruit breeds frustration; one who knows 'Bhagavān is my support' acts yet do
+
+[sthitaprajna] Sthita-prajña  |  Verses: BG 2.55–72
+  Title: Sthita-prajña — one of steady wisdom
+  Bannanje: Bannanje (BG 2.55–72): [No paraphrase for this concept is included in the bannanje_verses provided for the present extract; therefore no source-grounded note can be offered here. Refer to BG 2.55–72 in the Bannanje commentary for the closing portrait of the sthita-prajña.]
+
+[daivi_sampad] Daivī sampad  |  Verses: BG 16.1–3 · 16.5
+  Title: Daivī sampat — the path of release
+  Bannanje: Bannanje (BG 16.1, 16.5): Krishna lists daivī-sampat — ahiṃsā, satya, akrodha, tyāga, śānti, apaiśuna, dayā, aloluptva, mārdava, hrī, acāpala. Daivī-sampat leads to vi-mokṣa, āsurī to ni-bandha. 'Vi-mokṣa' is personality-development and liberation in varied stages according to one's sādhana; 'ni-bandha' is not the bondage of saṃsāra — it is the low bondage that pushes one into the darkness of tama
+
+[ahimsa] Ahiṃsā  |  Verses: BG 10.5 · 13.7 · 16.2
+  Title: Ahiṃsā — non-injury in body, word and mind
+  Bannanje: Bannanje (BG 10.5, 16.2): living so that another is not harmed is ahiṃsā. It is to be practised not only in body but in mind and speech — taunting, cursing, mentally reviling another is also hiṃsā. Sometimes hiṃsā becomes ahiṃsā: killing a man-eating tiger to save a village's lives is ahiṃsā; small violence done to prevent great violence is ahiṃsā. By speech, deed and mind, conduct yourself so tha
+
+[satya] Satya  |  Verses: BG 10.4 · 17.15
+  Title: Satya — prāmāṇikatā, sincerity in speech
+  Bannanje: Bannanje (BG 10.4, 17.15): satya is prāmāṇikatā — sincerity. Speaking one thing to a person's face and another behind his back is apramāṇikatā. Saying what is, just as it is, is not yet satya. Satya is speech that is not provocative (anudvegakara), true (satyam), pleasant (priya) and beneficial (hita) for the listener's life — together with svādhyāya, this is vāṅmaya tapas. Where the pleasant is n
+
+[samatva_dharma] Sama-darśana  |  Verses: BG 5.18
+  Title: Sama-darśana — the paṇḍita sees Bhagavān in all
+  Bannanje: Bannanje (BG 5.18): the paṇḍita is sama-darśī — he sees the one indwelling Bhagavān equally in the vidyā-vinaya-sampanna, in a brāhmaṇa, in a cow, an elephant, a dog, and a śvapāka. Three grades of humans (vidyā-vinaya-sampanna at the top, then brāhmaṇa-varṇa, then śvapāka at the bottom) and three grades of animals (cow highest, elephant middle, dog lowest) are juxtaposed. Bhagavān is sarvāntaryām
+
+[krodha] Krodha  |  Verses: BG 2.62–63 · 3.37
+  Title: Krodha — kāma\\
+  Bannanje: Bannanje (BG 2.62 & 3.37): One who dwells on objects develops attachment to them; from attachment desire is kindled, and when desire is blocked anger arises. Krodha is nothing but kāma in another form; behind every krodha is an empty kāma. From krodha comes sammoha (the urge to do what should not be done), from sammoha smṛti-vibhrama (forgetting what is enjoined and forbidden), and so on down to t
+
+[lobha] Lobha  |  Verses: BG 16.21
+  Title: Lobha — one of the three gates of naraka
+  Bannanje: Bannanje (BG 16.21): Kāma, krodha and lobha are the three causes of ātma-nāśa — the gates of man's own naraka. Krodha is the offspring of kāma; many hidden desires within make us angry when they go unfulfilled. These three are our fundamental enemies that destroy our personality, and every other vice is their offspring. Letting go of them brings happiness here and hereafter.
+
+[moha] Moha  |  Verses: BG 2.7 · 2.63 · 18.73
+  Title: Moha — bewilderment of dharma-discernment
+  Bannanje: Bannanje (BG 2.7, 2.63, 18.73): Arjuna confesses that kārpaṇya-doṣa has dulled his innate valour and his thinking power on dharma has become a tangle — he cannot tell right from wrong. From contact comes attachment, then desire to possess, then krodha when desire is blocked, then sammoha (incongruous urges to do what should not be done), loss of discrimination, and final ruin. At the end Arjuna sa
+
+[asatsanga] Asat-saṅga  |  Verses: BG 2.62
+  Title: Saṅga in viṣayas — the start of the chain
+  Bannanje: Bannanje (BG 2.62): For the person who keeps dwelling on objects, attachment (saṅga) to them grows; from saṅga, desire is kindled; when desire is blocked, anger erupts. The downward chain begins exactly here. After that follow sammoha, smṛti-vibhrama, buddhi-nāśa and total ruin.
+
+[avidya] Avidyā  |  Verses: BG 5.15 · 14.8
+  Title: Ajñāna — the veil over knowledge
+  Bannanje: Bannanje (BG 5.15, 14.8): The vibhu — here taken either as the jīva (special, with iccha, vicāra, jñāna, varied across births) or as Bhagavān (sarvasamartha, sarvagata) — does not take on anyone's pāpa or puṇya. What we experience is the fruit of our own karma; the wrong is to blame others. People do not see this because jñāna is covered by ajñāna and they sink into moha and bhrānti. Tamoguṇa is t
+
+[dvandva] Dvandva  |  Verses: BG 2.45 · 7.27
+  Title: Dvandva-moha — the pull of opposites
+  Bannanje: Bannanje (BG 2.45, 7.27): Vedas appear outwardly to be about the three guṇas, but inwardly cure us of that very entanglement. Arjuna is told to be 'nir-dvandvaḥ' — to cast off the strain of opposites — and 'nir-yoga-kṣemaḥ' — to entrust acquisition and preservation to Bhagavān. We are born already carrying icchā-dveṣa, and from this rise the dvandvas (sukha-duḥkha, jīveśvara distinction etc.); the
+
+[asuri_sampad] Āsurī sampad  |  Verses: BG 16.4 · 16.7–20
+  Title: Āsurī sampat — the six contrary qualities
+  Bannanje: Bannanje (BG 16.4, 16.7): Against the twenty-six divine qualities, Kṛṣṇa sets out six āsurī ones — ḍambha (parading what is not there), darpa (the mindset that does not shrink from any wrong), atimāna (exaggerated self-image), krodha, pāruṣya (harsh, contemptuous speech) and ajñāna (the emperor of all these). The āsurī-svabhāva does not know what should be done and what should not; lacks śauca, āc
+
+[paramagati] Paramā gati  |  Verses: BG 15.6 · 8.21
+  Title: Paramā gati — Bhagavān\\
+  Bannanje: Bannanje (BG 15.6, 8.21): the place where Bhagavān is forever visible to the jñānis is paramadhāma, and that itself is mokṣa. There the sun, moon and fire do not shine; rather it is from this paramadhāma that they themselves draw their light. He who recognises the ātma-jyoti and sees within the ātman the Paramātman reaches this paramadhāma from which there is no return. At 8.21 Bannanje glosses 'a
+
+[brahmi_sthiti] Brāhmī sthiti  |  Verses: BG 2.72
+  Title: Brāhmī sthiti — the mark of the brahma-jñānī
+  Bannanje: Bannanje (BG 2.72): brāhmī sthiti is the mark of one who has come to rest in Bhagavān. All that has been described till now is the lakṣaṇa of a brahma-jñānī — of one in whom brahma-prajñā is awake and who stands settled in Brahman. Such a brahma-jñānī cannot be recognised by outer activity or dress; only his mental state reveals where he stands. If even at the last moment of his death the consciou
+
+[jivanmukti] Jīvanmukti  |  Verses: BG 5.19–21 · 12.13–19 · 14.22–25
+  Title: Living settled in Bhagavān — won the saṃsāra here itself
+  Bannanje: Bannanje (BG 5.19, 14.22): those whose mind is fixed on the ekarūpatā of Bhagavān — that He is one nirdoṣa form pervading every place and every thing — have won this life right here; they remain established in Bhagavān and never fall back into bondage. At 14.22 he describes the one beyond the three guṇas: he neither hates what is unwanted when it comes nor craves what is wanted when it is absent; 
+
+[naishkarmya_siddhi] Naiṣkarmya-siddhi  |  Verses: BG 18.49
+  Title: Naiṣkarmya-siddhi — perfection through nyāsa of desires
+  Bannanje: Bannanje (BG 18.49): the siddhi that is the means to mokṣa — the state in which there are no pāpa-karmas — is not reached merely by engaging in svakarma. One must control the mind, do karma free of fruit-craving, free of the ahaṅkāra 'I did it', and offer everything to Bhagavān (bhagavad-arpaṇa-bhāva). Ahaṅkāra is the great enemy of adhyātma; we must be alert to it. To sum up: by giving up the 'I 
+
+[archiradi_marga] Arciradi-mārga  |  Verses: BG 8.24
+  Title: Path of Agni and Jyoti — devatās escorting the mokṣa-jīva
+  Bannanje: Bannanje (BG 8.24): the abhimāni-devatās of fire and light (Agni and Jyoti, the children of Vaiśvānara, the principal agni), of the day, of the bright fortnight, of the saṅkrānti, and of the six months of uttarāyaṇa — together with the abhimāni of midday and that of the full moon — successively welcome and pass on the mokṣa-yogya jīva that has come out of the body. Those who travel by this path, k
+
+[dhumadi_marga] Dhūmādi-mārga  |  Verses: BG 8.25
+  Title: Path of Dhūma and Rātri — return through soma-loka
+  Bannanje: Bannanje (BG 8.25): the jīva who is not mokṣa-yogya, on leaving the body, is welcomed by the abhimāni-devatās of smoke and darkness, then by the kṛṣṇa-pakṣa devatā, then by dakṣiṇāyana and the abhimāni-devatās of the six months of dakṣiṇāyana, who take the jīva to soma-loka. Here the jīva enjoys until his puṇya is exhausted, then re-enters the cloud, comes down with rain to the earth, enters a wom
+
+[sarva_dharman_parityajya] Carama-śloka phala  |  Verses: BG 18.66
+  Title: Sarva-dharmān parityajya — Kṛṣṇa\\
+  Bannanje: Bannanje (BG 18.66): 'sarva-dharmān parityajya' means doing all puṇya-karmas while expecting no fruit from them — our dharma-work must not become a trade. He illustrates with Yudhiṣṭhira's reply to Draupadī: "I am no trader in dharma; I practise dharma for my own ātma-saṃtoṣa, not out of any phala-apekṣā." Whatever dharma one performs is only Bhagavān's ārādhana; when one lives thus, Bhagavān burn
+
+[tapo_yajna] Tapo-yajña  |  Verses: BG 4.28
+  Title: Tapo-yajna — offering one\\
+  Bannanje: Bannanje (BG 4.28): Tapo-yajna has two faces, external and internal. One is continuous dhyana, needing no external apparatus; the other supplies the support that contemplation of the Lord requires. Atma-samyama is called tapas — for example, brahmacarya-palana and vrata-anushthana. Such offering of tapas into the Lord is yajna.
+
+[yoga_yajna] Yoga-yajña  |  Verses: BG 4.28–30
+  Title: Yoga-yajna — karma-yoga as worship
+  Bannanje: Bannanje (BG 4.28): Yoga-yajna is undertaking the various forms of karma-yoga for the pleasure of the Lord. This is worship of the Lord through external acts — for example, 108 pradakshinas to God, archana, and so on. It also includes the observance of the yama-niyamas spoken of in the yoga-shastra.
+
+[svadhyaya_yajna] Svādhyāya-jñāna-yajña  |  Verses: BG 4.28
+  Title: Svadhyaya-jnana-yajna — study as worship
+  Bannanje: Bannanje (BG 4.28): Svadhyaya-jnana-yajna is the yajna most dear to the Lord. Svadhyaya means reading what pertains to oneself, vedadhyayana of one's own sakha, and discovering — through study, in all granthas — the gunas of the Lord who is sarvottama and independent everywhere. Sharing what is known is also dear to the Lord; jnana is the one wealth that grows by being shared. To do this one must 
+
+[jnana_yajna] Jñāna-yajña  |  Verses: BG 4.33
+  Title: Jnana-yajna — knowledge surpasses substance-sacrifice
+  Bannanje: Bannanje (BG 4.33): 'shreyan dravyamayad yajnaj jnana-yajnah parantapa' — jnana-yajna is greater than the external yajna of oblating substances. 'sarvam karma'khilam partha jnane parisamapyate' — every act, fully done, finds completion in knowledge; without jnana behind it, karma is useless, like a leaky boat. The two readings 'sarva-karma akhilam' (every act made complete) and 'sarva-karma a-khil
+
+[brahmarpana] Brahmārpaṇa  |  Verses: BG 4.24
+  Title: Brahmarpana — offering, oblation, fire, and offerer all are the Lord
+  Bannanje: Bannanje (BG 4.24): The arpana, the havis, the agni, and the act of offering — all are the Lord (or under his control). The Lord seated within the giver gives, and seated within the receiver receives; everything proceeds by the Lord's will. Agni here is not mere insentient fire but agnyabhimani-devata (a cetana), within whom, as taraka-shakti, the Lord himself is present. When karma is done with t
+
+[pranava_om] Praṇava (Om)  |  Verses: BG 8.13 · 17.23
+  Title: Oṃ — ekākṣaraṃ Brahma uttered at departure
+  Bannanje: Bannanje (BG 8.13, 17.23): At departure the yogī closes every nāḍī-dvāra, fixes the mind on Bhagavān in the heart, raises the prāṇa to the sahasrāra, utters 'Oṃ' — the one syllable that is vācya of the paratattva — remembers Me, and reaching the place of no return attains paramā gati. This is the hard hatha-yoga path. Oṃ, tat, sat are the three names of Brahman. Oṃ = he who bears the world and fil
+
+[akshara_a] Akṣarāṇām akāraḥ  |  Verses: BG 10.33
+  Title: Among letters, the A — and among compounds, the dvandva
+  Bannanje: Bannanje (BG 10.33): Kṛṣṇa names His vibhūti in language itself. 'A' (a-kāra) — the special letter that holds all the guṇas of Bhagavān: 'a' means 'alla' (He is not any known thing — vilakṣaṇa from the world) and also 'illa' (in Him no doṣa is — sarva-doṣa-dūra, sarva-guṇa-pūrṇa); thus sarva-vilakṣaṇa, sarva-doṣa-dūra, sarva-guṇa-pūrṇa Bhagavān is a-kāra-vācya and fills the letter 'a'. Among compo
+
+[jyotir_jyoti] Jyotiṣām jyotiḥ  |  Verses: BG 13.17
+  Title: Bhagavān — the light of every light, beyond darkness
+  Bannanje: Bannanje (BG 13.17): Bhagavān is the great jyoti — the light that gives light to every light. He is jñāna-rūpa, self-knowing, attainable by jñāna, and dwells in everyone's heart. Since the earlier subtle vivaraṇa is hard to hold in dhyāna, Kṛṣṇa here describes Himself bhāvanātmaka. He is light without darkness, anantam — beyond limit. He is the mahā-jyoti who gives light to every other light. In d
+
+[vibhuti] Vibhūti  |  Verses: BG 10.41
+  Title: Vibhūti — sparks of Bhagavān\\
+  Bannanje: Bannanje (BG 10.41): Whatever in any group is mighty, whatever in any sampatti is great, whatever has stood out in height — know all of that as having sprung from a spark of the light of My glory. The special guṇa that is in one person, or in one object, that is not in another — that is one spark (kiḍi) of the light of Bhagavān's hirimā; it is one tuṇuku (a fragment) of His ananta tejas.
+
+[adhidaiva] Adhidaiva  |  Verses: BG 8.4
+
+[adhiyajna] Adhiyajña  |  Verses: BG 8.4
+
+[shat_prameya] Ṣaṭ-prameya  |  Verses: BG 8.1-4
+
+[dvividha_nishtha] Dvividhā niṣṭhā  |  Verses: BG 3.3
+
+[kalanemi_kama_abhimani] Kālanemi — abhimāni of kāma  |  Verses: BG 3.37
+
+[pindanda_brahmanda] Piṇḍāṇḍa to Brahmāṇḍa  |  Verses: BG 13.1 · 8.3 · 7.4
+
+[jiva_svabhava] Jīva-svabhāva  |  Verses: BG 18.41 · 8.3
+
+[ananya_eka_bhakti] Ananya eka-bhakti  |  Verses: BG 9.22 · 8.21 · 18.65
+
+[antima_ashvasana] Antima āśvāsana  |  Verses: BG 18.66
+
+
+=== CONCEPT RELATIONSHIPS ===
+  brahman --[is-a: same referent — Hari]--> paramatman
+  paramatman --[is-a: supreme person]--> purushottama
+  purushottama --[predicates-on: beyond perishable]--> ksara_purusha
+  purushottama --[predicates-on: beyond imperishable]--> akshara_purusha
+  avatara --[is-a: descent of]--> purushottama
+  sarvottamatva --[predicates-on: axiomatic property]--> purushottama
+  jiva --[is-a: bound jīva = kṣara]--> ksara_purusha
+  isvara --[is-a: Hari as indweller]--> antaryamin
+  prakriti --[includes: 5 of 8 components]--> mahabhutas
+  prakriti --[includes: manas as evolute of prakṛti]--> manas
+  prakriti --[includes: buddhi as evolute of prakṛti]--> buddhi
+  prakriti --[includes: ahaṅkāra as evolute of prakṛti]--> ahankara
+  karma_tattva --[arises-from: action expresses nature]--> svabhava
+  aksharam_param_brahma --[is-a: imperishable Brahman]--> brahman
+  kshetra_field --[includes: first five tattvas]--> mahabhutas
+  kshetra_field --[includes: sixth tattva]--> avyakta
+  kshetra_field --[includes: eleven indriyas]--> indriyas
+  kshetra_field --[includes: vikāra pair]--> icchā_dveṣa
+  kshetra_field --[includes: subtle vikāras]--> sanghata_cetana_dhrti
+  kshetrajna --[predicates-on: knower of field]--> kshetra_field
+  kshetra_jnana --[predicates-on: knowing the knower]--> kshetrajna
+  kshetra_jnana --[antidote-to: removes ignorance about self]--> jiva
+  rajas --[opposite-of: active vs inert]--> tamas
+  sattva --[opposite-of: clarity vs darkness]--> tamas
+  sattva --[transforms-into: mode → its knowledge]--> sattvika_jnana
+  sattva --[transforms-into: mode → its action]--> sattvika_karma
+  sattva --[transforms-into: mode → its agent]--> sattvika_karta
+  triguna_atita --[is-a: same state in 2.45]--> gunatita
+  sharanagati --[is-a: culmination of bhakti]--> bhakti_yoga
+  karma_yoga --[transforms-into: same goal, different posture]--> sannyasa_yoga
+  tyaga --[is-a: fruit-renunciation as sannyāsa]--> sannyasa_yoga
+  indriya_nigraha --[leads-to: sense-restraint → steady-wisdom]--> sthitaprajna
+  samadhi --[leads-to: absorption → release]--> moksha
+  svadhyaya --[is-a: recitation as yajña]--> svadhyaya_yajna
+  manas --[is-a: 11th indriya]--> indriyas
+  ahankara --[transforms-into: bewilders the jīva]--> jiva
+  citta --[leads-to: steady citta → samādhi]--> samadhi
+  svadharma --[arises-from: duty from nature]--> svabhava
+  varnashrama --[arises-from: varṇa from intrinsic nature]--> svabhava
+  nishkama_karma --[is-a: desireless action = karma-yoga]--> karma_yoga
+  sthitaprajna --[includes: sense-restraint]--> indriya_nigraha
+  daivi_sampad --[leads-to: divine endowment → release]--> moksha
+  ahimsa --[is-a: divine virtue]--> daivi_sampad
+  satya --[is-a: divine virtue]--> daivi_sampad
+  asatsanga --[transforms-into: BG 2.62 — saṅga → kāma]--> kama
+  kama --[transforms-into: BG 2.63 — kāma-vighāta → krodha]--> krodha
+  krodha --[transforms-into: BG 2.63 — krodha → moha]--> moha
+  moha --[is-a: delusion as ignorance-form]--> avidya
+  kama --[arises-from: born of rajas]--> rajas
+  lobha --[is-a: gate of hell]--> asuri_sampad
+  kama --[is-a: gate of hell]--> asuri_sampad
+  krodha --[is-a: gate of hell]--> asuri_sampad
+  avidya --[opposite-of: ignorance vs discrimination]--> kshetra_jnana
+  moksha --[is-a: liberation as supreme destination]--> paramagati
+  brahmi_sthiti --[leads-to: established → released]--> moksha
+  jivanmukti --[leads-to: embodied liberation → mukti]--> moksha
+  archiradi_marga --[leads-to: path of light → no return]--> moksha
+  dhumadi_marga --[opposite-of: return vs no-return]--> archiradi_marga
+  sarva_dharman_parityajya --[leads-to: carama-śloka guarantee]--> moksha
+  sharanagati --[is-a: surrender = carama-upadeśa]--> sarva_dharman_parityajya
+  jnana_angas --[leads-to: 20 virtues that constitute knowledge]--> jnana_yoga
+  amanitva --[is-a: first of the 20]--> jnana_angas
+  arjava --[is-a: 3rd of the 20]--> jnana_angas
+  shauca --[is-a: 6th of the 20]--> jnana_angas
+  ksanti --[is-a: 4th of the 20]--> jnana_angas
+  ahimsa --[is-a: 2nd of the 20]--> jnana_angas
+  vairagya --[is-a: 11th of the 20]--> jnana_angas
+  ananya_yoga --[is-a: 16th of the 20]--> jnana_angas
+  ananya_yoga --[is-a: undeviating bhakti]--> bhakti_yoga
+  vivikta_seva --[is-a: 17th of the 20]--> jnana_angas
+  adhyatma_jnana_nityatvam --[is-a: 19th of the 20]--> jnana_angas
+  tattva_jnanartha_darshanam --[is-a: 20th — the capstone]--> jnana_angas
+  sattvika_shraddha --[is-a: faith in sattva]--> shraddha
+  rajasa_shraddha --[is-a: faith in rajas]--> shraddha
+  tamasa_shraddha --[is-a: faith in tamas]--> shraddha
+  sattvika_shraddha --[arises-from: expresses sattva]--> sattva
+  rajasa_shraddha --[arises-from: expresses rajas]--> rajas
+  tamasa_shraddha --[arises-from: expresses tamas]--> tamas
+  sattvika_ahara --[arises-from: food expressing sattva]--> sattva
+  pravritti_nivritti --[predicates-on: sāttvika buddhi knows both]--> buddhi
+  pravritti_nivritti --[leads-to: knowing pravṛtti = knowing one\\]--> svadharma
+  ashvattha --[is-a: tree as metaphor for embodiment]--> kshetra_field
+  pranava_om --[is-a: syllable identifying Brahman]--> brahman
+  akshara_a --[is-a: first phoneme]--> pranava_om
+  jyotir_jyoti --[is-a: light of lights = Hari]--> paramatman
+  vibhuti --[predicates-on: glory expresses supremacy]--> sarvottamatva
+  kshetra_jnana --[includes: Ch 13 culminates jñāna]--> jnana_yoga
+  bhakti_yoga --[leads-to: devotion culminates in surrender]--> sharanagati
+  jnana_yoga --[leads-to: knowledge → release]--> moksha
+  karma_yoga --[leads-to: action purifies → knowledge]--> jnana_yoga
+  purushottama --[manifested-as-nama: Pūrṇa Puruṣottama as nāma — BG 15.18 carama-śloka]--> vsn:n_0024
+  purushottama --[manifested-as-nama: Puruṣaḥ — the puruṣa beyond kṣara/akṣara]--> vsn:n_0406
+  brahman --[manifested-as-nama: Viśvam — Brahman as cosmic totality]--> vsn:n_0001
+  brahman --[manifested-as-nama: Viṣṇuḥ — Mādhva: Brahman = Viṣṇu]--> vsn:n_0002
+  brahman --[manifested-as-nama: Brahma — direct name-form of Brahman]--> vsn:n_0667
+  paramatman --[manifested-as-nama: Paramātmā — direct nāma of Paramātman]--> vsn:n_0012
+  paramatman --[manifested-as-nama: Nārāyaṇaḥ — antaryāmin in all waters/beings]--> vsn:n_0245
+  paramatman --[manifested-as-nama: Bhūtātmā — inner self of all beings]--> vsn:n_0007
+  paramatman --[manifested-as-nama: Sākṣī — witness-self (BG 13.22 upadraṣṭā)]--> vsn:n_0015
+  avatara --[manifested-as-nama: Kṛṣṇaḥ — speaker of the Gītā, sva-icchā-avatāra]--> vsn:n_0057
+  avatara --[manifested-as-nama: Rāmaḥ — Tretā-yuga avatāra]--> vsn:n_0394
+  avatara --[manifested-as-nama: Nārasiṃha-vapuḥ — man-lion avatāra-form]--> vsn:n_0021
+  avatara --[manifested-as-nama: Vāmanaḥ — dwarf avatāra]--> vsn:n_0152
+  avatara --[manifested-as-nama: Mahā-varāhaḥ — boar avatāra]--> vsn:n_0539
+  avatara --[manifested-as-nama: Khaṇḍa-paraśuḥ — Paraśu-rāma avatāra]--> vsn:n_0570
+  akshara_purusha --[manifested-as-nama: Akṣaraḥ — the imperishable (kūṭastha)]--> vsn:n_0016
+  akshara_purusha --[manifested-as-nama: Akṣaraḥ — second occurrence, Lakṣmī-tier]--> vsn:n_0017
+  sarvottamatva --[manifested-as-nama: Viṣṇuḥ — sarvottama by Mādhva siddhānta]--> vsn:n_0002
+  sarvottamatva --[manifested-as-nama: Puruṣottamaḥ — supreme person, none higher]--> vsn:n_0024
+  sarvottamatva --[manifested-as-nama: Loka-trayāśrayaḥ — shelter of all three worlds]--> vsn:n_0650
+  sarvottamatva --[manifested-as-nama: Hariḥ — sin-snatcher, sarvottama]--> vsn:n_0656
+  bhakti_yoga --[manifested-as-nama: Bhakta-vatsalaḥ — affectionate to devotees]--> vsn:n_0739
+  bhakti_yoga --[manifested-as-nama: Bhakta-vatsalaḥ — second occurrence, sealing emphasis]--> vsn:n_0780
+  bhakti_yoga --[manifested-as-nama: Loka-nāthaḥ — Lord-of-bhakta-loka]--> vsn:n_0737
+  dhyana_yoga --[manifested-as-nama: Yogaḥ — yoga itself as name-form]--> vsn:n_0018
+  dhyana_yoga --[manifested-as-nama: Yogī — the yogin, dhyāna-locus]--> vsn:n_0852
+  dhyana_yoga --[manifested-as-nama: Yogīśaḥ — Lord of yogins (BG 6 dhyāna-yoga)]--> vsn:n_0853
+  sharanagati --[manifested-as-nama: Śaraṇam — direct refuge-name (BG 18.66)]--> vsn:n_0086
+  sharanagati --[manifested-as-nama: Vīrahā — slayer of devotees\\]--> vsn:n_0928
+  sharanagati --[manifested-as-nama: Suhṛt — friend (śaraṇāgata-vatsala)]--> vsn:n_0461
+  sarva_dharman_parityajya --[manifested-as-nama: Hariḥ — snatcher of sins (BG 18.66 sarva-pāpa-mokṣa)]--> vsn:n_0656
+  sarva_dharman_parityajya --[manifested-as-nama: Puruṣottamaḥ — the speaker of the carama-śloka]--> vsn:n_0024
+  moksha --[manifested-as-nama: Mukundaḥ — giver of mukti]--> vsn:n_0515
+  moksha --[manifested-as-nama: Muktānāṃ paramā gatiḥ — supreme goal of the released]--> vsn:n_0013
+  paramagati --[manifested-as-nama: Muktānāṃ paramā gatiḥ — direct paramagati nāma]--> vsn:n_0013
+  paramagati --[manifested-as-nama: Satāṃ gatiḥ — goal of the sat (sādhus)]--> vsn:n_0184
+  antaryamin --[manifested-as-nama: Viṣṇuḥ — pervader, antaryāmin par excellence]--> vsn:n_0002
+  antaryamin --[manifested-as-nama: Bhūtātmā — inner self of all beings]--> vsn:n_0007
+  antaryamin --[manifested-as-nama: Hṛṣīkeśaḥ — Lord of indriyas, hṛdaya-stha]--> vsn:n_0047
+  antaryamin --[manifested-as-nama: Ūrjitaḥ — sūtrātman, thread-of-being]--> vsn:n_0156
+  vibhuti --[manifested-as-nama: Trivikramaḥ — three-stride vibhūti (BG 10)]--> vsn:n_0530
+  vibhuti --[manifested-as-nama: Nārasiṃha-vapuḥ — narasiṃha as vibhūti-form]--> vsn:n_0021
+  pancha_bheda --[leads-to: pañca-bheda grounds tāratamya]--> taratamya
+  pancha_bheda --[predicates-on: pañca-bheda asserts difference from Īśvara]--> isvara
+  taratamya --[predicates-on: tāratamya orders grades of jīvas]--> jiva
+  taratamya --[includes: tāratamya encompasses pañca-bheda]--> pancha_bheda
+  naishkarmya_siddhi --[predicates-on: naiṣkarmya-siddhi manifests as vibhūti]--> vibhuti
+  naishkarmya_siddhi --[leads-to: naiṣkarmya-siddhi culminates in jīvanmukti]--> jivanmukti
+  jivanmukti --[leads-to: jīvanmukti leads to sāyujya]--> sayujya
+  jivanmukti --[predicates-on: jīvanmukta sees jyotir among jyotis]--> jyotir_jyoti
+  jyotir_jyoti --[is-a: jyotir-jyoti and aśvattha are both pratīkas]--> ashvattha
+  vibhuti --[is-a: ratha-rūpaka is a vibhūti-pratīka]--> ratha_rupaka
+  paramartha --[includes: Brahman is paramārtha]--> brahman
+  paramartha --[includes: sarvottamatva is the axiomatic paramārtha]--> sarvottamatva
+  paramartha --[includes: tāratamya flows from paramārtha]--> taratamya
+  tattva --[includes: jīva is a tattva]--> jiva
+  tattva --[includes: prakṛti is a tattva]--> prakriti
+  tattva --[includes: kāla is a tattva]--> kala
+  tattva --[predicates-on: tattvas describe paramārtha]--> paramartha
+  guna --[includes: sattva is a guṇa]--> sattva
+  guna --[includes: rajas is a guṇa]--> rajas
+  guna --[includes: tamas is a guṇa]--> tamas
+  guna --[arises-from: guṇas arise from prakṛti]--> prakriti
+  kshetra --[includes: body is the field]--> kshetra_field
+  kshetra --[includes: field-knower is Bhagavān]--> kshetrajna
+  kshetra --[predicates-on: kshetra-frame applies to jīva]--> jiva
+  antahkarana --[includes: manas is an inner organ]--> manas
+  antahkarana --[includes: buddhi is an inner organ]--> buddhi
+  antahkarana --[includes: ahaṅkāra is an inner organ]--> ahankara
+  antahkarana --[predicates-on: antaḥkaraṇa belongs to jīva]--> jiva
+  dharma --[includes: svadharma is core dharma]--> svadharma
+  dharma --[includes: niṣkāma-karma is dharmic action]--> nishkama_karma
+  dharma --[leads-to: dharma leads to sādhanā]--> sadhana
+  dosha --[includes: kāma is the root doṣa]--> kama
+  dosha --[includes: krodha arises from kāma]--> krodha
+  dosha --[includes: lobha is the third gate to naraka]--> lobha
+  dosha --[includes: dvandva is a doṣa-root]--> dvandva
+  dosha --[opposite-of: doṣa opposes sādhanā]--> sadhana
+  sadhana --[includes: śraddhā is a sādhanā]--> shraddha
+  sadhana --[includes: vairāgya is a sādhanā]--> vairagya
+  sadhana --[includes: tapas is a sādhanā]--> tapas
+  sadhana --[includes: dāna is a sādhanā]--> dana
+  sadhana --[leads-to: sādhanā leads to phala]--> phala
+  yoga --[includes: karma-yoga is a path]--> karma_yoga
+  yoga --[includes: jñāna-yoga is a path]--> jnana_yoga
+  yoga --[includes: bhakti-yoga is the substrate]--> bhakti_yoga
+  yoga --[leads-to: yoga leads to phala]--> phala
+  yajna --[includes: dravya-yajña is first of four]--> dravya_yajna
+  yajna --[includes: tapo-yajña is second of four]--> tapo_yajna
+  yajna --[includes: yoga-yajña is third of four]--> yoga_yajna
+  yajna --[is-a: yajña is a form of sādhanā]--> sadhana
+  phala --[includes: mokṣa is the supreme phala]--> moksha
+  phala --[includes: paramagati is phala]--> paramagati
+  phala --[arises-from: phala arises from sādhanā]--> sadhana
+  pratika --[includes: aśvattha is a pratīka]--> ashvattha
+  pratika --[includes: praṇava-Om is a pratīka]--> pranava_om
+  pratika --[predicates-on: pratīkas point to Brahman]--> brahman
+  dravya_yajna --[leads-to: ascending order of yajñas]--> tapo_yajna
+  tapo_yajna --[leads-to: tapas leads to yoga-yajña]--> yoga_yajna
+  yoga_yajna --[leads-to: yoga leads to svādhyāya-yajña]--> svadhyaya_yajna
+  svadhyaya_yajna --[leads-to: svādhyāya leads to jñāna-yajña — highest]--> jnana_yajna
+  brahmarpana --[arises-from: brahmārpaṇa culminates jñāna-yajña]--> jnana_yajna
+  gunatita --[leads-to: guṇātīta state leads to mokṣa]--> moksha
+  gunatita --[opposite-of: beyond tamas is guṇātīta]--> tamas
+  triguna_atita --[predicates-on: Vedas declare Brahman beyond guṇas]--> brahman
+  triguna_atita --[leads-to: vedic testimony leads toward guṇātīta]--> gunatita
+  buddhi_yoga --[is-a: buddhi-yoga is jñāna-yoga in action]--> jnana_yoga
+  buddhi_yoga --[leads-to: buddhi-yoga matures into sannyāsa]--> sannyasa_yoga
+  abhyasa_vairagya --[leads-to: practice and dispassion lead to buddhi-yoga]--> buddhi_yoga
+  kala --[predicates-on: kāla expresses Hari nature]--> svarupa_aikya
+  samatva --[arises-from: equanimity arises from practice]--> abhyasa
+  samatva --[leads-to: samatva is the ground of jñāna-yoga]--> jnana_yoga
+  sattvika_ahara --[leads-to: sāttvika food supports renunciation]--> sannyasa_yoga
+  paratattva --[includes: pañca-bheda is a paratattva truth]--> pancha_bheda
+  paratattva --[includes: svarūpa-aikya is paratattva doctrine]--> svarupa_aikya
+  paratattva --[predicates-on: paratattva centres on Brahman]--> brahman
+  shat_prameya --[includes: jīva-svabhāva is second prameya]--> jiva_svabhava
+  shat_prameya --[includes: adhibhūta is fourth prameya]--> adhibhuta
+  shat_prameya --[includes: adhidaiva is fifth prameya]--> adhidaiva
+  shat_prameya --[includes: adhiyajña is sixth prameya]--> adhiyajna
+  shat_prameya --[predicates-on: ṣaṭ-prameya begins with Brahman]--> brahman
+  ashta_prakriti --[includes: parā-prakṛti is higher nature]--> para_prakriti
+  ashta_prakriti --[predicates-on: aṣṭa-prakṛti elaborates prakṛti]--> prakriti
+  dvividha_nishtha --[includes: buddhi-yoga supports both niṣṭhās]--> buddhi_yoga
+  dvividha_nishtha --[predicates-on: karma-niṣṭhā is one of two]--> karma_yoga
+  ananya_bhakti_sharanagati --[includes: ananya-bhakti is the means]--> ananya_eka_bhakti
+  ananya_bhakti_sharanagati --[includes: antima-āśvāsana is final promise]--> antima_ashvasana
+  ananya_bhakti_sharanagati --[leads-to: bhakti-śaraṇāgati leads to mokṣa]--> moksha
+  kshetra_kshetrajna --[includes: piṇḍāṇḍa-brahmāṇḍa — span of the field]--> pindanda_brahmanda
+  kshetra_kshetrajna --[predicates-on: kshetra-kshetrajña frame applies to jīva]--> jiva
+  phala_gati --[includes: naiṣkarmya-siddhi is a phala]--> naishkarmya_siddhi
+  phala_gati --[predicates-on: phala-gati encompasses mokṣa]--> moksha
+  sadhana_angas --[includes: samatva is a sādhana-aṅga]--> samatva
+  sadhana_angas --[predicates-on: sādhana-aṅgas support sādhanā]--> sadhana
+  triguna --[includes: sattva is a guṇa]--> sattva
+  triguna --[includes: rajas is a guṇa]--> rajas
+  triguna --[includes: tamas is a guṇa]--> tamas
+  triguna --[arises-from: triguṇa arises from prakṛti]--> prakriti
+  yajna_pratika --[includes: brahmārpaṇa is a yajña-pratīka]--> brahmarpana
+  yajna_pratika --[includes: jñāna-yajña is highest yajña]--> jnana_yajna
+  yajna_pratika --[predicates-on: yajña-pratīkas point to Brahman]--> brahman
+  samatva_dharma --[predicates-on: samatva is a jñāna-aṅga]--> jnana_angas
+  kalanemi_kama_abhimani --[predicates-on: Kālanemi is abhimāni of kāma]--> kama
+
+
+=== ANCHOR SHLOKAS (dev + iast) ===
+
+BG 8.3 (brahman):
+  देव: अक्षरं ब्रह्म परमं स्वभावोऽध्यात्ममुच्यते।\\nभूतभावोद्भवकरो विसर्गः कर्मसंज्ञितः॥
+  EN:   akṣaraṃ brahma paramaṃ svabhāvo'dhyātmam ucyate |\\nbhūta-bhāvodbhava-karo visargaḥ karma-saṃjñitaḥ ||
+
+BG 13.22 (paramatman):
+  देव: उपद्रष्टानुमन्ता च भर्ता भोक्ता महेश्वरः।\\nपरमात्मेति चाप्युक्तो देहेऽस्मिन्पुरुषः परः॥
+  EN:   upadraṣṭānumantā ca bhartā bhoktā maheśvaraḥ |\\nparamātmeti cāpy ukto dehe 'smin puruṣaḥ paraḥ ||
+
+BG 15.18 (purushottama):
+  देव: यस्मात्क्षरमतीतोऽहमक्षरादपि चोत्तमः।\\nअतोऽस्मि लोके वेदे च प्रसिद्धः पुरुषोत्तमः॥
+  EN:   yasmāt kṣaram atīto 'ham akṣarād api cottamaḥ |\\nato 'smi loke vede ca prasiddhaḥ puruṣottamaḥ ||
+
+BG 15.16 (ksara_purusha):
+  देव: द्वाविमौ पुरुषौ लोके क्षरश्चाक्षर एव च।\\nक्षरः सर्वाणि भूतानि कूटस्थोऽक्षर उच्यते॥
+  EN:   dvāv imau puruṣau loke kṣaraś cākṣara eva ca |\\nkṣaraḥ sarvāṇi bhūtāni kūṭastho 'kṣara ucyate ||
+
+BG 15.16 (akshara_purusha):
+  देव: द्वाविमौ पुरुषौ लोके क्षरश्चाक्षर एव च।\\nक्षरः सर्वाणि भूतानि कूटस्थोऽक्षर उच्यते॥
+  EN:   dvāv imau puruṣau loke kṣaraś cākṣara eva ca |\\nkṣaraḥ sarvāṇi bhūtāni kūṭastho 'kṣara ucyate ||
+
+BG 4.7 (avatara):
+  देव: यदा यदा हि धर्मस्य ग्लानिर्भवति भारत।\\nअभ्युत्थानमधर्मस्य तदात्मानं सृजाम्यहम्॥
+  EN:   yadā yadā hi dharmasya glānir bhavati bhārata |\\nabhyutthānam adharmasya tadātmānaṃ sṛjāmy aham ||
+
+BG 7.7 (svarupa_aikya):
+  देव: मत्तः परतरं नान्यत्किञ्चिदस्ति धनञ्जय।\\nमयि सर्वमिदं प्रोतं सूत्रे मणिगणा इव॥
+  EN:   mattaḥ parataraṃ nānyat kiñcid asti dhanañjaya |\\nmayi sarvam idaṃ protaṃ sūtre maṇi-gaṇā iva ||
+
+BG 7.7 (sarvottamatva):
+  देव: मत्तः परतरं नान्यत्किञ्चिदस्ति धनञ्जय।
+  EN:   mattaḥ parataraṃ nānyat kiñcid asti dhanañjaya |
+
+BG 15.7 (jiva):
+  देव: ममैवांशो जीवलोके जीवभूतः सनातनः।\\nमनःषष्ठानीन्द्रियाणि प्रकृतिस्थानि कर्षति॥
+  EN:   mamaivāṃśo jīva-loke jīva-bhūtaḥ sanātanaḥ |\\nmanaḥ-ṣaṣṭhānīndriyāṇi prakṛti-sthāni karṣati ||
+
+BG 18.61 (isvara):
+  देव: ईश्वरः सर्वभूतानां हृद्देशेऽर्जुन तिष्ठति।\\nभ्रामयन्सर्वभूतानि यन्त्रारूढानि मायया॥
+  EN:   īśvaraḥ sarva-bhūtānāṃ hṛd-deśe 'rjuna tiṣṭhati |\\nbhrāmayan sarva-bhūtāni yantrārūḍhāni māyayā ||
+
+BG 7.4 (prakriti):
+  देव: भूमिरापोऽनलो वायुः खं मनो बुद्धिरेव च।\\nअहङ्कार इतीयं मे भिन्ना प्रकृतिरष्टधा॥
+  EN:   bhūmir āpo 'nalo vāyuḥ khaṃ mano buddhir eva ca |\\nahaṅkāra itīyaṃ me bhinnā prakṛtir aṣṭadhā ||
+
+BG 7.5 (para_prakriti):
+  देव: अपरेयमितस्त्वन्यां प्रकृतिं विद्धि मे पराम्।\\nजीवभूतां महाबाहो ययेदं धार्यते जगत्॥
+  EN:   apareyam itas tv anyāṃ prakṛtiṃ viddhi me parām |\\njīva-bhūtāṃ mahā-bāho yayedaṃ dhāryate jagat ||
+
+BG 11.32 (kala):
+  देव: कालोऽस्मि लोकक्षयकृत्प्रवृद्धो लोकान्समाहर्तुमिह प्रवृत्तः।
+  EN:   kālo 'smi loka-kṣaya-kṛt pravṛddho lokān samāhartum iha pravṛttaḥ |
+
+BG 18.48 (svabhava):
+  देव: सहजं कर्म कौन्तेय सदोषमपि न त्यजेत्।\\nसर्वारम्भा हि दोषेण धूमेनाग्निरिवावृताः॥
+  EN:   sahajaṃ karma kaunteya sa-doṣam api na tyajet |\\nsarvārambhā hi doṣeṇa dhūmenāgnir ivāvṛtāḥ ||
+
+BG 13.1 (kshetra_field):
+  देव: इदं शरीरं कौन्तेय क्षेत्रमित्यभिधीयते।\\nएतद्यो वेत्ति तं प्राहुः क्षेत्रज्ञ इति तद्विदः॥
+  EN:   idaṃ śarīraṃ kaunteya kṣetram ity abhidhīyate |\\netad yo vetti taṃ prāhuḥ kṣetrajña iti tad-vidaḥ ||
+
+BG 13.2 (kshetrajna):
+  देव: क्षेत्रज्ञं चापि मां विद्धि सर्वक्षेत्रेषु भारत।\\nक्षेत्रक्षेत्रज्ञयोर्ज्ञानं यत्तज्ज्ञानं मतं मम॥
+  EN:   kṣetrajñaṃ cāpi māṃ viddhi sarva-kṣetreṣu bhārata |\\nkṣetra-kṣetrajñayor jñānaṃ yat taj jñānaṃ mataṃ mama ||
+
+BG 14.6 (sattva):
+  देव: तत्र सत्त्वं निर्मलत्वात्प्रकाशकमनामयम्।\\nसुखसङ्गेन बध्नाति ज्ञानसङ्गेन चानघ॥
+  EN:   tatra sattvaṃ nirmalatvāt prakāśakam anāmayam |\\nsukha-saṅgena badhnāti jñāna-saṅgena cānagha ||
+
+BG 14.7 (rajas):
+  देव: रजो रागात्मकं विद्धि तृष्णासङ्गसमुद्भवम्।\\nतन्निबध्नाति कौन्तेय कर्मसङ्गेन देहिनम्॥
+  EN:   rajo rāgātmakaṃ viddhi tṛṣṇā-saṅga-samudbhavam |\\ntan nibadhnāti kaunteya karma-saṅgena dehinam ||
+
+BG 14.8 (tamas):
+  देव: तमस्त्वज्ञानजं विद्धि मोहनं सर्वदेहिनाम्।\\nप्रमादालस्यनिद्राभिस्तन्निबध्नाति भारत॥
+  EN:   tamas tv ajñāna-jaṃ viddhi mohanaṃ sarva-dehinām |\\npramādālasya-nidrābhis tan nibadhnāti bhārata ||
+
+BG 14.24 (gunatita):
+  देव: समदुःखसुखः स्वस्थः समलोष्टाश्मकाञ्चनः।\\nतुल्यप्रियाप्रियो धीरस्तुल्यनिन्दात्मसंस्तुतिः॥
+  EN:   sama-duḥkha-sukhaḥ sva-sthaḥ sama-loṣṭāśma-kāñcanaḥ |\\ntulya-priyāpriyo dhīras tulya-nindātma-saṃstutiḥ ||
+
+BG 2.47 (karma_yoga):
+  देव: कर्मण्येवाधिकारस्ते मा फलेषु कदाचन।\\nमा कर्मफलहेतुर्भूर्मा ते सङ्गोऽस्त्वकर्मणि॥
+  EN:   karmaṇy evādhikāras te mā phaleṣu kadācana |\\nmā karma-phala-hetur bhūr mā te saṅgo 'stv akarmaṇi ||
+
+BG 4.38 (jnana_yoga):
+  देव: न हि ज्ञानेन सदृशं पवित्रमिह विद्यते।\\nतत्स्वयं योगसंसिद्धः कालेनात्मनि विन्दति॥
+  EN:   na hi jñānena sadṛśaṃ pavitram iha vidyate |\\ntat svayaṃ yoga-saṃsiddhaḥ kālenātmani vindati ||
+
+BG 18.65 (bhakti_yoga):
+  देव: मन्मना भव मद्भक्तो मद्याजी मां नमस्कुरु।\\nमामेवैष्यसि सत्यं ते प्रतिजाने प्रियोऽसि मे॥
+  EN:   man-manā bhava mad-bhakto mad-yājī māṃ namaskuru |\\nmām evaiṣyasi satyaṃ te pratijāne priyo 'si me ||
+
+BG 6.10 (dhyana_yoga):
+  देव: योगी युञ्जीत सततमात्मानं रहसि स्थितः।\\nएकाकी यतचित्तात्मा निराशीरपरिग्रहः॥
+  EN:   yogī yuñjīta satatam ātmānaṃ rahasi sthitaḥ |\\nekākī yata-cittātmā nirāśīr aparigrahaḥ ||
+
+BG 2.48 (samatva):
+  देव: योगस्थः कुरु कर्माणि सङ्गं त्यक्त्वा धनञ्जय।\\nसिद्ध्यसिद्ध्योः समो भूत्वा समत्वं योग उच्यते॥
+  EN:   yoga-sthaḥ kuru karmāṇi saṅgaṃ tyaktvā dhanañjaya |\\nsiddhy-asiddhyoḥ samo bhūtvā samatvaṃ yoga ucyate ||
+
+BG 18.66 (sharanagati):
+  देव: सर्वधर्मान्परित्यज्य मामेकं शरणं व्रज।\\nअहं त्वा सर्वपापेभ्यो मोक्षयिष्यामि मा शुचः॥
+  EN:   sarva-dharmān parityajya mām ekaṃ śaraṇaṃ vraja |\\nahaṃ tvā sarva-pāpebhyo mokṣayiṣyāmi mā śucaḥ ||
+
+BG 2.56 (sthitaprajna):
+  देव: दुःखेष्वनुद्विग्नमनाः सुखेषु विगतस्पृहः।\\nवीतरागभयक्रोधः स्थितधीर्मुनिरुच्यते॥
+  EN:   duḥkheṣv anudvigna-manāḥ sukheṣu vigata-spṛhaḥ |\\nvīta-rāga-bhaya-krodhaḥ sthita-dhīr munir ucyate ||
+
+BG 3.35 (svadharma):
+  देव: श्रेयान्स्वधर्मो विगुणः परधर्मात्स्वनुष्ठितात्।\\nस्वधर्मे निधनं श्रेयः परधर्मो भयावहः॥
+  EN:   śreyān sva-dharmo viguṇaḥ para-dharmāt sv-anuṣṭhitāt |\\nsva-dharme nidhanaṃ śreyaḥ para-dharmo bhayāvahaḥ ||
+
+BG 2.47 (nishkama_karma):
+  देव: कर्मण्येवाधिकारस्ते मा फलेषु कदाचन।
+  EN:   karmaṇy evādhikāras te mā phaleṣu kadācana |
+
+BG 16.5 (daivi_sampad):
+  देव: दैवी सम्पद्विमोक्षाय निबन्धायासुरी मता।\\nमा शुचः सम्पदं दैवीमभिजातोऽसि पाण्डव॥
+  EN:   daivī sampad vimokṣāya nibandhāyāsurī matā |\\nmā śucaḥ sampadaṃ daivīm abhijāto 'si pāṇḍava ||
+
+BG 3.37 (kama):
+  देव: काम एष क्रोध एष रजोगुणसमुद्भवः।\\nमहाशनो महापाप्मा विद्ध्येनमिह वैरिणम्॥
+  EN:   kāma eṣa krodha eṣa rajo-guṇa-samudbhavaḥ |\\nmahāśano mahā-pāpmā viddhy enam iha vairiṇam ||
+
+BG 2.63 (krodha):
+  देव: क्रोधाद्भवति सम्मोहः सम्मोहात्स्मृतिविभ्रमः।\\nस्मृतिभ्रंशाद् बुद्धिनाशो बुद्धिनाशात्प्रणश्यति॥
+  EN:   krodhād bhavati sammohaḥ sammohāt smṛti-vibhramaḥ |\\nsmṛti-bhraṃśād buddhi-nāśo buddhi-nāśāt praṇaśyati ||
+
+BG 2.62 (asatsanga):
+  देव: ध्यायतो विषयान्पुंसः सङ्गस्तेषूपजायते।\\nसङ्गात्सञ्जायते कामः कामात्क्रोधोऽभिजायते॥
+  EN:   dhyāyato viṣayān puṃsaḥ saṅgas teṣūpajāyate |\\nsaṅgāt sañjāyate kāmaḥ kāmāt krodho 'bhijāyate ||
+
+BG 16.21 (asuri_sampad):
+  देव: त्रिविधं नरकस्येदं द्वारं नाशनमात्मनः।\\nकामः क्रोधस्तथा लोभस्तस्मादेतत्त्रयं त्यजेत्॥
+  EN:   tri-vidhaṃ narakasyedaṃ dvāraṃ nāśanam ātmanaḥ |\\nkāmaḥ krodhas tathā lobhas tasmād etat trayaṃ tyajet ||
+
+BG 6.1 (moksha):
+  देव: अनाश्रितः कर्मफलं कार्यं कर्म करोति यः।\\nस सन्न्यासी च योगी च न निरग्निर्न चाक्रियः॥
+  EN:   anāśritaḥ karma-phalaṃ kāryaṃ karma karoti yaḥ |\\nsa sannyāsī ca yogī ca na niragnir na cākriyaḥ ||
+
+BG 15.6 (paramagati):
+  देव: यद्गत्वा न निवर्तन्ते तद्धाम परमं मम।
+  EN:   yad gatvā na nivartante tad dhāma paramaṃ mama |
+
+BG 2.72 (brahmi_sthiti):
+  देव: एषा ब्राह्मी स्थितिः पार्थ नैनां प्राप्य विमुह्यति।\\nस्थित्वास्यामन्तकालेऽपि ब्रह्मनिर्वाणमृच्छति॥
+  EN:   eṣā brāhmī sthitiḥ pārtha naināṃ prāpya vimuhyati |\\nsthitvāsyām anta-kāle 'pi brahma-nirvāṇam ṛcchati ||
+
+BG 4.33 (jnana_yajna):
+  देव: श्रेयान्द्रव्यमयाद्यज्ञाज्ज्ञानयज्ञः परन्तप।\\nसर्वं कर्माखिलं पार्थ ज्ञाने परिसमाप्यते॥
+  EN:   śreyān dravyamayād yajñāj jñāna-yajñaḥ parantapa |\\nsarvaṃ karmākhilaṃ pārtha jñāne parisamāpyate ||
+
+BG 4.24 (brahmarpana):
+  देव: ब्रह्मार्पणं ब्रह्म हविर्ब्रह्माग्नौ ब्रह्मणा हुतम्।\\nब्रह्मैव तेन गन्तव्यं ब्रह्मकर्मसमाधिना॥
+  EN:   brahmārpaṇaṃ brahma havir brahmāgnau brahmaṇā hutam |\\nbrahmaiva tena gantavyaṃ brahma-karma-samādhinā ||
+
+BG 15.1 (ashvattha):
+  देव: ऊर्ध्वमूलमधःशाखमश्वत्थं प्राहुरव्ययम्।\\nछन्दांसि यस्य पर्णानि यस्तं वेद स वेदवित्॥
+  EN:   ūrdhva-mūlam adhaḥ-śākham aśvatthaṃ prāhur avyayam |\\nchandāṃsi yasya parṇāni yas taṃ veda sa vedavit ||
+
+BG 8.13 (pranava_om):
+  देव: ओमित्येकाक्षरं ब्रह्म व्याहरन्मामनुस्मरन्।\\nयः प्रयाति त्यजन्देहं स याति परमां गतिम्॥
+  EN:   om ity ekākṣaraṃ brahma vyāharan mām anusmaran |\\nyaḥ prayāti tyajan dehaṃ sa yāti paramāṃ gatim ||
+
+BG 13.17 (jyotir_jyoti):
+  देव: ज्योतिषामपि तज्ज्योतिस्तमसः परमुच्यते।\\nज्ञानं ज्ञेयं ज्ञानगम्यं हृदि सर्वस्य विष्ठितम्॥
+  EN:   jyotiṣām api taj jyotis tamasaḥ param ucyate |\\njñānaṃ jñeyaṃ jñāna-gamyaṃ hṛdi sarvasya viṣṭhitam ||
+
+BG 7.7 (taratamya):
+  देव: मत्तः परतरं नान्यत्किञ्चिदस्ति धनञ्जय।\\nमयि सर्वमिदं प्रोतं सूत्रे मणिगणा इव॥
+
+BG 15.7 (pancha_bheda):
+  देव: ममैवांशो जीवलोके जीवभूतः सनातनः।
+
+BG 13.7 (jnana_angas):
+  देव: अमानित्वमदम्भित्वमहिंसा क्षान्तिरार्जवम्।\\nआचार्योपासनं शौचं स्थैर्यमात्मविनिग्रहः॥
+
+BG 13.7 (amanitva):
+  देव: अमानित्वमदम्भित्वमहिंसा क्षान्तिरार्जवम्।
+
+BG 9.22 (ananya_yoga):
+  देव: अनन्याश्चिन्तयन्तो मां ये जनाः पर्युपासते।\\nतेषां नित्याभियुक्तानां योगक्षेमं वहाम्यहम्॥
+
+BG 17.2 (sattvika_shraddha):
+  देव: त्रिविधा भवति श्रद्धा देहिनां सा स्वभावजा।\\nसात्त्विकी राजसी चैव तामसी चेति तां शृणु॥
+
+BG 17.8 (sattvika_ahara):
+  देव: आयुःसत्त्वबलारोग्यसुखप्रीतिविवर्धनाः।\\nरस्याः स्निग्धाः स्थिरा हृद्या आहाराः सात्त्विकप्रियाः॥
+
+BG 18.30 (pravritti_nivritti):
+  देव: प्रवृत्तिं च निवृत्तिं च कार्याकार्ये भयाभये।\\nबन्धं मोक्षं च या वेत्ति बुद्धिः सा पार्थ सात्त्विकी॥
+
+BG 5.18 (sayujya):
+  देव: विद्याविनयसम्पन्ने ब्राह्मणे गवि हस्तिनि।\\nशुनि चैव श्वपाके च पण्डिताः समदर्शिनः॥
+
+BG 11.54 (samipya):
+  देव: भक्त्या त्वनन्यया शक्य अहमेवंविधोऽर्जुन।\\nज्ञातुं द्रष्टुं च तत्त्वेन प्रवेष्टुं च परन्तप॥
+
+BG 12.20 (salokya):
+  देव: ये तु धर्म्यामृतमिदं यथोक्तं पर्युपासते।\\nश्रद्दधाना मत्परमा भक्तास्तेऽतीव मे प्रियाः॥
+
+BG 14.2 (sarupya):
+  देव: इदं ज्ञानमुपाश्रित्य मम साधर्म्यमागताः।\\nसर्गेऽपि नोपजायन्ते प्रलये न व्यथन्ति च॥
+
+BG 8.3 (aksharam_param_brahma):
+  देव: अक्षरं ब्रह्म परमं स्वभावोऽध्यात्ममुच्यते।
+
+BG 3.5 (karma_tattva):
+  देव: न हि कश्चित्क्षणमपि जातु तिष्ठत्यकर्मकृत्।\\nकार्यते ह्यवशः कर्म सर्वः प्रकृतिजैर्गुणैः॥
+
+BG 15.9 (antahkarana):
+  देव: श्रोत्रं चक्षुः स्पर्शनं च रसनं घ्राणमेव च।\\nअधिष्ठाय मनश्चायं विषयानुपसेवते॥
+  EN:   śrotraṃ cakṣuḥ sparśanaṃ ca rasanaṃ ghrāṇam eva ca |\\nadhiṣṭhāya manaś cāyaṃ viṣayān upasevate ||
+
+BG 4.7 (dharma):
+  देव: यदा यदा हि धर्मस्य ग्लानिर्भवति भारत।\\nअभ्युत्थानमधर्मस्य तदात्मानं सृजाम्यहम्॥
+  EN:   yadā yadā hi dharmasya glānir bhavati bhārata |\\nabhyutthānam adharmasya tadātmānaṃ sṛjāmy aham ||
+
+BG 3.37 (dosha):
+  देव: काम एष क्रोध एष रजोगुणसमुद्भवः।\\nमहाशनो महापाप्मा विद्ध्येनमिह वैरिणम्॥
+  EN:   kāma eṣa krodha eṣa rajo-guṇa-samudbhavaḥ |\\nmahāśano mahā-pāpmā viddhy enam iha vairiṇam ||
+
+BG 14.5 (guna):
+  देव: सत्त्वं रजस्तम इति गुणाः प्रकृतिसम्भवाः।\\nनिबध्नन्ति महाबाहो देहे देहिनमव्ययम्॥
+  EN:   sattvaṃ rajas tama iti guṇāḥ prakṛti-sambhavāḥ |\\nnibadhnanti mahā-bāho dehe dehinam avyayam ||
+
+BG 13.1 (kshetra):
+  देव: इदं शरीरं कौन्तेय क्षेत्रमित्यभिधीयते।\\nएतद्यो वेत्ति तं प्राहुः क्षेत्रज्ञ इति तद्विदः॥
+  EN:   idaṃ śarīraṃ kaunteya kṣetram ity abhidhīyate |\\netad yo vetti taṃ prāhuḥ kṣetrajña iti tad-vidaḥ ||
+
+BG 15.17 (paramartha):
+  देव: उत्तमः पुरुषस्त्वन्यः परमात्मेत्युदाहृतः।\\nयो लोकत्रयमाविश्य बिभर्त्यव्यय ईश्वरः॥
+  EN:   uttamaḥ puruṣas tv anyaḥ paramātmety udāhṛtaḥ |\\nyo loka-trayam āviśya bibharty avyaya īśvaraḥ ||
+
+BG 18.54 (phala):
+  देव: ब्रह्मभूतः प्रसन्नात्मा न शोचति न काङ्क्षति।\\nसमः सर्वेषु भूतेषु मद्भक्तिं लभते पराम्॥
+  EN:   brahma-bhūtaḥ prasannātmā na śocati na kāṅkṣati |\\nsamaḥ sarveṣu bhūteṣu mad-bhaktiṃ labhate parām ||
+
+BG 15.1 (pratika):
+  देव: ऊर्ध्वमूलमधःशाखमश्वत्थं प्राहुरव्ययम्।\\nछन्दांसि यस्य पर्णानि यस्तं वेद स वेदवित्॥
+  EN:   ūrdhva-mūlam adhaḥ-śākham aśvatthaṃ prāhur avyayam |\\nchandāṃsi yasya parṇāni yas taṃ veda sa vedavit ||
+
+BG 4.28 (sadhana):
+  देव: द्रव्ययज्ञास्तपोयज्ञा योगयज्ञास्तथापरे।\\nस्वाध्यायज्ञानयज्ञाश्च यतयः संशितव्रताः॥
+  EN:   dravya-yajñās tapo-yajñā yoga-yajñās tathāpare |\\nsvādhyāya-jñāna-yajñāś ca yatayaḥ saṃśita-vratāḥ ||
+
+BG 7.4 (tattva):
+  देव: भूमिरापोऽनलो वायुः खं मनो बुद्धिरेव च।\\nअहङ्कार इतीयं मे भिन्ना प्रकृतिरष्टधा॥
+  EN:   bhūmir āpo 'nalo vāyuḥ khaṃ mano buddhir eva ca |\\nahaṅkāra itīyaṃ me bhinnā prakṛtir aṣṭadhā ||
+
+BG 3.10 (yajna):
+  देव: सहयज्ञाः प्रजाः सृष्ट्वा पुरोवाच प्रजापतिः।\\nअनेन प्रसविष्यध्वमेष वोऽस्त्विष्टकामधुक्॥
+  EN:   saha-yajñāḥ prajāḥ sṛṣṭvā puro-vāca prajāpatiḥ |\\nanena prasaviṣyadhvam eṣa vo 'stv iṣṭa-kāma-dhuk ||
+
+BG 6.46 (yoga):
+  देव: तपस्विभ्योऽधिको योगी ज्ञानिभ्योऽपि मतोऽधिकः।\\nकर्मिभ्यश्चाधिको योगी तस्माद्योगी भवार्जुन॥
+  EN:   tapasvibhyo 'dhiko yogī jñānibhyo 'pi mato 'dhikaḥ |\\nkarmibhyaś cādhiko yogī tasmād yogī bhavārjuna ||`;
+
+function getChatSystem() {
+  /* Language instruction prepended to every API call based on UI toggle */
+  const L = {
+    dev: 'LANGUAGE: Respond in Sanskrit using Devanāgarī script. Quote shlokas in Devanāgarī (e.g. कर्मण्येवाधिकारस्ते). Do NOT use IAST or Hindi.',
+    hi:  'LANGUAGE: Respond in Hindi using Devanāgarī script. Quote shlokas in Devanāgarī. Do NOT use IAST.',
+    kn:  'LANGUAGE: Respond in Kannada. Quote shlokas in Kannada script (e.g. ಕರ್ಮಣ್ಯೇವಾಧಿಕಾರಸ್ತೇ). Do NOT use IAST or Devanāgarī.',
+    en:  'LANGUAGE: Respond in English. Quote shlokas in IAST transliteration (e.g. karmaṇy evādhikāraste). Do NOT use Devanāgarī unless specifically asked.',
+  };
+  const lang = (typeof state !== 'undefined' && state.lang) ? state.lang : 'en';
+  const instr = L[lang] || L.en;
+  const voiceInstr = (typeof voiceMode !== 'undefined' && voiceMode)
+    ? '\n\nVOICE MODE: This response will be read aloud. Write as natural spoken language only. Use NO markdown — no #, **, *, >, ---, bullet points, or numbered lists. Use short flowing sentences and natural pauses. Structure with words like First, Also, Finally instead of lists or headers.'
+    : '';
+  return `You are a Bhagavad Gītā scholar specialising in the Madhva Vedānta tradition, drawing on Bannanje Govindacharya's commentary. Answer faithfully, grounded in the knowledge base. Always cite verse references (BG x.y). Follow the LANGUAGE instruction strictly.
+
+${instr}
+
+${CHAT_SYSTEM_BASE}${voiceInstr}`;
+}
+
+
+async function chatSend(text) {
+  const inp = document.getElementById('chat-input');
+  const q = (text || (inp && inp.value) || '').trim();
+  if (!q || chatState.loading) return;
+  if (inp) inp.value = '';
+  if (text) voiceMode = false; /* suggestion-click send (has text arg) resets voice mode */
+
+  chatState.msgs.push({ role: 'user', content: q });
+  chatState.loading = true;
+  renderChat();
+
+  try {
+    const apiKey = getChatApiKey();
+    if (!apiKey) {
+      chatState.msgs.pop();
+      chatState.loading = false;
+      renderChat();
+      return;
+    }
+
+    // Build request body
+    let body;
+    try {
+      body = JSON.stringify({
+        model: 'claude-sonnet-4-6',
+        max_tokens: 4096,
+        system: getChatSystem(),
+        messages: chatState.msgs.map(m => ({ role: m.role, content: m.content })),
+      });
+    } catch(jsonErr) {
+      throw new Error('Failed to build request: ' + jsonErr.message);
+    }
+
+    // Use XMLHttpRequest for better cross-origin compatibility on Android Chrome
+    const data = await new Promise((resolve, reject) => {
+      const xhr = new XMLHttpRequest();
+      xhr.open('POST', 'https://api.anthropic.com/v1/messages', true);
+      xhr.setRequestHeader('Content-Type', 'application/json');
+      xhr.setRequestHeader('x-api-key', apiKey);
+      xhr.setRequestHeader('anthropic-version', '2023-06-01');
+      xhr.setRequestHeader('anthropic-dangerous-direct-browser-access', 'true');
+      xhr.timeout = 60000; // 60 second timeout
+      xhr.onload = () => {
+        if (xhr.status === 401) { reject(new Error('Invalid API key (401). Tap ⚙️ to re-enter your key.')); return; }
+        if (xhr.status === 429) { reject(new Error('Rate limit reached. Wait a moment and try again.')); return; }
+        if (xhr.status >= 400) { reject(new Error('API error ' + xhr.status + ': ' + xhr.responseText.slice(0,150))); return; }
+        try { resolve(JSON.parse(xhr.responseText)); }
+        catch(e) { reject(new Error('Bad response from API: ' + e.message)); }
+      };
+      xhr.onerror = () => reject(new Error(
+        'Network error — cannot reach api.anthropic.com\n' +
+        '• Check your internet connection\n' +
+        '• Try reloading the page\n' +
+        '• Re-enter your API key via ⚙️ (it may have invisible characters)'
+      ));
+      xhr.ontimeout = () => reject(new Error('Request timed out (60s). Try again.'));
+      xhr.send(body);
+    });
+
+    const reply = (data.content || []).find(b => b.type === 'text')?.text || '(no response)';
+    chatState.msgs.push({ role: 'assistant', content: reply });
+    chatState.loading = false;
+    renderChat();
+    /* Speak AFTER DOM settles — focus/render events kill Android TTS if spoken before */
+    if (voiceMode) setTimeout(() => speakReply(reply), 300);
+  } catch (e) {
+    chatState.msgs.push({ role: 'assistant', content: '⚠️ ' + (e.message || String(e)) });
+    chatState.loading = false;
+    renderChat();
+  }
+}
+
+function chatReset() {
+  chatState.msgs = [];
+  chatState.loading = false;
+  renderChat();
+}
+
+
+/* v2.1 — XHR chat */
+const chatState = { msgs: [], loading: false };
+
+function getChatApiKey() { return (localStorage.getItem('gita_api_key') || '').replace(/\s+/g,''); }
+function setChatApiKey(k) {
+  const clean = k.replace(/\s+/g, ''); // strip all whitespace incl newlines
+  if (clean) localStorage.setItem('gita_api_key', clean);
+  else localStorage.removeItem('gita_api_key');
+}
+function chatToggleKey() {
+  const cur = getChatApiKey();
+  const val = prompt(cur ? 'Update API key (leave blank to remove):' : 'Enter your Anthropic API key:', cur);
+  if (val === null) return;
+  setChatApiKey(val);
+  renderChat();
+}
+
+
+/* Multilingual UI strings for the chat panel */
+const CHAT_UI = {
+  en: {
+    intro: "Ask any question about the Bhagavad Gītā — concepts, shlokas, Bannanje's commentary, Madhva philosophy.",
+    placeholder: "Ask about a concept, verse, or teaching…",
+    newConv: "↺ New conversation",
+    sugg: ["What is Bannanje's view of Brahman?","Kṣara vs akṣara puruṣa?","What does BG 2.47 teach?","Explain sthitaprajña","What is tāratamya?","How do guṇas bind the soul?","What is pañca-bheda?","How does bhakti lead to mokṣa?"]
+  },
+  dev: {
+    intro: "भगवद्गीतायाः विषये प्रश्नं पृच्छतु — संकल्पनाः, श्लोकाः, बन्नञ्जेयोः भाष्यम्, माध्वदर्शनम्।",
+    placeholder: "संकल्पनां, श्लोकं वा पृच्छतु…",
+    newConv: "↺ नूतनः संवादः",
+    sugg: ["ब्रह्मणः विषये बन्नञ्जेयोः मतं किम्?","क्षर-पुरुषः अक्षर-पुरुषश्च — भेदः कः?","BG २.४७ किं शिक्षयति?","स्थितप्रज्ञस्य लक्षणं किम्?","तारतम्यं किम्?","गुणाः जीवं कथं बध्नन्ति?","पञ्चभेदः किम्?","भक्तिः मोक्षं कथं ददाति?"]
+  },
+  hi: {
+    intro: "भगवद्गीता के विषय में कोई भी प्रश्न पूछें — संकल्पनाएँ, श्लोक, बन्नञ्जे का भाष्य, माध्व दर्शन।",
+    placeholder: "संकल्पना, श्लोक या उपदेश पूछें…",
+    newConv: "↺ नई बातचीत",
+    sugg: ["ब्रह्म पर बन्नञ्जे का मत क्या है?","क्षर-पुरुष और अक्षर-पुरुष में अंतर?","BG २.४७ क्या सिखाता है?","स्थितप्रज्ञ की व्याख्या","तारतम्य क्या है?","गुण जीव को कैसे बाँधते हैं?","पञ्चभेद क्या है?","भक्ति से मोक्ष कैसे मिलता है?"]
+  },
+  kn: {
+    intro: "ಭಗವದ್ಗೀತೆಯ ಬಗ್ಗೆ ಯಾವುದೇ ಪ್ರಶ್ನೆ ಕೇಳಿ — ಸಂಕಲ್ಪನೆಗಳು, ಶ್ಲೋಕಗಳು, ಬನ್ನಂಜೆ ವ್ಯಾಖ್ಯಾನ, ಮಾಧ್ವ ದರ್ಶನ.",
+    placeholder: "ಸಂಕಲ್ಪನೆ, ಶ್ಲೋಕ ಅಥವಾ ಉಪದೇಶ ಕೇಳಿ…",
+    newConv: "↺ ಹೊಸ ಸಂವಾದ",
+    sugg: ["ಬ್ರಹ್ಮನ ಬಗ್ಗೆ ಬನ್ನಂಜೆ ಅಭಿಪ್ರಾಯ?","ಕ್ಷರ-ಪುರುಷ ಮತ್ತು ಅಕ್ಷರ-ಪುರುಷ ಭೇದ?","BG ೨.೪೭ ಏನು ಕಲಿಸುತ್ತದೆ?","ಸ್ಥಿತಪ್ರಜ್ಞ ಎಂದರೇನು?","ತಾರತಮ್ಯ ಎಂದರೇನು?","ಗುಣಗಳು ಜೀವ ಬಂಧನ ಹೇಗೆ?","ಪಂಚಭೇದ ಎಂದರೇನು?","ಭಕ್ತಿಯಿಂದ ಮೋಕ್ಷ ಹೇಗೆ?"]
+  }
+};
+
+/* Voice input — hi-IN used for dev/Sanskrit: outputs Devanagari script reliably */
+const VOICE_LANGS = { en:'en-IN', dev:'hi-IN', hi:'hi-IN', kn:'kn-IN' };
+const TTS_LANGS   = { en:'en-IN', dev:'hi-IN', hi:'hi-IN', kn:'kn-IN' };
+let voiceRec = null;
+let voiceUtterance = null;
+let wakeLock = null;
+let voiceMode = false;
+
+async function acquireWakeLock() {
+  if (!('wakeLock' in navigator) || wakeLock) return;
+  try { wakeLock = await navigator.wakeLock.request('screen'); } catch(e) {}
+}
+function releaseWakeLock() {
+  if (!wakeLock) return;
+  wakeLock.release().catch(()=>{});
+  wakeLock = null;
+}
+
+function stripForSpeech(text) {
+  return text
+    .replace(/#{1,6}\s*/g, '')          // ## headings
+    .replace(/\*\*(.+?)\*\*/g, '$1')    // **bold**
+    .replace(/\*(.+?)\*/g, '$1')        // *italic*
+    .replace(/^>\s*/gm, '')             // > blockquotes
+    .replace(/^-{3,}$/gm, '')           // --- dividers
+    .replace(/\|{1,2}/g, ',')           // || or | (verse separators) → pause
+    .replace(/^\s*[-*]\s+/gm, '')       // bullet points
+    .replace(/\[([^\]]+)\]\([^)]+\)/g, '$1') // [links](url)
+    .replace(/`[^`]+`/g, '')            // `code`
+    .replace(/\n{3,}/g, '\n\n')         // collapse excess blank lines
+    .trim();
+}
+
+function setVoiceStatus(msg) {
+  let el = document.getElementById('voice-status');
+  if (!el) {
+    el = document.createElement('div');
+    el.id = 'voice-status';
+    el.style.cssText = 'text-align:center;font-size:12px;color:#888;padding:4px 0;min-height:18px';
+    const wrap = document.querySelector('.chat-input-wrap') || document.getElementById('chat-send')?.parentNode;
+    if (wrap) wrap.parentNode.insertBefore(el, wrap);
+  }
+  el.textContent = msg || '';
+}
+
+function speakReply(text) {
+  if (!window.speechSynthesis) { setVoiceStatus('TTS not supported'); return; }
+  const synth = window.speechSynthesis;
+  synth.cancel();
+
+  const spokenText = stripForSpeech(text);
+  if (!spokenText) { setVoiceStatus('Nothing to speak'); return; }
+
+  /* Split into sentences — Android cuts off long utterances */
+  const chunks = spokenText.match(/[^।.!?]+[।.!?]*/g)?.map(s => s.trim()).filter(Boolean) || [spokenText];
+
+  const lang = TTS_LANGS[state.lang] || 'en-IN';
+  const base = lang.split('-')[0];
+  const mic = document.getElementById('chat-mic');
+
+  function fireChunks(voices) {
+    setVoiceStatus('Speaking…');
+    if (mic) { mic.textContent = '🔊'; mic.title = 'Tap to stop'; }
+
+    let idx = 0;
+    function speakNext() {
+      if (!voiceUtterance && idx > 0) return; /* stopped externally */
+      if (idx >= chunks.length) {
+        voiceUtterance = null;
+        if (mic) { mic.textContent = '🎙'; mic.title = 'Voice input'; }
+        setVoiceStatus('');
+        setTimeout(() => startVoice(), 500);
+        return;
+      }
+      const utt = new SpeechSynthesisUtterance(chunks[idx++]);
+      utt.lang = lang;
+      utt.rate = 0.92;
+      utt.pitch = 1.0;
+      utt.voice = voices.find(v => v.lang === lang)
+               || voices.find(v => v.lang.startsWith(base))
+               || voices.find(v => v.lang === 'hi-IN')
+               || voices.find(v => v.lang.startsWith('hi'))
+               || voices[0] || null;
+      utt.onend = speakNext;
+      utt.onerror = (e) => {
+        if (e.error === 'interrupted' || e.error === 'canceled') return;
+        setVoiceStatus('TTS error: ' + e.error);
+        voiceUtterance = null;
+        if (mic) { mic.textContent = '🎙'; mic.title = 'Voice input'; }
+      };
+      voiceUtterance = utt;
+      synth.speak(utt);
+    }
+    speakNext();
+  }
+
+  setVoiceStatus('Loading voice…');
+  let attempts = 0;
+  function trySpeak() {
+    const voices = synth.getVoices();
+    setVoiceStatus('Loading voice… ' + voices.length + ' found');
+    if (voices.length > 0 || attempts++ > 15) {
+      fireChunks(voices);
+    } else {
+      setTimeout(trySpeak, 150);
+    }
+  }
+  trySpeak();
+}
+
+function startVoice() {
+  /* If TTS is currently speaking, stop it first */
+  if (voiceUtterance) {
+    window.speechSynthesis.cancel();
+    voiceUtterance = null;
+    const mic = document.getElementById('chat-mic');
+    if (mic) { mic.textContent = '🎙'; mic.title = 'Voice input'; }
+    releaseWakeLock();
+    return;
+  }
+  acquireWakeLock();
+  /* Prime Android speechSynthesis within user gesture — volume 0 so inaudible */
+  if (window.speechSynthesis) {
+    const primer = new SpeechSynthesisUtterance('.');
+    primer.volume = 0;
+    primer.rate = 10;
+    window.speechSynthesis.speak(primer);
+    /* Do NOT cancel — cancelling removes the unlock */
+  }
+  const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
+  if (!SR) {
+    const inp = document.getElementById('chat-input');
+    if (inp) { inp.placeholder = 'Voice not supported — type instead'; }
+    return;
+  }
+  /* Stop if already recording */
+  if (voiceRec) { try { voiceRec.stop(); } catch(e){} return; }
+
+  const mic = document.getElementById('chat-mic');
+  const inp = document.getElementById('chat-input');
+
+  voiceRec = new SR();
+  voiceRec.lang = VOICE_LANGS[state.lang] || 'en-IN';
+  voiceRec.continuous = false;
+  voiceRec.interimResults = true;
+  voiceRec.maxAlternatives = 1;
+
+  /* Simple error handler — reset mic state */
+  voiceRec.onerror = (e) => {
+    voiceRec = null;
+    const mic2 = document.getElementById('chat-mic');
+    if (mic2) { mic2.classList.remove('recording'); mic2.textContent = '🎙'; }
+  };
+
+  voiceRec.onstart = () => {
+    if (mic) { mic.classList.add('recording'); mic.title = 'Tap to stop'; }
+    if (inp) inp.placeholder = '🎙 Listening…';
+  };
+  voiceRec.onresult = (e) => {
+    const t = Array.from(e.results).map(r => r[0].transcript).join('');
+    if (inp) { inp.value = t; inp.dispatchEvent(new Event('input')); }
+  };
+  voiceRec.onend = () => {
+    voiceRec = null;
+    if (mic) { mic.classList.remove('recording'); mic.title = 'Voice input'; }
+    const ui = CHAT_UI[state.lang] || CHAT_UI.en;
+    if (inp) inp.placeholder = ui.placeholder;
+    const send = document.getElementById('chat-send');
+    if (send && inp) send.disabled = !inp.value.trim() || chatState.loading;
+    /* Auto-submit if text was captured */
+    if (inp && inp.value.trim()) {
+      voiceMode = true;
+      setTimeout(() => chatSend(), 100);
+    } else {
+      releaseWakeLock();
+    }
+  };
+  voiceRec.onerror = (e) => {
+    voiceRec = null;
+    if (mic) { mic.classList.remove('recording'); mic.title = 'Voice input'; }
+    const ui = CHAT_UI[state.lang] || CHAT_UI.en;
+    if (inp) {
+      inp.placeholder = e.error === 'not-allowed'
+        ? '⚠️ Microphone permission denied'
+        : e.error === 'network'
+        ? '⚠️ Voice needs internet connection'
+        : '⚠️ Voice error — try again';
+    }
+    setTimeout(() => { if (inp) inp.placeholder = (CHAT_UI[state.lang]||CHAT_UI.en).placeholder; }, 3000);
+  };
+  try { voiceRec.start(); }
+  catch(e) {
+    voiceRec = null;
+    if (inp) inp.placeholder = '⚠️ Could not start mic — ' + e.message;
+  }
+}
+
+function renderChat() {
+  const ui = CHAT_UI[state.lang] || CHAT_UI.en;
+  const root = document.getElementById('view-chat');
+  root.style.display = 'flex';
+  root.style.flexDirection = 'column';
+
+  const msgsHTML = chatState.msgs.map(m =>
+    `<div class="chat-bubble ${m.role==='user'?'user':'bot'}">${escapeHtml(m.content)}</div>`
+  ).join('');
+
+  const hasKey = !!getChatApiKey();
+  const gearBtn = `<span onclick="chatToggleKey()" title="${hasKey?'API key set — click to change':'Set API key'}" style="position:absolute;top:14px;right:16px;cursor:pointer;font-size:16px;opacity:.5;user-select:none" aria-label="API key settings">${hasKey?'🔑':'⚙️'}</span>`;
+
+  const noKeyMsg = `<div style="margin:auto;text-align:center;padding:24px 16px;color:var(--ink-soft);font-size:14px;line-height:1.8">
+    <div style="font-size:32px;margin-bottom:12px">🔒</div>
+    <div style="font-weight:600;margin-bottom:8px">Chat not available</div>
+    <div>This feature requires an Anthropic API key.<br>Contact the app owner for access.</div>
+  </div>`;
+
+  const emptyHTML = chatState.msgs.length === 0
+    ? (hasKey
+        ? `<div class="chat-empty">${escapeHtml(ui.intro)}</div>
+           <div class="chat-suggestions">${ui.sugg.map(s =>
+             `<button class="chat-suggestion" data-q="${escapeHtml(s)}" onclick="chatSend(this.dataset.q)">${escapeHtml(s)}</button>`
+           ).join('')}</div>`
+        : noKeyMsg)
+    : '';
+
+  const typingHTML = chatState.loading ?
+    `<div class="chat-typing"><span></span><span></span><span></span></div>` : '';
+
+  const resetBtn = chatState.msgs.length > 0 ?
+    `<button class="chat-reset" onclick="chatReset()">${escapeHtml(ui.newConv)}</button>` : '';
+
+  root.style.position = 'relative';
+  root.innerHTML = `
+    ${gearBtn}
+    <div class="chat-msgs" id="chat-msgs">
+      ${emptyHTML}${msgsHTML}${typingHTML}
+    </div>
+    <div class="chat-input-wrap">
+      <div style="flex:1;display:flex;flex-direction:column">
+        ${resetBtn}
+        <textarea id="chat-input" rows="2" placeholder="${escapeHtml(ui.placeholder)}"
+          onkeydown="if(event.key==='Enter'&&!event.shiftKey){event.preventDefault();chatSend()}"
+          oninput="voiceMode=false;document.getElementById('chat-send').disabled=!this.value.trim()||chatState.loading"
+        ></textarea>
+      </div>
+      <button id="chat-mic" class="chat-mic" onclick="startVoice()" title="Voice input">🎙</button>
+      <button id="chat-send" class="chat-send" disabled onclick="chatSend()">➤</button>
+    </div>`;
+
+  const msgsEl = document.getElementById('chat-msgs');
+  if (msgsEl) msgsEl.scrollTop = msgsEl.scrollHeight;
+  const inp = document.getElementById('chat-input');
+  if (inp && !voiceMode) setTimeout(() => inp.focus(), 50);
+}
+
+function chatReset() {
+  chatState.msgs = [];
+  chatState.loading = false;
+  renderChat();
+}
+
 /* Initial render */
 render();
+</script>
+<script>
+/* === inlined from positions.js === */
+/* positions.js
+ *
+ * Hand-laid coordinates for the celestial-map view of the Gītā concept KG.
+ *
+ * Layout philosophy: a ladder of being read top-down.
+ *   - Paramārtha (Hari) at the apex — single column
+ *   - Tattvas just below — the metaphysical scaffolding
+ *   - Kṣetra-Kṣetrajña — where embodiment begins
+ *   - Guṇa — the three modes
+ *   - Yoga — the largest tier, spread wide
+ *   - Sādhanā — practices, parallel to yogas
+ *   - Antaḥkaraṇa & Dharma — inner faculties + ethical posture, side-by-side
+ *   - Doṣa & Pratīka — defects (left) and symbols (right), as bookend tiers
+ *   - Phala — the goals, at the bottom (the rest of the climb)
+ *   - Yajña — clustered as a side panel on the right (sacrifice as a vertical column)
+ *
+ * Coordinate system: x in [0, 1000], y in [0, 1500], r is node radius.
+ * Larger r = doctrinally larger weight (purushottama largest, peripheral nodes smaller).
+ */
+
+const KG_POSITIONS = {
+  // ============ Paramārtha (y ≈ 60–180) — center column ============
+  'purushottama':       [500,  80, 22],
+  'brahman':            [340, 140, 17],
+  'paramatman':         [500, 140, 17],
+  'sarvottamatva':      [660, 140, 17],
+  'akshara_purusha':    [340, 200, 13],
+  'ksara_purusha':      [500, 200, 13],
+  'svarupa_aikya':      [660, 200, 13],
+  'avatara':            [580, 260, 13],
+  'taratamya':          [200, 200, 13],
+  'pancha_bheda':       [80,  200, 13],
+
+  // ============ Tattva (y ≈ 280–360) ============
+  'isvara':             [120, 290, 14],
+  'jiva':               [240, 290, 14],
+  'prakriti':           [380, 320, 14],
+  'para_prakriti':      [500, 320, 12],
+  'aksharam_param_brahma':[620, 320, 12],
+  'kala':               [740, 290, 12],
+  'karma_tattva':       [400, 390, 12],
+  'svabhava':           [560, 390, 12],
+
+  // ============ Kṣetra-Kṣetrajña (y ≈ 440–520) ============
+  'kshetrajna':         [200, 460, 14],
+  'kshetra_field':      [340, 460, 14],
+  'mahabhutas':         [460, 460, 11],
+  'avyakta':            [560, 460, 11],
+  'indriyas':           [660, 460, 11],
+  'icchā_dveṣa':        [760, 460, 11],
+  'sanghata_cetana_dhrti':[860, 460, 11],
+  'kshetra_jnana':      [500, 530, 13],
+
+  // ============ Guṇa (y ≈ 580–650) ============
+  'sattva':             [280, 600, 14],
+  'rajas':              [420, 600, 14],
+  'tamas':              [560, 600, 14],
+  'gunatita':           [700, 600, 14],
+  'sattvika_jnana':     [220, 670, 10],
+  'sattvika_karma':     [340, 670, 10],
+  'sattvika_karta':     [460, 670, 10],
+  'triguna_atita':      [780, 670, 12],
+  'sattvika_shraddha':  [220, 720, 10],
+  'rajasa_shraddha':    [340, 720, 10],
+  'tamasa_shraddha':    [460, 720, 10],
+  'sattvika_ahara':     [580, 720, 10],
+
+  // ============ Yoga (y ≈ 730–820) — wide spread, the largest tier ============
+  'karma_yoga':         [120, 760, 14],
+  'jnana_yoga':         [240, 760, 14],
+  'bhakti_yoga':        [380, 760, 16],
+  'dhyana_yoga':        [500, 760, 14],
+  'sannyasa_yoga':      [620, 760, 14],
+  'buddhi_yoga':        [740, 760, 13],
+  'abhyasa_vairagya':   [860, 760, 13],
+  'samatva':            [300, 830, 12],
+  'sharanagati':        [500, 830, 16],   // BG 18.66 — visually emphasized
+
+  // ============ Sādhanā (y ≈ 890–960) — practices, mid-page ============
+  'shraddha':           [120, 910, 12],
+  'vairagya':           [220, 910, 12],
+  'abhyasa':            [320, 910, 12],
+  'tapas':              [420, 910, 12],
+  'dana':               [520, 910, 12],
+  'tyaga':              [620, 910, 12],
+  'indriya_nigraha':    [720, 910, 12],
+  'samadhi':            [820, 910, 12],
+  'svadhyaya':          [920, 910, 11],
+  // jñāna-aṅgas — second row of sādhana
+  'jnana_angas':        [120, 960, 12],
+  'amanitva':           [220, 960,  9],
+  'arjava':             [310, 960,  9],
+  'shauca':             [400, 960,  9],
+  'ksanti':             [490, 960,  9],
+  'ananya_yoga':        [580, 960, 11],
+  'vivikta_seva':       [690, 960,  9],
+  'adhyatma_jnana_nityatvam':[800, 960,  9],
+  'tattva_jnanartha_darshanam':[900, 960, 10],
+
+  // ============ Antaḥkaraṇa (y ≈ 1000) — left cluster ============
+  'manas':              [150, 1010, 12],
+  'buddhi':             [260, 1010, 12],
+  'ahankara':           [370, 1010, 12],
+  'citta':              [150, 1080, 11],
+  'antaryamin':         [260, 1080, 13],
+  'jnanendriyas_karmendriyas':[370, 1080, 10],
+
+  // ============ Dharma (y ≈ 1000) — right cluster, parallel ============
+  'svadharma':          [560, 1010, 12],
+  'varnashrama':        [670, 1010, 12],
+  'nishkama_karma':     [780, 1010, 13],
+  'sthitaprajna':       [560, 1080, 14],
+  'daivi_sampad':       [670, 1080, 13],
+  'ahimsa':             [780, 1080, 11],
+  'satya':              [880, 1080, 11],
+  'samatva_dharma':     [880, 1010, 11],
+  'pravritti_nivritti': [880, 1130, 11],
+
+  // ============ Doṣa (y ≈ 1170) — bottom-left, the descent ============
+  'kama':               [120, 1180, 14],
+  'krodha':             [220, 1180, 14],
+  'lobha':              [320, 1180, 12],
+  'moha':               [420, 1180, 13],
+  'asatsanga':          [120, 1250, 11],
+  'avidya':             [220, 1250, 12],
+  'dvandva':            [320, 1250, 11],
+  'asuri_sampad':       [420, 1250, 13],
+
+  // ============ Pratīka (y ≈ 1170) — bottom-right, symbols ============
+  'pranava_om':         [580, 1180, 13],
+  'ashvattha':          [700, 1180, 13],
+  'ratha_rupaka':       [820, 1180, 12],
+  'akshara_a':          [580, 1250, 11],
+  'jyotir_jyoti':       [700, 1250, 12],
+  'vibhuti':            [820, 1250, 12],
+
+  // ============ Phala (y ≈ 1350) — the goals, at the foot ============
+  'moksha':             [500, 1350, 22],   // big — the goal
+  'paramagati':         [340, 1350, 14],
+  'brahmi_sthiti':      [180, 1350, 13],
+  'jivanmukti':         [660, 1350, 14],
+  'naishkarmya_siddhi': [820, 1350, 12],
+  'archiradi_marga':    [340, 1420, 11],
+  'dhumadi_marga':      [180, 1420, 11],
+  'sarva_dharman_parityajya':[500, 1420, 16],  // carama-śloka emphasized
+  // Madhva mukti-gradations clustered around moksha
+  'salokya':            [360, 1290, 11],
+  'samipya':            [440, 1290, 11],
+  'sarupya':            [560, 1290, 11],
+  'sayujya':            [640, 1290, 13],
+  // Madhva mukti-gradations clustered around moksha
+  'salokya':            [360, 1290, 11],
+  'samipya':            [440, 1290, 11],
+  'sarupya':            [560, 1290, 11],
+  'sayujya':            [640, 1290, 13],
+
+  // ============ Yajña (side column, y ≈ 600–950) — right edge ============
+  'dravya_yajna':       [950, 600, 10],
+  'tapo_yajna':         [950, 670, 10],
+  'yoga_yajna':         [950, 740, 10],
+  'svadhyaya_yajna':    [950, 810, 10],
+  'jnana_yajna':        [950, 880, 12],
+  'brahmarpana':        [950, 950, 12],
+};
+
+/* Tier bands for the map background (y-ranges) */
+const KG_TIER_BANDS = [
+  { tier:'paramartha',  yTop:30,   yBottom:265,  label:{x:14, y:50} },
+  { tier:'tattva',      yTop:270,  yBottom:425,  label:{x:14, y:290} },
+  { tier:'kshetra',     yTop:430,  yBottom:560,  label:{x:14, y:450} },
+  { tier:'guna',        yTop:565,  yBottom:715,  label:{x:14, y:585} },
+  { tier:'yoga',        yTop:720,  yBottom:870,  label:{x:14, y:740} },
+  { tier:'sadhana',     yTop:875,  yBottom:990,  label:{x:14, y:895} },
+  { tier:'antahkarana', yTop:995,  yBottom:1160, label:{x:14, y:1015}, half:'left' },
+  { tier:'dharma',      yTop:995,  yBottom:1160, label:{x:520, y:1015}, half:'right' },
+  { tier:'dosha',       yTop:1165, yBottom:1300, label:{x:14, y:1185}, half:'left' },
+  { tier:'pratika',     yTop:1165, yBottom:1300, label:{x:520, y:1185}, half:'right' },
+  { tier:'phala',       yTop:1305, yBottom:1480, label:{x:14, y:1325} },
+  { tier:'yajna',       yTop:580,  yBottom:990,  label:{x:920, y:580}, side:true },
+];
+
+/* Edge types to render on the full map (others suppressed for visual clarity) */
+const KG_SHOW_EDGE_TYPES = new Set([
+  'is-a','includes','leads-to','opposite-of','antidote-to',
+  'arises-from','predicates-on','transforms-into','grounded-in',
+]);
+
+/* Export for the renderer / verifier (no-op in the browser) */
 </script>
 </body>
 </html>
