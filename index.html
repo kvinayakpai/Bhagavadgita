@@ -335,6 +335,88 @@ body.lang-kn .sl-meaning {
   font-family: 'Tiro Kannada', 'Noto Sans Kannada', serif;
   font-size: 15.5px;
 }
+
+/* ============ CHAPTER CONTROLS & COLLAPSIBLE COMMENTARY ============ */
+.ch-controls {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin: 14px 0 16px;
+  padding-bottom: 14px;
+  border-bottom: 1px solid var(--rule-soft);
+}
+.ch-select-wrap {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 13px;
+  color: var(--ink-soft);
+}
+.sh-dropdown {
+  padding: 6px 12px;
+  border: 1px solid var(--rule);
+  border-radius: 8px;
+  background: var(--paper);
+  color: var(--ink);
+  font-family: inherit;
+  font-size: 13.5px;
+  outline: none;
+  cursor: pointer;
+  box-shadow: 0 1px 2px rgba(0,0,0,0.05);
+}
+.ch-toggle-group {
+  display: flex;
+  background: var(--paper-2);
+  border: 1px solid var(--rule);
+  border-radius: 10px;
+  overflow: hidden;
+  padding: 2px;
+}
+.ch-toggle-btn {
+  background: transparent;
+  border: none;
+  color: var(--ink-fade);
+  padding: 6px 14px;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: .06em;
+  text-transform: uppercase;
+  cursor: pointer;
+  border-radius: 8px;
+  transition: background .2s, color .2s;
+  font-family: inherit;
+}
+.ch-toggle-btn.active {
+  background: var(--rust);
+  color: #fff;
+}
+.sl-toggle-btn {
+  background: transparent;
+  border: 1px solid var(--rule-soft);
+  color: var(--rust);
+  padding: 6px 12px;
+  border-radius: 12px;
+  font-size: 11px;
+  font-weight: 600;
+  cursor: pointer;
+  letter-spacing: .04em;
+  text-transform: uppercase;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  transition: background .2s, border-color .2s;
+  margin-top: 8px;
+  font-family: inherit;
+}
+.sl-toggle-btn:hover {
+  background: var(--paper-2);
+  border-color: var(--rule);
+}
+.sl-meaning.collapsed {
+  display: none;
+}
 </style>
 </head>
 <body class="lang-en">
@@ -1811,6 +1893,12 @@ const state = { chapterSel: 2, lang:'en', view:'browse', focusId:null, q:'' };
    pill badges, footer counter, Madhva callout prefix). All values
    {en, dev, kn}. Keys mirror the English idiom used by the source. */
 const UI_STRINGS = {
+  jumpToVerse:     { en:'Jump to Verse:', dev:'श्लोकं गच्छतु:', kn:'ಶ್ಲೋಕಕ್ಕೆ ಹೋಗಿ:', hi:'श्लोक पर जाएँ:' },
+  onlyShlokas:     { en:'Only Shlokas', dev:'केवल-श्लोकाः', kn:'ಕೇವಲ ಶ್ಲೋಕಗಳು', hi:'केवल श्लोक' },
+  shlokasCommentary:{ en:'Shlokas + Commentary', dev:'स-भाष्य', kn:'ಶ್ಲೋಕ + ಭಾಷ್ಯ', hi:'श्लोक + भाष्य' },
+  showCommentary:  { en:'Show Commentary ▾', dev:'भाष्यं दर्शयतु ▾', kn:'ವಿವರಣೆ ನೋಡಿ ▾', hi:'व्याख्या देखें ▾' },
+  hideCommentary:  { en:'Hide Commentary ▴', dev:'भाष्यं गोपयतु ▴', kn:'ವಿವರಣೆ ಮುಚ್ಚಿ ▴', hi:'व्याख्या छुपाएं ▴' },
+
   outgoing:        { en:'Outgoing',       dev:'निर्गत-सम्बन्धाः',   kn:'ನಿರ್ಗತ-ಸಂಬಂಧಗಳು', hi:'बाहर जाने वाले संबंध' },
   incoming:        { en:'Incoming',       dev:'आगत-सम्बन्धाः',     kn:'ಆಗತ-ಸಂಬಂಧಗಳು', hi:'अंदर आने वाले संबंध' },
   relatedNamas:    { en:'In the Sahasranāma', dev:'सहस्रनामे', kn:'ಸಹಸ್ರನಾಮದಲ್ಲಿ', hi:'सहस्रनाम में' },
@@ -2305,7 +2393,7 @@ function renderChapters() {
       let lastCh = null;
       refsStr.split(/[·,]/).forEach(function(seg) {
         seg = seg.trim();
-        var m = seg.match(/BG\s*(\d+)[.\u00b7](\d+)(?:[\u2013\-](\d+))?/);
+        var m = seg.match(/BG\s*(\d+)[\u00b7](\d+)(?:[\u2013\-](\d+))?/);
         if (m) {
           lastCh = parseInt(m[1]);
           if (lastCh === ch) {
@@ -2313,7 +2401,7 @@ function renderChapters() {
             if (v>=vs && v<=ve && !seen.has(nodeId)) { out.push(node); seen.add(nodeId); }
           }
         } else if (lastCh !== null) {
-          var m2 = seg.match(/(\d+)[.\u00b7](\d+)(?:[\u2013\-](\d+))?/);
+          var m2 = seg.match(/(\d+)[\u00b7](\d+)(?:[\u2013\-](\d+))?/);
           if (m2) {
             var ch2=parseInt(m2[1]);
             if (ch2===ch) {
@@ -2335,6 +2423,11 @@ function renderChapters() {
     return out;
   }
 
+  // Global toggle state
+  const showAll = state.showAllCommentary || false;
+  const collapsedClass = showAll ? '' : ' collapsed';
+  const toggleText = showAll ? UI('hideCommentary') : UI('showCommentary');
+
   const shlokaCards = verseKeys.map(key => {
     const [chS, vS] = key.split('.');
     const chN = parseInt(chS), vN = parseInt(vS);
@@ -2348,15 +2441,18 @@ function renderChapters() {
       ? `<div class="sl-verse${isKn?' kn':''}">${escapeHtml(verse)}</div>` : '';
     
     // Kannada meaning/commentary under the shloka directly
-    const meaning = (BANNANJE_VERSE_MEANINGS && BANNANJE_VERSE_MEANINGS[key]) || '';
-    const meaningHtml = meaning ? `<div class="sl-meaning">${escapeHtml(meaning)}</div>` : '';
+    const meaning = (typeof BANNANJE_VERSE_MEANINGS !== 'undefined' && BANNANJE_VERSE_MEANINGS[key]) || '';
+    const meaningHtml = meaning ? `
+      <button class="sl-toggle-btn" onclick="toggleCommentary('${key}')" id="btn-${key}">${toggleText}</button>
+      <div class="sl-meaning${collapsedClass}" id="meaning-${key}">${escapeHtml(meaning)}</div>
+    ` : '';
 
-    // Concept chips — computed inline, no pre-built map
+    // Concept chips
     const conceptNodes = linkedConceptsFor(chN, vN);
     const chips = conceptNodes.map(n =>
       `<span class="sl-concept-chip" onclick="setView('focus','${n.id}')">${escapeHtml(labelOf(n))}</span>`
     ).join('');
-    return `<div class="sl-card">
+    return `<div class="sl-card" id="card-${key}">
       <div class="sl-ref">BG ${key}</div>
       ${verseHtml}
       ${meaningHtml}
@@ -2368,14 +2464,61 @@ function renderChapters() {
     ? `<div class="ch-section-hd">Shlokas (${verseKeys.length})</div>${shlokaCards}`
     : `<p style="color:var(--ink-fade);font-size:14px;padding:6px 0">No shlokas for this chapter.</p>`;
 
+  // Generate Dropdown select options
+  const dropdownOptions = verseKeys.map(key => `<option value="${key}">BG ${key}</option>`).join('');
+
   root.innerHTML = `
     <div class="ch-grid">${btnRow}</div>
     <div class="ch-list-wrap">
       <div class="ch-hd">Chapter ${sel} — ${chTitle[sel]||''}</div>
+      
+      <!-- CONTROLS ROW -->
+      <div class="ch-controls">
+        <div class="ch-select-wrap">
+          <span>${UI('jumpToVerse')}</span>
+          <select class="sh-dropdown" onchange="if(this.value){document.getElementById('card-' + this.value).scrollIntoView({behavior:'smooth', block:'center'}); this.value='';}">
+            <option value="">-- Select --</option>
+            ${dropdownOptions}
+          </select>
+        </div>
+        
+        <div class="ch-toggle-group">
+          <button class="ch-toggle-btn${!showAll?' active':''}" id="global-show-shlokas" onclick="setGlobalCommentary(false)">${UI('onlyShlokas')}</button>
+          <button class="ch-toggle-btn${showAll?' active':''}" id="global-show-all" onclick="setGlobalCommentary(true)">${UI('shlokasCommentary')}</button>
+        </div>
+      </div>
+
       ${conceptsSection}
       ${shlokaSection}
     </div>`;
 }
+
+// Global functions for toggles
+window.toggleCommentary = function(key) {
+  const el = document.getElementById('meaning-' + key);
+  const btn = document.getElementById('btn-' + key);
+  if (el && btn) {
+    const collapsed = el.classList.toggle('collapsed');
+    btn.innerHTML = collapsed ? UI('showCommentary') : UI('hideCommentary');
+  }
+};
+
+window.setGlobalCommentary = function(show) {
+  const btnShlokas = document.getElementById('global-show-shlokas');
+  const btnAll = document.getElementById('global-show-all');
+  if (btnShlokas) btnShlokas.classList.toggle('active', !show);
+  if (btnAll) btnAll.classList.toggle('active', show);
+  
+  state.showAllCommentary = show;
+  
+  document.querySelectorAll('.sl-meaning').forEach(el => {
+    el.classList.toggle('collapsed', !show);
+  });
+  document.querySelectorAll('.sl-toggle-btn').forEach(btn => {
+    btn.innerHTML = show ? UI('hideCommentary') : UI('showCommentary');
+  });
+};
+
 function renderMap(){
   const root = document.getElementById('view-map');
 
