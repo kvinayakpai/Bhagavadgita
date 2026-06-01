@@ -421,10 +421,10 @@ body.lang-kn .sl-meaning {
 /* ============ MAP CONTROLS PANEL ============ */
 .map-controls-panel {
   display: flex;
-  justify-content: space-between;
+  justify-content: flex-start;
   align-items: center;
   flex-wrap: wrap;
-  gap: 16px;
+  gap: 20px;
   margin: 12px 14px 16px;
   padding: 14px 18px;
   background: var(--paper-2);
@@ -434,86 +434,32 @@ body.lang-kn .sl-meaning {
 }
 .map-control-item {
   display: flex;
-  flex-direction: column;
-  gap: 6px;
-}
-.map-control-item.slider-item {
-  flex: 1;
-  min-width: 280px;
-}
-.slider-header {
-  display: flex;
-  justify-content: space-between;
   align-items: center;
-  font-size: 13px;
-  margin-bottom: 2px;
+  gap: 10px;
 }
 .map-control-label {
   font-weight: 600;
   color: var(--ink-soft);
   letter-spacing: .02em;
+  font-size: 13.5px;
+  white-space: nowrap;
 }
-.map-ch-badge {
-  font-size: 12px;
-  font-weight: 700;
-  color: var(--rust);
+.map-dropdown {
+  padding: 6px 12px;
+  border: 1px solid var(--rule);
+  border-radius: 8px;
   background: var(--paper);
-  padding: 3px 10px;
-  border-radius: 20px;
-  border: 1px solid var(--rule-soft);
-}
-.slider-row {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-}
-.slider-bound {
-  font-size: 11px;
-  color: var(--ink-fade);
-  font-weight: 500;
-}
-.map-slider {
-  flex: 1;
-  -webkit-appearance: none;
-  appearance: none;
-  height: 6px;
-  border-radius: 3px;
-  background: var(--rule-soft);
+  color: var(--ink);
+  font-family: inherit;
+  font-size: 13.5px;
   outline: none;
   cursor: pointer;
-  transition: background .2s;
+  box-shadow: 0 1px 2px rgba(0,0,0,0.05);
+  transition: border-color .2s, box-shadow .2s;
 }
-.map-slider:hover {
-  background: var(--rule);
-}
-.map-slider::-webkit-slider-thumb {
-  -webkit-appearance: none;
-  appearance: none;
-  width: 18px;
-  height: 18px;
-  border-radius: 50%;
-  background: var(--rust);
-  cursor: pointer;
-  box-shadow: 0 1px 4px rgba(0,0,0,0.2);
-  transition: transform .1s, background-color .1s;
-}
-.map-slider::-webkit-slider-thumb:hover {
-  transform: scale(1.15);
-  background: var(--ink);
-}
-.map-slider::-moz-range-thumb {
-  width: 18px;
-  height: 18px;
-  border: none;
-  border-radius: 50%;
-  background: var(--rust);
-  cursor: pointer;
-  box-shadow: 0 1px 4px rgba(0,0,0,0.2);
-  transition: transform .1s, background-color .1s;
-}
-.map-slider::-moz-range-thumb:hover {
-  transform: scale(1.15);
-  background: var(--ink);
+.map-dropdown:focus {
+  border-color: var(--rust);
+  box-shadow: 0 0 0 2px var(--rule-soft);
 }
 </style>
 </head>
@@ -2665,9 +2611,22 @@ function renderMap(){
     hi: 'सभी अध्याय'
   }[state.lang] || 'All Chapters';
 
-  const chLabelText = chSel === 0 
-    ? allChaptersLabel 
-    : `${state.lang==='kn'?'ಅಧ್ಯಾಯ':'Chapter'} ${chSel} — ${chTitle[chSel]}`;
+  // Generate Adhyaya options dynamically
+  const chOptions = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18].map(ch => {
+    if (ch === 0) {
+      return `<option value="0"${chSel===0?' selected':''}>-- ${allChaptersLabel} --</option>`;
+    }
+    const title = chTitle[ch];
+    const prefix = state.lang==='kn'?'ಅಧ್ಯಾಯ':'Chapter';
+    return `<option value="${ch}"${chSel===ch?' selected':''}>${prefix} ${ch} — ${title}</option>`;
+  }).join('');
+
+  const chLabel = {
+    en: 'Adhyaya:',
+    dev: 'अध्यायः:',
+    kn: 'ಅಧ್ಯಾಯ:',
+    hi: 'अध्याय:'
+  }[state.lang] || 'Adhyaya:';
 
   // Generate Shloka dropdown choices for the active chapter
   let shlokaDropdown = '';
@@ -2688,10 +2647,17 @@ function renderMap(){
       `<option value="${k}"${vSel===k?' selected':''}>BG ${k}</option>`
     ).join('');
 
+    const shlokaLabel = {
+      en: 'Shloka:',
+      dev: 'श्लोकः:',
+      kn: 'ಶ್ಲೋಕ:',
+      hi: 'श्लोक:'
+    }[state.lang] || 'Shloka:';
+
     shlokaDropdown = `
       <div class="map-control-item">
-        <label for="map-shloka-select" class="map-control-label">${{en:'Shloka:', dev:'श्लोकः:', kn:'ಶ್ಲೋಕ:', hi:'श्लोक:'}[state.lang]||'Shloka:'}</label>
-        <select id="map-shloka-select" class="sh-dropdown" onchange="onMapShlokaChange(this.value)">
+        <label for="map-shloka-select" class="map-control-label">${shlokaLabel}</label>
+        <select id="map-shloka-select" class="map-dropdown" onchange="onMapShlokaChange(this.value)">
           <option value="">-- ${allShlokasLabel} --</option>
           ${shlokaOptions}
         </select>
@@ -2699,25 +2665,13 @@ function renderMap(){
     `;
   }
 
-  const filterLabel = {
-    en: 'Chapter Filter:',
-    dev: 'अध्याय-सूची:',
-    kn: 'ಅಧ್ಯಾಯ ಶೋಧಕ:',
-    hi: 'अध्याय फ़िल्टर:'
-  }[state.lang] || 'Chapter Filter:';
-
   const controlPanelHtml = `
     <div class="map-controls-panel">
-      <div class="map-control-item slider-item">
-        <div class="slider-header">
-          <span class="map-control-label">${filterLabel}</span>
-          <span class="map-ch-badge">${escapeHtml(chLabelText)}</span>
-        </div>
-        <div class="slider-row">
-          <span class="slider-bound">0</span>
-          <input type="range" min="0" max="18" value="${chSel}" class="map-slider" id="map-ch-slider" oninput="onMapSliderChange(this.value)">
-          <span class="slider-bound">18</span>
-        </div>
+      <div class="map-control-item">
+        <label for="map-ch-select" class="map-control-label">${chLabel}</label>
+        <select id="map-ch-select" class="map-dropdown" onchange="onMapChapterChange(this.value)" style="max-width: 320px; font-weight: 500;">
+          ${chOptions}
+        </select>
       </div>
       ${shlokaDropdown}
     </div>
@@ -2740,11 +2694,39 @@ function renderMap(){
     }
   }
 
+  // Calculate coordinates center of the active nodes for auto-scrolling
+  let sumX = 0, sumY = 0, count = 0;
+  NODES.forEach(n => {
+    if (!activeNodeIds.has(n.id)) return;
+    const p = KG_POSITIONS[n.id];
+    if (p) {
+      sumX += p[0];
+      sumY += p[1];
+      count++;
+    }
+  });
+  const avgX = count > 0 ? (sumX / count) : 500;
+  const avgY = count > 0 ? (sumY / count) : 0;
+
   if (HAS_HANDLAID) {
     renderMapHandLaid(root, activeNodeIds, controlPanelHtml);
   } else {
     renderMapAuto(root, activeNodeIds, controlPanelHtml);
   }
+
+  // Auto-centering scroll navigation to focus on the active concept cluster
+  setTimeout(() => {
+    const mapWrap = document.querySelector('.map-wrap');
+    if (mapWrap) {
+      const targetLeft = chSel === 0 ? (500 - mapWrap.clientWidth / 2) : (avgX - mapWrap.clientWidth / 2);
+      const targetTop = chSel === 0 ? 0 : (avgY - mapWrap.clientHeight / 2);
+      mapWrap.scrollTo({
+        left: targetLeft,
+        top: targetTop,
+        behavior: 'smooth'
+      });
+    }
+  }, 100);
 }
 
 function renderMapHandLaid(root, activeNodeIds, controlPanelHtml){
@@ -2847,14 +2829,14 @@ function renderMapAuto(root, activeNodeIds, controlPanelHtml){
   `;
 }
 
-window.onMapSliderChange = function(val) {
+window.onMapChapterChange = function(val) {
   const ch = parseInt(val);
   state.mapChapterSel = ch;
   state.mapVerseSel = ''; // Reset shloka filter when chapter changes
   if (ch > 0) {
     state.chapterSel = ch; // Sync back to chapters tab!
   }
-  state.lastChapterSel = ch; // Avoid circular dynamic resets
+  state.lastChapterSel = ch; // Avoid circular resets
   renderMap();
 };
 
