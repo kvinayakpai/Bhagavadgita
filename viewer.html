@@ -417,6 +417,104 @@ body.lang-kn .sl-meaning {
 .sl-meaning.collapsed {
   display: none;
 }
+
+/* ============ MAP CONTROLS PANEL ============ */
+.map-controls-panel {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 16px;
+  margin: 12px 14px 16px;
+  padding: 14px 18px;
+  background: var(--paper-2);
+  border: 1px solid var(--rule);
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.03);
+}
+.map-control-item {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+.map-control-item.slider-item {
+  flex: 1;
+  min-width: 280px;
+}
+.slider-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 13px;
+  margin-bottom: 2px;
+}
+.map-control-label {
+  font-weight: 600;
+  color: var(--ink-soft);
+  letter-spacing: .02em;
+}
+.map-ch-badge {
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--rust);
+  background: var(--paper);
+  padding: 3px 10px;
+  border-radius: 20px;
+  border: 1px solid var(--rule-soft);
+}
+.slider-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.slider-bound {
+  font-size: 11px;
+  color: var(--ink-fade);
+  font-weight: 500;
+}
+.map-slider {
+  flex: 1;
+  -webkit-appearance: none;
+  appearance: none;
+  height: 6px;
+  border-radius: 3px;
+  background: var(--rule-soft);
+  outline: none;
+  cursor: pointer;
+  transition: background .2s;
+}
+.map-slider:hover {
+  background: var(--rule);
+}
+.map-slider::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  background: var(--rust);
+  cursor: pointer;
+  box-shadow: 0 1px 4px rgba(0,0,0,0.2);
+  transition: transform .1s, background-color .1s;
+}
+.map-slider::-webkit-slider-thumb:hover {
+  transform: scale(1.15);
+  background: var(--ink);
+}
+.map-slider::-moz-range-thumb {
+  width: 18px;
+  height: 18px;
+  border: none;
+  border-radius: 50%;
+  background: var(--rust);
+  cursor: pointer;
+  box-shadow: 0 1px 4px rgba(0,0,0,0.2);
+  transition: transform .1s, background-color .1s;
+}
+.map-slider::-moz-range-thumb:hover {
+  transform: scale(1.15);
+  background: var(--ink);
+}
 </style>
 </head>
 <body class="lang-en">
@@ -461,6 +559,10 @@ body.lang-kn .sl-meaning {
   <span id="stats"></span>
 </footer>
 
+<script src="bannanje_kn_private.js" onerror="window.BANNANJE_VERSE_MEANINGS = null;"></script>
+<script src="bannanje_en_private.js" onerror="window.BANNANJE_VERSE_MEANINGS_EN = null;"></script>
+<script src="bannanje_hi_private.js" onerror="window.BANNANJE_VERSE_MEANINGS_HI = null;"></script>
+<script src="bannanje_dev_private.js" onerror="window.BANNANJE_VERSE_MEANINGS_DEV = null;"></script>
 <script src="data.js"></script>
 <script src="positions.js"></script>
 <script>
@@ -2440,8 +2542,17 @@ function renderChapters() {
     const verseHtml = verse
       ? `<div class="sl-verse${isKn?' kn':''}">${escapeHtml(verse)}</div>` : '';
     
-    // Kannada meaning/commentary under the shloka directly
-    const meaning = (typeof BANNANJE_VERSE_MEANINGS !== 'undefined' && BANNANJE_VERSE_MEANINGS[key]) || '';
+    // Language-aware meaning/commentary under the shloka directly
+    let meaning = '';
+    if (state.lang === 'kn' && typeof BANNANJE_VERSE_MEANINGS !== 'undefined' && BANNANJE_VERSE_MEANINGS !== null) {
+      meaning = BANNANJE_VERSE_MEANINGS[key] || '';
+    } else if (state.lang === 'en' && typeof BANNANJE_VERSE_MEANINGS_EN !== 'undefined' && BANNANJE_VERSE_MEANINGS_EN !== null) {
+      meaning = BANNANJE_VERSE_MEANINGS_EN[key] || '';
+    } else if (state.lang === 'hi' && typeof BANNANJE_VERSE_MEANINGS_HI !== 'undefined' && BANNANJE_VERSE_MEANINGS_HI !== null) {
+      meaning = BANNANJE_VERSE_MEANINGS_HI[key] || '';
+    } else if (state.lang === 'dev' && typeof BANNANJE_VERSE_MEANINGS_DEV !== 'undefined' && BANNANJE_VERSE_MEANINGS_DEV !== null) {
+      meaning = BANNANJE_VERSE_MEANINGS_DEV[key] || '';
+    }
     const meaningHtml = meaning ? `
       <button class="sl-toggle-btn" onclick="toggleCommentary('${key}')" id="btn-${key}">${toggleText}</button>
       <div class="sl-meaning${collapsedClass}" id="meaning-${key}">${escapeHtml(meaning)}</div>
@@ -2522,17 +2633,127 @@ window.setGlobalCommentary = function(show) {
 function renderMap(){
   const root = document.getElementById('view-map');
 
-  if (HAS_HANDLAID) return renderMapHandLaid(root);
-  return renderMapAuto(root);
+  // Dynamic synchronization of map selection state with the Chapters view tab
+  if (state.lastChapterSel !== state.chapterSel) {
+    state.mapChapterSel = state.chapterSel || 0;
+    state.mapVerseSel = ''; // Reset verse selection on map when chapter changes from chapters tab
+    state.lastChapterSel = state.chapterSel;
+  }
+  if (state.mapChapterSel === undefined) {
+    state.mapChapterSel = 0; // Default fallback to all chapters
+  }
+
+  const fontFam = state.lang==='hi'?'Tiro Devanagari Hindi':state.lang==='dev'?'Tiro Devanagari Sanskrit':state.lang==='kn'?'Tiro Kannada':'Cormorant Garamond';
+  const chSel = state.mapChapterSel; // 0 to 18
+  const vSel = state.mapVerseSel || ''; // 'ch.v' or ''
+  
+  const chTitle = {
+    0:'All Chapters',
+    1:'Arjuna-viṣāda', 2:'Sāṅkhya-yoga', 3:'Karma-yoga',
+    4:'Jñāna-karma-sannyāsa', 5:'Karma-sannyāsa', 6:'Dhyāna-yoga',
+    7:'Vijñāna-yoga', 8:'Akṣara-brahma', 9:'Rāja-vidyā-rāja-guhya',
+    10:'Vibhūti-yoga', 11:'Viśvarūpa-darśana', 12:'Bhakti-yoga',
+    13:'Kṣetra-kṣetrajña', 14:'Guṇa-traya-vibhāga', 15:'Puruṣottama',
+    16:'Daivāsura-sampad-vibhāga', 17:'Śraddhā-traya-vibhāga',
+    18:'Mokṣa-sannyāsa'
+  };
+
+  const allChaptersLabel = {
+    en: 'All Chapters',
+    dev: 'सर्वाध्यायाः',
+    kn: 'ಎಲ್ಲಾ ಅಧ್ಯಾಯಗಳು',
+    hi: 'सभी अध्याय'
+  }[state.lang] || 'All Chapters';
+
+  const chLabelText = chSel === 0 
+    ? allChaptersLabel 
+    : `${state.lang==='kn'?'ಅಧ್ಯಾಯ':'Chapter'} ${chSel} — ${chTitle[chSel]}`;
+
+  // Generate Shloka dropdown choices for the active chapter
+  let shlokaDropdown = '';
+  if (chSel > 0) {
+    const selStr = String(chSel);
+    const verseKeys = Object.keys(FULL_GITA)
+      .filter(k => k.split('.')[0] === selStr)
+      .sort((a,b) => parseInt(a.split('.')[1]) - parseInt(b.split('.')[1]));
+
+    const allShlokasLabel = {
+      en: 'All Shlokas',
+      dev: 'सर्व-श्लोकाः',
+      kn: 'ಎಲ್ಲಾ ಶ್ಲೋಕಗಳು',
+      hi: 'सभी श्लोक'
+    }[state.lang] || 'All Shlokas';
+
+    const shlokaOptions = verseKeys.map(k => 
+      `<option value="${k}"${vSel===k?' selected':''}>BG ${k}</option>`
+    ).join('');
+
+    shlokaDropdown = `
+      <div class="map-control-item">
+        <label for="map-shloka-select" class="map-control-label">${{en:'Shloka:', dev:'श्लोकः:', kn:'ಶ್ಲೋಕ:', hi:'श्लोक:'}[state.lang]||'Shloka:'}</label>
+        <select id="map-shloka-select" class="sh-dropdown" onchange="onMapShlokaChange(this.value)">
+          <option value="">-- ${allShlokasLabel} --</option>
+          ${shlokaOptions}
+        </select>
+      </div>
+    `;
+  }
+
+  const filterLabel = {
+    en: 'Chapter Filter:',
+    dev: 'अध्याय-सूची:',
+    kn: 'ಅಧ್ಯಾಯ ಶೋಧಕ:',
+    hi: 'अध्याय फ़िल्टर:'
+  }[state.lang] || 'Chapter Filter:';
+
+  const controlPanelHtml = `
+    <div class="map-controls-panel">
+      <div class="map-control-item slider-item">
+        <div class="slider-header">
+          <span class="map-control-label">${filterLabel}</span>
+          <span class="map-ch-badge">${escapeHtml(chLabelText)}</span>
+        </div>
+        <div class="slider-row">
+          <span class="slider-bound">0</span>
+          <input type="range" min="0" max="18" value="${chSel}" class="map-slider" id="map-ch-slider" oninput="onMapSliderChange(this.value)">
+          <span class="slider-bound">18</span>
+        </div>
+      </div>
+      ${shlokaDropdown}
+    </div>
+  `;
+
+  // Filter nodes and edges based on selections
+  let activeNodeIds = new Set();
+  const conceptIdx = buildChapterIndex(); 
+  const shlokaMap = buildShlokaChapterIndex(); 
+
+  if (chSel === 0) {
+    NODES.forEach(n => activeNodeIds.add(n.id));
+  } else {
+    if (vSel) {
+      const list = shlokaMap[vSel] || [];
+      list.forEach(e => activeNodeIds.add(e.nodeId));
+    } else {
+      const list = conceptIdx[chSel] || [];
+      list.forEach(e => activeNodeIds.add(e.node.id));
+    }
+  }
+
+  if (HAS_HANDLAID) {
+    renderMapHandLaid(root, activeNodeIds, controlPanelHtml);
+  } else {
+    renderMapAuto(root, activeNodeIds, controlPanelHtml);
+  }
 }
 
-function renderMapHandLaid(root){
+function renderMapHandLaid(root, activeNodeIds, controlPanelHtml){
   const W = 1000, H = 1500;
   const showSet = (typeof KG_SHOW_EDGE_TYPES !== 'undefined') ? KG_SHOW_EDGE_TYPES : null;
   const fontFam = state.lang==='hi'?'Tiro Devanagari Hindi':state.lang==='dev'?'Tiro Devanagari Sanskrit':state.lang==='kn'?'Tiro Kannada':'Cormorant Garamond';
   let svg = `<svg viewBox="0 0 ${W} ${H}" width="${W}" height="${H}" xmlns="http://www.w3.org/2000/svg">`;
 
-  // tier bands (alternating washes, plus optional side-column for yajna)
+  // tier bands
   KG_TIER_BANDS.forEach((band,bi)=>{
     const x = band.side ? 900 : (band.half==='right' ? W/2 : 0);
     const w = band.side ? 100 : (band.half ? W/2 : W);
@@ -2543,9 +2764,10 @@ function renderMapHandLaid(root){
     svg += `<text x="${band.label.x}" y="${band.label.y}" font-family="${fontFam}" font-size="13" fill="var(--ink-soft)" font-weight="600">${escapeHtml(lab)}</text>`;
   });
 
-  // edges (filtered + curved)
+  // edges (Only draw if both source and target endpoints are in activeNodeIds)
   EDGES.forEach(e=>{
     if (showSet && !showSet.has(e.type)) return;
+    if (!activeNodeIds.has(e.source) || !activeNodeIds.has(e.target)) return;
     const a = KG_POSITIONS[e.source]; const b = KG_POSITIONS[e.target];
     if (!a || !b) return;
     const [ax,ay] = a, [bx,by] = b;
@@ -2554,8 +2776,9 @@ function renderMapHandLaid(root){
     svg += `<path class="map-edge" d="M ${ax} ${ay} Q ${mx} ${my} ${bx} ${by}" stroke="var(--e-${e.type})" stroke-width="0.7"/>`;
   });
 
-  // nodes
+  // nodes (Only draw if present in activeNodeIds)
   NODES.forEach(n=>{
+    if (!activeNodeIds.has(n.id)) return;
     const p = KG_POSITIONS[n.id]; if (!p) return;
     const [x,y,r] = p;
     const lab = labelOf(n);
@@ -2568,16 +2791,19 @@ function renderMapHandLaid(root){
   });
 
   svg += `</svg>`;
-  root.innerHTML = `<div class="map-wrap">${svg}</div>`;
+  root.innerHTML = `
+    ${controlPanelHtml}
+    <div class="map-wrap">${svg}</div>
+  `;
 }
 
-function renderMapAuto(root){
-  // Fallback: stacked rows by tier order
+function renderMapAuto(root, activeNodeIds, controlPanelHtml){
   const W = 820, leftPad = 100, rightPad = 30;
   const tierGap = 84;
+  const activeNodes = NODES.filter(n => activeNodeIds.has(n.id));
   const H = TIERS.length * tierGap + 80;
   const byTier = Object.fromEntries(TIERS.map(t=>[t.id,[]]));
-  NODES.forEach(n => { if (byTier[n.tier]) byTier[n.tier].push(n); });
+  activeNodes.forEach(n => { if (byTier[n.tier]) byTier[n.tier].push(n); });
   const pos = {};
   TIERS.forEach((tier, ti)=>{
     const arr = byTier[tier.id];
@@ -2597,13 +2823,14 @@ function renderMapAuto(root){
     svg += `<text x="10" y="${y+4}" font-family="${fontFam}" font-size="12" fill="var(--ink-soft)" font-weight="600">${escapeHtml(lab)}</text>`;
   });
   EDGES.forEach(e=>{
+    if (!activeNodeIds.has(e.source) || !activeNodeIds.has(e.target)) return;
     const a = pos[e.source]; const b = pos[e.target];
     if (!a || !b) return;
     const mx = (a.x+b.x)/2;
     const my = (a.y+b.y)/2 - Math.abs(b.y-a.y)*0.08;
     svg += `<path class="map-edge" d="M ${a.x} ${a.y} Q ${mx} ${my} ${b.x} ${b.y}" stroke="var(--e-${e.type})" stroke-width="0.7"/>`;
   });
-  NODES.forEach(n=>{
+  activeNodes.forEach(n=>{
     const p = pos[n.id]; if (!p) return;
     const lab = labelOf(n);
     const maxLen = state.lang==='en' ? 14 : 10;
@@ -2614,8 +2841,27 @@ function renderMapAuto(root){
     </g>`;
   });
   svg += `</svg>`;
-  root.innerHTML = `<div class="map-wrap">${svg}</div>`;
+  root.innerHTML = `
+    ${controlPanelHtml}
+    <div class="map-wrap">${svg}</div>
+  `;
 }
+
+window.onMapSliderChange = function(val) {
+  const ch = parseInt(val);
+  state.mapChapterSel = ch;
+  state.mapVerseSel = ''; // Reset shloka filter when chapter changes
+  if (ch > 0) {
+    state.chapterSel = ch; // Sync back to chapters tab!
+  }
+  state.lastChapterSel = ch; // Avoid circular dynamic resets
+  renderMap();
+};
+
+window.onMapShlokaChange = function(val) {
+  state.mapVerseSel = val;
+  renderMap();
+};
 
 /* ---------- DISPATCH ---------- */
 function render(){
