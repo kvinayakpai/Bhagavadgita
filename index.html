@@ -284,6 +284,44 @@ body.lang-en .vsn-chip{font-family:'Cormorant Garamond',serif;font-style:italic}
 .map-node text{font-family:'Cormorant Garamond',serif;font-size:10px;fill:var(--ink);pointer-events:none;text-anchor:middle}
 .map-edge{fill:none;stroke-opacity:.45}
 
+/* ============ MAP EMPTY STATE ============ */
+.map-empty-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 40px 24px;
+  background: var(--paper);
+  border: 1px dashed var(--rule);
+  border-radius: 12px;
+  max-width: 480px;
+  margin: 40px auto;
+  text-align: center;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.02);
+  box-sizing: border-box;
+}
+.map-empty-icon {
+  font-size: 48px;
+  margin-bottom: 16px;
+  line-height: 1;
+}
+.map-empty-title {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 22px;
+  color: var(--ink);
+  margin: 0 0 10px;
+  font-weight: 600;
+}
+.map-empty-desc {
+  font-size: 13.5px;
+  line-height: 1.6;
+  color: var(--ink-soft);
+  margin: 0;
+}
+body.lang-kn .map-empty-title { font-family: 'Tiro Kannada', serif; font-size: 20px; }
+body.lang-hi .map-empty-title { font-family: 'Tiro Devanagari Hindi', serif; font-size: 20px; }
+body.lang-dev .map-empty-title { font-family: 'Tiro Devanagari Sanskrit', serif; font-size: 20px; }
+
 /* ============ FOOTER ============ */
 footer{
   position:fixed;bottom:0;left:0;right:0;
@@ -2804,9 +2842,42 @@ function renderMapHandLaid(root, activeNodeIds, controlPanelHtml){
   });
 
   svg += `</svg>`;
+
+  let mapContent = '';
+  if (activeNodeIds.size === 0) {
+    const emptyMsgs = {
+      en: {
+        title: 'No Mapped Concepts',
+        desc: 'No key concepts are currently mapped to this specific shloka in the Knowledge Graph yet. Try exploring other shlokas in this chapter.'
+      },
+      kn: {
+        title: 'ಯಾವುದೇ ಪರಿಕಲ್ಪನೆಗಳು ಕಂಡುಬಂದಿಲ್ಲ',
+        desc: 'ಜ್ಞಾನ ನಕ್ಷೆಯಲ್ಲಿ ಈ ನಿರ್ದಿಷ್ಟ ಶ್ಲೋಕಕ್ಕೆ ಯಾವುದೇ ಪ್ರಮುಖ ಪರಿಕಲ್ಪನೆಗಳನ್ನು ಇನ್ನು ಗುರುತಿಸಲಾಗಿಲ್ಲ. ದಯವಿಟ್ಟು ಈ ಅಧ್ಯಾಯದ ಬೇರೆ ಶ್ಲೋಕಗಳನ್ನು ನೋಡಿ.'
+      },
+      hi: {
+        title: 'कोई मुख्य विचार उपलब्ध नहीं',
+        desc: 'ज्ञान मानचित्र में इस विशेष श्लोक से जुड़ा कोई मुख्य विचार अभी उपलब्ध नहीं है। कृपया इस अध्याय के अन्य श्लोकों को देखें।'
+      },
+      dev: {
+        title: 'कोऽपि विचारो न लब्धः',
+        desc: 'अस्मिन् विशिष्टे श्लोके सम्बद्धः कोऽपि मुख्यसिद्धान्तः अधुना ज्ञानमानचित्रे न विद्यते। कृपया अस्य अध्यायस्य अन्यान् श्लोकान् पश्यतु।'
+      }
+    };
+    const msg = emptyMsgs[state.lang] || emptyMsgs.en;
+    mapContent = `
+      <div class="map-empty-state">
+        <div class="map-empty-icon">📭</div>
+        <h3 class="map-empty-title">${msg.title}</h3>
+        <p class="map-empty-desc">${msg.desc}</p>
+      </div>
+    `;
+  } else {
+    mapContent = svg;
+  }
+
   root.innerHTML = `
     ${controlPanelHtml}
-    <div class="map-wrap">${svg}</div>
+    <div class="map-wrap">${mapContent}</div>
   `;
 }
 
@@ -2883,9 +2954,42 @@ function renderMapAuto(root, activeNodeIds, controlPanelHtml){
     </g>`;
   });
   svg += `</svg>`;
+
+  let mapContent = '';
+  if (activeNodeIds.size === 0) {
+    const emptyMsgs = {
+      en: {
+        title: 'No Mapped Concepts',
+        desc: 'No key concepts are currently mapped to this specific shloka in the Knowledge Graph yet. Try exploring other shlokas in this chapter.'
+      },
+      kn: {
+        title: 'ಯಾವುದೇ ಪರಿಕಲ್ಪನೆಗಳು ಕಂಡುಬಂದಿಲ್ಲ',
+        desc: 'ಜ್ಞಾನ ನಕ್ಷೆಯಲ್ಲಿ ಈ ನಿರ್ದಿಷ್ಟ ಶ್ಲೋಕಕ್ಕೆ ಯಾವುದೇ ಪ್ರಮುಖ ಪರಿಕಲ್ಪನೆಗಳನ್ನು ಇನ್ನು ಗುರುತಿಸಲಾಗಿಲ್ಲ. ದಯವಿಟ್ಟು ಈ ಅಧ್ಯಾಯದ ಬೇರೆ ಶ್ಲೋಕಗಳನ್ನು ನೋಡಿ.'
+      },
+      hi: {
+        title: 'कोई मुख्य विचार उपलब्ध नहीं',
+        desc: 'ज्ञान मानचित्र में इस विशेष श्लोक से जुड़ा कोई मुख्य विचार अभी उपलब्ध नहीं है। कृपया इस अध्याय के अन्य श्लोकों को देखें।'
+      },
+      dev: {
+        title: 'कोऽपि विचारो न लब्धः',
+        desc: 'अस्मिन् विशिष्टे श्लोके सम्बद्धः कोऽपि मुख्यसिद्धान्तः अधुना ज्ञानमानचित्रे न विद्यते। कृपया अस्य अध्यायस्य अन्यान् श्लोकान् पश्यतु।'
+      }
+    };
+    const msg = emptyMsgs[state.lang] || emptyMsgs.en;
+    mapContent = `
+      <div class="map-empty-state">
+        <div class="map-empty-icon">📭</div>
+        <h3 class="map-empty-title">${msg.title}</h3>
+        <p class="map-empty-desc">${msg.desc}</p>
+      </div>
+    `;
+  } else {
+    mapContent = svg;
+  }
+
   root.innerHTML = `
     ${controlPanelHtml}
-    <div class="map-wrap">${svg}</div>
+    <div class="map-wrap">${mapContent}</div>
   `;
 }
 
