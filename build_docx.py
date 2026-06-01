@@ -9,8 +9,8 @@ import sys
 
 sys.stdout.reconfigure(encoding='utf-8')
 
-JSON_PATH = r"C:\Claude\gita-concept-kg\_extracted\clean_verses_700.json"
-DOCX_PATH = r"C:\Claude\gita-concept-kg\Bhagavad_Gita_All_Verses_CLEAN.docx"
+JSON_PATH = r"C:\Antigravity\Bhagavadgita\_extracted\clean_verses_700.json"
+DOCX_PATH = r"C:\Antigravity\Bhagavadgita\Bhagavad_Gita_All_Verses_CLEAN.docx"
 
 CHAPTER_NAMES = {
     1: "ಅರ್ಜುನವಿಷಾದ ಯೋಗ",
