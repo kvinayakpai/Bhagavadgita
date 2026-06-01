@@ -121,38 +121,33 @@ const KG_POSITIONS = {
   'krodha':             [220, 1180, 14],
   'lobha':              [320, 1180, 12],
   'moha':               [420, 1180, 13],
-  'asatsanga':          [120, 1250, 11],
-  'avidya':             [220, 1250, 12],
-  'dvandva':            [320, 1250, 11],
-  'asuri_sampad':       [420, 1250, 13],
+  'asatsanga':          [120, 1210, 11],
+  'avidya':             [220, 1210, 12],
+  'dvandva':            [320, 1210, 11],
+  'asuri_sampad':       [420, 1210, 13],
 
   // ============ Pratīka (y ≈ 1170) — bottom-right, symbols ============
   'pranava_om':         [580, 1180, 13],
   'ashvattha':          [700, 1180, 13],
   'ratha_rupaka':       [820, 1180, 12],
-  'akshara_a':          [580, 1250, 11],
-  'jyotir_jyoti':       [700, 1250, 12],
-  'vibhuti':            [820, 1250, 12],
+  'akshara_a':          [580, 1210, 11],
+  'jyotir_jyoti':       [700, 1210, 12],
+  'vibhuti':            [820, 1210, 12],
 
-  // ============ Phala (y ≈ 1350) — the goals, at the foot ============
-  'moksha':             [500, 1350, 22],   // big — the goal
-  'paramagati':         [340, 1350, 14],
-  'brahmi_sthiti':      [180, 1350, 13],
-  'jivanmukti':         [660, 1350, 14],
-  'naishkarmya_siddhi': [820, 1350, 12],
-  'archiradi_marga':    [340, 1420, 11],
-  'dhumadi_marga':      [180, 1420, 11],
-  'sarva_dharman_parityajya':[500, 1420, 16],  // carama-śloka emphasized
+  // ============ Phala (y ≈ 1320) — the goals, at the foot ============
+  'moksha':             [500, 1315, 22],   // big — the goal
+  'paramagati':         [340, 1315, 14],
+  'brahmi_sthiti':      [180, 1315, 13],
+  'jivanmukti':         [660, 1315, 14],
+  'naishkarmya_siddhi': [820, 1315, 12],
+  'archiradi_marga':    [340, 1380, 11],
+  'dhumadi_marga':      [180, 1380, 11],
+  'sarva_dharman_parityajya':[500, 1380, 16],  // carama-śloka emphasized
   // Madhva mukti-gradations clustered around moksha
-  'salokya':            [360, 1290, 11],
-  'samipya':            [440, 1290, 11],
-  'sarupya':            [560, 1290, 11],
-  'sayujya':            [640, 1290, 13],
-  // Madhva mukti-gradations clustered around moksha
-  'salokya':            [360, 1290, 11],
-  'samipya':            [440, 1290, 11],
-  'sarupya':            [560, 1290, 11],
-  'sayujya':            [640, 1290, 13],
+  'salokya':            [360, 1275, 11],
+  'samipya':            [440, 1275, 11],
+  'sarupya':            [560, 1275, 11],
+  'sayujya':            [640, 1275, 13],
 
   // ============ Yajña (side column, y ≈ 600–950) — right edge ============
   'dravya_yajna':       [950, 600, 10],
@@ -173,9 +168,9 @@ const KG_TIER_BANDS = [
   { tier:'sadhana',     yTop:875,  yBottom:990,  label:{x:14, y:895} },
   { tier:'antahkarana', yTop:995,  yBottom:1160, label:{x:14, y:1015}, half:'left' },
   { tier:'dharma',      yTop:995,  yBottom:1160, label:{x:520, y:1015}, half:'right' },
-  { tier:'dosha',       yTop:1165, yBottom:1300, label:{x:14, y:1185}, half:'left' },
-  { tier:'pratika',     yTop:1165, yBottom:1300, label:{x:520, y:1185}, half:'right' },
-  { tier:'phala',       yTop:1305, yBottom:1480, label:{x:14, y:1325} },
+  { tier:'dosha',       yTop:1165, yBottom:1235, label:{x:14, y:1185}, half:'left' },
+  { tier:'pratika',     yTop:1165, yBottom:1235, label:{x:520, y:1185}, half:'right' },
+  { tier:'phala',       yTop:1240, yBottom:1410, label:{x:14, y:1260} },
   { tier:'yajna',       yTop:580,  yBottom:990,  label:{x:920, y:580}, side:true },
 ];
 

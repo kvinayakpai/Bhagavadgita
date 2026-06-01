@@ -2820,13 +2820,15 @@ function renderMapHandLaid(root, activeNodeIds, controlPanelHtml){
     const yajnaActive = activeTiers.has('yajna');
 
     // 5. Calculate new coordinates for each active row
-    const rowHeight = 150; // Spacious height per active tier slot
+    const rowHeight = 120; // Beautiful compact height per active tier slot
     const topMargin = 40;
     activeStandardRows.forEach((row, ri) => {
       const newYTop = topMargin + ri * rowHeight;
       const newYBottom = newYTop + rowHeight;
       
       row.tiers.forEach(tier => {
+        if (!activeTiers.has(tier)) return; // Completely skip empty half-panels!
+        
         const band = KG_TIER_BANDS.find(b => b.tier === tier);
         if (!band) return;
 
