@@ -2741,15 +2741,13 @@ function renderMapHandLaid(root, activeNodeIds, controlPanelHtml){
   const chSel = state.mapChapterSel || 0;
 
   if (activeNodeIds.size > 0 && chSel > 0) {
-    let minX = W, maxX = 0, minY = H, maxY = 0;
+    let minY = H, maxY = 0;
     let count = 0;
     activeNodeIds.forEach(id => {
       const p = KG_POSITIONS[id];
       if (p) {
         const [x, y, r] = p;
         const r_pad = r + 24; // padding for node and label text
-        if (x - r_pad < minX) minX = x - r_pad;
-        if (x + r_pad > maxX) maxX = x + r_pad;
         if (y - r_pad < minY) minY = y - r_pad;
         if (y + r_pad + 18 > maxY) maxY = y + r_pad + 18;
         count++;
@@ -2757,13 +2755,10 @@ function renderMapHandLaid(root, activeNodeIds, controlPanelHtml){
     });
 
     if (count > 0) {
-      const padX = 35;
-      const padY = 35;
-      const xStart = Math.max(0, minX - padX);
+      const padY = 40;
       const yStart = Math.max(0, minY - padY);
-      const boxW = Math.min(W, maxX + padX) - xStart;
       const boxH = Math.min(H, maxY + padY) - yStart;
-      viewBox = `${xStart} ${yStart} ${boxW} ${boxH}`;
+      viewBox = `0 ${yStart} ${W} ${boxH}`;
       svgWAttr = "100%";
       svgHAttr = "100%";
     }
@@ -2833,21 +2828,19 @@ function renderMapAuto(root, activeNodeIds, controlPanelHtml){
     });
   });
   const fontFam = state.lang==='hi'?'Tiro Devanagari Hindi':state.lang==='dev'?'Tiro Devanagari Sanskrit':state.lang==='kn'?'Tiro Kannada':'Cormorant Garamond';
-  // Calculate dynamic bounding box to fit all active nodes in a single view
+  // Calculate dynamic vertical bounding box to fit all active nodes in a single view
   let viewBox = `0 0 ${W} ${H}`;
   let svgWAttr = W;
   let svgHAttr = H;
   const chSel = state.mapChapterSel || 0;
 
   if (activeNodeIds.size > 0 && chSel > 0) {
-    let minX = W, maxX = 0, minY = H, maxY = 0;
+    let minY = H, maxY = 0;
     let count = 0;
     activeNodes.forEach(n => {
       const p = pos[n.id];
       if (p) {
         const r_pad = p.r + 24;
-        if (p.x - r_pad < minX) minX = p.x - r_pad;
-        if (p.x + r_pad > maxX) maxX = p.x + r_pad;
         if (p.y - r_pad < minY) minY = p.y - r_pad;
         if (p.y + r_pad + 18 > maxY) maxY = p.y + r_pad + 18;
         count++;
@@ -2855,13 +2848,10 @@ function renderMapAuto(root, activeNodeIds, controlPanelHtml){
     });
 
     if (count > 0) {
-      const padX = 20;
-      const padY = 20;
-      const xStart = Math.max(0, minX - padX);
+      const padY = 30;
       const yStart = Math.max(0, minY - padY);
-      const boxW = Math.min(W, maxX + padX) - xStart;
       const boxH = Math.min(H, maxY + padY) - yStart;
-      viewBox = `${xStart} ${yStart} ${boxW} ${boxH}`;
+      viewBox = `0 ${yStart} ${W} ${boxH}`;
       svgWAttr = "100%";
       svgHAttr = "100%";
     }
