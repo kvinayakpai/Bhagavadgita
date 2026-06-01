@@ -1,126 +1,125 @@
 # Bhagavadgita Project — Session Handoff
 
-**Last updated:** 2026-05-31 (session B continuation)
-**Project:** `C:\Claude\gita-concept-kg`
+**Last updated:** 2026-06-01 (session C)
+**Project:** `C:\Antigravity\Bhagavadgita`
 **GitHub:** https://github.com/kvinayakpai/Bhagavadgita
 
 ---
 
 ## Goal
 
-Build a clean Kannada deliverable containing all Bhagavadgītā verses (Sanskrit śloka + Bannanje Govindacharya's Kannada commentary) extracted from `Bhagavad_Gita.pdf` (576 pages).
+Build a clean multilingual deliverable of the Bhagavadgītā with:
+1. All 702 verses (Sanskrit śloka + Bannanje Govindacharya's Kannada commentary) extracted from `Bhagavad_Gita.pdf` (576 pages).
+2. Commentary translated into English, Hindi, and Sanskrit (Devanāgarī) — 702 entries × 4 languages.
+3. An interactive viewer (Browse / Focus / Map / Chapters) with one-click quad-script toggle.
+4. Concept Knowledge Graph: 112 nodes, 124 typed edges, 12 tiers, Madhva siddhānta lens.
 
-## Current status
+---
 
-**694 / 695 actual Bannanje verses (99.9%)** delivered in clean Unicode Kannada.
+## Current status (after session C, 2026-06-01)
 
-Six rows previously flagged as "missing" turned out to be **phantoms** — verses that don't exist in Bannanje's edition. Phantom count now: 7 (BG 3.43, 11.52, 11.54, 11.55, 13.35, 8.22, and the older "BG 1.21" placeholder).
+**Verse extraction: COMPLETE**
+- 702 entries in `_extracted/clean_verses_700.json` (the Bannanje edition uses its own verse numbering)
+- 694 / 695 actual Bannanje verses (99.9%) — 1 verse still missing (BG 15.2 / see Known Issues)
+- 7 phantom rows: BG 3.43, 11.52, 11.54, 11.55, 13.35, 8.22, 1.21
 
-Breakdown by extraction method (in `_extracted/clean_verses_700.json`):
-- 655 clean (recovered from previously-lost OCR pass)
-- 21 patched from user-shared screenshots (BG 12.3 and BG 16.18 added this round)
-- 18 auto-extracted from clean OCR pages (some have imperfect shloka/meaning column split)
-- 7 phantom_disregard (gray rows — actual content lives elsewhere, see notes)
-- 1 missing_marker remaining: BG 15.2 (Bannanje's renumbering displaces it; user said "everything else attached")
+**Commentary translation: COMPLETE (all 4 languages)**
+| File | Language | Status |
+|---|---|---|
+| `bannanje_kn_private.js` | Kannada (source) | ✅ Complete — 702 entries |
+| `bannanje_en_private.js` | English | ✅ Complete — 702 entries |
+| `bannanje_hi_private.js` | Hindi | ✅ Complete — 702 entries |
+| `bannanje_dev_private.js` | Sanskrit / Devanāgarī | ✅ Complete — 702 entries, contamination-cleaned |
 
-## Important discovery this round
+**DEV contamination cleanup: COMPLETE (2026-06-01)**
+- Google Translate API systematically hallucinated Kannada negation particle `ಅಲ್ಲ` (alla) → `अल्लाह`
+- All 702 entries scanned and cleaned using `detect_contamination.py`
+- Residual hallucinations replaced: `अल्लाह` → `न`, `इल्लाह` → `न विद्यते`
+- Post-clean scan: **0 contaminated entries** out of 702
 
-**Bannanje's verse counts DIFFER from conventional BG:**
+**Viewer: COMPLETE**
+- Quad-script toggle: EN / DEV / HI / KN
+- Chapters tab: all 18 chapters, full Bannanje commentary per shloka per language
+- `viewer-bundled.html`: 15.7 MB self-contained bundle
 
-| Chapter | Conventional | Bannanje (this edition) |
-|---------|-------------:|------------------------:|
-| Ch 3    | 43 verses    | **42** (3.42 = conv 3.42-43 combined) |
-| Ch 11   | 55 verses    | **35** (compresses ~20 verses) |
-| Ch 13   | 35 verses    | **34** |
-| Ch 15   | 20 verses    | renumbered (Bannanje 15.1 = conv 15.2) |
-| Ch 8, 1 | known shifts | (see Known issues) |
+**Documents: REBUILT (2026-06-01)**
+- `Bhagavad_Gita_All_Verses_CLEAN.docx` — rebuilt from JSON
+- `decks/Bhagavadgita_Concept_KG_{en,dev,hi,kn}.pptx` — all 4 rebuilt
 
-This means: any verse numbers higher than Bannanje's chapter limit are phantoms. The data file may still have phantom rows in Ch 11 (verses 36–55) where OCR misread Bannanje's lower numbers as higher ones. **Recommended next-session task:** audit Ch 11 verses 36-55 in the JSON; many should be re-flagged as `phantom_disregard`.
-
-## Primary deliverables (on host)
-
-- [`Bhagavad_Gita_All_Verses_CLEAN.xlsx`](computer://C:\Claude\gita-concept-kg\Bhagavad_Gita_All_Verses_CLEAN.xlsx) — 1.5 MB, **stale (does not reflect this round's edits)**; needs rebuild from JSON
-- [`Bhagavad_Gita_All_Verses_CLEAN.docx`](computer://C:\Claude\gita-concept-kg\Bhagavad_Gita_All_Verses_CLEAN.docx) — stale; needs rebuild
-- [`_extracted/clean_verses_700.json`](computer://C:\Claude\gita-concept-kg\_extracted\clean_verses_700.json) — **CURRENT source of truth; includes today's edits**
-
-**VM is currently down**, so I couldn't rebuild XLSX/DOCX this round. Next session should run the rebuild scripts (saved in earlier bash history; schema is straightforward — openpyxl with status-based fills, python-docx with title page + per-chapter layout).
-
-**Color legend (when rebuilt):**
-- White rows = clean OCR text
-- Green rows = screenshot patches
-- Blue rows = auto-extracted (imperfect column split)
-- Yellow rows = still placeholder
-- Gray rows = phantom
-
-## This round's changes (session B continuation, 2026-05-31)
-
-Direct JSON edits via Edit tool (VM was down):
-
-**Two screenshot patches applied:**
-- **BG 12.3** — "Ye tv akṣaram anirdeśyam avyaktaṃ paryupāsate..." with Bannanje commentary on avyakta lakṣmī upāsanā (book p399)
-- **BG 16.18** — "Ahaṅkāraṃ balaṃ darpaṃ kāmaṃ krodhaṃ ca saṃśritāḥ..." with Bannanje commentary on the āsurī svabhāva (book p503)
-
-**Five phantoms flagged:**
-- BG 3.43 → phantom (Bannanje Ch 3 has 42 verses; user-confirmed via book p124 chapter-end image)
-- BG 11.52, 11.54, 11.55 → phantoms (Bannanje Ch 11 has 35 verses; user-confirmed via book p394 chapter-end image; conv BG 11.54/55 are at BG 11.34/35)
-- BG 13.35 → phantom (Bannanje Ch 13 has 34 verses; user explicitly confirmed)
+---
 
 ## Key file locations
 
 ```
-C:\Claude\gita-concept-kg\
-├── Bhagavad_Gita.pdf                              # source (576 pages, 2.9 MB)
-├── gita_pages\page_NNNN.png                       # PDF pages rasterized (NNNN=0001..0576)
-├── Bhagavad_Gita_text.txt                         # OLD garbled OCR
-├── Bhagavad_Gita_All_Verses_CLEAN.xlsx            # NEEDS REBUILD from JSON
-├── Bhagavad_Gita_All_Verses_CLEAN.docx            # NEEDS REBUILD from JSON
-├── Bhagavad_Gita_All_Verses_RAW_OCR.xlsx          # legacy garbled fallback (keep for ref)
-├── Bhagavad_Gita_All_Verses_RAW_OCR.docx          # legacy garbled fallback
-├── Bhagavad_Gita_Bannanje_Clean.xlsx              # earlier 112-verse subset with 4 langs
-├── Bhagavad_Gita_Bannanje_Clean.docx              # earlier 112-verse subset
-└── _extracted\
-    ├── clean_verses_700.json                      # SOURCE OF TRUTH — current
-    ├── patched_refs.json                          # screenshot-patched list
-    ├── HANDOFF.md                                 # this file
-    ├── clean_ocr\p-001.txt ... p-576.txt          # 576 clean OCR pages (the gold)
-    ├── clean_concat.txt                           # all pages concatenated
-    ├── clean_markers.json                         # detected verse markers
-    ├── bannanje_clean.json                        # 112-verse concept-curated set (kn/en/dev/hi)
-    └── clean_verses_112.json                      # same, flattened
+C:\Antigravity\Bhagavadgita\
+├── Bhagavad_Gita.pdf                          # source (576 pages, 2.9 MB)
+├── data.js                                    # 112 concepts, 124 edges, 112 shlokas
+├── positions.js                               # map coordinates
+├── viewer.html / index.html                   # main SPA (byte-identical)
+├── viewer-bundled.html                        # self-contained 15.7 MB bundle
+│
+├── bannanje_kn_private.js                     # Kannada commentary — SOURCE OF TRUTH
+├── bannanje_en_private.js                     # English translation
+├── bannanje_hi_private.js                     # Hindi translation
+├── bannanje_dev_private.js                    # Sanskrit/Devanāgarī translation (cleaned)
+│
+├── build-bundle.py                            # builds viewer-bundled.html
+├── build-decks.js                             # builds 4 pptx decks (needs pptxgenjs + Node.js)
+├── build_docx.py                              # builds CLEAN.docx from JSON
+├── translate_all_meanings.py                  # KN → EN/HI/DEV via Google Translate gtx API
+├── detect_contamination.py                    # QA scan for DEV contamination
+├── verify.py                                  # Python integrity auditor
+├── verify.js                                  # JS structural auditor
+│
+├── decks/
+│   ├── Bhagavadgita_Concept_KG_{en,dev,hi,kn}.pptx   # 4 language decks (rebuilt 2026-06-01)
+│   └── Bhagavadgita_Concept_KG_{en,dev,hi,kn}.pdf    # PDF versions
+│
+├── Bhagavad_Gita_All_Verses_CLEAN.docx        # CURRENT — rebuilt 2026-06-01
+├── Bhagavad_Gita_All_Verses_CLEAN.xlsx        # STALE — needs rebuild from JSON
+├── Bhagavad_Gita_Bannanje_Clean.docx          # 112-verse concept-curated subset (stale)
+│
+└── _extracted/
+    ├── clean_verses_700.json                  # SOURCE OF TRUTH for docx/xlsx build
+    ├── bannanje_clean.json                    # 112-verse concept set (kn/en/dev/hi)
+    ├── clean_verses_112.json                  # same, flattened
+    ├── patched_refs.json                      # screenshot-patched verse list
+    ├── HANDOFF.md                             # this file
+    ├── clean_ocr/p-001.txt … p-576.txt        # 576 clean OCR pages
+    ├── clean_concat.txt                       # all pages concatenated
+    └── clean_markers.json                     # detected verse markers
 ```
 
-## What's still missing (1 verse)
+> **Node.js location:** `C:\Claude\node-portable\node-v22.11.0-win-x64\node.exe`
+> (not on PATH — call with full path)
 
-- **BG 15.2** (book p~469) — Bannanje's renumbering displaces it. Bannanje 15.1 = conventional 15.2 ("adhaś cordhvaṃ prasṛtās tasya śākhā..."), so Bannanje 15.2 = conventional 15.3 ("na rūpam asyeha tathopalabhyate..."). Need screenshot of book p~470 to confirm and patch.
+---
 
-## How to continue (next session)
+## What's still missing / pending
 
-**Immediate priorities:**
+### 1 verse (low priority)
+- **BG 15.2** (book p~470) — Bannanje's renumbering displaces it.
+  Bannanje 15.1 = conventional 15.2; need screenshot of p~470 to patch.
 
-1. **Restart workspace VM** (was unavailable this round)
-2. **Rebuild XLSX from current JSON** — schema:
-   - 20 sheets: README + "All Verses" + 18 per-chapter
-   - Color fills by status (yellow/green/blue/gray)
-   - Freeze pane on header, wrap-text on shloka/meaning columns
-3. **Rebuild DOCX from current JSON** — title page, contents, per-verse blocks with status colors
-4. **Audit Ch 11 phantoms** (verses 36-55) — many in JSON are likely also phantoms from OCR mis-reads; mark them as `phantom_disregard`
-5. **Patch BG 15.2** if user provides the next page screenshot
-6. Update HANDOFF.md again with the new counts
+### XLSX needs rebuild (medium priority)
+- `Bhagavad_Gita_All_Verses_CLEAN.xlsx` is stale.
+- Run `python build_xlsx.py` (script exists; schema: 20 sheets, color fills by status, freeze header).
+- Close Excel before rebuilding to avoid PermissionError.
 
-**Process notes for screenshot patches:**
+### PDFs for decks (low priority)
+- Convert 4 pptx → pdf using LibreOffice:
+  ```bash
+  for L in en dev hi kn; do
+    soffice --headless --convert-to pdf --outdir decks "decks/Bhagavadgita_Concept_KG_${L}.pptx"
+  done
+  ```
 
-When user sends screenshots:
-1. Identify chapter (top banner `ಭಗವದ್ಗೀತಾ-ಅಧ್ಯಾಯ-NN`), book page (footer), verse markers visible (`॥N॥` in Kannada digits).
-2. Transcribe directly from the image (Kannada renders cleanly — read verbatim, including pada-by-pada gloss and prose commentary).
-3. Find matching `(chapter, verse)` row in JSON, update shloka/meaning/source_page/status='screenshot_patch'.
-4. Rebuild deliverables.
-
-If user shows a **chapter-ending page** (with "ಮುಗಿಯಿತು" text and stars `**`), it confirms what Bannanje's actual last verse number is — use that to identify phantoms.
+---
 
 ## Known issues / caveats
 
 **1. Bannanje verse numbering ≠ conventional Bhagavad Gita numbering.**
-This is the biggest source of confusion. Bannanje compresses or splits verses differently than the standard count. Known mappings:
+Bannanje compresses or splits verses differently. Known mappings:
 - Bannanje 1.10 = conventional 1.21 ("senayor ubhayor madhye")
 - Bannanje 8.10/11 = conventional 8.21/22
 - Bannanje 11.30 = conventional 11.51
@@ -128,19 +127,76 @@ This is the biggest source of confusion. Bannanje compresses or splits verses di
 - Bannanje 11.35 = conventional 11.55
 - Bannanje 15.1 = conventional 15.2
 
-The XLSX uses **Bannanje's numbering** (the markers printed in the book).
+The JSON/DOCX/XLSX use **Bannanje's numbering** (the markers printed in the book).
 
 **2. Phantom rows.**
-7 rows in JSON are flagged `phantom_disregard` (gray when rebuilt) because Bannanje's edition doesn't have those verse numbers. Ch 11 likely has more phantom rows in the 36-55 range that haven't been flagged yet — needs audit.
+7 rows in JSON are flagged `phantom_disregard` (gray when rebuilt):
+BG 3.43, 11.52, 11.54, 11.55, 13.35, 8.22, 1.21
 
-**3. Auto-extracted shloka/meaning split is imperfect.**
-For the 18 rows with status `auto_extracted`, the chunk text is clean Kannada but the column split is heuristic. Sometimes pada-by-pada ends up in the Shloka column, or part of the formal shloka spills into Meaning. Reading both columns together gives the right content.
+Ch 11 likely has more phantom rows in the 36–55 range from OCR mis-reads — needs audit if comprehensive Ch 11 coverage is needed.
 
-**4. Excel file lock.**
-If user has XLSX open, saves fail with PermissionError. Rebuild script falls back to `_v5`, `_v6` etc. Tell user to close Excel before rebuilding.
+**3. DEV translation hallucination (fixed).**
+Google Translate API maps Kannada `ಅಲ್ಲ` (alla = "not") → `अल्लाह` every time.
+This was discovered and fixed in session C. `detect_contamination.py` catches it going forward.
+Post-processing: `अल्लाह` → `न`, `इल्लाह` → `न विद्यते`, `ನಮ್ಮ` → `अस्माकम्`.
 
-**5. PDF page vs book page off-by-one.**
+**4. Translation method (DEV/HI/EN).**
+Uses the lightweight `translate.googleapis.com/translate_a/single?client=gtx` endpoint with:
+- SSL verification disabled (corporate proxy workaround)
+- 800-char micro-chunking for long entries
+- 3–5s delays between requests to avoid rate limiting
+See `translate_all_meanings.py` and `final_cleanup.py` for implementation.
+
+**5. Auto-extracted shloka/meaning split is imperfect.**
+For the 18 rows with status `auto_extracted` in the JSON, the column split is heuristic.
+Reading both columns together gives the right content.
+
+**6. XLSX file lock.**
+If user has XLSX open, saves fail with PermissionError. Tell user to close Excel before rebuilding.
+
+**7. PDF page vs book page off-by-one.**
 PDF has 576 pages; book footer page numbering is one less. Book page N = PDF page N+1.
+
+---
+
+## How to continue (next session)
+
+**Standard rebuild sequence:**
+```powershell
+# In C:\Antigravity\Bhagavadgita
+
+# 1. Verify everything is consistent
+python verify.py
+
+# 2. Rebuild bundle after any data change
+python build-bundle.py
+
+# 3. Rebuild XLSX (if stale)
+python build_xlsx.py
+
+# 4. Rebuild DOCX
+python build_docx.py
+
+# 5. Rebuild pptx decks
+C:\Claude\node-portable\node-v22.11.0-win-x64\node.exe build-decks.js
+
+# 6. Check DEV commentary for contamination
+python detect_contamination.py
+
+# 7. Push
+git add -A
+git commit -m "..."
+git push origin main
+```
+
+**If retranslating commentary:**
+```python
+# translate_all_meanings.py handles KN → EN/HI/DEV
+# Uses gtx API with SSL bypass and chunking
+# Run detect_contamination.py afterward and fix any DEV issues with final_cleanup.py
+```
+
+---
 
 ## Cumulative session changes
 
@@ -151,11 +207,21 @@ PDF has 576 pages; book footer page numbering is one less. Book page N = PDF pag
 - XLSX/DOCX rebuilt
 
 **Session B (2026-05-31):**
-- 18 verses auto-extracted from already-on-disk clean OCR via chunk-between-markers
+- 18 verses auto-extracted from clean OCR via chunk-between-markers
 - Coverage went 674 → 692
-- XLSX rebuilt (DOCX was stale)
+- XLSX rebuilt (DOCX stale)
 
 **Session B continuation (2026-05-31):**
 - 2 more screenshot patches (BG 12.3, BG 16.18) → 694 good
-- 5 phantoms flagged (BG 3.43, 11.52, 11.54, 11.55, 13.35) based on user-shared chapter-ending screenshots
-- VM unavailable — JSON edited directly; XLSX/DOCX rebuild deferred to next session
+- 5 phantoms flagged (BG 3.43, 11.52, 11.54, 11.55, 13.35) from chapter-ending screenshots
+- VM unavailable — JSON edited directly; XLSX/DOCX rebuild deferred
+
+**Session C (2026-06-01):**
+- Translated Kannada commentary into EN, HI, DEV — 702 entries × 4 languages
+- Integrated multilingual commentary into Chapters tab and Focus cards
+- Discovered and fixed systematic DEV contamination (अल्लाह hallucination across all chapters)
+- Built `detect_contamination.py` and `verify.py` for ongoing QA
+- Rebuilt `Bhagavad_Gita_All_Verses_CLEAN.docx` from JSON (fixed stale path in build_docx.py)
+- Rebuilt all 4 concept KG decks (fixed missing `TIER_COLOR` export in data.js)
+- Updated README.md to reflect quad-script viewer and all new files
+- All changes pushed to `kvinayakpai/Bhagavadgita` (main)

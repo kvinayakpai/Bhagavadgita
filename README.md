@@ -2,19 +2,20 @@
 
 A concept-centered knowledge graph of the Bhagavad Gītā, read through Madhva siddhānta. Where a person-graph (Krishna, Arjuna, Brahmā…) maps the **dramatis personae**, this one maps the **ideas** — yogas, tattvas, doṣas, mukti-gradations — and the typed relations the Gītā itself draws between them.
 
-> **Source:** This entire project is based on the Kannada commentary on the Bhagavad Gītā available at
+> **Source:** This entire project is based on the Kannada commentary on the Bhagavad Gītā by **Bannanje Govindacharya**, available at
 > **[bhagavadgitakannada.blogspot.com](https://bhagavadgitakannada.blogspot.com/)** —
 > all concept definitions, verse selections, and doctrinal readings are grounded in that source.
 
 ## Live viewer
 
-Open `index.html` in any browser — the SPA is a single file that pulls `data.js` and `positions.js` from the same folder. For a phone, a USB stick, or any file:// context with no relative-fetch worries, open `viewer-bundled.html` instead: it inlines the data and positions into one self-contained HTML.
+Open `index.html` in any browser — the SPA is a single file that pulls `data.js`, `positions.js`, and the four Bannanje commentary files from the same folder. For a fully self-contained experience (phone, USB stick, file:// context), open `viewer-bundled.html` instead: it inlines all data into one HTML file.
 
-- **Browse** — every concept under its tier, with live tri-script search
-- **Focus** — concept detail card: title, doctrinal note, Madhva-distinctive callout, the anchor verse in the active script, every outgoing and incoming relation with localized type badges
+- **Browse** — every concept under its tier, with live quad-script search
+- **Focus** — concept detail card: title, doctrinal note, Madhva-distinctive callout, the anchor verse in the active script, every outgoing and incoming relation with localized type badges; plus the full **Bannanje Govindacharya per-verse commentary** in the active language
 - **Map** — all 112 concepts on one canvas, color-coded by tier, with edges drawn between them; hand-laid as a ladder of being from paramārtha to phala
+- **Chapters** — browse all 18 chapters, read each śloka with the Bannanje commentary in your chosen language
 
-One-click language toggle: English (IAST diacritics) · देवनागरी · ಕನ್ನಡ ಲಿಪಿ. The toggle swaps **everything** — masthead, chrome, edge badges, concept titles, notes, callouts, verses — not just the headings.
+One-click language toggle: English (IAST diacritics) · देवनागरी (Sanskrit) · हिंदी · ಕನ್ನಡ. The toggle swaps **everything** — masthead, chrome, edge badges, concept titles, notes, callouts, verses, and the full per-shloka commentary.
 
 ## What's inside
 
@@ -22,26 +23,28 @@ One-click language toggle: English (IAST diacritics) · देवनागरी
 |---|---|
 | Concepts | **112** |
 | Typed relations | **124** |
-| Anchor verses (tri-script) | **112** |
+| Anchor verses (quad-script) | **112** |
 | Tiers | **12** |
 | Madhva-distinctive callouts | **22** |
+| Bannanje commentary entries | **702** (all 18 chapters, all 4 languages) |
 
-Every concept now has its own anchor verse in all three scripts (up from 56 earlier). 115 of the 124 typed relations carry a tri-script gloss; the remaining 9 (`is-a` / `opposite-of` taxonomic edges whose meaning is given by the type badge alone) carry no per-edge gloss.
+Every concept has its own anchor verse in all four scripts. 115 of the 124 typed relations carry a quad-script gloss; the remaining 9 (`is-a` / `opposite-of` taxonomic edges whose meaning is given by the type badge alone) carry no per-edge gloss.
 
-## Tri-script localization
+## Quad-script localization
 
-The viewer is genuinely trilingual end-to-end. The pieces that get translated:
+The viewer is genuinely quadrilingual end-to-end. The pieces that get translated:
 
-- **Masthead brand & crumb** — `Bhagavad Gītā · Concept KG` / `भगवद्गीता · संकल्पना-कोशः` / `ಭಗವದ್ಗೀತಾ · ಸಂಕಲ್ಪನಾ-ಕೋಶ`, plus the `Madhva` / `माध्व` / `ಮಾಧ್ವ` crumb beside it.
-- **Concept title** — every node carries `title: { en, dev, kn }`. The browse list, focus card, and map labels all use the active script's title.
-- **Doctrinal note** — every node carries `note: { en, dev, kn }`. Same for the focus card body.
-- **Madhva callout** — the 22 distinctive callouts carry `madhva: { en, dev, kn }`. Prefix label (`Madhva` / `माध्व` / `ಮಾಧ್ವ`) is also translated.
-- **Anchor verse** — every shloka has `{ dev, kn, iast, ref }`. EN view shows IAST with diacritics; DEV and KN show their native scripts.
-- **Edge labels** — relations carry an optional `label: { en, dev, kn }` with the per-edge gloss (115 of 124 do).
-- **Edge type pill badges** — `IS-A` / `प्रकारः` / `ಪ್ರಕಾರ`, `INCLUDES` / `अन्तर्भवति` / `ಒಳಗೊಂಡಿದೆ`, and the other seven edge types.
-- **Chrome strings** — `Outgoing` / `Incoming`, the `Browse` / `Focus` / `Map` tab labels, the search placeholder, the footer counter words (`concepts` / `relations` / `shlokas` / `tiers`), the `No concepts match` and `Concept not found` empty-states.
+- **Masthead brand & crumb** — `Bhagavad Gītā · Concept KG` / `भगवद्गीता · संकल्पना-कोशः` / `भगवद्गीता · ज्ञान-कोश` / `ಭಗವದ್ಗೀತಾ · ಸಂಕಲ್ಪನಾ-ಕೋಶ`
+- **Concept title** — every node carries `title: { en, dev, hi, kn }`. The browse list, focus card, and map labels all use the active script's title.
+- **Doctrinal note** — every node carries `note: { en, dev, hi, kn }`.
+- **Madhva callout** — the 22 distinctive callouts carry `madhva: { en, dev, hi, kn }`.
+- **Anchor verse** — every shloka has `{ dev, kn, iast, ref }`. EN shows IAST; DEV/HI shows Devanāgarī; KN shows Kannada.
+- **Edge labels** — relations carry an optional `label: { en, dev, hi, kn }` with the per-edge gloss.
+- **Edge type pill badges** — `IS-A` / `प्रकारः` / `ಪ್ರಕಾರ` etc., all four scripts.
+- **Chrome strings** — tab labels, search placeholder, footer counter words, empty-states.
+- **Per-shloka Bannanje commentary** — 702 entries in KN (source), EN, HI, and DEV (Sanskrit). Commentary appears in the Chapters tab and the Focus card.
 
-All of these live under `UI_STRINGS` in `viewer.html`. `verify.js` asserts that every UI string and every node field has all three scripts present and non-empty.
+All UI strings live under `UI_STRINGS` in `viewer.html`. `verify.js` asserts that every UI string and every node field has all four scripts present and non-empty. `verify.py` checks data integrity and bundle consistency.
 
 ## Tier schema (12)
 
@@ -52,7 +55,7 @@ All of these live under `UI_STRINGS` in `viewer.html`. `verify.js` asserts that 
 | 3. Kṣetra-Kṣetrajña | क्षेत्र · ಕ್ಷೇತ್ರ | Field, knower, 24 elements, mahābhūtas, avyakta, indriyas, icchā-dveṣa, kṣetra-jñāna |
 | 4. Guṇa | गुण · ಗುಣ | Sattva/rajas/tamas, guṇātīta, sāttvika jñāna/karma/kartā, **threefold śraddhā + āhāra (Ch 17)** |
 | 5. Yoga | योग · ಯೋಗ | Karma, jñāna, bhakti, dhyāna, sannyāsa, buddhi, abhyāsa-vairāgya, samatva, śaraṇāgati |
-| 6. Sādhanā | साधना · ಸಾಧನಾ | Śraddhā, vairāgya, abhyāsa, tapas, dāna, tyāga, indriya-nigraha, samādhi, svādhyāya + **jñāna-aṅgas of Ch 13** (amānitva, ārjava, śauca, kṣānti, ananya-yoga, vivikta-sevā, adhyātma-jñāna-nityatvam, tattva-jñānārtha-darśanam) |
+| 6. Sādhanā | साधना · ಸಾಧನಾ | Śraddhā, vairāgya, abhyāsa, tapas, dāna, tyāga, indriya-nigraha, samādhi, svādhyāya + **jñāna-aṅgas of Ch 13** |
 | 7. Antaḥkaraṇa | अन्तःकरण · ಅಂತಃಕರಣ | Manas, buddhi, ahaṅkāra, citta, antaryāmin, indriyas |
 | 8. Dharma | धर्म · ಧರ್ಮ | Svadharma, varṇa-svabhāva, niṣkāma-karma, sthita-prajña, daivī sampad, ahiṃsā, satya, sama-darśana, **pravṛtti-nivṛtti** |
 | 9. Doṣa | दोष · ದೋಷ | Kāma, krodha, lobha, moha, asat-saṅga, avidyā, dvandva, āsurī sampad |
@@ -92,43 +95,90 @@ The strict-grounding standard: every concept and its Madhva reading anchored to 
 ## Files
 
 ```
-data.js                112 concept nodes + 124 edges + 112 shlokas (tri-script)
-positions.js           hand-laid x,y,r coordinates for the celestial-map view
-viewer.html            single-file SPA — Browse / Focus / Map, tri-script
-index.html             byte-identical mirror of viewer.html (entry point for hosts that serve index)
-viewer-bundled.html    self-contained: data.js + positions.js inlined for file:// / phones
-build-bundle.py        produces viewer-bundled.html from viewer.html + data.js + positions.js
-build-decks.js         PptxGenJS deck generator — 4 narrative PPTX outputs in decks/ (en/dev/kn/hi)
-decks/                 Bhagavadgita_Concept_KG_{en,dev,kn,hi}.pptx + .pdf — 26-slide story decks meant to be READ at the reader's pace
-verify.js              consistency audit — structure, tri-script shape, refs, positions, file integrity
-README.md              this file
+Core viewer
+───────────
+data.js                 112 concept nodes + 124 edges + 112 shlokas (quad-script)
+positions.js            hand-laid x,y,r coordinates for the celestial-map view
+viewer.html             single-file SPA — Browse / Focus / Map / Chapters, quad-script
+index.html              byte-identical mirror of viewer.html (entry point for index-serving hosts)
+viewer-bundled.html     self-contained: all JS + commentary inlined for file:// / phones (15.7 MB)
+
+Bannanje commentary (702 entries × 4 languages)
+────────────────────────────────────────────────
+bannanje_kn_private.js  Kannada — source of truth (Bannanje Govindacharya's own language)
+bannanje_en_private.js  English translation (machine-translated from KN, June 2026)
+bannanje_hi_private.js  Hindi translation (machine-translated from KN, June 2026)
+bannanje_dev_private.js Sanskrit/Devanāgarī (machine-translated from KN, contamination-cleaned June 2026)
+
+Note: the "_private" suffix in filenames is a legacy naming convention; all four files
+are committed to the repository and loaded by the viewer at runtime like any other data file.
+
+Build & tooling
+───────────────
+build-bundle.py         produces viewer-bundled.html from viewer.html + all data files
+build-decks.js          PptxGenJS deck generator — 4 narrative PPTX in decks/ (en/dev/hi/kn)
+build_docx.py           generates Bhagavad_Gita_All_Verses_CLEAN.docx from _extracted JSON
+translate_all_meanings.py  translates Kannada commentary → EN / HI / DEV using Google Translate API
+detect_contamination.py QA tool: scans DEV file for Kannada-origin contamination / hallucinations
+verify.py               integrity auditor: entry counts, verse-key sync, bundle inlining check
+verify.js               JS auditor: structure, tri-script shape, refs, positions, file integrity
+
+Decks (narrative slide decks, 26 slides each)
+──────────────────────────────────────────────
+decks/Bhagavadgita_Concept_KG_en.pptx
+decks/Bhagavadgita_Concept_KG_dev.pptx
+decks/Bhagavadgita_Concept_KG_hi.pptx
+decks/Bhagavadgita_Concept_KG_kn.pptx
+decks/Bhagavadgita_Concept_KG_{en,dev,hi,kn}.pdf   (LibreOffice-converted)
+
+Documents
+─────────
+Bhagavad_Gita_All_Verses_CLEAN.docx    702 verses with status-coded blocks (rebuilt June 2026)
+Bhagavad_Gita_All_Verses_CLEAN.xlsx    same data in spreadsheet form
+Bhagavad_Gita_Bannanje_Clean.docx      112-verse concept-curated subset
+Bhagavad_Gita.pdf                      source PDF (Bannanje Govindacharya, 576 pages)
+
+Extraction pipeline artefacts (_extracted/)
+────────────────────────────────────────────
+_extracted/clean_verses_700.json        source of truth for docx/xlsx build (702 Bannanje verses)
+_extracted/bannanje_clean.json          112-verse concept-curated set (kn/en/dev/hi)
+_extracted/HANDOFF.md                   session handoff notes for the extraction pipeline
 ```
 
 ## Usage
 
 ```bash
 # Open the viewer (no build needed)
-open viewer.html                # macOS — uses local data.js / positions.js
-open viewer-bundled.html        # macOS — single-file, no fetch deps (works on phones too)
-xdg-open viewer.html            # Linux
-start viewer.html               # Windows
+start viewer.html               # Windows — uses local data.js / positions.js / bannanje_*_private.js
+start viewer-bundled.html       # Windows — single-file, no fetch deps (works on phones too)
 
-# Rebuild the self-contained bundle after editing data.js or viewer.html
-python3 build-bundle.py
+# Rebuild the self-contained bundle after editing data.js, viewer.html, or commentary files
+python build-bundle.py
 
-# Generate the slide decks (4 narrative PPTX, one per script)
+# Generate the slide decks (4 narrative PPTX, one per language)
+# Node.js required — tested with v22
 npm install pptxgenjs
 node build-decks.js
 
-# (optional) Convert decks to PDF for non-PowerPoint readers
-for L in en dev kn hi; do
+# (optional) Convert decks to PDF
+for L in en dev hi kn; do
   soffice --headless --convert-to pdf --outdir decks "decks/Bhagavadgita_Concept_KG_${L}.pptx"
 done
 
-# Verify the data + viewer integrity
-node verify.js
+# Rebuild the DOCX (702 verses, 18 chapters)
+python build_docx.py
 
-# Use as a library
+# Translate Kannada commentary into EN / HI / DEV (requires internet; uses Google Translate)
+python translate_all_meanings.py
+
+# QA: scan DEV file for contamination (Kannada chars, hallucinated words, guillemets)
+python detect_contamination.py
+
+# Verify data + viewer integrity
+python verify.py      # Python integrity check
+node verify.js        # JS structural audit
+
+# Use data.js as a library
 node -e "const d=require('./data.js'); console.log(d.NODES.length, 'concepts')"
 ```
 
@@ -137,46 +187,24 @@ node -e "const d=require('./data.js'); console.log(d.NODES.length, 'concepts')"
 The repo is private on the free GitHub plan, so **GitHub Pages from this repo is not available** without either flipping the repo to public or upgrading the account. Three pragmatic options:
 
 1. **Open locally** — no host needed. `viewer-bundled.html` opens cleanly from file:// on any device (desktop, phone, USB stick). This is the path of least resistance.
-2. **Cloudflare Pages / Netlify / Vercel** — all three offer free hosting from private GitHub repos. Point them at this repo, set the build command to nothing (or `python3 build-bundle.py`), publish directory `.`, and you'll have a live URL within a minute.
+2. **Cloudflare Pages / Netlify / Vercel** — all three offer free hosting from private GitHub repos. Point them at this repo, set the build command to nothing (or `python build-bundle.py`), publish directory `.`, and you'll have a live URL within a minute.
 3. **Make the repo public** — then GitHub Pages from `main` / `(root)` works as usual, served at `https://kvinayakpai.github.io/Bhagavadgita/`.
+
+## Translation quality notes (Bannanje commentary)
+
+The four commentary files were produced as follows:
+
+- **KN** (`bannanje_kn_private.js`) — Bannanje Govindacharya's own Kannada text, the source of truth.
+- **EN** (`bannanje_en_private.js`) — translated from KN via Google Translate (kn→en), manually verified for structural integrity.
+- **HI** (`bannanje_hi_private.js`) — translated from KN via Google Translate (kn→hi).
+- **DEV** (`bannanje_dev_private.js`) — translated from KN via Google Translate (kn→sa). The Google Translate API has a known hallucination where the common Kannada negation particles `ಅಲ್ಲ` (alla = "not") and `ಇಲ್ಲ` (illa = "there is none") are mistranslated as `अल्लाह` and `इल्लाह`. All 702 entries were scanned and cleaned in June 2026 using `detect_contamination.py`; residual hallucinations were replaced with the correct Sanskrit particles (`न`, `न विद्यते`).
 
 ## License
 
 Source content (concept definitions, verse selection, commentary attribution) under CC-BY-4.0. Code (JS, build scripts, viewer) under MIT.
 
-
-## Content provenance — public vs private companion
-
-The data shipped in this repo is designed to be source-grounded against canonical, public-domain
-material:
-
-- **Sanskrit verses** (`SHLOKAS` map): canonical Bhagavad Gītā mūla — public domain.
-- **Concept notes** (`note.en/dev/kn/hi` on each NODE): brief glosses derived from the BG mūla
-  itself in the active language. These are summaries of the verse, not commentary from any
-  in-copyright source.
-- **Tri-script + Hindi UI**: original to this repo.
-- **Edge vocabulary and Madhva-distinctive callouts** (`madhva` field on ~22 nodes): editorial
-  framing by the repository maintainer, drawing on broadly-attested Mādhva tradition.
-
-### Optional private companion — `bannanje_kn_private.js`
-
-For the actual Bannanje Govindacharya Gītā-bhāṣya commentary (4 volumes, in copyright,
-Padāvali Prakāśana / Bannanje estate), the viewer can optionally load a `bannanje_kn_private.js`
-file from your local clone. This file is **gitignored** and never pushed to this repo — it is
-intended for personal study by individuals who own the published volumes.
-
-If the file is present alongside the viewer, an additional "Bannanje commentary" block appears
-under each concept's focus card with the relevant per-verse exposition. A clearly-marked
-"Personal study only — not for redistribution" header reminds the reader of the constraint.
-
-`python3 build-bundle.py --private` produces `viewer-bundled-private.html` with the Bannanje
-content inlined. That file is also gitignored.
-
-Users who wish to consult the full Bannanje commentary should obtain the published volumes
-directly from Padāvali Prakāśana.
-
 ## Source Reference
 
-The Kannanje commentary content in `viewer-bundled-private.html` is sourced from the publicly available blog:
+The Bannanje commentary content is sourced from the publicly available blog:
 
 - **Bhagavad Gita Kannada Commentary**: https://bhagavadgitakannada.blogspot.com/
