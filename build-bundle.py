@@ -37,6 +37,26 @@ def replace_tag(html, tag, inline):
     return html.replace(tag, block, 1)
 
 bundle = viewer
+
+# Inline the optional private localized meaning scripts if they exist, or use null stubs.
+lang_configs = [
+    ('kn', 'BANNANJE_VERSE_MEANINGS'),
+    ('en', 'BANNANJE_VERSE_MEANINGS_EN'),
+    ('hi', 'BANNANJE_VERSE_MEANINGS_HI'),
+    ('dev', 'BANNANJE_VERSE_MEANINGS_DEV')
+]
+
+for suffix, var_name in lang_configs:
+    tag = f'<script src="bannanje_{suffix}_private.js" onerror="window.{var_name} = null;"></script>'
+    path = os.path.join(ROOT, f'bannanje_{suffix}_private.js')
+    if os.path.exists(path):
+        inline = strip_cjs_export(read(f'bannanje_{suffix}_private.js'))
+        block = f'<script>\n/* === inlined from bannanje_{suffix}_private.js === */\n{inline}\n</script>'
+        bundle = bundle.replace(tag, block, 1)
+    else:
+        # Fallback to null stub if file is not found
+        bundle = bundle.replace(tag, f'<script>window.{var_name} = null;</script>', 1)
+
 bundle = replace_tag(bundle, '<script src="data.js"></script>', data_inline)
 bundle = replace_tag(bundle, '<script src="positions.js"></script>', positions_inline)
 
