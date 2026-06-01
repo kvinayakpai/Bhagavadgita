@@ -277,8 +277,8 @@ body.lang-kn .vsn-chip{font-family:'Tiro Kannada','Noto Sans Kannada',serif}
 body.lang-en .vsn-chip{font-family:'Cormorant Garamond',serif;font-style:italic}
 
 /* ============ MAP (full graph) ============ */
-.map-wrap{padding:10px 8px 80px;overflow:auto}
-.map-wrap svg{display:block;margin:0 auto;background:var(--paper);border:1px solid var(--rule);border-radius:8px}
+.map-wrap{padding:10px 8px 20px;overflow:auto;display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:350px;max-height:calc(100vh - 220px);box-sizing:border-box}
+.map-wrap svg{display:block;margin:0 auto;background:var(--paper);border:1px solid var(--rule);border-radius:8px;max-width:100%;max-height:100%;width:auto;height:auto;box-sizing:border-box}
 .map-node circle{cursor:pointer;transition:r .1s, stroke-width .1s}
 .map-node:hover circle{stroke-width:2.5}
 .map-node text{font-family:'Cormorant Garamond',serif;font-size:10px;fill:var(--ink);pointer-events:none;text-anchor:middle}
@@ -2733,7 +2733,43 @@ function renderMapHandLaid(root, activeNodeIds, controlPanelHtml){
   const W = 1000, H = 1500;
   const showSet = (typeof KG_SHOW_EDGE_TYPES !== 'undefined') ? KG_SHOW_EDGE_TYPES : null;
   const fontFam = state.lang==='hi'?'Tiro Devanagari Hindi':state.lang==='dev'?'Tiro Devanagari Sanskrit':state.lang==='kn'?'Tiro Kannada':'Cormorant Garamond';
-  let svg = `<svg viewBox="0 0 ${W} ${H}" width="${W}" height="${H}" xmlns="http://www.w3.org/2000/svg">`;
+  
+  // Calculate dynamic bounding box to fit all active nodes in a single view
+  let viewBox = `0 0 ${W} ${H}`;
+  let svgWAttr = W;
+  let svgHAttr = H;
+  const chSel = state.mapChapterSel || 0;
+
+  if (activeNodeIds.size > 0 && chSel > 0) {
+    let minX = W, maxX = 0, minY = H, maxY = 0;
+    let count = 0;
+    activeNodeIds.forEach(id => {
+      const p = KG_POSITIONS[id];
+      if (p) {
+        const [x, y, r] = p;
+        const r_pad = r + 24; // padding for node and label text
+        if (x - r_pad < minX) minX = x - r_pad;
+        if (x + r_pad > maxX) maxX = x + r_pad;
+        if (y - r_pad < minY) minY = y - r_pad;
+        if (y + r_pad + 18 > maxY) maxY = y + r_pad + 18;
+        count++;
+      }
+    });
+
+    if (count > 0) {
+      const padX = 35;
+      const padY = 35;
+      const xStart = Math.max(0, minX - padX);
+      const yStart = Math.max(0, minY - padY);
+      const boxW = Math.min(W, maxX + padX) - xStart;
+      const boxH = Math.min(H, maxY + padY) - yStart;
+      viewBox = `${xStart} ${yStart} ${boxW} ${boxH}`;
+      svgWAttr = "100%";
+      svgHAttr = "100%";
+    }
+  }
+
+  let svg = `<svg viewBox="${viewBox}" width="${svgWAttr}" height="${svgHAttr}" xmlns="http://www.w3.org/2000/svg">`;
 
   // tier bands
   KG_TIER_BANDS.forEach((band,bi)=>{
@@ -2797,7 +2833,41 @@ function renderMapAuto(root, activeNodeIds, controlPanelHtml){
     });
   });
   const fontFam = state.lang==='hi'?'Tiro Devanagari Hindi':state.lang==='dev'?'Tiro Devanagari Sanskrit':state.lang==='kn'?'Tiro Kannada':'Cormorant Garamond';
-  let svg = `<svg viewBox="0 0 ${W} ${H}" width="${W}" height="${H}" xmlns="http://www.w3.org/2000/svg">`;
+  // Calculate dynamic bounding box to fit all active nodes in a single view
+  let viewBox = `0 0 ${W} ${H}`;
+  let svgWAttr = W;
+  let svgHAttr = H;
+  const chSel = state.mapChapterSel || 0;
+
+  if (activeNodeIds.size > 0 && chSel > 0) {
+    let minX = W, maxX = 0, minY = H, maxY = 0;
+    let count = 0;
+    activeNodes.forEach(n => {
+      const p = pos[n.id];
+      if (p) {
+        const r_pad = p.r + 24;
+        if (p.x - r_pad < minX) minX = p.x - r_pad;
+        if (p.x + r_pad > maxX) maxX = p.x + r_pad;
+        if (p.y - r_pad < minY) minY = p.y - r_pad;
+        if (p.y + r_pad + 18 > maxY) maxY = p.y + r_pad + 18;
+        count++;
+      }
+    });
+
+    if (count > 0) {
+      const padX = 20;
+      const padY = 20;
+      const xStart = Math.max(0, minX - padX);
+      const yStart = Math.max(0, minY - padY);
+      const boxW = Math.min(W, maxX + padX) - xStart;
+      const boxH = Math.min(H, maxY + padY) - yStart;
+      viewBox = `${xStart} ${yStart} ${boxW} ${boxH}`;
+      svgWAttr = "100%";
+      svgHAttr = "100%";
+    }
+  }
+
+  let svg = `<svg viewBox="${viewBox}" width="${svgWAttr}" height="${svgHAttr}" xmlns="http://www.w3.org/2000/svg">`;
   TIERS.forEach((tier,ti)=>{
     const y = 40 + ti*tierGap;
     svg += `<rect x="0" y="${y-22}" width="${W}" height="${tierGap}" fill="${ti%2 ? 'rgba(214,197,153,.10)' : 'rgba(230,216,176,.18)'}"/>`;
