@@ -1,0 +1,344 @@
+# Translation Authoring Plan — Tatvam Jalam (तत्त्व-जालम्)
+
+**Purpose:** Guide for agents and contributors to bring the Bannanje Govindacharya commentary translations
+in `bannanje_dev.js`, `bannanje_hi.js`, and `bannanje_en.js` to publication quality.
+
+**Do not start work until you have read this document in full.**
+
+---
+
+## 1. What Exists and Its Quality
+
+### Source of truth
+`bannanje_kn.js` — 702 verse commentaries in Kannada, transcribed from Bannanje Govindacharya's
+Gita Pravachana (available at bhagavadgitakannada.blogspot.com). This is the **only authoritative text**.
+Every translation must be derived from this Kannada source, not from the English.
+
+### Current state of translations
+
+| Language | File | Entries | Clean | Corrupt | Corruption type |
+|----------|------|---------|-------|---------|-----------------|
+| Kannada (KN) | `bannanje_kn.js` | 702 | 702 | 0 | — source |
+| English (EN) | `bannanje_en.js` | 702 | ~657 | ~45 | OCR garbage numbers from external quotes |
+| Hindi (HI) | `bannanje_hi.js` | 702 | ~656 | ~46 | OCR garbage numbers |
+| Sanskrit/Dev (DEV) | `bannanje_dev.js` | 701 | ~665 | ~36 | OCR numbers + Kannada words transliterated into Devanagari |
+
+Corrupt verse lists are in `commentary_needs_repair.md` in the root of this repo.
+
+### Quality benchmark — the concept node notes
+The `dev` prose in the NODES array (visible in the Focus/Browse views) represents the **target quality level**
+for Sanskrit authoring. Example from the `brahman` node:
+
+> मध्व-सिद्धान्ते ब्रह्म इति शब्दः केवलं विष्णोः (नारायणस्य) वाचकः — सर्वोत्तमः,
+> क्षराक्षरातीतः पुरुषोत्तमः। न तु निर्विशेष-निरुपाधि-सामान्य-तत्त्ववाचकः।
+
+This is **authored Sanskrit** — composed directly in the target language from the concepts, using
+correct sandhi, proper case endings, tatsama Vedantic terminology, and no English intrusions.
+
+---
+
+## 2. The Three Tasks
+
+Tasks are independent and can be done in parallel by different agents.
+
+### Task A — Fix corrupt verses (DEV, HI, EN)
+**Scope:** ~36 DEV + ~46 HI + ~45 EN = ~127 verse entries across three files.
+**Input:** `commentary_needs_repair.md` (lists each corrupt verse with its KN source and EN reference).
+**Output:** Corrected entries written back into the respective `.js` files.
+
+For each corrupt entry:
+1. Read the KN source in `commentary_needs_repair.md`
+2. Translate/re-author the passage in the target language
+3. Replace the corrupt entry in the `.js` file using str_replace
+
+### Task B — Re-author Sanskrit (DEV) commentary to publication quality
+**Scope:** All 701 entries in `bannanje_dev.js`, working from the Kannada source.
+**The current DEV text** is a machine translation from Kannada. Even the "clean" 94% has issues:
+transliterated Sanskrit-sounding words that are actually Kannada idioms, hybrid register mixing
+colloquial Kannada constructs with Sanskrit syntax, and prose that reads as translated rather than composed.
+
+**Target register:** Classical expository Sanskrit in the style of Vedanta commentators. Specifically:
+- Compound-heavy nominal style (not verb-heavy)
+- Tatsama terminology throughout
+- Short declarative sentences with clear sandhi
+- No explanatory parentheticals in English
+
+### Task C — Improve Hindi (HI) and English (EN) commentary register
+**Scope:** All 702 entries in each file.
+**The current HI text** reads as a direct translation of a translation — Kannada → English → Hindi.
+The Hindi should be translated directly from Kannada, in a register suitable for a Hindi speaker
+familiar with Vedantic concepts.
+
+**The current EN text** is similarly once-removed. It should read as direct English commentary,
+not as a transliteration of Kannada phrasing.
+
+---
+
+## 3. How to Author Sanskrit (DEV) at the Required Quality Level
+
+This is the hardest task. Follow these principles exactly.
+
+### 3.1 Compose, do not translate
+
+**Wrong approach:** Take the English or Kannada sentence and translate it word-for-word into Sanskrit.
+This produces hybrid output that fails grammatically and stylistically.
+
+**Right approach:** Read the Kannada, understand the idea, then compose a Sanskrit sentence
+that expresses that idea natively.
+
+Example for BG 2.47:
+- **KN source:** ಕರ್ಮದಲ್ಲಿ ಮಾತ್ರ ನಿನಗೆ ಹಕ್ಕು, ಫಲಗಳಲ್ಲಿ ಎಂದೂ ಇಲ್ಲ
+- **Machine output (bad):** केवलं कर्मणि भवतः अधिकारः, फलेषु कदापि न
+  *(This is literal and passable but reads like a translation)*
+- **Composed Sanskrit (better):** कर्मण्येव ते अधिकारः, न तु फलेषु कदाचित् — इयमेव कृष्णस्य
+  कर्म-रहस्य-मीमांसा
+
+### 3.2 Use Vedantic tatsama vocabulary
+
+Do not attempt to find Sanskrit equivalents for modern Kannada/English explanatory words.
+Use the established Vedantic vocabulary:
+
+| Concept | Use this | Not this |
+|---------|----------|----------|
+| God/Bhagavan | भगवान्, हरिः, ईश्वरः | देव, प्रभु (these are acceptable but less precise) |
+| Supreme | सर्वोत्तमः, परमः | महान् (generic) |
+| Different/distinct | भिन्नः, पृथक् | अलग (Hindi) |
+| Soul/jiva | जीवः, आत्मा | प्राण (wrong concept) |
+| Liberation | मोक्षः, मुक्तिः | स्वतन्त्रता (calque of English) |
+| Knowledge | ज्ञानम् | विद्या (different connotation) |
+| Action | कर्म (never translate this) | क्रिया (different) |
+
+### 3.3 Correct sandhi and case endings
+
+Run a mental check before finalising any sentence:
+- Nominative singular: -ः (masculine), -म् (neuter), -ā (feminine a-stems)
+- Genitive: use for attribution (रामस्य पुत्रः = son of Rama)
+- Locative: for "in/among" (कर्मणि = in karma)
+- Sandhi: final -ः before vowels becomes -r- (हरिर् उवाच), before consonants stays (हरिः करोति)
+
+Common errors to avoid:
+- Writing मा शोचसि (correct: मा शोचः — prohibitive with लोट्)
+- Mixing Sanskrit and Hindi verb forms (करोगे is Hindi, करिष्यति is Sanskrit)
+- Writing अहं हूँ (हूँ is Hindi copula, Sanskrit has none or uses अस्मि)
+
+### 3.4 Do not transliterate Kannada idioms
+
+The current machine translation contains Kannada idioms written in Devanagari. These must be
+translated, not transcribed.
+
+| Kannada word seen in DEV | What it means | Correct Sanskrit |
+|--------------------------|---------------|------------------|
+| टोङ्गे-तिसिलु | branches and twigs (ಟೊಂಗೆ-ತಿಸಿಲು) | शाखा-प्रशाखाः |
+| खुशी (from ಖುಷಿ) | happiness | आनन्दः, सुखम् |
+| खुग्वेद (from ಖುಗ್ವೇದ) | Rigveda (Kannada pronunciation) | ऋग्वेदः |
+| बाड़ (from ಬಾಡ಼್) | fence/enclosure | वेष्टनम् |
+
+### 3.5 Paragraph structure
+
+Bannanje's commentary for each verse follows a consistent structure:
+1. Sanskrit verse quotation
+2. One-line summary meaning (gist)
+3. Verse-by-word breakdown
+4. Doctrinal elaboration with examples
+5. Madhva-specific interpretation (where relevant)
+
+The Sanskrit commentary should preserve this structure. Do not collapse it into a single paragraph.
+
+---
+
+## 4. How to Author Hindi (HI) at the Required Quality Level
+
+### 4.1 Register
+Use **Hindi-medium Vedanta register** — the register of books like "Gita ka Sandesh" or
+Swami Chinmayananda's Hindi publications. Not academic Sanskrit-heavy Hindi, not colloquial Hindi.
+
+Characteristics:
+- Tatsama Sanskrit terms for theological concepts: ब्रह्म, जीव, कर्म, मोक्ष (never translate these)
+- Hindi syntax with Sanskrit vocabulary
+- Present tense for doctrinal statements (कृष्ण कहते हैं, not कृष्ण ने कहा)
+- आदरणीय/formal second person (आप, not तुम) when addressing the reader
+- Standard Devanagari with nuktas only for genuine Arabic/Persian loanwords (not needed here)
+
+### 4.2 Source
+Always translate from Kannada (`bannanje_kn.js`), not from the English. The English is itself
+a translation and has its own idioms. The Kannada is Bannanje's direct voice.
+
+### 4.3 Common errors to avoid
+- **Do not write Sanskrit sentences in Hindi files.** If a sentence would work in Sanskrit, it should
+  be rewritten in Hindi syntax.
+- **Do not copy the English word order.** Hindi is SOV; ensure verbs come at the end.
+- **Do not use होना as the main verb constantly.** Hindi allows pro-drop; use it.
+- **Do not Romanise.** No "karma" written in Roman script — always कर्म.
+- **Do not translate सर्वधर्मान् परित्यज्य as "सभी बुरे धर्म"** (all bad dharmas). The Madhva
+  reading is "सभी उप-धर्मों को" (all secondary/partial dharmas) — the verse is about surrendering
+  subsidiary duties, not evil ones.
+
+---
+
+## 5. How to Author English (EN) at the Required Quality Level
+
+### 5.1 Register
+**Scholarly English Vedanta commentary** — the register of Georg Feuerstein, Barbara Stoler Miller,
+or the Swami Gambhirananda translations with commentary. Clear, precise, respectful of Sanskrit
+technical terms, with minimal paraphrase.
+
+### 5.2 Keep Sanskrit terms
+Do not translate every Sanskrit word. The following should appear as-is (italicised in print,
+plain text in the app):
+- karma, dharma, jiva, brahman, moksha, bhakti, yoga, guna, prakriti, purusha
+- Proper names: Krishna, Arjuna, Hari, Vishnu, Lakshmi, Madhva
+
+### 5.3 Common errors to avoid
+- **Do not write "Bhagavan says..."** followed by a paraphrase. Bannanje's commentary explains
+  what the verse means; keep that explanatory voice.
+- **Do not translate verse quotations in IAST as English words.** Keep the Sanskrit.
+  Wrong: "karmanye vadhikaraste ma phaleshu kadachana — work is your right..."
+  Right: "karmṇy-evādhikāras te (BG 2.47): the injunction is to act..."
+- **Do not use "God" as the translation of भगवान्.** Use "Bhagavān" or "Hari" consistently.
+  "God" implies generic theism; this is specifically about Viṣṇu/Nārāyaṇa in the Madhva reading.
+- **Do not use passive voice excessively.** Bannanje is a strong, direct commentator.
+- **OCR numbers in source text** (e.g. "716 63661 01 5667") are Bible verse references that
+  got garbled in the original digitisation. Replace them with the actual reference if identifiable,
+  or remove them if not.
+
+---
+
+## 6. Workflow for Any Agent
+
+### Step 1: Set up
+```bash
+cd /home/claude/Bhagavadgita
+git pull
+```
+
+### Step 2: Read source for the verse you're working on
+```python
+import re, json
+
+def get_verse(key):
+    for lang in ['kn','en','hi','dev']:
+        with open(f'bannanje_{lang}.js', encoding='utf-8') as f:
+            entries = dict(re.findall(r'"(\d+\.\d+)":\s*"((?:[^"\\]|\\.)*)"', f.read()))
+        text = entries.get(key,'').replace('\\n','\n').replace('\\"','"')
+        print(f"\n{lang.upper()} ({key}):\n{text[:400]}")
+
+get_verse('2.47')
+```
+
+### Step 3: Author the replacement text
+- Read the KN source (authoritative)
+- Compose in the target language following the principles in sections 3–5
+- Keep `\n` line breaks to match the paragraph structure of the source
+
+### Step 4: Write the replacement
+Use direct string replacement in the JS file. The format is:
+```
+"2.47": "...text with \\n for newlines..."
+```
+
+### Step 5: Verify
+```bash
+node --input-type=module << 'EOF'
+import { readFileSync } from 'fs';
+const src = readFileSync('bannanje_dev.js','utf-8');
+// Wrap in a dummy assignment and parse
+try { new Function(src.replace('window.BANNANJE_VERSE_MEANINGS_DEV','const X')); console.log('✓ parse OK'); }
+catch(e) { console.error('✗', e.message); }
+EOF
+```
+
+### Step 6: Commit
+```bash
+git add bannanje_dev.js bannanje_hi.js bannanje_en.js
+git commit -m "fix(commentary): correct BG X.Y-Z.W in DEV/HI/EN"
+```
+
+**Do NOT run `build-bundle.py` or any script that re-bundles the JS into `viewer-bundled.html`.**
+This causes double-encoding corruption of all Devanagari and Kannada text.
+The viewer loads the JS files directly in production.
+
+---
+
+## 7. Critical Mistakes to Avoid (Summary)
+
+### Encoding
+- **Never run `build-bundle.py`** — it double-encodes UTF-8. The HTML reads the JS files directly.
+- **Never copy-paste from a Latin-1 context** into Devanagari files — verify byte encoding after saving.
+
+### Content
+- **Never translate from English** — always from Kannada source.
+- **Never leave Kannada words transliterated into Devanagari** — translate them.
+- **Never invent doctrinal content** — if the Kannada source doesn't say it, don't write it.
+- **Never fabricate verse meanings** — Bannanje's interpretations are specific to Madhva Vedanta
+  and often differ from popular translations. The KN source is authoritative.
+- **Never use AI to "fix" the Sanskrit** without verifying against the KN source — machine
+  "corrections" of Sanskrit often introduce new errors while removing the old ones.
+
+### Style
+- **Never mix registers** — Sanskrit commentary should read as Sanskrit throughout, not as
+  Sanskrit sentences with Hindi words dropped in.
+- **Never skip the verse structure** — Bannanje's commentary has a consistent format (verse →
+  gist → word analysis → elaboration). Preserve it.
+- **Never translate theological terminology** — brahman, jiva, moksha, karma stay as-is in all
+  three languages.
+
+### Workflow
+- **Never commit without testing** — run the node parse check in Step 5 above.
+- **Never work from a stale local copy** — always `git pull` first.
+- **Never make large batch replacements** without reading each one — batch scripts introduced
+  all the current corruption.
+
+---
+
+## 8. Scope and Priority
+
+| Priority | Task | File | Verses | Effort |
+|----------|------|------|--------|--------|
+| P1 (blocker) | Fix corrupt DEV verses | `bannanje_dev.js` | ~36 | Low |
+| P1 (blocker) | Fix corrupt HI/EN verses | `bannanje_hi.js`, `bannanje_en.js` | ~46 each | Low |
+| P2 (quality) | Re-author DEV to composition quality | `bannanje_dev.js` | 701 | High |
+| P3 (quality) | Improve HI register throughout | `bannanje_hi.js` | 702 | High |
+| P3 (quality) | Improve EN register throughout | `bannanje_en.js` | 702 | Medium |
+
+P1 tasks are small (fix the ~127 known-corrupt entries listed in `commentary_needs_repair.md`).
+P2/P3 are the larger editorial project and should be done chapter by chapter with human review.
+
+---
+
+## 9. What Good Output Looks Like
+
+### DEV — BG 18.66 (target)
+
+Current (machine translation):
+> सर्वधर्मान् पारित्यज्य मम एकं शरणं व्रज | अहं त्वां सर्व पपेभ्यः मोक्षैश्यामि मा शुचः —
+> सर्वाशुभधर्मेषु निष्फलः। तृष्णां त्यजतु।
+
+Target (composed Sanskrit):
+> 'सर्वधर्मान् परित्यज्य' — सर्वाण्युपधर्म-साधनानि त्यक्त्वा। 'माम् एकम्' — केवलं हरिमेव।
+> 'शरणं व्रज' — भक्त्या-आत्मनिवेदनं कुरु। एतद् गीतायाः चरम-श्लोकः; मध्वाचार्यमते
+> 'सर्वधर्मान्' इत्यत्र उपधर्माः गृह्यन्ते, न तु स्वधर्मः।
+
+### HI — BG 18.66 (target)
+
+Current:
+> सभी बुरे धर्म निष्फल। तृष्णा छोड़ो. मुझे ही समर्पित हो जाओ।
+
+Target:
+> 'सर्वधर्मान् परित्यज्य' का अर्थ है — सभी उप-साधनों और आंशिक धर्मों को छोड़कर।
+> 'माम् एकम् शरणम् व्रज' — केवल हरि की शरण जाओ। यह गीता का चरम-श्लोक है। माध्व-मत में
+> 'सर्वधर्मान्' से उप-धर्म लिए जाते हैं, स्वधर्म नहीं।
+
+### EN — BG 18.66 (target)
+
+Current:
+> Fruitless of all evil religions. Leave the cravings. Surrender to Me alone.
+
+Target:
+> 'Sarva-dharmān parityajya' (abandoning all subsidiary dharmas): in Madhva's reading, this refers
+> to upāsanā-methods and conditional duties, not to svadharma. The carama-śloka: take refuge in
+> Hari alone, and He will release you from all karma-bondage. The verse turns on 'mām ekam' —
+> Hari exclusively, not a generic absolute.
+
+---
+
+*Last updated: June 2026 | Project: Tatvam Jalam (तत्त्व-जालम्) | Source: Bannanje Govindacharya Gita Pravachana*
