@@ -273,7 +273,7 @@ if (intViewer && intBundle){
 console.log('');
 
 // 15 — optional Bannanje private companion (informational only — graceful handling)
-const bannanjePath = path.join(__dirname, 'bannanje_kn_private.js');
+const bannanjePath = path.join(__dirname, 'bannanje_kn.js');
 const bannanjePresent = fs.existsSync(bannanjePath);
 console.log('BANNANJE_KN_PRIVATE: ' + (bannanjePresent
   ? 'loaded (' + Math.round(fs.statSync(bannanjePath).size / 1024) + ' KiB)'

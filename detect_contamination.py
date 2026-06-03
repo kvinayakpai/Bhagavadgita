@@ -24,8 +24,8 @@ def load_var(filename, var_name):
         rest = rest[:-1]
     return json.loads(rest)
 
-dev = load_var('bannanje_dev_private.js', 'BANNANJE_VERSE_MEANINGS_DEV')
-kn  = load_var('bannanje_kn_private.js',  'BANNANJE_VERSE_MEANINGS')
+dev = load_var('bannanje_dev.js', 'BANNANJE_VERSE_MEANINGS_DEV')
+kn  = load_var('bannanje_kn.js',  'BANNANJE_VERSE_MEANINGS')
 
 # ── Precise patterns ──────────────────────────────────────────────────────────
 PATTERNS = [

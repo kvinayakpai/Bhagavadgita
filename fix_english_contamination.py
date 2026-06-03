@@ -1,7 +1,7 @@
 """
 fix_english_contamination.py
-Removes/replaces English code-switches in bannanje_dev_private.js.
-Uses bannanje_kn_private.js as source of truth for context.
+Removes/replaces English code-switches in bannanje_dev.js.
+Uses bannanje_kn.js as source of truth for context.
 
 Strategy:
 - English words/phrases in the Devanagari commentary are code-switches from
@@ -36,8 +36,8 @@ def save_var(filename, var_name, obj, module_export):
         f.write(new_content)
 
 # ── Load data ──────────────────────────────────────────────────────────────────
-dev = load_var('bannanje_dev_private.js', 'BANNANJE_VERSE_MEANINGS_DEV')
-kn  = load_var('bannanje_kn_private.js',  'BANNANJE_VERSE_MEANINGS')
+dev = load_var('bannanje_dev.js', 'BANNANJE_VERSE_MEANINGS_DEV')
+kn  = load_var('bannanje_kn.js',  'BANNANJE_VERSE_MEANINGS')
 
 # ── Replacement rules ──────────────────────────────────────────────────────────
 # Order matters: longer/more specific phrases first.
@@ -454,11 +454,4 @@ if still_contaminated:
     for k, words, text in still_contaminated[:20]:
         print(f"  {k}: {list(set(words))[:8]}")
 
-# ── Save backup then write fixed file ─────────────────────────────────────────
-import shutil
-shutil.copy('bannanje_dev_private.js', 'bannanje_dev_private.js.bak')
-print("\nBackup saved to bannanje_dev_private.js.bak")
-
-# Save fixed version
-save_var('bannanje_dev_private.js', 'BANNANJE_VERSE_MEANINGS_DEV', fixed_dev, True)
-print("Fixed file written to bannanje_dev_private.js")
+# ── Sa

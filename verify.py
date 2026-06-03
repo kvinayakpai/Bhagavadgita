@@ -80,10 +80,10 @@ def verify_bundle():
         
     # 2. Check script blocks are inlined
     scripts = [
-        ('kn', 'bannanje_kn_private.js'),
-        ('en', 'bannanje_en_private.js'),
-        ('hi', 'bannanje_hi_private.js'),
-        ('dev', 'bannanje_dev_private.js'),
+        ('kn', 'bannanje_kn.js'),
+        ('en', 'bannanje_en.js'),
+        ('hi', 'bannanje_hi.js'),
+        ('dev', 'bannanje_dev.js'),
         ('data', 'data.js'),
         ('positions', 'positions.js')
     ]
@@ -116,7 +116,7 @@ def main():
                          ('en', 'BANNANJE_VERSE_MEANINGS_EN'),
                          ('hi', 'BANNANJE_VERSE_MEANINGS_HI'),
                          ('dev', 'BANNANJE_VERSE_MEANINGS_DEV')]:
-        filename = f'bannanje_{suffix}_private.js'
+        filename = f'bannanje_{suffix}.js'
         if check_file_exists(filename):
             data = parse_js_var(filename, var)
             if data is None or len(data) != 702:

@@ -150,7 +150,7 @@ def main():
     ]
     
     for suffix, data, var_name in lang_mappings:
-        out_file = os.path.join(ROOT, f'bannanje_{suffix}_private.js')
+        out_file = os.path.join(ROOT, f'bannanje_{suffix}.js')
         print(f"Writing {out_file}...")
         meanings_json = json.dumps(data, indent=2, ensure_ascii=False)
         content = f"window.{var_name} = {meanings_json};\n\n"
