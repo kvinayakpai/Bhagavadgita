@@ -621,3 +621,30 @@ string replacement handles this correctly as long as replacements are sequential
 ---
 
 *Last updated: June 2026 — Session 2 complete*
+
+
+---
+
+## 15. Session 3 Progress — June 2026
+
+**Completed this session:**
+
+| Chapter | DEV | HI | EN | Commit |
+|---------|-----|----|----|--------|
+| Ch2 — Sāṅkhya-yoga (72v) | ✓ | ✓ | ✓ | `3d70c5b` |
+
+**Running totals:** DEV 177/701 · HI 177/701 · EN 177/701
+
+**Working method used:**
+- Composed in 6 chunks (~12 verses each)
+- Parse-checked after each chunk before writing next
+- Synced .js files into viewer-bundled.html after chapter complete
+- One commit per chapter with full doctrinal notes
+
+**Key verses in Ch2 (Madhva positions):**
+- 2.12 — plurality of souls; bheda eternal (refutes Advaita)
+- 2.17/2.19 — 'enam' = Bhagavān-vācaka (not only jīva)
+- 2.47 — karmaṇy evādhikāras te — Karma-yoga sūtra
+- 2.72 — brāhmī sthiti = Bhagavān-mokṣa (not dissolution)
+
+**Next:** Ch18 (78 verses) — all three languages
