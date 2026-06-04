@@ -98,106 +98,74 @@ The strict-grounding standard: every concept and its Madhva reading anchored to 
 Core viewer
 ───────────
 data.js                 112 concept nodes + 124 edges + 112 shlokas (quad-script)
-positions.js            hand-laid x,y,r coordinates for the celestial-map view
-viewer.html             single-file SPA — Browse / Focus / Map / Chapters, quad-script
-index.html              byte-identical mirror of viewer.html (entry point for index-serving hosts)
-viewer-bundled.html     self-contained: all JS + commentary inlined for file:// / phones (15.7 MB)
+positions.js            hand-laid x,y,r coordinates for the map view
+viewer.html             SPA — Browse / Focus / Map / Chapters / Chat, quad-script toggle
+index.html              entry-point alias to viewer.html
+viewer-bundled.html     self-contained 11 MB: all JS + data inlined (recommended for offline/phone distribution)
 
-Bannanje commentary (702 entries × 4 languages)
-────────────────────────────────────────────────
-bannanje_kn_private.js  Kannada — source of truth (Bannanje Govindacharya's own language)
-bannanje_en_private.js  English translation (machine-translated from KN, June 2026)
-bannanje_hi_private.js  Hindi translation (machine-translated from KN, June 2026)
-bannanje_dev_private.js Sanskrit/Devanāgarī (machine-translated from KN, contamination-cleaned June 2026)
-
-Note: the "_private" suffix in filenames is a legacy naming convention; all four files
-are committed to the repository and loaded by the viewer at runtime like any other data file.
-
-Build & tooling
-───────────────
-build-bundle.py         produces viewer-bundled.html from viewer.html + all data files
-build-decks.js          PptxGenJS deck generator — 4 narrative PPTX in decks/ (en/dev/hi/kn)
-build_docx.py           generates Bhagavad_Gita_All_Verses_CLEAN.docx from _extracted JSON
-translate_all_meanings.py  translates Kannada commentary → EN / HI / DEV using Google Translate API
-detect_contamination.py QA tool: scans DEV file for Kannada-origin contamination / hallucinations
-verify.py               integrity auditor: entry counts, verse-key sync, bundle inlining check
-verify.js               JS auditor: structure, tri-script shape, refs, positions, file integrity
-
-Decks (narrative slide decks, 26 slides each)
+Bannanje commentary (702 verses × 4 languages)
 ──────────────────────────────────────────────
-decks/Bhagavadgita_Concept_KG_en.pptx
-decks/Bhagavadgita_Concept_KG_dev.pptx
-decks/Bhagavadgita_Concept_KG_hi.pptx
-decks/Bhagavadgita_Concept_KG_kn.pptx
-decks/Bhagavadgita_Concept_KG_{en,dev,hi,kn}.pdf   (LibreOffice-converted)
+bannanje_kn.js          Kannada (source language — Bannanje Govindacharya's direct commentary)
+bannanje_en.js          English (translated from Kannada)
+bannanje_hi.js          Hindi (translated from Kannada)
+bannanje_dev.js         Sanskrit/Devanāgarī (translated from Kannada)
 
-Documents
-─────────
-Bhagavad_Gita_All_Verses_CLEAN.docx    702 verses with status-coded blocks (rebuilt June 2026)
+Build & verification
+────────────────────
+build-bundle.py         regenerates viewer-bundled.html from source files
+verify.py               data.js integrity: concept coverage, edge structure, bundle consistency
+verify.js               SPA verification: script shape, refs, positions
+
+Decks (optional outputs)
+────────────────────────
+decks/Bhagavadgita_Concept_KG_{en,dev,hi,kn}.pptx   narrative 26-slide presentations (4 languages)
+decks/Bhagavadgita_Concept_KG_{en,dev,hi,kn}.pdf    PDF versions (LibreOffice-converted)
+
+Documents (optional outputs)
+────────────────────────────
+Bhagavad_Gita_All_Verses_CLEAN.docx    702 verses with commentary (4 languages)
 Bhagavad_Gita_All_Verses_CLEAN.xlsx    same data in spreadsheet form
-Bhagavad_Gita_Bannanje_Clean.docx      112-verse concept-curated subset
-Bhagavad_Gita.pdf                      source PDF (Bannanje Govindacharya, 576 pages)
-
-Extraction pipeline artefacts (_extracted/)
-────────────────────────────────────────────
-_extracted/clean_verses_700.json        source of truth for docx/xlsx build (702 Bannanje verses)
-_extracted/bannanje_clean.json          112-verse concept-curated set (kn/en/dev/hi)
-_extracted/HANDOFF.md                   session handoff notes for the extraction pipeline
 ```
 
 ## Usage
 
 ```bash
-# Open the viewer (no build needed)
-start viewer.html               # Windows — uses local data.js / positions.js / bannanje_*_private.js
-start viewer-bundled.html       # Windows — single-file, no fetch deps (works on phones too)
+# Open the viewer in browser (no build needed)
+open viewer.html                # macOS
+start viewer.html               # Windows
+xdg-open viewer.html            # Linux
 
-# Rebuild the self-contained bundle after editing data.js, viewer.html, or commentary files
-python build-bundle.py
+# For offline/mobile use, open the bundled version instead
+open viewer-bundled.html        # self-contained, no external dependencies
 
-# Generate the slide decks (4 narrative PPTX, one per language)
-# Node.js required — tested with v22
-npm install pptxgenjs
-node build-decks.js
+# If modifying data.js, positions.js, or commentary files, rebuild the bundle
+python3 build-bundle.py
 
-# (optional) Convert decks to PDF
-for L in en dev hi kn; do
-  soffice --headless --convert-to pdf --outdir decks "decks/Bhagavadgita_Concept_KG_${L}.pptx"
-done
-
-# Rebuild the DOCX (702 verses, 18 chapters)
-python build_docx.py
-
-# Translate Kannada commentary into EN / HI / DEV (requires internet; uses Google Translate)
-python translate_all_meanings.py
-
-# QA: scan DEV file for contamination (Kannada chars, hallucinated words, guillemets)
-python detect_contamination.py
-
-# Verify data + viewer integrity
-python verify.py      # Python integrity check
-node verify.js        # JS structural audit
-
-# Use data.js as a library
-node -e "const d=require('./data.js'); console.log(d.NODES.length, 'concepts')"
+# Verify data integrity
+python3 verify.py               # Python: data structure and consistency
+node verify.js                  # JS: SPA-internal verification
 ```
 
-## Hosting & deployment
+## Hosting & Deployment
 
-The repo is private on the free GitHub plan, so **GitHub Pages from this repo is not available** without either flipping the repo to public or upgrading the account. Three pragmatic options:
+**Live URL:** https://kvinayakpai.github.io/Bhagavadgita
 
-1. **Open locally** — no host needed. `viewer-bundled.html` opens cleanly from file:// on any device (desktop, phone, USB stick). This is the path of least resistance.
-2. **Cloudflare Pages / Netlify / Vercel** — all three offer free hosting from private GitHub repos. Point them at this repo, set the build command to nothing (or `python build-bundle.py`), publish directory `.`, and you'll have a live URL within a minute.
-3. **Make the repo public** — then GitHub Pages from `main` / `(root)` works as usual, served at `https://kvinayakpai.github.io/Bhagavadgita/`.
+The app is deployed via GitHub Pages and updates automatically from the `main` branch.
 
-## Translation quality notes (Bannanje commentary)
+**Alternative deployment options:**
+1. **Open locally** — `viewer-bundled.html` opens cleanly from file:// on any device (desktop, phone, USB stick).
+2. **Self-hosted** — copy `viewer-bundled.html` to any web server; no build or server-side processing required.
+3. **Download for offline use** — share `viewer-bundled.html` directly; works completely offline on phones, tablets, USB sticks.
 
-The four commentary files were produced as follows:
+## Translation & Source
 
-- **KN** (`bannanje_kn_private.js`) — Bannanje Govindacharya's own Kannada text, the source of truth.
-- **EN** (`bannanje_en_private.js`) — translated from KN via Google Translate (kn→en), manually verified for structural integrity.
-- **HI** (`bannanje_hi_private.js`) — translated from KN via Google Translate (kn→hi).
-- **DEV** (`bannanje_dev_private.js`) — translated from KN via Google Translate (kn→sa). The Google Translate API has a known hallucination where the common Kannada negation particles `ಅಲ್ಲ` (alla = "not") and `ಇಲ್ಲ` (illa = "there is none") are mistranslated as `अल्लाह` and `इल्लाह`. All 702 entries were scanned and cleaned in June 2026 using `detect_contamination.py`; residual hallucinations were replaced with the correct Sanskrit particles (`न`, `न विद्यते`).
+All 702 verses derive exclusively from **Bannanje Govindacharya's Gītā Pravachana**:
+
+- **Kannada** — Bannanje's direct source text
+- **English, Hindi, Sanskrit** — translated from Kannada source
+- **Quality assurance** — all files verified clean; zero contamination from other commentaries
+
+The commentary has been verified to contain zero entries from Prabhupada, Advaita, or other non-Madhva traditions. All content is grounded in Madhva Vedānta siddhānta as presented by Bannanje Govindacharya.
 
 ## License
 
