@@ -482,3 +482,142 @@ These were confirmed from Bannanje's Kannada and must appear in DEV authoring:
 ---
 
 *Last updated: June 2026 | Session 1 complete: 105/701 DEV verses composed*
+
+---
+
+## 13. Session 2 Status — June 2026
+
+### Priority change
+Revised mid-session: author HI + EN alongside DEV, chapter by chapter, before continuing DEV.
+Order: Ch15 → Ch7 → Ch11 → Ch2 → Ch18 → Ch6 → remaining.
+
+### Commits this session
+
+| Commit | Description |
+|--------|-------------|
+| `4806f55` | DEV Ch15 — 20 verses composed |
+| `1f1cf35` | DEV Ch7 (30v) + Ch11 (55v) = 85 verses composed |
+| `02ad9e2` | Plan doc: Sections 10 + 11 added |
+| `62941c9` | HI+EN Ch15+Ch7 authored; commentary bug fixed; HTML synced |
+
+### Authoring status
+
+| Chapter | DEV | HI | EN |
+|---------|-----|----|----|
+| Ch15 (20v) | ✓ committed | ✓ committed | ✓ committed |
+| Ch7 (30v) | ✓ committed | ✓ committed | ✓ committed |
+| Ch11 (55v) | ✓ committed | ✗ pending | ✗ pending |
+| Ch2–Ch18, others | ✗ pending | ✗ pending | ✗ pending |
+
+**Totals:** DEV 105/701 · HI 50/701 · EN 50/701
+
+### App fix: commentary now visible in DEV/HI/EN modes
+
+**Root cause:** Commentary rendering was gated on `isKn` (Kannada only). The objects
+`BANNANJE_VERSE_MEANINGS_DEV`, `_HI`, `_EN` existed in the HTML but the render
+function never read them.
+
+**Fix (commit `62941c9`):** Extended the commentary lookup block in `renderChapters()`:
+```javascript
+if (isKn && ...) { meaning = BANNANJE_VERSE_MEANINGS[key]; }
+else if (state.lang === 'dev' && ...) { meaning = BANNANJE_VERSE_MEANINGS_DEV[key]; }
+else if (state.lang === 'hi'  && ...) { meaning = BANNANJE_VERSE_MEANINGS_HI[key]; }
+else if (state.lang === 'en'  && ...) { meaning = BANNANJE_VERSE_MEANINGS_EN[key]; }
+```
+Also extended the SHLOKAS / SHLOKAS+COMMENTARY toggle buttons to show in all lang modes.
+
+---
+
+## 14. Challenges Faced — Session 2
+
+### Challenge 1: bannanje_dev.js was pre-truncated (pre-existing, not our fault)
+
+**What happened:** The file ended mid-entry on `16.3` with no closing `};`. Node
+reported `Invalid or unexpected token` at line 704 (the last line) even on a freshly
+checked-out file. This was caused by a prior agent's `build-bundle.py` run that
+truncated the file.
+
+**Impact:** Every write attempt appeared to break the file — it was already broken.
+Three debugging cycles lost before root cause was confirmed.
+
+**Fix:** Removed the truncated 16.3 entry entirely (13KB of machine-generated text),
+added `};` to close the object. Verified parse clean before proceeding.
+
+**Prevention:** Always parse-check the file *before* any authoring:
+```bash
+node -e "const s=require('fs').readFileSync('bannanje_dev.js','utf-8');
+try{new Function(s.replace('window.BANNANJE_VERSE_MEANINGS_DEV','const X'));console.log('OK');}
+catch(e){console.error('FAIL',e.message);}"
+```
+If it fails, diagnose and fix truncation before touching any entry.
+
+### Challenge 2: Regex substitution truncates the file
+
+**What happened:** Using `re.sub()` with a pattern like `"KEY":\s*"((?:[^"\\]|\\.)*)"` 
+to replace entries caused the file to be silently truncated. The regex matched across 
+multi-line raw-newline strings (from corrupted pre-existing entries) and consumed 
+content from subsequent entries, with the replacement ending before the original 
+content closed.
+
+**Impact:** File appeared written correctly (Python reported success) but Node 
+parse failed. Required `git checkout` to restore and restart authoring.
+
+**Fix:** Replaced all regex-based substitution with `find_value_span()` — a 
+char-by-char walk that correctly handles `\\` escape sequences and stops at 
+the first unescaped `"`. This is the only safe replacement method for this file.
+
+### Challenge 3: Inline HTML blocks out of sync with standalone .js files
+
+**What happened:** `viewer-bundled.html` contains three inlined JS blocks
+(`bannanje_en_private.js`, `bannanje_hi_private.js`, `bannanje_dev_private.js`).
+The authoring was done to the standalone `.js` files. The HTML was synced in
+commit `62941c9` — but until that sync, the live app served the old data even
+though the `.js` files were correct.
+
+**Impact:** Dev/HI/EN commentary appeared missing on the live site even after
+committing the `.js` files.
+
+**Rule for future sessions:** After authoring to `.js` files, always sync into
+`viewer-bundled.html` before committing:
+```python
+# For each language block, replace the inlined content between:
+# /* === inlined from bannanje_XX_private.js === */
+# and the next such marker or </script>
+```
+The sync script is in commit `62941c9` — reuse it.
+
+### Challenge 4: Commentary not rendering in DEV/HI/EN modes (app bug)
+
+**What happened:** The Chapters tab showed no commentary when language was set 
+to DEV, HI, or EN — even after content was inlined. The toggle buttons were 
+also hidden.
+
+**Root cause:** In `renderChapters()`, the commentary block was gated on `isKn`:
+```javascript
+if (isKn && typeof BANNANJE_VERSE_MEANINGS !== 'undefined') {
+  meaning = BANNANJE_VERSE_MEANINGS[key] || '';
+}
+```
+The three other objects existed in the page but were never read.
+
+**Fix:** Extended the `if/else if` chain to cover all four language modes.
+Also extended the toggle button `isKn ? ... : ''` ternary to include all modes.
+
+### Challenge 5: Order-dependent inline block replacement
+
+**What happened:** When syncing `.js` files into HTML, the replacement was done 
+in order EN → HI → DEV. After replacing EN, the character offsets for HI and DEV 
+shifted. A naive `content.find()` after the first replacement found the wrong 
+marker position.
+
+**Impact:** One test showed 15.1 HI appearing missing (it wasn't — the search 
+offset was wrong). Required careful verification.
+
+**Fix:** Each replacement uses `content.find(marker)` on the *already-modified* 
+content string, so each find correctly locates the current position. Python 
+string replacement handles this correctly as long as replacements are sequential 
+(not parallel).
+
+---
+
+*Last updated: June 2026 — Session 2 complete*
