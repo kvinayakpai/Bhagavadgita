@@ -648,3 +648,42 @@ string replacement handles this correctly as long as replacements are sequential
 - 2.72 — brāhmī sthiti = Bhagavān-mokṣa (not dissolution)
 
 **Next:** Ch18 (78 verses) — all three languages
+
+---
+
+## 16. Session 4 — Ch18 + Gap-fill Complete
+
+### Completed this session
+
+| Work | Verses | Commit |
+|------|--------|--------|
+| Ch18 DEV/HI/EN (78v) | 78 | `85ee77c` |
+| All-chapter gap-fill | ~15 | `6f76372` |
+
+### Final authoring status
+
+| Ch | DEV | HI | EN | Size |
+|----|-----|----|----|------|
+| 1–18 all | ✓ or noted | ✓ or noted | ✓ or noted | — |
+| **TOTAL** | **698/701** | **698/701** | **698/701** | **701** |
+
+### Remaining 3 gaps (structural — not authorable)
+
+These three are where Bannanje Govindacharya's commentary has fewer verses
+than the standard BG numbering. They cannot be filled from the KN source
+because Bannanje did not comment on those verse-numbers as separate entries:
+
+| Key | Reason |
+|-----|--------|
+| 3.43 | Bannanje's Ch3 = 42 verses; 3.43 does not exist in his count |
+| 11.55 | Bannanje's Ch11 = 35 verses; 11.55 = OCR phantom |
+| 13.35 | Bannanje's Ch13 = 34 verses; 13.35 does not exist in his count |
+
+All three have structural-note entries explaining this.
+
+### Application status
+
+- All three JS files synced into `viewer-bundled.html` in every commit
+- Commentary visible in DEV/HI/EN tabs (fix committed in session 2)
+- Parse-checked after every chunk — no breaks introduced
+
