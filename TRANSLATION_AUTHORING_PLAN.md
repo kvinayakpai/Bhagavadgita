@@ -687,3 +687,150 @@ All three have structural-note entries explaining this.
 - Commentary visible in DEV/HI/EN tabs (fix committed in session 2)
 - Parse-checked after every chunk — no breaks introduced
 
+
+---
+
+## 17. Contamination Audit — June 2026
+
+### Audit methodology
+
+Systematic scan across all three language files checking for:
+1. IAST transliteration passed off as English commentary
+2. Alien phrases from non-Bannanje sources (Prabhupada, Radhakrishnan, etc.)
+3. Advaita/Mayavada doctrinal contamination in DEV
+4. Machine-generated garbled Sanskrit in pre-existing DEV entries
+
+### Findings
+
+#### Category A — CLEAN (no action needed)
+
+**HI (all 698 entries):** No contamination. All entries authored this session are
+genuine Hindi-medium Vedanta prose. Zero IAST-as-Hindi entries.
+
+**EN chapters we authored (Ch1, Ch2, Ch7, Ch8.22, Ch11, Ch12.6/13/18, Ch15,
+Ch16, Ch18):** Use IAST notation for proper nouns and Sanskrit terms within
+English scholarly prose. This is acceptable — standard Indological convention.
+
+**DEV Advaita/Nirakara mentions:** Every instance of 'अद्वैत' and 'निराकार'
+in our composed DEV entries is in explicit refutation context
+("अयं श्लोकः अद्वैतमतस्य खण्डनम्"). No Advaita doctrine has entered.
+
+#### Category B — PRE-EXISTING ALIEN DATA in EN (19 entries, highest priority)
+
+These are **not from Bannanje's book**. They appear to be fragments from an
+earlier agent's machine-generated build — raw IAST shlokas with no genuine
+English commentary, or phrases from other commentators.
+
+**"supreme personality of godhead"** (Prabhupada's phrase) found in:
+- 8.10, 8.21
+
+**Raw IAST-shloka-only entries** (zero English prose):
+- 3.3, 3.34, 5.17, 5.20, 6.4, 6.25, 6.34, 8.8, 9.5, 9.27, 10.3, 10.13,
+  12.1, 12.4, 13.22, 13.23, 17.23
+
+**Alien gloss** ("samsara of fifteen fences" — source unknown):
+- 12.4
+
+**Full list to re-author in EN:**
+
+| Key | Current contamination |
+|-----|-----------------------|
+| 3.3 | IAST shloka + garbled |
+| 3.34 | IAST shloka only |
+| 5.17 | IAST shloka only |
+| 5.20 | IAST shloka only |
+| 6.4 | IAST shloka + broken English |
+| 6.25 | IAST shloka only |
+| 6.34 | IAST shloka only |
+| 8.8 | IAST shloka only |
+| 8.10 | IAST + "supreme personality of godhead" |
+| 8.21 | IAST + "supreme personality of godhead" |
+| 9.5 | IAST shloka only |
+| 9.27 | IAST shloka only |
+| 10.3 | IAST shloka only |
+| 10.13 | IAST shloka only |
+| 12.1 | IAST shloka only |
+| 12.4 | alien gloss |
+| 13.22 | IAST shloka only |
+| 13.23 | IAST shloka only |
+| 17.23 | IAST shloka only |
+
+#### Category C — PRE-EXISTING GARBLED DEV (6 entries, medium priority)
+
+These DEV entries were not authored by us — they are the original machine-
+generated Sanskrit from before session 1. They are garbled hybrid Sanskrit,
+not Bannanje's voice, and some contain 'अद्वैत' used in non-refutation
+context (because they are machine output, not doctrine).
+
+**Entries to re-author in DEV:**
+
+| Key | Issue |
+|-----|-------|
+| 4.22 | Garbled machine Sanskrit; 'अद्वैत' in unclear context |
+| 4.42 | Garbled machine Sanskrit |
+| 5.3 | Garbled machine Sanskrit; 'अद्वैत' context unclear |
+| 5.6 | Garbled machine Sanskrit; 'अद्वैत' context unclear |
+| 5.11 | Garbled machine Sanskrit; 'अद्वैत' context unclear |
+| 13.14 | Garbled; 'निराकार' context unclear |
+
+Note: HI equivalents of these same verses should also be checked — if HI
+for 4.22, 4.42, 5.3, 5.6, 5.11, 13.14 came from the same pre-existing
+build they may also be contaminated.
+
+#### Category D — OUR EN 15.1 has heavy IAST opening
+
+15.1 EN begins with the full IAST shloka text before the commentary — this
+is structurally fine (other chapters do this too) but the IAST density is
+highest of all our entries (19 chars). No action needed unless the style
+policy changes.
+
+---
+
+## 18. Remediation Plan
+
+### Priority 1 — Re-author 19 alien EN entries (Chapters 3, 5, 6, 8, 9, 10, 12, 13, 17)
+
+These must be replaced with genuine English commentary derived from the
+KN source. Each is a specific verse — read the KN entry, compose English.
+
+**Execution order:**
+1. Ch3: 3.3, 3.34
+2. Ch5: 5.17, 5.20
+3. Ch6: 6.4, 6.25, 6.34
+4. Ch8: 8.8, 8.10, 8.21
+5. Ch9: 9.5, 9.27
+6. Ch10: 10.3, 10.13
+7. Ch12: 12.1, 12.4
+8. Ch13: 13.22, 13.23
+9. Ch17: 17.23
+
+After each chapter's entries are written: parse-check, then proceed.
+Commit all 19 together once complete.
+
+### Priority 2 — Re-author 6 garbled DEV entries (Chapters 4, 5, 13)
+
+Replace with composed classical Sanskrit from KN source.
+- Ch4: 4.22, 4.42
+- Ch5: 5.3, 5.6, 5.11
+- Ch13: 13.14
+
+Also check HI for the same 6 keys — replace if contaminated.
+
+### Priority 3 — Full scan of remaining pre-existing HI entries
+
+Chapters not authored this session: Ch3, Ch4, Ch5, Ch6, Ch8, Ch9, Ch10,
+Ch13, Ch17. Although the HI flag returned 0 contaminated entries, the
+pre-existing HI may contain subtle issues (IAST-heavy, hollow entries).
+Spot-check 5 random entries per chapter before declaring clean.
+
+### What is NOT needed
+
+- No changes to KN (source file, never touched)
+- No changes to our authored DEV entries (Ch2, Ch7, Ch11, Ch15, Ch18)
+- No changes to our authored HI entries (all chapters)
+- No changes to our authored EN entries except the 19 listed above
+- The 3 structural gaps (3.43, 11.55, 13.35) remain as-is
+
+---
+
+*Audit date: June 2026 | Auditor: session 4 contamination check*
