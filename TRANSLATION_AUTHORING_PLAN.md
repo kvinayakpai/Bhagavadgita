@@ -361,14 +361,19 @@ Total: **105 verses** composed in classical Sanskrit from KN source.
 
 **Remaining DEV (596 verses across Ch1–6, Ch8–10, Ch12–14, Ch16–18):**
 
-Priority order per plan:
-1. Ch2 (72 verses) — Sāṅkhya-yoga, core doctrine, highest priority
-2. Ch18 (78 verses) — largest chapter
-3. Ch6 (47 verses) — Dhyāna-yoga
-4. Ch1 (48 verses)
-5. Remaining chapters in any order
+**REVISED PRIORITY (June 2026):** Author HI + EN before continuing DEV.
+Work chapter-by-chapter across all three languages simultaneously.
 
-HI and EN commentary not yet started (P3).
+Order: Ch15 → Ch7 → Ch11 → Ch2 → Ch18 → Ch6 → remaining
+
+| Chapter | DEV | HI | EN |
+|---------|-----|----|----|
+| Ch15 (20v) | ✓ done | ✓ done | ✓ done |
+| Ch7 (30v) | ✓ done | pending | pending |
+| Ch11 (55v) | ✓ done | pending | pending |
+| Ch2 (72v) | pending | pending | pending |
+| Ch18 (78v) | pending | pending | pending |
+| All others | pending | pending | pending |
 
 ---
 
