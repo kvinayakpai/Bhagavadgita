@@ -342,3 +342,138 @@ Target:
 ---
 
 *Last updated: June 2026 | Project: Tatvam Jalam (तत्त्व-जालम्) | Source: Bannanje Govindacharya Gita Pravachana*
+
+---
+
+## 10. Session Status Log
+
+### Session 1 — June 2026 (this session)
+
+**Completed:**
+
+| Chapter | Verses | Status |
+|---------|--------|--------|
+| Ch15 — Purushottama-yoga | 20/20 | ✓ Committed (`4806f55`) |
+| Ch7 — Jñāna-Vijñāna-yoga | 30/30 | ✓ Committed (`1f1cf35`) |
+| Ch11 — Viśvarūpa-darśana | 55/55 | ✓ Committed (`1f1cf35`) |
+
+Total: **105 verses** composed in classical Sanskrit from KN source.
+
+**Remaining DEV (596 verses across Ch1–6, Ch8–10, Ch12–14, Ch16–18):**
+
+Priority order per plan:
+1. Ch2 (72 verses) — Sāṅkhya-yoga, core doctrine, highest priority
+2. Ch18 (78 verses) — largest chapter
+3. Ch6 (47 verses) — Dhyāna-yoga
+4. Ch1 (48 verses)
+5. Remaining chapters in any order
+
+HI and EN commentary not yet started (P3).
+
+---
+
+## 11. Technical Learnings (for agents)
+
+These are hard-won lessons from this session. Follow them to avoid repeating the same failures.
+
+### 11.1 The file was already truncated before authoring began
+
+`bannanje_dev.js` had a pre-existing structural defect: the `16.3` entry was cut off mid-value, and the closing `};` was missing. This was caused by the other agent's build process (`build-bundle.py`), which truncated the file when it ran out of buffer.
+
+**Symptom:** Node parse error `Invalid or unexpected token` at line 704 (the last line), even on a freshly checked-out file.
+
+**Fix applied:** Removed the truncated `16.3` entry, added the missing `};` closing. The entry itself was a massive machine-generated block (13KB) that was not authoritative.
+
+**Rule:** Before starting any authoring session, run the parse check first:
+```bash
+node -e "const src = require('fs').readFileSync('bannanje_dev.js','utf-8'); try { new Function(src.replace('window.BANNANJE_VERSE_MEANINGS_DEV','const X')); console.log('OK'); } catch(e) { console.error('FAIL', e.message); }"
+```
+If it fails, diagnose the truncation before touching any entry.
+
+### 11.2 Safe string replacement: always use char-by-char boundary walking
+
+**The broken approach** (do not use):
+```python
+re.sub(r'"KEY":\s*"((?:[^"\\]|\\.)*)"', replacement, content)
+```
+This regex can match across multi-line raw newlines in corrupted entries, eating content from the next entry and truncating the file.
+
+**The correct approach** — `find_value_span(content, key)`:
+```python
+def find_value_span(content, key):
+    pattern = f'"{key}":'
+    key_pos = content.find(pattern)
+    if key_pos == -1: return None, None
+    pos = key_pos + len(pattern)
+    while pos < len(content) and content[pos] in ' \t\r\n': pos += 1
+    if content[pos] != '"': return None, None
+    val_start = pos
+    pos += 1
+    while pos < len(content):
+        c = content[pos]
+        if c == '\\': pos += 2; continue   # skip escape sequence
+        if c == '"': return val_start, pos  # found closing quote
+        if c == '\n': return val_start, None  # raw newline = malformed
+        pos += 1
+    return None, None
+```
+
+If `v_end` is `None`, the entry is malformed (contains raw newlines). Do not attempt to replace it blindly — diagnose first.
+
+### 11.3 escape_js() must convert \n before writing
+
+Python multi-line string literals contain actual `\n` characters. Before inserting into a JS double-quoted string, these must become the two-character sequence `\n` (backslash + n):
+
+```python
+def escape_js(text):
+    out = []
+    for c in text:
+        if c == '\\': out.append('\\\\')
+        elif c == '"': out.append('\\"')
+        elif c == '\n': out.append('\\n')
+        elif c == '\r': pass  # discard
+        else: out.append(c)
+    return ''.join(out)
+```
+
+Then write: `content[:v_start+1] + escape_js(verse_text) + content[v_end:]`
+
+### 11.4 Always validate parse after every write
+
+```bash
+node -e "
+const src = require('fs').readFileSync('bannanje_dev.js','utf-8');
+try { new Function(src.replace('window.BANNANJE_VERSE_MEANINGS_DEV','const X')); console.log('OK'); }
+catch(e) { console.error('FAIL', e.message); }
+"
+```
+
+If this fails after writing, restore from git immediately:
+```bash
+git checkout bannanje_dev.js
+```
+Then diagnose the specific entry that broke it using the bisect approach.
+
+### 11.5 Authoring register — what "composed Sanskrit" looks like
+
+The quality benchmark is the concept-node `dev` prose (in the NODES array, commit `9c5ef78`). That prose was composed directly in Sanskrit, not translated from English. Example (brahman node):
+
+> मध्व-सिद्धान्ते ब्रह्म इति शब्दः केवलं विष्णोः (नारायणस्य) वाचकः — सर्वोत्तमः, क्षराक्षरातीतः पुरुषोत्तमः। न तु निर्विशेष-निरुपाधि-सामान्य-तत्त्ववाचकः।
+
+The new Ch15/Ch7/Ch11 entries follow this same register. The old machine-translated entries (pre-session) read as Kannada in Devanagari script, with hybrid syntax, transliterated idioms (टोङ्गे, तिसिलु), and Hindi verb forms dropped in. The distinction is immediately visible in reading.
+
+### 11.6 Doctrinal positions to preserve (Madhva/Dvaita) — verified from KN source
+
+These were confirmed from Bannanje's Kannada and must appear in DEV authoring:
+
+- **Brahman** = केवलं विष्णुः — not nirguṇa absolute
+- **Akshara** = श्रीलक्ष्मी (nitya-mukta, kūṭasthā) — not a generic "imperishable"
+- **Kshara** = all jivas including Brahma — Brahma too is mortal (kshara)
+- **Purushottama** = Hari alone, beyond both kshara and akshara
+- **Para prakriti** = Lakshmi/chit; **Apara prakriti** = 8-fold jada
+- **Vishvarupa** (BG 11.13): Madhvacharya — all eligible jivas in triloka saw simultaneously, not Arjuna alone
+- **Ananya bhakti** = only path to Vishvarupa-level darshana — not veda/tapas/dana/yajna alone
+
+---
+
+*Last updated: June 2026 | Session 1 complete: 105/701 DEV verses composed*
