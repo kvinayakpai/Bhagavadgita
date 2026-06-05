@@ -40,15 +40,16 @@ bundle = viewer
 
 # Inline the optional private localized meaning scripts if they exist, or use null stubs.
 lang_configs = [
-    ('kn', 'BANNANJE_VERSE_MEANINGS'),
-    ('en', 'BANNANJE_VERSE_MEANINGS_EN'),
-    ('hi', 'BANNANJE_VERSE_MEANINGS_HI'),
-    ('dev', 'BANNANJE_VERSE_MEANINGS_DEV')
+    ('kn', 'BANNANJE_VERSE_MEANINGS', 'bannanje_kn.js'),
+    ('en', 'BANNANJE_VERSE_MEANINGS_EN', 'bannanje_en.js'),
+    ('hi', 'BANNANJE_VERSE_MEANINGS_HI', 'bannanje_hi.js'),
+    ('dev', 'BANNANJE_VERSE_MEANINGS_DEV', 'bannanje_dev.js'),
 ]
 
-for suffix, var_name in lang_configs:
-    tag = f'<script src="bannanje_{suffix}.js" onerror="window.{var_name} = null;"></script>'
-    path = os.path.join(ROOT, f'bannanje_{suffix}.js')
+for suffix, var_name, filename in lang_configs:
+    # viewer.html uses _private.js tags; we map them to the public files
+    tag = f'<script src="bannanje_{suffix}_private.js" onerror="window.{var_name} = null;"></script>'
+    path = os.path.join(ROOT, filename)
     if os.path.exists(path):
         inline = strip_cjs_export(read(f'bannanje_{suffix}.js'))
         block = f'<script>\n/* === inlined from bannanje_{suffix}.js === */\n{inline}\n</script>'
