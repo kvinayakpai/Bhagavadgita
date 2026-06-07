@@ -2067,7 +2067,11 @@ function setView(v, id){
 }
 
 function labelOf(n){
-  return state.lang==='hi' ? (n.hi || n.dev) : state.lang==='dev' ? n.dev : state.lang==='kn' ? n.kn : n.en;
+  const t = n.title || {};
+  if (state.lang==='hi')  return n.hi  || n.dev  || t.hi  || n.en || '';
+  if (state.lang==='dev') return n.dev  || t.dev  || n.en  || '';
+  if (state.lang==='kn')  return n.kn   || t.kn   || n.en  || '';
+  return n.en || t.en || '';
 }
 
 /* getActive: read a field that may be either a flat string (English-only) OR a
@@ -2926,8 +2930,8 @@ function renderMapHandLaid(root, activeNodeIds, controlPanelHtml){
     const p = newPositions[n.id]; if (!p) return;
     const [x,y,r] = p;
     const lab = labelOf(n);
-    const maxLen = state.lang==='en' ? 16 : 12;
-    const shown = lab.length > maxLen ? lab.slice(0,maxLen-1)+'?' : lab;
+    // No truncation
+    const shown = lab;
     svg += `<g class="map-node" data-id="${n.id}">
       <circle cx="${x}" cy="${y}" r="${r}" fill="var(--t-${n.tier})" fill-opacity="0.88" stroke="var(--t-${n.tier})" stroke-width="1.2"/>
       <text x="${x}" y="${y + r + 11}" font-family="${fontFam}" font-size="${state.lang==='en'?10:11}">${escapeHtml(shown)}</text>
@@ -3021,8 +3025,8 @@ function renderMapAuto(root, activeNodeIds, controlPanelHtml){
   activeNodes.forEach(n=>{
     const p = pos[n.id]; if (!p) return;
     const lab = labelOf(n);
-    const maxLen = state.lang==='en' ? 14 : 10;
-    const shown = lab.length > maxLen ? lab.slice(0,maxLen-1)+'?' : lab;
+    // No truncation
+    const shown = lab;
     svg += `<g class="map-node" data-id="${n.id}">
       <circle cx="${p.x}" cy="${p.y}" r="${p.r}" fill="var(--t-${n.tier})" fill-opacity="0.88" stroke="var(--t-${n.tier})" stroke-width="1.2"/>
       <text x="${p.x}" y="${p.y + p.r + 11}" font-family="${fontFam}" font-size="${state.lang==='en'?10:11}">${escapeHtml(shown)}</text>
