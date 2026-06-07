@@ -158,6 +158,7 @@ body.lang-kn  .focus-card h1{font-family:'Tiro Kannada',serif;font-size:30px}
 .focus-card .madhva .madhva-prefix{font-weight:600;color:var(--t-paramartha)}
 .focus-card .refs{font-size:11px;letter-spacing:.06em;color:var(--ink-fade);margin-top:10px}
 .ch-grid{display:flex;flex-wrap:wrap;gap:4px;padding:12px 16px 0}
+.ch-btn-all{min-width:40px;font-size:11px;letter-spacing:.04em}
 .ch-btn{min-width:32px;padding:4px 8px;border:1px solid var(--rule);border-radius:4px;
   background:var(--paper);color:var(--ink);font-size:13px;cursor:pointer;font-family:inherit}
 .ch-btn.active{background:var(--rust);color:#fff;border-color:var(--rust)}
@@ -1974,7 +1975,7 @@ const BANNANJE_DONE = new Set(Object.keys(FULL_GITA)); /* all verses are Bannanj
 /* ============================================================================
    Renderer
    ============================================================================ */
-const state = { chapterSel: 2, lang:'en', view:'browse', focusId:null, q:'' };
+const state = { chapterSel: 0, lang:'en', view:'browse', focusId:null, q:'' };
 
 /* UI_STRINGS — tri-script translations for chrome labels (section headers,
    pill badges, footer counter, Madhva callout prefix). All values
@@ -2442,7 +2443,7 @@ function renderChapters() {
   const conceptIdx  = buildChapterIndex();       // ch → [{node, refsRaw}]
   const shlokaMap   = buildShlokaChapterIndex(); // "ch.v" → [{nodeId, s}]
   const chapters = [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18];
-  const sel = state.chapterSel || 2;
+  const sel = state.chapterSel ?? 0;
   const isKn = (state.lang === 'kn');
 
   const chTitle = {
@@ -2455,24 +2456,45 @@ function renderChapters() {
     18:'Mokṣa-sannyāsa'
   };
 
-  const btnRow = chapters.map(ch =>
-    `<button class="ch-btn${ch===sel?' active':''}" onclick="state.chapterSel=${ch};renderChapters()">${ch}</button>`
-  ).join('');
+  const btnRow = [
+    `<button class="ch-btn ch-btn-all${sel===0?' active':''}" onclick="state.chapterSel=0;renderChapters()">All</button>`,
+    ...chapters.map(ch =>
+      `<button class="ch-btn${ch===sel?' active':''}" onclick="state.chapterSel=${ch};renderChapters()">${ch}</button>`
+    )
+  ].join('');
 
   // ── Concepts section ──────────────────────────────────────────────────────
-  const conceptRows = (conceptIdx[sel]||[]).map(({node:n, refsRaw}) =>
-    `<div class="ch-concept-row">
-      <span class="ch-concept-label" onclick="setView('focus','${n.id}')">${escapeHtml(labelOf(n))}</span>
-      <span class="ch-verses">${escapeHtml(refsRaw)}</span>
-    </div>`
-  ).join('');
-  const conceptsSection = conceptRows
-    ? `<div class="ch-section-hd">Concepts</div>${conceptRows}`
-    : '';
+  let conceptRows, conceptsSection;
+  if (sel === 0) {
+    // All chapters: show all nodes sorted by tier then label
+    const allNodes = NODES.slice().sort((a,b) => {
+      const ti = TIER_INDEX[a.tier]||0, tj = TIER_INDEX[b.tier]||0;
+      return ti - tj || labelOf(a).localeCompare(labelOf(b));
+    });
+    conceptRows = allNodes.map(n =>
+      `<div class="ch-concept-row">
+        <span class="ch-concept-label" onclick="setView('focus','${n.id}')">${escapeHtml(labelOf(n))}</span>
+        <span class="ch-verses">${escapeHtml(n.refs||'')}</span>
+      </div>`
+    ).join('');
+    conceptsSection = conceptRows
+      ? `<div class="ch-section-hd">Concepts (${allNodes.length})</div>${conceptRows}`
+      : '';
+  } else {
+    conceptRows = (conceptIdx[sel]||[]).map(({node:n, refsRaw}) =>
+      `<div class="ch-concept-row">
+        <span class="ch-concept-label" onclick="setView('focus','${n.id}')">${escapeHtml(labelOf(n))}</span>
+        <span class="ch-verses">${escapeHtml(refsRaw)}</span>
+      </div>`
+    ).join('');
+    conceptsSection = conceptRows
+      ? `<div class="ch-section-hd">Concepts</div>${conceptRows}`
+      : '';
+  }
 
   // ── Full Shlokas section from FULL_GITA ───────────────────────────────────
   const selStr = String(sel);
-  const verseKeys = Object.keys(FULL_GITA)
+  const verseKeys = sel === 0 ? [] : Object.keys(FULL_GITA)
     .filter(k => k.split('.')[0] === selStr)
     .sort((a,b) => parseInt(a.split('.')[1]) - parseInt(b.split('.')[1]));
 
@@ -2560,9 +2582,9 @@ function renderChapters() {
     </div>`;
   }).join('');
 
-  const shlokaSection = shlokaCards
+  const shlokaSection = sel === 0 ? '' : (shlokaCards
     ? `<div class="ch-section-hd">Shlokas (${verseKeys.length})</div>${shlokaCards}`
-    : `<p style="color:var(--ink-fade);font-size:14px;padding:6px 0">No shlokas for this chapter.</p>`;
+    : `<p style="color:var(--ink-fade);font-size:14px;padding:6px 0">No shlokas for this chapter.</p>`);
 
   // Generate Dropdown select options
   const dropdownOptions = verseKeys.map(key => `<option value="${key}">BG ${key}</option>`).join('');
@@ -2570,10 +2592,10 @@ function renderChapters() {
   root.innerHTML = `
     <div class="ch-grid">${btnRow}</div>
     <div class="ch-list-wrap">
-      <div class="ch-hd">Chapter ${sel} — ${chTitle[sel]||''}</div>
+      <div class="ch-hd">${sel === 0 ? 'All Chapters' : 'Chapter ' + sel + ' — ' + (chTitle[sel]||'')}</div>
       
       <!-- CONTROLS ROW -->
-      <div class="ch-controls">
+      ${sel === 0 ? '' : `<div class="ch-controls">
         <div class="ch-select-wrap">
           <span>${UI('jumpToVerse')}</span>
           <select class="sh-dropdown" onchange="if(this.value){document.getElementById('card-' + this.value).scrollIntoView({behavior:'smooth', block:'center'}); this.value='';}">
@@ -2581,12 +2603,11 @@ function renderChapters() {
             ${dropdownOptions}
           </select>
         </div>
-        
         <div class="ch-toggle-group">
           <button class="ch-toggle-btn${!showAll?' active':''}" id="global-show-shlokas" onclick="setGlobalCommentary(false)">${UI('onlyShlokas')}</button>
           <button class="ch-toggle-btn${showAll?' active':''}" id="global-show-all" onclick="setGlobalCommentary(true)">${UI('shlokasCommentary')}</button>
         </div>
-      </div>
+      </div>`}
 
       ${conceptsSection}
       ${shlokaSection}
@@ -2623,19 +2644,16 @@ function renderMap(){
   const root = document.getElementById('view-map');
 
   // Dynamic synchronization of map selection state with the Chapters view tab
-  // Sync map chapter from chapters tab only if user hasn't yet touched the map
-  if (!state.mapInitialized) {
-    state.mapChapterSel = 0; // Default: show all chapters
-    state.mapInitialized = true;
-    state.lastChapterSel = state.chapterSel;
-  } else if (state.lastChapterSel !== state.chapterSel) {
-    state.mapChapterSel = state.chapterSel || 0;
-    state.mapVerseSel = ''; // Reset verse selection on map when chapter changes from chapters tab
-    state.lastChapterSel = state.chapterSel;
-  }
+  // Sync chapters tab → map (always, unless user changed map dropdown independently)
   if (state.mapChapterSel === undefined) {
-    state.mapChapterSel = 0; // Fallback
+    state.mapChapterSel = 0; // First open: All Chapters
+  } else if (!state.mapUserOverride && state.lastChapterSel !== state.chapterSel) {
+    // Chapters tab changed — follow it
+    state.mapChapterSel = state.chapterSel ?? 0;
+    state.mapVerseSel = '';
   }
+  state.lastChapterSel = state.chapterSel;
+  state.mapUserOverride = false; // Reset after consuming
 
   const fontFam = state.lang==='hi'?'Tiro Devanagari Hindi':state.lang==='dev'?'Tiro Devanagari Sanskrit':state.lang==='kn'?'Tiro Kannada':'Cormorant Garamond';
   const chSel = state.mapChapterSel; // 0 to 18
@@ -3137,11 +3155,10 @@ function renderMapAuto(root, activeNodeIds, controlPanelHtml){
 window.onMapChapterChange = function(val) {
   const ch = parseInt(val);
   state.mapChapterSel = ch;
-  state.mapVerseSel = ''; // Reset shloka filter when chapter changes
-  if (ch > 0) {
-    state.chapterSel = ch; // Sync back to chapters tab!
-  }
-  state.lastChapterSel = ch; // Avoid circular resets
+  state.mapVerseSel = '';
+  state.chapterSel = ch; // Sync back to chapters tab
+  state.lastChapterSel = ch;
+  state.mapUserOverride = true; // User explicitly changed map — don't re-clobber
   renderMap();
 };
 
