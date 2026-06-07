@@ -1,15 +1,1 @@
-# Pipeline artifacts (regeneratable)
-gita_pages/
-_extracted/
-
-# Node
-node_modules/
-package-lock.json
-
-# Python
-__pycache__/
-*.pyc
-*.pkl
-
-# OS
-.DS_Store
+# Cleared by user request to allow all files and folders to be tracked.
