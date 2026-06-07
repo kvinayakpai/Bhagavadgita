@@ -95,6 +95,7 @@ header .lang button + button{border-left:1px solid var(--rule)}
 
 /* ============ MAIN ============ */
 main{flex:1;padding:8px 0 80px}
+#view-map{padding-bottom:24px;min-height:0}
 
 /* ============ BROWSE ============ */
 .tier-section{padding:10px 14px 4px}
@@ -277,8 +278,8 @@ body.lang-kn .vsn-chip{font-family:'Tiro Kannada','Noto Sans Kannada',serif}
 body.lang-en .vsn-chip{font-family:'Cormorant Garamond',serif;font-style:italic}
 
 /* ============ MAP (full graph) ============ */
-.map-wrap{padding:10px 8px 20px;overflow:auto;display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:350px;max-height:calc(100vh - 220px);box-sizing:border-box}
-.map-wrap svg{display:block;margin:0 auto;background:var(--paper);border:1px solid var(--rule);border-radius:8px;max-width:100%;max-height:100%;width:auto;height:auto;box-sizing:border-box}
+.map-wrap{padding:10px 8px 20px;overflow:auto;display:flex;flex-direction:column;align-items:center;justify-content:flex-start;min-height:350px;box-sizing:border-box}
+.map-wrap svg{display:block;margin:0 auto;background:var(--paper);border:1px solid var(--rule);border-radius:8px;max-width:100%;width:100%;height:auto;box-sizing:border-box}
 .map-node circle{cursor:pointer;transition:r .1s, stroke-width .1s}
 .map-node:hover circle{stroke-width:2.5}
 .map-node text{font-family:'Cormorant Garamond',serif;font-size:10px;fill:var(--ink);pointer-events:none;text-anchor:middle}
@@ -2622,13 +2623,18 @@ function renderMap(){
   const root = document.getElementById('view-map');
 
   // Dynamic synchronization of map selection state with the Chapters view tab
-  if (state.lastChapterSel !== state.chapterSel) {
+  // Sync map chapter from chapters tab only if user hasn't yet touched the map
+  if (!state.mapInitialized) {
+    state.mapChapterSel = 0; // Default: show all chapters
+    state.mapInitialized = true;
+    state.lastChapterSel = state.chapterSel;
+  } else if (state.lastChapterSel !== state.chapterSel) {
     state.mapChapterSel = state.chapterSel || 0;
     state.mapVerseSel = ''; // Reset verse selection on map when chapter changes from chapters tab
     state.lastChapterSel = state.chapterSel;
   }
   if (state.mapChapterSel === undefined) {
-    state.mapChapterSel = 0; // Default fallback to all chapters
+    state.mapChapterSel = 0; // Fallback
   }
 
   const fontFam = state.lang==='hi'?'Tiro Devanagari Hindi':state.lang==='dev'?'Tiro Devanagari Sanskrit':state.lang==='kn'?'Tiro Kannada':'Cormorant Garamond';
@@ -2750,7 +2756,8 @@ function renderMap(){
   const avgX = count > 0 ? (sumX / count) : 500;
   const avgY = count > 0 ? (sumY / count) : 0;
 
-  if (HAS_HANDLAID) {
+  // All-chapters: use hand-laid global map. Chapter-filtered: dynamic auto layout.
+  if (HAS_HANDLAID && chSel === 0) {
     renderMapHandLaid(root, activeNodeIds, controlPanelHtml);
   } else {
     renderMapAuto(root, activeNodeIds, controlPanelHtml);
@@ -2979,57 +2986,111 @@ function renderMapHandLaid(root, activeNodeIds, controlPanelHtml){
 }
 
 function renderMapAuto(root, activeNodeIds, controlPanelHtml){
-  const W = 820, leftPad = 100, rightPad = 30;
-  const tierGap = 84;
   const activeNodes = NODES.filter(n => activeNodeIds.has(n.id));
-  
   const byTier = Object.fromEntries(TIERS.map(t=>[t.id,[]]));
   activeNodes.forEach(n => { if (byTier[n.tier]) byTier[n.tier].push(n); });
 
-  // 1. Identify active tiers in automatic layout
+  // Active tiers in canonical order
   const activeTiersList = TIERS.filter(t => byTier[t.id] && byTier[t.id].length > 0);
-  const H = activeTiersList.length * tierGap + 80;
+  const numTiers = activeTiersList.length;
+
+  // Dynamic sizing
+  const maxPerTier = Math.max(...activeTiersList.map(t => byTier[t.id].length), 1);
+  // Extra label padding: labels can extend ~40px beyond node center
+  const W = Math.max(520, Math.min(1000, 80 + maxPerTier * 120));
+  const leftPad = 70;
+  const rightPad = 70;
+  const rowH = Math.max(90, Math.min(130, 680 / numTiers));
+  const H = numTiers * rowH + 50; // overridden below by H_actual
+
+  // Tier importance → node radius
+  const tierRadius = {
+    paramartha:15, tattva:13, kshetra:11, guna:11, yoga:11,
+    sadhana:10, antahkarana:9, dharma:9, dosha:9, pratika:9, phala:11, yajna:10
+  };
+
+  // Build adjacency for ordering nodes within tier by connectivity
+  const adj = {};
+  activeNodes.forEach(n => adj[n.id] = new Set());
+  EDGES.forEach(e => {
+    if (activeNodeIds.has(e.source) && activeNodeIds.has(e.target)) {
+      adj[e.source] && adj[e.source].add(e.target);
+      adj[e.target] && adj[e.target].add(e.source);
+    }
+  });
+
+  // Sort nodes within each tier: most connected first, then alphabetical
+  activeTiersList.forEach(tier => {
+    byTier[tier.id].sort((a,b) => {
+      const da = (adj[a.id]||new Set()).size, db = (adj[b.id]||new Set()).size;
+      return db - da || labelOf(a).localeCompare(labelOf(b));
+    });
+  });
+
+  // Calculate cumulative Y offsets (tiers with many nodes get extra height for wrapping)
+  const WRAP_THRESHOLD = 6; // nodes per tier before wrapping to 2 rows
+  const tierYStart = {};
+  let cumY = 40;
+  activeTiersList.forEach((tier, ti) => {
+    tierYStart[tier.id] = cumY;
+    const arr = byTier[tier.id];
+    const rows = arr.length > WRAP_THRESHOLD ? 2 : 1;
+    cumY += rowH * rows;
+  });
+  const H_actual = cumY + 20;
 
   const pos = {};
-  // 2. Position active nodes in the dynamically collapsed active tiers
-  activeTiersList.forEach((tier, ti)=>{
+  activeTiersList.forEach((tier) => {
     const arr = byTier[tier.id];
     const usable = W - leftPad - rightPad;
-    arr.forEach((n,i)=>{
-      const x = leftPad + (arr.length===1 ? usable/2 : (i/(arr.length-1))*usable);
-      const y = 40 + ti*tierGap + 22;
-      pos[n.id] = { x, y, r:9 };
+    const yBase = tierYStart[tier.id];
+    const rows = arr.length > WRAP_THRESHOLD ? 2 : 1;
+    const perRow = rows === 2 ? Math.ceil(arr.length / 2) : arr.length;
+    arr.forEach((n, i) => {
+      const row = rows === 2 ? Math.floor(i / perRow) : 0;
+      const col = i % perRow;
+      const rowCount = row === 0 ? Math.min(perRow, arr.length) : arr.length - perRow;
+      const x = rowCount === 1
+        ? leftPad + usable / 2
+        : leftPad + (col / (rowCount - 1)) * usable;
+      const cy = yBase + (rows === 1 ? rowH / 2 : (row === 0 ? rowH * 0.33 : rowH * 0.75));
+      const r = tierRadius[n.tier] || 10;
+      pos[n.id] = { x, y: cy, r };
     });
   });
 
   const fontFam = state.lang==='hi'?'Tiro Devanagari Hindi':state.lang==='dev'?'Tiro Devanagari Sanskrit':state.lang==='kn'?'Tiro Kannada':'Cormorant Garamond';
-  let svg = `<svg viewBox="0 0 ${W} ${H}" width="100%" height="100%" xmlns="http://www.w3.org/2000/svg">`;
-  
-  // 3. Render active tier bands
-  activeTiersList.forEach((tier,ti)=>{
-    const y = 40 + ti*tierGap;
-    svg += `<rect x="0" y="${y-22}" width="${W}" height="${tierGap}" fill="${ti%2 ? 'rgba(214,197,153,.10)' : 'rgba(230,216,176,.18)'}"/>`;
+  const fontSize = state.lang === 'en' ? 11 : 12;
+  const H_final = typeof H_actual !== "undefined" ? H_actual : H;
+  let svg = `<svg viewBox="0 0 ${W} ${H_final}" width="100%" height="auto" xmlns="http://www.w3.org/2000/svg">`;
+
+  // Tier bands
+  activeTiersList.forEach((tier, ti) => {
+    const yTop = 40 + ti * rowH;
+    svg += `<rect x="0" y="${yTop}" width="${W}" height="${rowH}" fill="${ti%2 ? 'rgba(214,197,153,.10)' : 'rgba(230,216,176,.18)'}"/>`;
     const lab = state.lang==='hi'?(tier.hi||tier.dev):state.lang==='dev'?tier.dev:state.lang==='kn'?tier.kn:tier.en;
-    svg += `<text x="10" y="${y+4}" font-family="${fontFam}" font-size="12" fill="var(--ink-soft)" font-weight="600">${escapeHtml(lab)}</text>`;
+    svg += `<text x="8" y="${yTop + 18}" font-family="${fontFam}" font-size="11" fill="var(--ink-soft)" font-weight="600" opacity="0.7">${escapeHtml(lab)}</text>`;
   });
 
-  EDGES.forEach(e=>{
+  // Edges
+  EDGES.forEach(e => {
     if (!activeNodeIds.has(e.source) || !activeNodeIds.has(e.target)) return;
-    const a = pos[e.source]; const b = pos[e.target];
+    const a = pos[e.source], b = pos[e.target];
     if (!a || !b) return;
-    const mx = (a.x+b.x)/2;
-    const my = (a.y+b.y)/2 - Math.abs(b.y-a.y)*0.08;
-    svg += `<path class="map-edge" d="M ${a.x} ${a.y} Q ${mx} ${my} ${b.x} ${b.y}" stroke="var(--e-${e.type})" stroke-width="0.7"/>`;
+    const mx = (a.x + b.x) / 2;
+    const my = (a.y + b.y) / 2 - Math.abs(b.y - a.y) * 0.12;
+    svg += `<path class="map-edge" d="M ${a.x} ${a.y} Q ${mx} ${my} ${b.x} ${b.y}" stroke="var(--e-${e.type})" stroke-width="1" opacity="0.7"/>`;
   });
 
-  activeNodes.forEach(n=>{
+  // Nodes
+  activeNodes.forEach(n => {
     const p = pos[n.id]; if (!p) return;
     const lab = labelOf(n);
-    // No truncation
-    const shown = lab;
-    svg += `<g class="map-node" data-id="${n.id}">
-      <circle cx="${p.x}" cy="${p.y}" r="${p.r}" fill="var(--t-${n.tier})" fill-opacity="0.88" stroke="var(--t-${n.tier})" stroke-width="1.2"/>
-      <text x="${p.x}" y="${p.y + p.r + 11}" font-family="${fontFam}" font-size="${state.lang==='en'?10:11}">${escapeHtml(shown)}</text>
+    const connected = (adj[n.id]||new Set()).size > 0;
+    const opacity = connected ? '0.92' : '0.55';
+    svg += `<g class="map-node" data-id="${n.id}" style="cursor:pointer">
+      <circle cx="${p.x}" cy="${p.y}" r="${p.r}" fill="var(--t-${n.tier})" fill-opacity="${opacity}" stroke="var(--t-${n.tier})" stroke-width="1.5"/>
+      <text x="${p.x}" y="${p.y + p.r + 13}" font-family="${fontFam}" font-size="${fontSize}" text-anchor="middle" fill="var(--ink)">${escapeHtml(lab)}</text>
     </g>`;
   });
 
