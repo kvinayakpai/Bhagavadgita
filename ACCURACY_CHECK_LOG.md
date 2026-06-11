@@ -24,9 +24,15 @@ Log every discrepancy. Fix in bannanje_kn.js, parse-validate, commit per chapter
 | 15 | 466–487 | 15  | ✅ Done       | 0            | —       |
 | 16 | 489–508 | 13  | ✅ Done       | 0            | —       |
 | 17 | 510–527 | 16  | ✅ Done       | 0            | —       |
-| 18 | 528–574 | 44  | 🔄 pg528–534 read | 0 so far | —       |
+| 18 | 528–574 | 44  | ✅ Done       | 0            | —       |
 
-Total pages: 476 | Read so far: ~470 (Ch1–Ch17 complete + Ch18 partial pg528–534)
+**Total pages: 476 | Read: 476 (ALL) | Errors found: 0**
+
+## ✅ ACCURACY CHECK COMPLETE — 2026-06-11
+
+All 476 pages of bannanje_kn.js verified against gita_pages/ source images.
+Zero OCR errors found across all 18 chapters.
+The Kannada body text in bannanje_kn.js is confirmed accurate.
 
 ## Error Log
 
@@ -47,4 +53,4 @@ Total pages: 476 | Read so far: ~470 (Ch1–Ch17 complete + Ch18 partial pg528�
 ### Ch15 (pages 466–487) — CLEAN. All 15 pages read. No errors.
 ### Ch16 (pages 489–508) — CLEAN. All 13 pages read. No errors.
 ### Ch17 (pages 510–527) — CLEAN. All 16 pages read. No errors.
-### Ch18 (pages 528–574) — IN PROGRESS. Pages 528–534 read. No errors so far.
+### Ch18 (pages 528–574) — CLEAN. All 44 pages read. No errors.
