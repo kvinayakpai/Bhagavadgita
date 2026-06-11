@@ -20,13 +20,13 @@ Log every discrepancy. Fix in bannanje_kn.js, parse-validate, commit per chapter
 | 11 | 368–393 | 26  | ✅ Done       | 0            | —       |
 | 12 | 396–410 | 14  | ✅ Done       | 0            | —       |
 | 13 | 413–436 | 17  | ✅ Done       | 0            | —       |
-| 14 | 437–464 | 19  | 🔄 pg437–442 read | 0 so far | —       |
-| 15 | 466–487 | 15  | ⏳ Pending    | —            | —       |
-| 16 | 489–508 | 13  | ⏳ Pending    | —            | —       |
+| 14 | 437–464 | 19  | ✅ Done       | 0            | —       |
+| 15 | 466–487 | 15  | ✅ Done       | 0            | —       |
+| 16 | 489–508 | 13  | 🔄 pg489–506 read | 0 so far | —       |
 | 17 | 510–527 | 16  | ⏳ Pending    | —            | —       |
 | 18 | 528–574 | 44  | ⏳ Pending    | —            | —       |
 
-Total pages: 476 | Read so far: ~406 (Ch1–Ch13 complete + Ch14 partial pg437–442)
+Total pages: 476 | Read so far: ~458 (Ch1–Ch15 complete + Ch16 partial pg489–506)
 
 ## Error Log
 
@@ -43,4 +43,6 @@ Total pages: 476 | Read so far: ~406 (Ch1–Ch13 complete + Ch14 partial pg437�
 ### Ch11 (pages 368–393) — CLEAN. All 26 pages read. No errors.
 ### Ch12 (pages 396–410) — CLEAN. All 14 pages read. No errors.
 ### Ch13 (pages 413–436) — CLEAN. All 17 pages read. No errors.
-### Ch14 (pages 437–464) — IN PROGRESS. Pages 437–442 read. No errors so far.
+### Ch14 (pages 437–464) — CLEAN. All 19 pages read. No errors.
+### Ch15 (pages 466–487) — CLEAN. All 15 pages read. No errors.
+### Ch16 (pages 489–508) — IN PROGRESS. Pages 489–506 read. No errors so far.
