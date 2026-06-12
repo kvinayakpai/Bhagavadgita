@@ -20,9 +20,37 @@ All 5 views verified against local viewer-bundled.html:
 - Language switching: EN/देव/हिंदी/ಕನ್ನಡ all functional; full UI translates correctly
 - Footer: v3 · 112 concepts · 241 relations · 701 shlokas · 12 tiers ✅
 
+## Phase 1 OCR Cleanup — English Terms Scan — 2026-06-11
+
+Full scan of parenthesized content in bannanje_kn.js completed.
+
+**132 clean English terms** confirmed present (legitimate glosses by Bannanje).
+Sample: (Shock Treatment), (Father of Psychology), (Attachment), (Wisdom), (Gravity),
+(Vibration), (Space), (Instrument), (Tension), (Confidence), (Meditation), (Mind),
+(Memory), (Ego), (Divine), (Duty), (Action), (Theory), (Practical presentation),
+(Autobiography of Yogi), (Living with Himalayan Masters), (Velikovsky), (1877 to 1920),
+(Intentional Action), (Experiential Knowledge), (Integrated Experiential Knowledge), etc.
+
+**3 anomalous clean-looking terms** flagged for investigation:
+- #1  `(01/176\n\n'(Quality)` — malformed, looks garbled
+- #3  `(A-04)` — not English, likely a cross-reference artifact
+- #131 `(typeof module !== 'undefined' && module.exports)` — JavaScript code leaking into data
+
+**~154 possibly garbled entries** — mix of:
+- Genuine garbled OCR English terms (digits + Kannada letters)
+- Legitimate Kannada cross-references like (ಅ-೧೫, ಶ್ಲೋ-೧೬-೧೮)
+- Kannada-only content with verse numbers
+
+**Fixes applied so far:**
+- commit e5c9270: verse 2.2 KN — `ಚಿಕಿತ್ಸೆ (Shock Treatment) ನೀಡಿದ್ದಾನೆ` corrected
+  (both bannanje_kn.js and both inline blocks in viewer-bundled.html)
+
+**Outstanding:** ~46+ remaining garbled English terms still need page-by-page
+vision-read correction from gita_pages/ PNGs.
+
 ## Progress
 | Ch | Pages   | Pg# | Status  | Errors Found |
-|----|---------|-----|---------|--------------|
+|----|---------|-----|---------|--------------| 
 | 1  | 9–40    | 29  | ✅ Done  | 0            |
 | 2  | 42–94   | 43  | ✅ Done  | 0            |
 | 3  | 95–124  | 26  | ✅ Done  | 0            |

@@ -1,0 +1,236 @@
+================================================================================
+TATVAM JALAM (तत्त्व-जालम्) — PROJECT STATE FILE
+Last updated: 2026-06-12
+================================================================================
+
+PROJECT IDENTITY
+----------------
+Name:        Tatvam Jalam (तत्त्व-जालम्)
+Description: Bhagavad Gita knowledge graph web application
+Tradition:   Madhva Vedānta, based exclusively on Bannanje Govindacharya's
+             Gita Pravachana commentary
+Live URL:    https://kvinayakpai.github.io/Bhagavadgita
+GitHub repo: kvinayakpai/Bhagavadgita
+Local dir:   /home/claude/Bhagavadgita/
+
+
+ARCHITECTURE
+------------
+Single-file HTML application: viewer-bundled.html
+Built by: build-bundle.py (regenerates bundled HTML from source .js files)
+
+Standalone source files (must be synced into bundled HTML after every session):
+  - bannanje_kn.js    ← canonical Kannada commentary (authoritative source)
+  - bannanje_dev.js   ← Sanskrit/Devanagari commentary
+  - bannanje_hi.js    ← Hindi commentary
+  - bannanje_en.js    ← English commentary
+
+Inline blocks inside viewer-bundled.html are identified by markers:
+  /* === inlined from bannanje_XX_private.js === */
+
+Data structure: BANNANJE_KN keyed by "ch.verse" (e.g., "1.1", "18.78")
+
+NOTE: viewer-bundled.html has TWO copies of each KN data block (one around
+line 600, one around line 6450). Both must be updated when fixing bannanje_kn.js.
+
+
+CONTENT SCOPE
+-------------
+Philosophical concepts: 112 across 12 taratamya tiers
+Verse commentaries:     702 total (701 shlokas shown in footer — 1 structural gap)
+Languages:             4 — KN (Kannada, authoritative), DEV, HI, EN
+
+Views in app:          5 — Browse, Focus, Chapters, Map, Chat
+Footer:                v3 · 112 concepts · 241 relations · 701 shlokas · 12 tiers
+
+Embedded AI chat tab:
+  - Requires Anthropic API key (owner-set via gear icon)
+  - Stored in localStorage
+  - Voice conversation capability (Android-specific fixes applied)
+
+
+CONTENT POLICY (NON-NEGOTIABLE)
+---------------------------------
+All commentary derives EXCLUSIVELY from Bannanje Govindacharya's Gita Pravachana.
+When KN source is empty, NEVER fill DEV/HI/EN from general knowledge.
+Place placeholder: [NOTE: KN source empty — cannot author without book page]
+Then ask Vinayak which source pages to read.
+
+Contamination = cardinal sin. Never use IAST or general Gita knowledge as source.
+
+
+SOURCE MATERIALS
+----------------
+576 page images: gita_pages/page_NNNN.png (PNG format)
+  → Primary reference for OCR correction and accuracy checking
+  → Vision-reading is the ONLY reliable extraction method
+  → Legacy Kannada font encoding produces garbled bytes as raw text
+
+Canonical KN file: bannanje_kn.js
+Source PDF in project knowledge: Bhagavad_Gita.pdf
+
+
+================================================================================
+PHASE 1 — OCR CLEANUP OF bannanje_kn.js
+================================================================================
+
+STATUS: PARTIALLY COMPLETE — ONGOING
+
+Problem: ~265 garbled parenthesized English terms throughout bannanje_kn.js
+  Origin: OCR corruption from original scanning of legacy Kannada font PDF
+  Pattern: e.g., (॥6॥ 08 76168101081) = (Father of Psychology)
+           (57008 7≈68871600) = (Shock Treatment)
+
+Required approach: Vision-reading gita_pages/ PNGs to identify true English text.
+  NO programmatic removal — each page must be read individually.
+
+ENGLISH TERMS SCAN COMPLETED (2026-06-12):
+  132 clean English terms confirmed present (legitimate Bannanje glosses).
+  ~154 possibly garbled entries identified — mix of genuine garbled OCR English
+  terms, legitimate Kannada cross-references like (ಅ-೧೫, ಶ್ಲೋ-೧೬-೧೮), and
+  Kannada-only content with verse numbers.
+  3 anomalous terms flagged for investigation:
+    - (01/176\n\n'(Quality)) — malformed
+    - (A-04) — likely cross-reference artifact
+    - (typeof module !== 'undefined' && module.exports) — JS code in data
+
+Fixes applied:
+  - commit 32bb17b: batch of early fixes
+  - commit e5c9270: verse 2.2 KN — ಚಿಕಿತ್ಸೆ (Shock Treatment) corrected
+    (both bannanje_kn.js AND both inline KN blocks in viewer-bundled.html)
+
+Outstanding: ~46+ remaining garbled English terms still need page-by-page
+  vision-read correction. Each requires reading the relevant gita_pages/ PNG,
+  identifying the correct English text, applying to bannanje_kn.js AND both
+  inline blocks in viewer-bundled.html, parse-validating, then committing.
+
+
+================================================================================
+PHASE 2 — KANNADA BODY TEXT ACCURACY CHECK
+================================================================================
+
+STATUS: ✅ COMPLETE — 2026-06-11
+
+Method: Line-by-line image-to-text verification of bannanje_kn.js against
+        source page images (gita_pages/ PNGs), one image per tool call.
+
+Log file: ACCURACY_CHECK_LOG.md (commit 54a9a04)
+
+Result: ALL 476 PAGES READ. ZERO ERRORS. Kannada body text confirmed clean.
+
+| Ch | Pages   | Pg# | Status | Errors |
+|----|---------|-----|--------|--------|
+| 1–18 | 9–574 | 476 | ✅ Done | 0 |
+
+
+================================================================================
+COMMENTARY AUTHORING STATUS
+================================================================================
+
+DEV/HI/EN authoring: 698 / 701 complete
+
+Permanent structural gaps (3 total — documented, not fixable):
+  1. 3.43   — Bannanje source has fewer verses; genuine gap
+  2. 13.35  — Same reason; genuine gap
+  3. 11.52–11.55 — Digitisation failure (NOT a source gap)
+               Pages 392–393 in book contain all four verses
+               KN file currently has wrong placeholder notes
+               Needs resolution (see below)
+
+Post-remediation contamination scan: CLEAN
+  alien=0, IAST-only=0 in DEV/HI
+  One deliberate IAST citation in 15.1 EN — acceptable
+
+
+================================================================================
+APP VISUAL CHECK — 2026-06-11 ✅
+================================================================================
+
+All 5 views verified against local viewer-bundled.html:
+- Browse:    112 concepts, 12 tiers rendering correctly
+- Focus:     Brahman concept with commentary loads correctly
+- Chapters:  All 18 chapter buttons; Ch1=47 shlokas, Ch18=78 shlokas; toggle works
+- Chat:      "Chat not available" + API key prompt (expected without key)
+- Languages: EN/देव/हिंदी/ಕನ್ನಡ all functional; full UI translates correctly
+Footer: v3 · 112 concepts · 241 relations · 701 shlokas · 12 tiers ✅
+
+
+================================================================================
+KNOWN ISSUES / ON THE HORIZON
+================================================================================
+
+1. COMPLETE PHASE 1: Fix remaining ~46+ garbled English terms in bannanje_kn.js.
+   Method: Vision-read relevant gita_pages/ PNGs, identify correct English text,
+   apply fixes to bannanje_kn.js AND BOTH inline blocks in viewer-bundled.html,
+   parse-validate, commit.
+   IMPORTANT: viewer-bundled.html has TWO KN data blocks (~line 600 and ~line 6450)
+   — both must always be updated together.
+
+2. INVESTIGATE 3 ANOMALOUS TERMS in bannanje_kn.js:
+   - (01/176\n\n'(Quality)) — malformed entry
+   - (A-04) — possibly a cross-reference artifact
+   - (typeof module !== 'undefined' && module.exports) — JS code leaking into data
+
+3. RESOLVE 11.52–11.55 CONVERSION FAILURE:
+   Pages 392–393 of book contain all four verses.
+   KN file has wrong placeholder notes — needs correction.
+   This is a digitisation failure, not a genuine source gap.
+
+
+================================================================================
+TOOLING & WORKFLOW
+================================================================================
+
+Parse validation command (bannanje_kn.js):
+  node -e "const s=require('fs').readFileSync('bannanje_kn.js','utf-8'); \
+  try{new Function(s.replace('window.BANNANJE_KN','const X'));console.log('OK');} \
+  catch(e){console.error('FAIL',e.message);}"
+
+Git workflow: HTTPS with token authentication embedded in remote URL
+Git token: [stored separately — not in repo]
+
+Primary AI interface: claude.ai (all sessions)
+Hosting: GitHub Pages
+Build: build-bundle.py, Node.js, Python, Playwright, pptxgenjs, ffmpeg
+
+Plan/status doc: TRANSLATION_AUTHORING_PLAN.md (in repo)
+Accuracy log:    ACCURACY_CHECK_LOG.md (in repo)
+
+
+================================================================================
+KEY LEARNINGS & PRINCIPLES
+================================================================================
+
+1. Vision-reading only: Legacy font encoding makes raw text extraction unusable.
+   Always read gita_pages/ PNG images for source content.
+
+2. Regex is dangerous for JS edits: Use find_value_span() (char-by-char walk
+   handling \\ escapes) for replacing verse values. re.sub() silently truncates.
+
+3. TWO KN blocks in viewer-bundled.html: ~line 600 and ~line 6450. Any fix to
+   bannanje_kn.js must also be applied to BOTH blocks in viewer-bundled.html.
+
+4. Sync after every session: Standalone .js files must be synced into their
+   inline blocks inside viewer-bundled.html after every authoring session.
+
+5. Work in repo directly: Modify files in /home/claude/Bhagavadgita/, commit
+   with git commit, and push. Never create separate output files.
+
+6. Autonomous execution expected: Vinayak expects chapter-by-chapter completion
+   without mid-task status checks. Plan → execute → log → report when done.
+
+7. Structural gaps are real: 3.43 and 13.35 are genuine; 11.52–11.55 is not.
+
+8. All costs in INR only (Indian audience).
+
+9. Rate limit management: One image per tool call. Fresh conversation per chapter
+   pair avoids context accumulation tax. Never batch images in one turn.
+
+10. Phase 2 result: Kannada OCR is clean — zero errors across 476 pages.
+    Only contamination in KN file is the garbled parenthesized English terms
+    (Phase 1), not the body text.
+
+
+================================================================================
+END OF STATE FILE
+================================================================================
