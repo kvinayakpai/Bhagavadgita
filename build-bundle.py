@@ -1,11 +1,11 @@
-"""build-bundle.py — produce viewer-bundled.html: a single self-contained HTML
+"""build-bundle.py — produce viewer.html: a single self-contained HTML
 that opens cleanly from file:// (incl. on phones) with zero external file
 dependencies. Inlines data.js and positions.js into the viewer in place of
 the <script src="..."> tags.
 
 Run:        python3 build-bundle.py
 
-Out:        viewer-bundled.html
+Out:        viewer.html
 """
 import io, os, sys
 
@@ -15,7 +15,7 @@ def read(p):
     with open(os.path.join(ROOT,p), 'r', encoding='utf-8') as f:
         return f.read()
 
-viewer = read('viewer.html')
+viewer = read('viewer-src.html')
 data_js = read('data.js')
 positions_js = read('positions.js')
 
@@ -64,7 +64,7 @@ bundle = replace_tag(bundle, '<script src="positions.js"></script>', positions_i
 # Ensure UTF-8 meta is in head (it already is, but assert).
 assert '<meta charset="utf-8"' in bundle, "missing utf-8 charset meta"
 
-out_name = 'viewer-bundled.html'
+out_name = 'viewer.html'
 out = os.path.join(ROOT, out_name)
 with open(out, 'w', encoding='utf-8') as f:
     f.write(bundle)
