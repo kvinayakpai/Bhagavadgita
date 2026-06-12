@@ -4,7 +4,7 @@
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
 <meta name="theme-color" content="#f4ead8">
-<title>Bhagavad Gītā · Concept KG (Madhva)</title>
+<title>Bhagavad Gītā · Tatvam Jalam</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;0,700;1,400&family=Inter:wght@400;500;600&family=Noto+Sans+Devanagari:wght@400;500;600&family=Noto+Sans+Kannada:wght@400;500;600&family=Tiro+Devanagari+Sanskrit:ital@0;1&family=Tiro+Kannada:ital@0;1&display=swap" rel="stylesheet">
@@ -508,7 +508,7 @@ body.lang-kn .sl-meaning {
 
 <header class="top">
   <div class="brand">
-    <span class="name">Bhagavad <em>Gītā</em> · Concept KG</span>
+    <span class="name">Bhagavad <em>Gītā</em> · Tatvam Jalam</span>
     <span class="crumb">Madhva</span>
   </div>
   <div class="lang" id="lang-tabs">
@@ -4422,91 +4422,4 @@ function startVoice() {
     }
   };
   voiceRec.onerror = (e) => {
-    voiceRec = null;
-    if (mic) { mic.classList.remove('recording'); mic.title = 'Voice input'; }
-    const ui = CHAT_UI[state.lang] || CHAT_UI.en;
-    if (inp) {
-      inp.placeholder = e.error === 'not-allowed'
-        ? '⚠️ Microphone permission denied'
-        : e.error === 'network'
-        ? '⚠️ Voice needs internet connection'
-        : '⚠️ Voice error — try again';
-    }
-    setTimeout(() => { if (inp) inp.placeholder = (CHAT_UI[state.lang]||CHAT_UI.en).placeholder; }, 3000);
-  };
-  try { voiceRec.start(); }
-  catch(e) {
-    voiceRec = null;
-    if (inp) inp.placeholder = '⚠️ Could not start mic — ' + e.message;
-  }
-}
-
-function renderChat() {
-  const ui = CHAT_UI[state.lang] || CHAT_UI.en;
-  const root = document.getElementById('view-chat');
-  root.style.display = 'flex';
-  root.style.flexDirection = 'column';
-
-  const msgsHTML = chatState.msgs.map(m =>
-    `<div class="chat-bubble ${m.role==='user'?'user':'bot'}">${escapeHtml(m.content)}</div>`
-  ).join('');
-
-  const hasKey = !!getChatApiKey();
-  const gearBtn = `<span onclick="chatToggleKey()" title="${hasKey?'API key set — click to change':'Set API key'}" style="position:absolute;top:14px;right:16px;cursor:pointer;font-size:16px;opacity:.5;user-select:none" aria-label="API key settings">${hasKey?'🔑':'⚙️'}</span>`;
-
-  const noKeyMsg = `<div style="margin:auto;text-align:center;padding:24px 16px;color:var(--ink-soft);font-size:14px;line-height:1.8">
-    <div style="font-size:32px;margin-bottom:12px">🔒</div>
-    <div style="font-weight:600;margin-bottom:8px">Chat not available</div>
-    <div>This feature requires an Anthropic API key.<br>Contact the app owner for access.</div>
-  </div>`;
-
-  const emptyHTML = chatState.msgs.length === 0
-    ? (hasKey
-        ? `<div class="chat-empty">${escapeHtml(ui.intro)}</div>
-           <div class="chat-suggestions">${ui.sugg.map(s =>
-             `<button class="chat-suggestion" data-q="${escapeHtml(s)}" onclick="chatSend(this.dataset.q)">${escapeHtml(s)}</button>`
-           ).join('')}</div>`
-        : noKeyMsg)
-    : '';
-
-  const typingHTML = chatState.loading ?
-    `<div class="chat-typing"><span></span><span></span><span></span></div>` : '';
-
-  const resetBtn = chatState.msgs.length > 0 ?
-    `<button class="chat-reset" onclick="chatReset()">${escapeHtml(ui.newConv)}</button>` : '';
-
-  root.style.position = 'relative';
-  root.innerHTML = `
-    ${gearBtn}
-    <div class="chat-msgs" id="chat-msgs">
-      ${emptyHTML}${msgsHTML}${typingHTML}
-    </div>
-    <div class="chat-input-wrap">
-      <div style="flex:1;display:flex;flex-direction:column">
-        ${resetBtn}
-        <textarea id="chat-input" rows="2" placeholder="${escapeHtml(ui.placeholder)}"
-          onkeydown="if(event.key==='Enter'&&!event.shiftKey){event.preventDefault();chatSend()}"
-          oninput="voiceMode=false;document.getElementById('chat-send').disabled=!this.value.trim()||chatState.loading"
-        ></textarea>
-      </div>
-      <button id="chat-mic" class="chat-mic" onclick="startVoice()" title="Voice input">🎙</button>
-      <button id="chat-send" class="chat-send" disabled onclick="chatSend()">➤</button>
-    </div>`;
-
-  const msgsEl = document.getElementById('chat-msgs');
-  if (msgsEl) msgsEl.scrollTop = msgsEl.scrollHeight;
-  const inp = document.getElementById('chat-input');
-  if (inp && !voiceMode) setTimeout(() => inp.focus(), 50);
-}
-
-function chatReset() {
-  chatState.msgs = [];
-  chatState.loading = false;
-  renderChat();
-}
-
-/* Initial render */
-render();
-</script>
-</body>
-</html>
+    
