@@ -1,4 +1,4 @@
-/* positions.js — hand-laid coordinates for the Tatvam Jalam concept map.
+/* positions.js — hand-laid coordinates for the Tatva Jalam concept map.
  *
  * Layout: ladder of being, top-down.
  *   Parabrahma (Bhagavanta/Krishna) at apex

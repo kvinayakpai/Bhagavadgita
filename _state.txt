@@ -5,7 +5,7 @@ Last updated: 2026-06-12
 
 PROJECT IDENTITY
 ----------------
-Name:        Tatvam Jalam (तत्त्व-जालम्)
+Name:        Tatva Jalam (तत्त्व-जालम्)
 Description: Bhagavad Gita knowledge graph web application
 Tradition:   Madhva Vedānta, based exclusively on Bannanje Govindacharya's
              Gita Pravachana commentary

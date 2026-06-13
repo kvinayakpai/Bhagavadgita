@@ -1,4 +1,4 @@
-# Tatvam Jalam — Project Status
+# Tatva Jalam — Project Status
 
 **Last updated:** June 4, 2026  
 **GitHub:** https://github.com/kvinayakpai/Bhagavadgita  
