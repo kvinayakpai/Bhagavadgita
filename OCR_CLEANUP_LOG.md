@@ -91,3 +91,29 @@ page image from `gita_pages/`. Surrounding Kannada text is also checked for OCR 
 **OCR Accuracy:** Surrounding Kannada text was generally accurate throughout all chapters. No major Kannada text errors found beyond the parenthesized English terms. Some structural OCR issues (missing closing parentheses, embedded newlines) also corrected.
 
 *Completed: All 18 chapters clean.*
+
+---
+
+## Phase 2 Post-Completion Audit (2026-06-14)
+
+After initial cleanup, a secondary audit found 11 additional garbled patterns that were missed. All have been fixed in both `bannanje_kn.js` and `viewer-bundled.html` (both KN blocks).
+
+| Verse | Garbled | Fixed As |
+|-------|---------|----------|
+| 2.22 | `\"79 ೪11೧ 111818)/20 11851915\"` | `\"Living with Himalayan Masters\"` |
+| 3.31 | `ಗಟಗ38೧ . 06176` | `Human being` |
+| 3.34 | `&॥೩೦೧/73€೧0` | `Attachment` |
+| 3.34 | `ಬಯಕೇಕಾಮ` | `ಬಯಕೆಕಾಮ` (spelling) |
+| 3.34 | `806516` | `Desire` |
+| 4.10 | `೩೫೩೦೧/7೦೧೧` | `Attachment` |
+| 5.4 | `ಜ್ಞಾನ-5/11ಟ9!\n\n156017` | `ಜ್ಞಾನ-Spiritual Wisdom` |
+| 5.4 | `ಅನುಷ್ಠಾನ-5/1108 7೩೦0೦9` | `ಅನುಷ್ಠಾನ-Spiritual Practice` |
+| 7.4 | `ನೀಲ ವರ್ಣದ(ಟ180160'` | `ನೀಲ ವರ್ಣದ(Ultraviolet)` |
+| 7.4 | `8//867655 08 561` | `awareness of self` |
+| 10.32 | `ವಿಶಿಷ್ಟಗುಣ(ಕ01೬509\n೦೬೩॥/)` | `ವಿಶಿಷ್ಟಗುಣ(Exclusive Quality)` |
+| 14.27 | `1೮ ೧೮1೧1೦55... ೦/೬೬.` | `The quintessence of entire Indian Philosophy is 15th Chapter of Bhagavad Gita.` |
+| 15.9 | `` ಆ*ಈ--ವ*ಚರ`ಏವಚ( 56!...`` | `ಅ+ಊ+ವ+ಚ=ಏವಚ(set of abbreviations-ಸಂಕ್ಷೇಪ-ಪದ)-` |
+| 15.13 | `೦೫೬1೫೦೧೩ 1006` | `Gravitational force` |
+| 17.24 | `ಸಂಕ್ಷಿಪ್ತಪದ(ಸಿ00೫0೦೧;` | `ಸಂಕ್ಷಿಪ್ತಪದ(Abbreviation;` |
+
+*Phase 2 completed: All garbles resolved. `bannanje_kn.js` and `viewer-bundled.html` are fully clean.*

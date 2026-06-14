@@ -54,3 +54,24 @@ All 39 garbled parenthesized English terms have been corrected in both `bannanje
 - Both `bannanje_kn.js` and both inline KN blocks in `viewer-bundled.html` updated
 - `bannanje_kn.js` parse validated: `node` `new Function()` returns OK
 - Legitimate references left intact: Upanishad cross-refs (1-2-2, 4-30-23, ೪-೫-೧೧, A-04), date ranges, verse counts, guna ratio data
+
+---
+
+## Phase 2 — Post-Completion Audit Fix Plan
+**Completed:** 2026-06-14 ✅
+
+A secondary audit after Phase 1 found 11 garbled patterns that were missed. All fixed in `bannanje_kn.js` and propagated manually to both KN blocks in `viewer-bundled.html` (bash workspace unavailable, build-bundle.py not run; direct edits applied instead).
+
+| Verse | Garbled (old) | Fixed As |
+|-------|--------------|----------|
+| 2.22 | `\"79 ೪11೧ 111818)/20 11851915\"` | `\"Living with Himalayan Masters\"` |
+| 3.31 | `ಗಟಗ38೧ . 06176` | `Human being` |
+| 3.34 | `&॥೩೦೧/73€೧0`, `ಬಯಕೇಕಾಮ`, `806516` | `Attachment`, `ಬಯಕೆಕಾಮ`, `Desire` |
+| 4.10 | `೩೫೩೦೧/7೦೧೧` | `Attachment` |
+| 5.4 | `ಜ್ಞಾನ-5/11ಟ9!\n\n156017`, `ಅನುಷ್ಠಾನ-5/1108 7೩೦0೦9` | `ಜ್ಞಾನ-Spiritual Wisdom`, `ಅನುಷ್ಠಾನ-Spiritual Practice` |
+| 7.4 | `ನೀಲ ವರ್ಣದ(ಟ180160'`, `8//867655 08 561` | `ನೀಲ ವರ್ಣದ(Ultraviolet)`, `awareness of self` |
+| 10.32 | `ವಿಶಿಷ್ಟಗುಣ(ಕ01೬509\n೦೬೩॥/)` | `ವಿಶಿಷ್ಟಗುಣ(Exclusive Quality)` |
+| 14.27 | `1೮ ೧೮1೧1೦55...` (OCR noise) | `The quintessence of entire Indian Philosophy is 15th Chapter of Bhagavad Gita.` |
+| 15.9 | `` ಆ*ಈ--ವ*ಚರ`ಏವಚ( 56!...`` | `ಅ+ಊ+ವ+ಚ=ಏವಚ(set of abbreviations-ಸಂಕ್ಷೇಪ-ಪದ)-` |
+| 15.13 | `೦೫೬1೫೦೧೩ 1006` | `Gravitational force` |
+| 17.24 | `ಸಂಕ್ಷಿಪ್ತಪದ(ಸಿ00೫0೦೧;` | `ಸಂಕ್ಷಿಪ್ತಪದ(Abbreviation;` |
