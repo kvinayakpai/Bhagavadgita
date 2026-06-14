@@ -46,31 +46,31 @@ Legend: ✅ done · ⏳ pending · ❌ term absent in this file · 🔍 needs ma
 | **4.21** | `(be content with whatever you have)`, `(Detached attachment)` | ✅ | ✅ | ✅ | Done 2026-06-14; unlisted (116130//), (18130180...) still present — need source img |
 | **4.30** | `(Protocol)` | ✅ | ✅ | ✅ | Done 2026-06-14 |
 | **4.35** | `(intuitional composition)` | ✅ | ✅ | ✅ | Done 2026-06-14; unlisted garbled quote "7% 15 31..." still present — need source img |
-| **4.36** | `Yesterday was history, tomorrow is a mystery, today is God's gift, that's why we call it 'the present'.` | ❌ | ⏳ | ⏳ | Phase 1; full quote garble; absent in en.js |
+| **4.36** | `Yesterday was history, tomorrow is a mystery, today is God's gift, that's why we call it 'the present'.` | ❌ | 🔍 | 🔍 | Phase 1; full quote garble; absent in en.js; hi/dev have verse but different garble structure — need source img |
 | **5.4** | `(Spiritual Wisdom)`, `(Spiritual Practice)` | ✅ | ✅ | ✅ | Phase 2; prefix words are KN-ONLY; done 2026-06-14 |
-| **5.18** | `(Exclusive Quality)` | ❌ | ⏳ | ⏳ | Phase 1; absent in en.js |
+| **5.18** | `(Exclusive Quality)` | ❌ | ✅ | ❌ | Phase 1; absent in en.js and dev.js; done hi.js 2026-06-14 |
 | **6.12** | `(Posture)` | ✅ | ✅ | ❌ | Phase 1; done 2026-06-14; absent in dev.js |
-| **6.25** | `(State of Resonance)`, `(conviction)`, `(courage)` | ❌ | ⏳ | ⏳ | Phase 1; three garbles; absent in en.js |
-| **6.29** | `The Socrates Triple Filter Test.` | ❌ | ⏳ | ⏳ | Phase 1; full sentence garble; absent in en.js |
-| **6.35** | `(Why tell it to me at all?)` ×4 | ❌ | ⏳ | ⏳ | Phase 1; absent in en.js |
-| **6.46** | `(There are nowadays professors of philosophy, but not philosophers - Henry David Thoreau, Walden).` | ❌ | ⏳ | ⏳ | Phase 1; full Thoreau quote; absent in en.js |
-| **7.4** | `(Ultraviolet)`, `(awareness of self)` | ❌ | ⏳ | ⏳ | Phase 2; `ನೀಲ ವರ್ಣದ` prefix is KN-ONLY; absent in en.js |
+| **6.25** | `(State of Resonance)`, `(conviction)`, `(courage)` | ❌ | ✅ | ✅ | Phase 1; absent in en.js; done hi/dev 2026-06-14 |
+| **6.29** | `The Socrates Triple Filter Test.` | ❌ | 🔍 | 🔍 | Phase 1; absent in en.js; hi/dev have verse but Socrates block is in 6.35 there, and 6.29 has a Bible quote garble — different structure; need source img |
+| **6.35** | `(Why tell it to me at all?)` ×4 | ❌ | 🔍 | 🔍 | Phase 1; absent in en.js; hi/dev 6.35 has Socrates dialogue with multiple complex garbles — need source img |
+| **6.46** | `(There are nowadays professors of philosophy, but not philosophers - Henry David Thoreau, Walden).` | ❌ | 🔍 | 🔍 | Phase 1; absent in en.js; hi/dev have garbled Thoreau quote but split across two parentheticals — need source img |
+| **7.4** | `(Ultraviolet)`, `(awareness of self)` | ❌ | ❌ | ❌ | Phase 2; absent in en/hi/dev (short paraphrase, no parenthetical terms) |
 | **10.32** | `(Exclusive Quality)` | ✅ | ✅ | ✅ | Phase 2; done 2026-06-14 |
 | **10.35** | `(Foundation)` | ✅ | ✅ | ❌ | Phase 1; done 2026-06-14; absent in dev.js |
 | **10.38** | `(Punishment)` | ✅ | ✅ | ❌ | Phase 1; done 2026-06-14; absent in dev.js |
-| **11.53** | `(Reputation)` | ❌ | ⏳ | ⏳ | Phase 1; absent in en.js |
-| **12.4** | `(Reputation)` | ❌ | ⏳ | ⏳ | Phase 1; absent in en.js |
+| **11.53** | `(Reputation)` | ❌ | ✅ | ❌ | Phase 1; absent in en.js and dev.js; done hi.js 2026-06-14 |
+| **12.4** | `(Reputation)` | ❌ | ❌ | ✅ | Phase 1; absent in en.js and hi.js; done dev.js 2026-06-14 |
 | **12.19** | `(Movable and immovable)` | ✅ | ✅ | ✅ | Phase 1; done 2026-06-14 |
 | **13.6** | `(Steadfastness)` ×2 | ✅ | ✅ | ✅ | Phase 1; done 2026-06-14 |
 | **13.11** | `(Practical)` | ✅ | ✅ | ✅ | Phase 1; done 2026-06-14 |
 | **13.18** | `(In a nutshell)` | ✅ | ✅ | ❌ | Phase 1; done 2026-06-14; absent in dev.js |
 | **14.3** | `(Raw materials)` | ✅ | ✅ | ✅ | Phase 1; done 2026-06-14 |
 | **14.9** | `(Raw materials)` | ✅ | ✅ | ✅ | Phase 1; done 2026-06-14 |
-| **14.27** | `The quintessence of entire Indian Philosophy is 15th Chapter of Bhagavad Gita.` | ❌ | ⏳ | ⏳ | Phase 2; full sentence garble; absent in en.js |
+| **14.27** | `The quintessence of entire Indian Philosophy is 15th Chapter of Bhagavad Gita.` | ❌ | ✅ | ❌ | Phase 2; absent in en.js and dev.js; done hi.js 2026-06-14 |
 | **15.9** | abbreviation formula | ❌ | 🔍 | 🔍 | Phase 2; formula is KN-script-specific; absent in en.js; verify hi/dev |
-| **15.13** | `Gravitational force` | ❌ | ⏳ | ⏳ | Phase 2; absent in en.js |
-| **15.15** | `(Space)` | ❌ | ⏳ | ⏳ | Phase 1; absent in en.js |
-| **16.3** | `(Quality)`, `(Conviction)` | ❌ | ⏳ | ⏳ | Phase 1; two garbles; absent in en.js |
+| **15.13** | `Gravitational force` | ❌ | ❌ | ❌ | Phase 2; absent in en/hi/dev (short paraphrase) |
+| **15.15** | `(Space)` | ❌ | ❌ | ❌ | Phase 1; absent in en/hi/dev (short paraphrase) |
+| **16.3** | `(Quality)`, `(Conviction)` | ❌ | ❌ | ❌ | Phase 1; absent in en/hi/dev (short paraphrase) |
 | **17.9** | `(Tasteless food)` | ✅ | ✅ | ❌ | Phase 1; done 2026-06-14; absent in dev.js |
 | **17.19** | `(Tasteless food)` | ✅ | ✅ | ❌ | Phase 1; done 2026-06-14; absent in dev.js |
 | **17.24** | `(Abbreviation)` | ✅ | ✅ | ✅ | Phase 2; done 2026-06-14 |
@@ -85,6 +85,7 @@ Legend: ✅ done · ⏳ pending · ❌ term absent in this file · 🔍 needs ma
 | 2026-06-14 | fix: OCR verse 1.24, 1.27 en/hi/dev | 1.24 ✅, 1.27 ✅ |
 | 2026-06-14 | fix: OCR verse 4.10, 4.13, 4.18, 4.20, 4.21, 4.30, 4.35 en/hi/dev | all ✅ |
 | 2026-06-14 | fix: OCR verse 5.4, 6.12, 10.32, 10.35, 10.38, 12.19, 13.6, 13.11, 13.18, 14.3, 14.9, 17.9, 17.19, 17.24 en/hi/dev | en ✅ (14 fixed, 14 absent); hi ✅ (all 14); dev ✅ (8 fixed, 6 absent) |
+| 2026-06-14 | fix: OCR verse 5.18, 6.25, 11.53, 12.4, 14.27 hi/dev | hi: 5.18 ✅, 6.25 ✅ ×3, 11.53 ✅, 14.27 ✅; dev: 6.25 ✅ ×3, 12.4 ✅; absent in en for all; 12.4 absent hi, 5.18/11.53/14.27 absent dev |
 
 ---
 
