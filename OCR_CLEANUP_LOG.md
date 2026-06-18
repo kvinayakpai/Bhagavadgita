@@ -163,3 +163,13 @@ The knowledge graph database (`data.js`), specifically under the Kannada nodes (
 * Playwright visual audit clicked through every language (English, Kannada, Hindi, Devanagari) and tab (**Browse**, **Focus**, **Chapters**, **Map**, **Chat**) confirming clean rendering and zero Javascript errors.
 * Successfully pushed changes to GitHub. The live site at `https://kvinayakpai.github.io/Bhagavadgita/viewer.html` has been confirmed as fully updated and clean.
 
+### 6. Additional Verse Audit and Boundary Leak Correction (2026-06-18)
+* **BG 9.17:**
+  - Resolved major OCR systematic error where the letter `ಋ` (Ṛ) was consistently misread as `ಖ` (kha) or `ಖು` (khu) (e.g., `ಖುಕ್‌` -> `ಋಕ್`, `ಖುಗ್ವೇದ`/`ಖಗ್ರೇದ` -> `ಋಗ್ವೇದ`, `ಖತ್ವಿಜಂ` -> `ಋತ್ವಿಜಂ`, and `ಖುತಂಭರ` -> `ಋತಂಭರ`).
+  - Restored/cleaned the 51 Matrika names of the Lord (e.g., `ಖುತಂಭರ` -> `ಋತಂಭರ`, `ಖಾಘ` -> `ೠಘ`, `ಲ್‌ ಶ` -> `ಌಶ`, `ಲ್‌ೀಜಿ` -> `ೡಜಿ`, `ಜಸಾರ` -> `ಙಸಾರ`, `ರುೂಟಿತಾರಿ` -> `ಝೂಟಿತಾರಿ`, `ಇಮು` -> `ಞಮ`, `ಷಡ್ಲುಣ` -> `ಷಡ್ಗುಣ`).
+  - Restored the Samaveda end phrase typo `1೪11ಬೃಸ್ಪತೀರ್ದಧಾತು` to `ಸ್ವಸ್ತಿನೋ ಬೃಹಸ್ಪತಿರ್ದಧಾತು`.
+* **BG 9.19 & 9.20 Boundary Leak:**
+  - Fixed a boundary leak where the first line/prefix of the Sanskrit verse of **BG 9.20** (`ತ್ರೈ` / `Tri` / `त्रि`) and the third line (`ತೇ ಪುಣ್ಯಮಾಸಾದ್ಯ...` / `te punyamasadya...`) leaked and were appended to the end of **BG 9.19** in all four language databases.
+  - Fully restored the complete, unified Sanskrit verse and proper word-by-word translation breakdown inside **BG 9.20** for all four language files.
+
+
