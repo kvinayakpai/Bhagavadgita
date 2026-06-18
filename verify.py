@@ -28,7 +28,7 @@ def parse_js_var(p, var_name):
     
     js_data = content[start_idx + len(marker):].strip()
     # Strip module.exports
-    export_marker = "if (typeof module !== 'undefined')"
+    export_marker = "if (typeof module !== 'undefined'"
     export_idx = js_data.find(export_marker)
     if export_idx != -1:
         js_data = js_data[:export_idx].strip()
