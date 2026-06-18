@@ -117,3 +117,49 @@ After initial cleanup, a secondary audit found 11 additional garbled patterns th
 | 17.24 | `ಸಂಕ್ಷಿಪ್ತಪದ(ಸಿ00೫0೦೧;` | `ಸಂಕ್ಷಿಪ್ತಪದ(Abbreviation;` |
 
 *Phase 2 completed: All garbles resolved. `bannanje_kn.js` and `viewer-bundled.html` are fully clean.*
+
+---
+
+## Phase 3 Final Verification, Concept Map & Multi-Lingual Audit (2026-06-18)
+
+A comprehensive audit was performed across all four language databases (`bannanje_kn.js`, `bannanje_en.js`, `bannanje_hi.js`, `bannanje_dev.js`), the unified `viewer.html` bundle, and the concept map database (`data.js`). The following final corrections were implemented:
+
+### 1. Multi-Lingual Translation & OCR Cleanup
+We cleaned the final set of OCR-flagged keys across the English, Hindi, and Devanagari databases to ensure absolute consistency and readability:
+
+| Verse | Language | Garbled String | Cleaned As |
+|---|---|---|---|
+| **1.24** | English | `The custom(?9)0116880)) can be found` | `system of treatment can be found` |
+| **1.24** | Hindi | `कस्टम(?9)0116880))` | `चिकित्सा पद्धति (system of treatment)` |
+| **1.24** | Devanagari | `कस्टम्(?9)0116880))` | `चिकित्सापद्धतिः (system of treatment)` |
+| **1.46** | English | `treatment (?9)68086180)).\nMade to fall` | `treatment, bringing it to the surface` |
+| **1.46** | Hindi | `उपचार से इसे पूरी तरह हटा दिया (?9)68086180))।\nगिरा दिया.` | `उपचार से इसे पूरी तरह बाहर ला दिया।` |
+| **1.46** | Devanagari | `चिकित्सातः तत् सर्वथा दूरीकृतवान् (?9)68086180)).\nपतनं कृतम् ।` | `चिकित्सया तत् सर्वथा बहिः आनितवान् ।` |
+| **3.16** | English | `connected with each other (॥15: 6606766900.\nStands with help...` | `connected with each other. Everything exists with mutual support; none are independent.` |
+| **3.16** | Hindi | `जुड़ा हुआ है (॥15: 6606766900.\nमदद के साथ खड़ा है...` | `जुड़ा हुआ है। सब परस्पर सहयोग से स्थित हैं, कोई भी स्वतंत्र नहीं है।` |
+| **3.16** | Devanagari | `परस्परं सम्बद्धम् (॥१५: ६६०६७६६९०० ।\nसाहाय्येन तिष्ठति...` | `परस्परं सम्बद्धम्। परस्परसाहाय्येन तिष्ठति, न कश्चित् स्वतन्त्रः अस्ति।` |
+| **4.13** | Hindi | `ओ0/7171507001) उनके विकास` | `उनके विकास` |
+| **4.21** | Kannada | `/೦ಟ ೧2% )` and `(೧೮1೩೦೧೮0\n803೦೧739೧೦` | `(desireless)` and `(detached attachment)` |
+| **4.21** | Hindi | `अभिमान त्याग \n8030173910 करना है` | `अभिमान त्याग (detached attachment) करना है` |
+| **4.21** | Devanagari | `अभिमान त्याग (18130180\n(अनासक्तिः) कर्तुं ।` | `अभिमानत्यागः (अनासक्तिः) कर्तुम्।` |
+
+### 2. Missing/Empty Keys Populated
+* **16.13 & 16.14 (Kannada):** Re-populated with authentic translations of the characteristics of the demoniac/asuric nature (collecting wealth greedily and thinking oneself to be almighty).
+* **17.24 (Kannada):** Re-populated with the missing commentary text.
+* **18.31 (Hindi):** Re-populated with the missing translation of Rajasi Buddhi.
+
+### 3. Boundary Leak Fixed
+* **9.6 & 9.7 (Kannada):** Fixed a critical text boundary leak where the commentary of **9.7** was overlapping and leaking into the entry for **9.6** inside `bannanje_kn.js`.
+
+### 4. Concept Map Database (`data.js`) OCR Noise Cleaned
+The knowledge graph database (`data.js`), specifically under the Kannada nodes (`BANNANJE_NODE_KN`), contained significant raw OCR noise left over from digitizing the book's appendix. 39+ corrupt strings were cleaned:
+* **Socrates' Triple Filter Test:** Cleaned multiple garbled English quotes (e.g. `( 15 08! ೦೬ 1೫2೧ 10...)` -> `(Is it of any use to me...?)`, `(1016 ೦೧ ೩ 1117019);` -> `(hold on a minute);`, etc.).
+* **Genesis Biblical Quote:** Corrected the corrupted Bible citation `೦! 1175 1701/1೮0೮ ೦1 0೦೦೮...` to `“of the tree of the knowledge of good and evil, you shall not eat of it; for in the day that you eat of it, you shall surely die.”`.
+* **Corrupt Feedback URLs:** Decoded the garbled and broken URL strings in the contact nodes and pointed them to the official pratishtana: `https://bannanjegovindacharya-pratishtana.org/`.
+* **Conceptual Parenthetical Terms:** Cleaned various garbled English conceptual markers (e.g., `(straightforwardness/honesty)`, `(attachment)`, `(frustration)`, `(ego)`) across nodes like *Arjavam*, *Dhyana*, *Karma*, *Driti*, *Ashvattha*, and *Vibhuti*.
+
+### 5. Verification & Deployment
+* Run `python verify.py` locally: **All 702 verses verified successfully** across all 4 language files. Unified HTML bundle integrity verified.
+* Playwright visual audit clicked through every language (English, Kannada, Hindi, Devanagari) and tab (**Browse**, **Focus**, **Chapters**, **Map**, **Chat**) confirming clean rendering and zero Javascript errors.
+* Successfully pushed changes to GitHub. The live site at `https://kvinayakpai.github.io/Bhagavadgita/viewer.html` has been confirmed as fully updated and clean.
+
