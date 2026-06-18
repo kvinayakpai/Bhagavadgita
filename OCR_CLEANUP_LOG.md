@@ -171,5 +171,12 @@ The knowledge graph database (`data.js`), specifically under the Kannada nodes (
 * **BG 9.19 & 9.20 Boundary Leak:**
   - Fixed a boundary leak where the first line/prefix of the Sanskrit verse of **BG 9.20** (`ತ್ರೈ` / `Tri` / `त्रि`) and the third line (`ತೇ ಪುಣ್ಯಮಾಸಾದ್ಯ...` / `te punyamasadya...`) leaked and were appended to the end of **BG 9.19** in all four language databases.
   - Fully restored the complete, unified Sanskrit verse and proper word-by-word translation breakdown inside **BG 9.20** for all four language files.
+* **BG 9.34 & 10.1 Chapter Boundary Leak:**
+  - Fixed a chapter boundary leak where the introduction to Chapter 10 and duplicate copies of verses **10.1** and **10.2** were incorrectly appended to the end of verse **9.34** in all four language databases.
+  - Cleaned verse **9.34** to end properly with the conclusion of Chapter 9.
+  - Prepended the Chapter 10 introduction to the beginning of verse **10.1** in all four language databases.
+  - Converted the Sanskrit quote in the Devanagari Chapter 10 introduction (`ಯಥಾಕಾಮನ್ ಪ್ರಷ್ಣನ ಪೈಛತಾ; ಯಾದಿ ವಿಜ್ಞಾಸ್ಯಾಮಃ...`) from Kannada script to pure Devanagari (`यथाकामं प्रश्नान् पृच्छत; यदि विज्ञास्यामः...`).
+  - Fixed a typo in the Kannada translation of verse **9.34** (`ನನ್ನನ್ನೇ ೀ ಆರಾಧಿಸು`) by removing the stray space and double letter `ೀ`.
+
 
 
