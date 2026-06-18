@@ -113,7 +113,7 @@ def main():
     
     # Check all four files exist and load successfully
     files_ok = True
-    for suffix, var, expected_len in [('kn', 'BANNANJE_KN', 702),
+    for suffix, var, expected_len in [('kn', 'BANNANJE_VERSE_MEANINGS', 702),
                                       ('en', 'BANNANJE_VERSE_MEANINGS_EN', 702),
                                       ('hi', 'BANNANJE_VERSE_MEANINGS_HI', 702),
                                       ('dev', 'BANNANJE_VERSE_MEANINGS_DEV', 702)]:

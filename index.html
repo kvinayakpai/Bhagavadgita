@@ -2155,7 +2155,7 @@ function renderBrowse(){
 
 /* ---------- Bannanje optional private block ---------- */
 function renderBannanjePrivate(conceptId){
-  const entry = BANNANJE_KN && BANNANJE_KN[conceptId];
+  const entry = BANNANJE_NODE_KN && BANNANJE_NODE_KN[conceptId];
   if (!entry || !entry.verses || !entry.verses.length) return '';
   const verses = entry.verses.map(v => {
     const verseRef = v.verse_ref ? `<div class="bp-verse-ref">${escapeHtml(v.verse_ref)}</div>` : '';
@@ -2212,7 +2212,7 @@ function renderFocus(){
     ${n.madhva ? `<div class="madhva"><span class="madhva-prefix">${escapeHtml(UI('madhva'))} · </span>${escapeHtml(getActive(n.madhva))}</div>` : ''}
     ${shlokaInline}
     <div class="refs">${escapeHtml(n.refs)}</div>
-    ${(typeof window !== 'undefined' && BANNANJE_KN && BANNANJE_KN[n.id]) ? renderBannanjePrivate(n.id) : ''}
+    ${(typeof window !== 'undefined' && BANNANJE_NODE_KN && BANNANJE_NODE_KN[n.id]) ? renderBannanjePrivate(n.id) : ''}
   </article>`;
 
   // relations
