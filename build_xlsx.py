@@ -3,8 +3,12 @@ import openpyxl
 from openpyxl.styles import Font, Alignment, PatternFill, Border, Side
 from openpyxl.utils import get_column_letter
 
-JSON_PATH = r"C:\Claude\gita-concept-kg\_extracted\clean_verses_700.json"
-XLSX_PATH = r"C:\Claude\gita-concept-kg\Bhagavad_Gita_All_Verses_CLEAN.xlsx"
+import os
+
+ROOT = os.path.dirname(os.path.abspath(__file__))
+JSON_PATH = os.path.join(ROOT, "_extracted", "clean_verses_700.json")
+XLSX_PATH = os.path.join(ROOT, "Bhagavad_Gita_All_Verses_CLEAN.xlsx")
+
 
 def build_xlsx():
     print(f"Loading {JSON_PATH}...")
