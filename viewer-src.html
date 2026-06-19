@@ -3080,7 +3080,7 @@ function renderMapAuto(root, activeNodeIds, controlPanelHtml){
   const fontFam = state.lang==='hi'?'Tiro Devanagari Hindi':state.lang==='dev'?'Tiro Devanagari Sanskrit':state.lang==='kn'?'Tiro Kannada':'Cormorant Garamond';
   const fontSize = state.lang === 'en' ? 11 : 12;
   const H_final = typeof H_actual !== "undefined" ? H_actual : H;
-  let svg = `<svg viewBox="0 0 ${W} ${H_final}" width="100%" height="auto" xmlns="http://www.w3.org/2000/svg">`;
+  let svg = `<svg viewBox="0 0 ${W} ${H_final}" width="100%" height="${H_final}" xmlns="http://www.w3.org/2000/svg">`;
 
   // Tier bands
   activeTiersList.forEach((tier, ti) => {
