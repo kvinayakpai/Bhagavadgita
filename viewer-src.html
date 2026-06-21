@@ -4506,6 +4506,10 @@ function chatReset() {
 }
 
 /* Initial render */
+if ('history' in window && 'scrollRestoration' in window) {
+  history.scrollRestoration = 'manual';
+}
+window.scrollTo(0, 0);
 render();
 </script>
 </body>
