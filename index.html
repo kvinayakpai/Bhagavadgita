@@ -2380,7 +2380,14 @@ function devToKn(str) {
     '\u096E':'೮','\u096F':'೯',
   };
   const combined = Object.assign({}, V, M, C, S);
-  return Array.from(str).map(ch => combined[ch] || ch).join('');
+  let res = Array.from(str).map(ch => combined[ch] || ch).join('');
+  // Apply homorganic class-nasal cluster to anusvara conversion rules
+  res = res.replace(/ಙ್(?=[ಕಖಗಘ])/g, 'ಂ');
+  res = res.replace(/ಞ್(?=[ಚಛಜಝ])/g, 'ಂ');
+  res = res.replace(/ಣ್(?=[ಟಠಡಢ])/g, 'ಂ');
+  res = res.replace(/ನ್(?=[ತಥದಧ])/g, 'ಂ');
+  res = res.replace(/ಮ್(?=[ಪಫಬಭ])/g, 'ಂ');
+  return res;
 }
 
 function devToIast(str) {
