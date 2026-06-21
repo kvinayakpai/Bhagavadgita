@@ -20,5 +20,5 @@ This log tracks the verification of transliterated Kannada shloka headers in the
 - [x] Chapter 14: Transliteration verified, anusvara rules applied.
 - [x] Chapter 15: Transliteration verified, anusvara rules applied.
 - [x] Chapter 16: Transliteration verified, anusvara rules applied.
-- [ ] Chapter 17: Transliteration verified, anusvara rules applied.
+- [x] Chapter 17: Transliteration verified, anusvara rules applied.
 - [ ] Chapter 18: Transliteration verified, anusvara rules applied.
