@@ -86,3 +86,16 @@ const KG_POSITIONS = {
   'sthitaprajna':     [770, 1340, 13],  // Steady wisdom
 
 };
+
+const KG_TIER_BANDS = [
+  { tier:'parabrahma',  yTop:  40, yBottom: 280, label:{x:8, y: 58} },
+  { tier:'shritattva',  yTop: 280, yBottom: 420, label:{x:8, y:298} },
+  { tier:'jivatattva',  yTop: 420, yBottom: 560, label:{x:8, y:438} },
+  { tier:'prakriti',    yTop: 560, yBottom: 700, label:{x:8, y:578} },
+  { tier:'yoga',        yTop: 700, yBottom: 800, label:{x:8, y:718} },
+  { tier:'antahkarana', yTop: 800, yBottom: 900, label:{x:8, y:818} },
+  { tier:'sadhana',     yTop: 900, yBottom:1010, label:{x:8, y:918} },
+  { tier:'dharma',      yTop:1010, yBottom:1120, label:{x:8, y:1028} },
+  { tier:'dosha',       yTop:1120, yBottom:1270, label:{x:8, y:1138} },
+  { tier:'phala',       yTop:1270, yBottom:1400, label:{x:8, y:1288} },
+];

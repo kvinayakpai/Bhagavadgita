@@ -2058,6 +2058,8 @@ function setLang(lang){
 function setView(v, id){
   state.view = v;
   if (id) state.focusId = id;
+  // Keep canvas selection in sync
+  if (id && typeof mapSelectedId !== 'undefined') mapSelectedId = id;
   document.querySelectorAll('#view-tabs button').forEach(b=>{
     b.classList.toggle('on', b.dataset.view===v);
   });
@@ -2879,16 +2881,245 @@ function mapHitNode(cx, cy) {
   return null;
 }
 
-// Render loop — placeholder until Phase 3 fills it in
+// ── Phase 3: Rendering ────────────────────────────────────────────────────
+
+/* Lighten a hex colour toward white by factor (0–1) */
+function mapLighten(hex, factor) {
+  let r = parseInt(hex.slice(1,3),16);
+  let g = parseInt(hex.slice(3,5),16);
+  let b = parseInt(hex.slice(5,7),16);
+  r = Math.round(r + (255-r)*factor);
+  g = Math.round(g + (255-g)*factor);
+  b = Math.round(b + (255-b)*factor);
+  return `rgb(${r},${g},${b})`;
+}
+
+/* hex + alpha → rgba string */
+function mapRgba(hex, a) {
+  const r = parseInt(hex.slice(1,3),16);
+  const g = parseInt(hex.slice(3,5),16);
+  const b = parseInt(hex.slice(5,7),16);
+  return `rgba(${r},${g},${b},${a})`;
+}
+
+/* Draw alternating tier band fills in world space */
+function mapDrawTierBands(ctx, activeSet) {
+  if (typeof KG_TIER_BANDS === 'undefined') return;
+  KG_TIER_BANDS.forEach((band, bi) => {
+    const col = TIER_HEX[band.tier];
+    if (!col) return;
+    ctx.fillStyle = mapRgba(col, bi % 2 === 0 ? 0.06 : 0.03);
+    ctx.fillRect(0, band.yTop, MAP_W, band.yBottom - band.yTop);
+    // Tier label on the left
+    ctx.save();
+    ctx.globalAlpha = 0.25;
+    ctx.fillStyle = col;
+    ctx.font = '11px sans-serif';
+    ctx.textBaseline = 'top';
+    ctx.fillText(band.tier, band.label ? band.label.x : 6, band.label ? band.label.y : band.yTop + 4);
+    ctx.restore();
+  });
+}
+
+/* Draw all edges between active nodes */
+function mapDrawEdges(ctx, activeSet, selectedId) {
+  const hasSelection = selectedId !== null;
+
+  EDGES.forEach(e => {
+    if (!activeSet.has(e.source) || !activeSet.has(e.target)) return;
+    const src = mapNodes.find(n => n.id === e.source);
+    const tgt = mapNodes.find(n => n.id === e.target);
+    if (!src || !tgt) return;
+
+    const isConnected = hasSelection && (e.source === selectedId || e.target === selectedId);
+    let alpha = 0.5;
+    if (hasSelection) alpha = isConnected ? 0.9 : 0.07;
+
+    const col = EDGE_HEX[e.type] || MAP_COLOR.inkSoft || '#4a3f30';
+
+    ctx.save();
+    ctx.globalAlpha = alpha;
+    ctx.strokeStyle = col;
+    ctx.lineWidth = isConnected ? 1.8 : 1;
+
+    // Dashed for is-a edges, solid otherwise
+    if (e.type === 'is-a') ctx.setLineDash([5, 4]);
+    else ctx.setLineDash([]);
+
+    // Cubic Bézier with gentle lateral offset
+    const dx = tgt.x - src.x, dy = tgt.y - src.y;
+    const cx1 = src.x + dx * 0.3 + dy * 0.15;
+    const cy1 = src.y + dy * 0.3 - dx * 0.15;
+    const cx2 = tgt.x - dx * 0.3 + dy * 0.15;
+    const cy2 = tgt.y - dy * 0.3 - dx * 0.15;
+
+    ctx.beginPath();
+    ctx.moveTo(src.x, src.y);
+    ctx.bezierCurveTo(cx1, cy1, cx2, cy2, tgt.x, tgt.y);
+    ctx.stroke();
+
+    // Arrowhead at target end — compute tangent at t≈0.85
+    const t = 0.85;
+    const mt = 1 - t;
+    const tx = 3*mt*mt*(cx1-src.x) + 6*mt*t*(cx2-cx1) + 3*t*t*(tgt.x-cx2);
+    const ty = 3*mt*mt*(cy1-src.y) + 6*mt*t*(cy2-cy1) + 3*t*t*(tgt.y-cy2);
+    const angle = Math.atan2(tgt.y - (tgt.y - ty*0.5), tgt.x - (tgt.x - tx*0.5));
+    const atan = Math.atan2(ty, tx);
+    const arrowLen = 8;
+    ctx.setLineDash([]);
+    ctx.beginPath();
+    ctx.moveTo(tgt.x, tgt.y);
+    ctx.lineTo(tgt.x - arrowLen*Math.cos(atan - 0.4), tgt.y - arrowLen*Math.sin(atan - 0.4));
+    ctx.moveTo(tgt.x, tgt.y);
+    ctx.lineTo(tgt.x - arrowLen*Math.cos(atan + 0.4), tgt.y - arrowLen*Math.sin(atan + 0.4));
+    ctx.stroke();
+
+    // Edge label at midpoint for selected node's edges
+    if (isConnected && e.type) {
+      const mx = src.x*0.125 + cx1*0.375 + cx2*0.375 + tgt.x*0.125;
+      const my = src.y*0.125 + cy1*0.375 + cy2*0.375 + tgt.y*0.125;
+      ctx.globalAlpha = 0.7;
+      ctx.fillStyle = col;
+      ctx.font = '9px sans-serif';
+      ctx.textAlign = 'center';
+      ctx.textBaseline = 'middle';
+      ctx.fillText(e.type, mx, my);
+    }
+
+    ctx.restore();
+  });
+}
+
+/* Draw all nodes in the active set */
+function mapDrawNodes(ctx, activeSet, selectedId) {
+  const hasSelection = selectedId !== null;
+  const searchQ = (state.searchQ || '').trim().toLowerCase();
+
+  mapNodes.forEach(n => {
+    if (!activeSet.has(n.id)) return;
+
+    const col = TIER_HEX[n.tier] || '#888';
+    const isSelected = n.id === selectedId;
+    const matchesSearch = !searchQ || labelOf(n).toLowerCase().includes(searchQ);
+    let alpha = 1;
+    if (hasSelection && !isSelected) alpha = 0.22;
+    else if (searchQ && !matchesSearch) alpha = 0.15;
+
+    ctx.save();
+    ctx.globalAlpha = alpha;
+
+    // Glow on selected
+    if (isSelected) {
+      ctx.shadowColor = col;
+      ctx.shadowBlur = 20;
+    }
+
+    // Circle fill
+    ctx.beginPath();
+    ctx.arc(n.x, n.y, n.r, 0, Math.PI * 2);
+    ctx.fillStyle = isSelected ? col : mapLighten(col, 0.82);
+    ctx.fill();
+
+    // Circle stroke
+    ctx.strokeStyle = col;
+    ctx.lineWidth = isSelected ? 3 : 1.5;
+    ctx.stroke();
+
+    ctx.shadowBlur = 0;
+
+    // Label inside circle (short)
+    const innerLabel = labelOf(n).slice(0, 10);
+    const fontSize = Math.max(8, Math.min(12, n.r * 0.6));
+    ctx.font = `${fontSize}px sans-serif`;
+    ctx.textAlign = 'center';
+    ctx.textBaseline = 'middle';
+    ctx.fillStyle = isSelected ? '#fff' : (MAP_COLOR.ink || '#1f1a13');
+    ctx.globalAlpha = alpha * (isSelected ? 1 : 0.85);
+    ctx.fillText(innerLabel, n.x, n.y);
+
+    // Full label below circle
+    ctx.font = `${Math.max(9, n.r * 0.55)}px sans-serif`;
+    ctx.fillStyle = MAP_COLOR.ink || '#1f1a13';
+    ctx.globalAlpha = alpha * 0.75;
+    const fullLabel = labelOf(n);
+    ctx.fillText(fullLabel, n.x, n.y + n.r + 9);
+
+    ctx.restore();
+  });
+}
+
+/* Draw the minimap (150×100) */
+function mapDrawMinimap() {
+  if (!mmCtx || !mmCanvas) return;
+  const mw = mmCanvas.width, mh = mmCanvas.height;
+  const sx = mw / MAP_W, sy = mh / MAP_H;
+
+  mmCtx.clearRect(0, 0, mw, mh);
+  mmCtx.fillStyle = MAP_COLOR.paper2 || '#f6ecd2';
+  mmCtx.fillRect(0, 0, mw, mh);
+
+  // Edges
+  mmCtx.globalAlpha = 0.25;
+  mmCtx.strokeStyle = MAP_COLOR.inkSoft || '#4a3f30';
+  mmCtx.lineWidth = 0.5;
+  EDGES.forEach(e => {
+    if (!mapActiveSet.has(e.source) || !mapActiveSet.has(e.target)) return;
+    const s = mapNodes.find(n => n.id === e.source);
+    const t = mapNodes.find(n => n.id === e.target);
+    if (!s || !t) return;
+    mmCtx.beginPath();
+    mmCtx.moveTo(s.x * sx, s.y * sy);
+    mmCtx.lineTo(t.x * sx, t.y * sy);
+    mmCtx.stroke();
+  });
+
+  // Nodes
+  mmCtx.globalAlpha = 1;
+  mapNodes.forEach(n => {
+    if (!mapActiveSet.has(n.id)) return;
+    const col = TIER_HEX[n.tier] || '#888';
+    mmCtx.beginPath();
+    mmCtx.arc(n.x * sx, n.y * sy, 3, 0, Math.PI * 2);
+    mmCtx.fillStyle = col;
+    mmCtx.fill();
+  });
+
+  // Viewport rectangle
+  if (mapCanvas) {
+    const vx = (-mapTransform.x / mapTransform.scale) * sx;
+    const vy = (-mapTransform.y / mapTransform.scale) * sy;
+    const vw = (mapCanvas.clientWidth  / mapTransform.scale) * sx;
+    const vh = (mapCanvas.clientHeight / mapTransform.scale) * sy;
+    mmCtx.strokeStyle = '#c0392b';
+    mmCtx.lineWidth = 1.5;
+    mmCtx.globalAlpha = 0.8;
+    mmCtx.strokeRect(vx, vy, vw, vh);
+  }
+}
+
+/* Main draw frame */
 function mapDrawFrame() {
   if (!mapCtx || !mapCanvas) return;
   const dpr = window.devicePixelRatio || 1;
   const cw = mapCanvas.width, ch = mapCanvas.height;
+
   mapCtx.clearRect(0, 0, cw, ch);
+
   // Background
   mapCtx.fillStyle = MAP_COLOR.paper || '#fbf5e6';
   mapCtx.fillRect(0, 0, cw, ch);
-  // Phase 3 will draw tiers, edges and nodes here
+
+  mapCtx.save();
+  mapCtx.translate(mapTransform.x * dpr, mapTransform.y * dpr);
+  mapCtx.scale(mapTransform.scale * dpr, mapTransform.scale * dpr);
+
+  mapDrawTierBands(mapCtx, mapActiveSet);
+  mapDrawEdges(mapCtx, mapActiveSet, mapSelectedId);
+  mapDrawNodes(mapCtx, mapActiveSet, mapSelectedId);
+
+  mapCtx.restore();
+
+  mapDrawMinimap();
 }
 
 function mapTick() {
@@ -2937,7 +3168,23 @@ function initMapCanvas() {
 
   mapCanvas.addEventListener('pointermove', e => {
     if (!mapDragging) {
-      // Tooltip handling (Phase 4 will flesh this out)
+      // Tooltip
+      const rect = mapCanvas.getBoundingClientRect();
+      const cx = e.clientX - rect.left;
+      const cy = e.clientY - rect.top;
+      const hit = mapHitNode(cx, cy);
+      const tip = document.getElementById('map-tooltip');
+      if (tip) {
+        if (hit) {
+          const note = hit.note ? (typeof hit.note === 'object' ? (hit.note.en || '') : hit.note) : '';
+          tip.textContent = labelOf(hit) + (note ? '\n' + note.slice(0, 80) + (note.length > 80 ? '…' : '') : '');
+          tip.style.left = (cx + 14) + 'px';
+          tip.style.top  = (cy - 10) + 'px';
+          tip.classList.add('visible');
+        } else {
+          tip.classList.remove('visible');
+        }
+      }
       return;
     }
     const dx = e.clientX - mapDragStart.x;
@@ -2954,7 +3201,10 @@ function initMapCanvas() {
       const cy = e.clientY - rect.top;
       const hit = mapHitNode(cx, cy);
       if (hit) {
+        mapSelectedId = hit.id;
         setView('focus', hit.id);
+      } else {
+        mapSelectedId = null;
       }
     }
     mapDragging = false;
