@@ -55,7 +55,7 @@ above the canvas wrap — same as now.
 
 ---
 
-## Phase 2 — Canvas state and initialization
+## Phase 2 — Canvas state and initialization ✅ COMPLETE
 
 **New module in `viewer-src.html`** (replaces `renderMapHandLaid` + `renderMapAuto`):
 
