@@ -11,7 +11,7 @@ simulation is only used when a chapter-filter forces a dynamic subgraph.
 
 ---
 
-## Phase 1 — HTML/CSS scaffolding
+## Phase 1 — HTML/CSS scaffolding ✅ COMPLETE
 
 **File: `viewer-src.html`**
 
@@ -318,7 +318,11 @@ is needed**.
 
 1. **Add `KG_TIER_BANDS` to `positions.js`** — fixes the existing `HAS_HANDLAID`
    always-false bug as a side effect.
-2. **Add canvas HTML + CSS to `viewer-src.html`** — scaffold without logic.
+2. ✅ **Add canvas HTML + CSS to `viewer-src.html`** — scaffold without logic.
+   - Replaced `.map-wrap` CSS with `.map-canvas-wrap`, `#map-canvas`, `.map-minimap`,
+     `.map-zoom-btns`, `.map-tooltip` rules.
+   - Both `renderMapHandLaid` and `renderMapAuto` now emit the canvas scaffold HTML.
+   - Old SVG scroll auto-centering removed (replaced by canvas pan/zoom in Phase 4).
 3. **Add `initMapCanvas`, `TIER_HEX` resolution, pointer events** — panning/zooming
    works, canvas is blank.
 4. **Add `drawNodes` + `drawEdges` + `drawTierBands`** — full graph renders from

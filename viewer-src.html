@@ -278,13 +278,16 @@ body.lang-kn  .relations li .other{font-family:'Tiro Kannada',serif;font-size:17
 body.lang-kn .vsn-chip{font-family:'Tiro Kannada','Noto Sans Kannada',serif}
 body.lang-en .vsn-chip{font-family:'Cormorant Garamond',serif;font-style:italic}
 
-/* ============ MAP (full graph) ============ */
-.map-wrap{padding:10px 8px 20px;overflow:auto;display:flex;flex-direction:column;align-items:center;justify-content:flex-start;min-height:350px;box-sizing:border-box}
-.map-wrap svg{display:block;margin:0 auto;background:var(--paper);border:1px solid var(--rule);border-radius:8px;max-width:100%;width:100%;height:auto;box-sizing:border-box}
-.map-node circle{cursor:pointer;transition:r .1s, stroke-width .1s}
-.map-node:hover circle{stroke-width:2.5}
-.map-node text{font-family:'Cormorant Garamond',serif;font-size:10px;fill:var(--ink);pointer-events:none;text-anchor:middle}
-.map-edge{fill:none;stroke-opacity:.45}
+/* ============ MAP (canvas-based) ============ */
+.map-canvas-wrap{position:relative;width:100%;height:520px;overflow:hidden;background:var(--paper);border-radius:8px;border:1px solid var(--rule);box-sizing:border-box}
+#map-canvas{display:block;width:100%;height:100%;cursor:grab;touch-action:none;border-radius:8px}
+#map-canvas:active{cursor:grabbing}
+.map-minimap{position:absolute;bottom:12px;right:12px;border:1px solid var(--rule);border-radius:4px;overflow:hidden;background:var(--paper);opacity:.85}
+.map-zoom-btns{position:absolute;top:12px;right:12px;display:flex;flex-direction:column;gap:4px}
+.map-zoom-btns button{width:30px;height:30px;border:1px solid var(--rule);border-radius:6px;background:var(--paper);color:var(--ink);font-size:16px;cursor:pointer;display:flex;align-items:center;justify-content:center;padding:0;line-height:1}
+.map-zoom-btns button:hover{background:var(--paper-2);border-color:var(--rust);color:var(--rust)}
+.map-tooltip{position:absolute;pointer-events:none;background:var(--paper-2);border:1px solid var(--rule);border-radius:6px;padding:6px 10px;font-size:12px;max-width:200px;opacity:0;transition:opacity .15s;white-space:pre-line;z-index:10;line-height:1.5}
+.map-tooltip.visible{opacity:1}
 
 /* ============ MAP EMPTY STATE ============ */
 .map-empty-state {
@@ -2788,19 +2791,8 @@ function renderMap(){
     renderMapAuto(root, activeNodeIds, controlPanelHtml);
   }
 
-  // Auto-centering scroll navigation to focus on the active concept cluster
-  setTimeout(() => {
-    const mapWrap = document.querySelector('.map-wrap');
-    if (mapWrap) {
-      const targetLeft = chSel === 0 ? (500 - mapWrap.clientWidth / 2) : (avgX - mapWrap.clientWidth / 2);
-      const targetTop = chSel === 0 ? 0 : (avgY - mapWrap.clientHeight / 2);
-      mapWrap.scrollTo({
-        left: targetLeft,
-        top: targetTop,
-        behavior: 'smooth'
-      });
-    }
-  }, 100);
+  // Auto-centering scroll navigation — replaced by canvas pan/zoom in Phase 2+
+  // (kept as no-op placeholder; canvas wrap does not scroll)
 }
 
 function renderMapHandLaid(root, activeNodeIds, controlPanelHtml){
@@ -3006,7 +2998,18 @@ function renderMapHandLaid(root, activeNodeIds, controlPanelHtml){
 
   root.innerHTML = `
     ${controlPanelHtml}
-    <div class="map-wrap">${mapContent}</div>
+    <div class="map-canvas-wrap" id="map-canvas-wrap">
+      <canvas id="map-canvas"></canvas>
+      <div class="map-minimap">
+        <canvas id="minimap-canvas" width="150" height="100"></canvas>
+      </div>
+      <div class="map-zoom-btns">
+        <button id="map-zoom-in" title="Zoom in">+</button>
+        <button id="map-zoom-out" title="Zoom out">−</button>
+        <button id="map-zoom-reset" title="Reset view">⊙</button>
+      </div>
+      <div id="map-tooltip" class="map-tooltip"></div>
+    </div>
   `;
 }
 
@@ -3155,7 +3158,18 @@ function renderMapAuto(root, activeNodeIds, controlPanelHtml){
 
   root.innerHTML = `
     ${controlPanelHtml}
-    <div class="map-wrap">${mapContent}</div>
+    <div class="map-canvas-wrap" id="map-canvas-wrap">
+      <canvas id="map-canvas"></canvas>
+      <div class="map-minimap">
+        <canvas id="minimap-canvas" width="150" height="100"></canvas>
+      </div>
+      <div class="map-zoom-btns">
+        <button id="map-zoom-in" title="Zoom in">+</button>
+        <button id="map-zoom-out" title="Zoom out">−</button>
+        <button id="map-zoom-reset" title="Reset view">⊙</button>
+      </div>
+      <div id="map-tooltip" class="map-tooltip"></div>
+    </div>
   `;
 }
 
