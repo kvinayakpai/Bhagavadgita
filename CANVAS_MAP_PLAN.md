@@ -94,7 +94,7 @@ const EDGE_HEX = {};
 
 ---
 
-## Phase 3 — Rendering
+## Phase 3 — Rendering ✅ COMPLETE
 
 **`drawFrame(activeSet, selectedId)`** — the main render function, called every frame:
 
@@ -190,7 +190,7 @@ reset transform.
 
 ---
 
-## Phase 5 — `KG_TIER_BANDS` in positions.js
+## Phase 5 — `KG_TIER_BANDS` in positions.js ✅ COMPLETE (implemented alongside Phase 3)
 
 `KG_TIER_BANDS` is currently referenced by `renderMapHandLaid` but never defined —
 so `HAS_HANDLAID` is always false and the hand-laid positions are never used for the
@@ -323,15 +323,15 @@ is needed**.
      `.map-zoom-btns`, `.map-tooltip` rules.
    - Both `renderMapHandLaid` and `renderMapAuto` now emit the canvas scaffold HTML.
    - Old SVG scroll auto-centering removed (replaced by canvas pan/zoom in Phase 4).
-3. **Add `initMapCanvas`, `TIER_HEX` resolution, pointer events** — panning/zooming
+3. ✅ **Add `initMapCanvas`, `TIER_HEX` resolution, pointer events** — panning/zooming
    works, canvas is blank.
-4. **Add `drawNodes` + `drawEdges` + `drawTierBands`** — full graph renders from
+4. ✅ **Add `drawNodes` + `drawEdges` + `drawTierBands`** — full graph renders from
    hand-laid positions.
-5. **Add minimap** — `drawMinimap` + minimap canvas.
+5. ✅ **Add minimap** — `drawMinimap` + minimap canvas.
 6. **Wire up `renderMap()`** — replaces SVG path; control panel dropdown unchanged.
 7. **Add chapter-filter simulation** — `simTick` + position reset on filter change.
-8. **Add tooltip** — hover shows node label and note excerpt.
-9. **Run `build-bundle.py`** and smoke-test.
+8. ✅ **Add tooltip** — hover shows node label and note excerpt.
+9. ✅ **Run `build-bundle.py`** and smoke-test.
 10. **Delete old `renderMapHandLaid` and `renderMapAuto`** once stable.
 
 ---
