@@ -306,7 +306,7 @@ replaced on dropdown changes.
 
 ---
 
-## Phase 8 — `build-bundle.py` update
+## Phase 8 — `build-bundle.py` update ✅ COMPLETE (no-op as predicted)
 
 `positions.js` now exports both `KG_POSITIONS` and `KG_TIER_BANDS`. The build
 script already inlines `positions.js` verbatim — **no change to `build-bundle.py`
