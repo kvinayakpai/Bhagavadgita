@@ -218,7 +218,7 @@ small margins.
 
 ---
 
-## Phase 6 — Force simulation (chapter-filtered views)
+## Phase 6 — Force simulation (chapter-filtered views) ✅ COMPLETE
 
 When `chSel !== 0` (a chapter or verse is selected), the active subgraph is small
 (typically 3–15 nodes). A brief physics simulation runs to settle nodes into a
@@ -277,7 +277,7 @@ preventing accumulation of drift.
 
 ---
 
-## Phase 7 — Integration with existing `renderMap()`
+## Phase 7 — Integration with existing `renderMap()` ✅ COMPLETE
 
 `renderMap()` currently calls `renderMapHandLaid` or `renderMapAuto` and replaces
 `root.innerHTML`. The new approach:
