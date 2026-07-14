@@ -2807,6 +2807,13 @@ function renderMap(){
     if (btnOut)   btnOut.onclick   = () => mapZoomAt(mapCanvas.clientWidth/2, mapCanvas.clientHeight/2, 1/1.3);
     if (btnReset) btnReset.onclick = mapResetView;
   }
+
+  // Phase 6: start force simulation for chapter-filtered views
+  if (chSel !== 0) {
+    mapStartSim();
+  } else {
+    mapSimRunning = false;
+  }
   // Auto-centering scroll navigation — replaced by canvas pan/zoom
 }
 
@@ -2820,6 +2827,9 @@ let mapAnimFrame = null;
 let mapDragging = false, mapDragStart = null, mapTransformStart = null;
 let mapDidDrag = false;
 let mapPinchStartDist = 0, mapPinchStartScale = 1;
+let mapSimRunning = false;   // true while force simulation is ticking
+let mapSimFrames  = 0;       // frame counter; stops at MAP_SIM_MAX_FRAMES
+const MAP_SIM_MAX_FRAMES = 300;
 
 const MAP_W = 1000;
 const MAP_H = 1500;
@@ -3122,7 +3132,95 @@ function mapDrawFrame() {
   mapDrawMinimap();
 }
 
+// ── Phase 6: Force simulation tick ───────────────────────────────────────
+function mapSimTick() {
+  const REPEL   = 8000;
+  const ATTRACT = 0.03;
+  const DAMP    = 0.82;
+  const CENTER  = 0.005;
+  const REST    = 120;  // ideal spring length
+  let moving = false;
+
+  for (const ni of mapNodes) {
+    if (!mapActiveSet.has(ni.id)) continue;
+    let fx = 0, fy = 0;
+
+    // Repulsion from all other active nodes
+    for (const nj of mapNodes) {
+      if (!mapActiveSet.has(nj.id) || ni === nj) continue;
+      const dx = ni.x - nj.x;
+      const dy = ni.y - nj.y;
+      const d  = Math.sqrt(dx * dx + dy * dy) || 1;
+      const f  = REPEL / (d * d);
+      fx += (dx / d) * f;
+      fy += (dy / d) * f;
+    }
+
+    // Spring attraction along edges
+    for (const e of EDGES) {
+      let other = null;
+      if (e.source === ni.id && mapActiveSet.has(e.target))
+        other = mapNodes.find(n => n.id === e.target);
+      else if (e.target === ni.id && mapActiveSet.has(e.source))
+        other = mapNodes.find(n => n.id === e.source);
+      if (!other) continue;
+      const dx = other.x - ni.x;
+      const dy = other.y - ni.y;
+      const d  = Math.sqrt(dx * dx + dy * dy) || 1;
+      fx += (dx / d) * (d - REST) * ATTRACT;
+      fy += (dy / d) * (d - REST) * ATTRACT;
+    }
+
+    // Weak centre pull
+    fx += (MAP_W / 2 - ni.x) * CENTER;
+    fy += (MAP_H / 2 - ni.y) * CENTER;
+
+    ni.vx = (ni.vx + fx) * DAMP;
+    ni.vy = (ni.vy + fy) * DAMP;
+    ni.x  = Math.max(50, Math.min(MAP_W - 50, ni.x + ni.vx));
+    ni.y  = Math.max(50, Math.min(MAP_H - 50, ni.y + ni.vy));
+
+    if (Math.hypot(ni.vx, ni.vy) > 0.3) moving = true;
+  }
+  return moving;
+}
+
+// Start (or restart) the simulation for the current active set.
+// Resets active nodes to their KG_POSITIONS before running,
+// preventing drift accumulation across filter changes.
+function mapStartSim() {
+  // Reset positions for active nodes to their seed values
+  for (const n of mapNodes) {
+    if (!mapActiveSet.has(n.id)) continue;
+    const p = (typeof KG_POSITIONS !== 'undefined') ? KG_POSITIONS[n.id] : null;
+    if (p) {
+      n.x = p[0]; n.y = p[1];
+    } else {
+      // Scatter with small random offset from centre
+      n.x = MAP_W / 2 + (Math.random() - 0.5) * 300;
+      n.y = MAP_H / 2 + (Math.random() - 0.5) * 300;
+    }
+    n.vx = 0; n.vy = 0;
+  }
+  mapSimRunning = true;
+  mapSimFrames  = 0;
+}
+
 function mapTick() {
+  // Run one simulation step if the sim is active (chapter-filtered view only)
+  if (mapSimRunning) {
+    const chSel = state.mapChapterSel || 0;
+    if (chSel === 0) {
+      // Full-graph: no simulation needed
+      mapSimRunning = false;
+    } else {
+      mapSimFrames++;
+      const stillMoving = mapSimTick();
+      if (!stillMoving || mapSimFrames >= MAP_SIM_MAX_FRAMES) {
+        mapSimRunning = false;
+      }
+    }
+  }
   mapDrawFrame();
   mapAnimFrame = requestAnimationFrame(mapTick);
 }
