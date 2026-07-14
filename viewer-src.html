@@ -2285,10 +2285,7 @@ function renderFocus(){
   root.innerHTML = html;
 }
 
-/* ---------- MAP — uses hand-laid KG_POSITIONS if positions.js loaded,
-                  falls back to auto-layout otherwise ---------- */
-const HAS_HANDLAID = (typeof KG_POSITIONS !== 'undefined') && (typeof KG_TIER_BANDS !== 'undefined');
-
+/* ---------- MAP ---------- */
 
 function buildChapterIndex() {
   // Returns {chNum: [{node, refsRaw}]}
@@ -2772,26 +2769,46 @@ function renderMap(){
     }
   }
 
-  // Calculate coordinates center of the active nodes for auto-scrolling
-  let sumX = 0, sumY = 0, count = 0;
-  NODES.forEach(n => {
-    if (!activeNodeIds.has(n.id)) return;
-    const p = KG_POSITIONS[n.id];
-    if (p) {
-      sumX += p[0];
-      sumY += p[1];
-      count++;
-    }
-  });
-  const avgX = count > 0 ? (sumX / count) : 500;
-  const avgY = count > 0 ? (sumY / count) : 0;
-
-  // All-chapters: use hand-laid global map. Chapter-filtered: dynamic auto layout.
-  if (HAS_HANDLAID && chSel === 0) {
-    renderMapHandLaid(root, activeNodeIds, controlPanelHtml);
-  } else {
-    renderMapAuto(root, activeNodeIds, controlPanelHtml);
+  // Build empty-state message for chapters/verses with no mapped concepts
+  let emptyStateHtml = '';
+  if (activeNodeIds.size === 0) {
+    const emptyMsgs = {
+      en: { title: 'No Mapped Concepts',
+            desc: 'No key concepts are currently mapped to this specific shloka in the Knowledge Graph yet. Try exploring other shlokas in this chapter.' },
+      kn: { title: 'ಯಾವುದೇ ಪರಿಕಲ್ಪನೆಗಳು ಕಂಡುಬಂದಿಲ್ಲ',
+            desc: 'ಜ್ಞಾನ ನಕ್ಷೆಯಲ್ಲಿ ಈ ನಿರ್ದಿಷ್ಟ ಶ್ಲೋಕಕ್ಕೆ ಯಾವುದೇ ಪ್ರಮುಖ ಪರಿಕಲ್ಪನೆಗಳನ್ನು ಇನ್ನು ಗುರುತಿಸಲಾಗಿಲ್ಲ. ದಯವಿಟ್ಟು ಈ ಅಧ್ಯಾಯದ ಬೇರೆ ಶ್ಲೋಕಗಳನ್ನು ನೋಡಿ.' },
+      hi: { title: 'कोई मुख्य विचार उपलब्ध नहीं',
+            desc: 'ज्ञान मानचित्र में इस विशेष श्लोक से जुड़ा कोई मुख्य विचार अभी उपलब्ध नहीं है। कृपया इस अध्याय के अन्य श्लोकों को देखें।' },
+      dev: { title: 'कोऽपि विचारो न लब्धः',
+            desc: 'अस्मिन् विशिष्टे श्लोके सम्बद्धः कोऽपि मुख्यसिद्धान्तः अधुना ज्ञानमानचित्रे न विद्यते। कृपया अस्य अध्यायस्य अन्यान् श्लोकान् पश्यतु।' }
+    };
+    const msg = emptyMsgs[state.lang] || emptyMsgs.en;
+    emptyStateHtml = `
+      <div class="map-empty-state">
+        <div class="map-empty-icon">📭</div>
+        <h3 class="map-empty-title">${msg.title}</h3>
+        <p class="map-empty-desc">${msg.desc}</p>
+      </div>
+    `;
   }
+
+  // Emit canvas scaffold (Phase 7: replaces renderMapHandLaid / renderMapAuto)
+  root.innerHTML = `
+    ${controlPanelHtml}
+    ${emptyStateHtml}
+    <div class="map-canvas-wrap" id="map-canvas-wrap" style="${activeNodeIds.size === 0 ? 'display:none' : ''}">
+      <canvas id="map-canvas"></canvas>
+      <div class="map-minimap">
+        <canvas id="minimap-canvas" width="150" height="100"></canvas>
+      </div>
+      <div class="map-zoom-btns">
+        <button id="map-zoom-in" title="Zoom in">+</button>
+        <button id="map-zoom-out" title="Zoom out">−</button>
+        <button id="map-zoom-reset" title="Reset view">⊙</button>
+      </div>
+      <div id="map-tooltip" class="map-tooltip"></div>
+    </div>
+  `;
 
   // Phase 2: initialise or re-wire canvas after innerHTML is set
   mapActiveSet = activeNodeIds;
@@ -3364,384 +3381,6 @@ function initMapCanvas() {
   // Kick the render loop
   if (mapAnimFrame) cancelAnimationFrame(mapAnimFrame);
   mapAnimFrame = requestAnimationFrame(mapTick);
-}
-
-function renderMapHandLaid(root, activeNodeIds, controlPanelHtml){
-  const W = 1000;
-  let H = 1500;
-  const showSet = (typeof KG_SHOW_EDGE_TYPES !== 'undefined') ? KG_SHOW_EDGE_TYPES : null;
-  const fontFam = state.lang==='hi'?'Tiro Devanagari Hindi':state.lang==='dev'?'Tiro Devanagari Sanskrit':state.lang==='kn'?'Tiro Kannada':'Cormorant Garamond';
-  
-  const chSel = state.mapChapterSel || 0;
-  const newPositions = {}; // maps nodeId -> [newX, newY, r]
-  const newBandCoords = {}; // maps tierName -> { yTop, yBottom, labelY }
-
-  if (chSel === 0) {
-    // Default to full positions
-    NODES.forEach(n => {
-      const p = KG_POSITIONS[n.id];
-      if (p) newPositions[n.id] = p;
-    });
-    KG_TIER_BANDS.forEach(band => {
-      newBandCoords[band.tier] = {
-        yTop: band.yTop,
-        yBottom: band.yBottom,
-        labelY: band.label.y
-      };
-    });
-  } else {
-    // 1. Identify which tiers have active nodes
-    const activeTiers = new Set();
-    activeNodeIds.forEach(id => {
-      const n = NODES.find(node => node.id === id);
-      if (n) activeTiers.add(n.tier);
-    });
-
-    // 2. Define standard horizontal rows in order
-    const ROWS = [
-      { id: 'paramartha', tiers: ['paramartha'] },
-      { id: 'tattva', tiers: ['tattva'] },
-      { id: 'kshetra', tiers: ['kshetra'] },
-      { id: 'guna', tiers: ['guna'] },
-      { id: 'yoga', tiers: ['yoga'] },
-      { id: 'sadhana', tiers: ['sadhana'] },
-      { id: 'antahkarana_dharma', tiers: ['antahkarana', 'dharma'] },
-      { id: 'dosha_pratika', tiers: ['dosha', 'pratika'] },
-      { id: 'phala', tiers: ['phala'] }
-    ];
-
-    // 3. Filter to active standard rows
-    const activeStandardRows = ROWS.filter(row => 
-      row.tiers.some(t => activeTiers.has(t))
-    );
-
-    // 4. Check if side tier yajna is active
-    const yajnaActive = activeTiers.has('yajna');
-
-    // 5. Calculate new coordinates for each active row
-    const rowHeight = 120; // Beautiful compact height per active tier slot
-    const topMargin = 40;
-    activeStandardRows.forEach((row, ri) => {
-      const newYTop = topMargin + ri * rowHeight;
-      const newYBottom = newYTop + rowHeight;
-      
-      row.tiers.forEach(tier => {
-        if (!activeTiers.has(tier)) return; // Completely skip empty half-panels!
-        
-        const band = KG_TIER_BANDS.find(b => b.tier === tier);
-        if (!band) return;
-
-        newBandCoords[tier] = {
-          yTop: newYTop,
-          yBottom: newYBottom,
-          labelY: newYTop + 24
-        };
-
-        // Map nodes belonging to this tier
-        NODES.forEach(n => {
-          if (n.tier !== tier || !activeNodeIds.has(n.id)) return;
-          const p = KG_POSITIONS[n.id];
-          if (!p) return;
-          const [origX, origY, r] = p;
-          
-          // Calculate relative Y offset inside original tier band
-          const origSpan = band.yBottom - band.yTop;
-          const relY = origSpan > 0 ? (origY - band.yTop) / origSpan : 0.5;
-          
-          // Calculate new Y coordinate in the compressed tier band
-          const newY = newYTop + relY * rowHeight;
-          newPositions[n.id] = [origX, newY, r];
-        });
-      });
-    });
-
-    // 6. Handle yajna side tier if active
-    if (yajnaActive) {
-      const band = KG_TIER_BANDS.find(b => b.tier === 'yajna');
-      if (band) {
-        const newYTop = topMargin;
-        const newYBottom = topMargin + activeStandardRows.length * rowHeight;
-        newBandCoords['yajna'] = {
-          yTop: newYTop,
-          yBottom: newYBottom,
-          labelY: newYTop + 24
-        };
-
-        NODES.forEach(n => {
-          if (n.tier !== 'yajna' || !activeNodeIds.has(n.id)) return;
-          const p = KG_POSITIONS[n.id];
-          if (!p) return;
-          const [origX, origY, r] = p;
-          
-          // Map yajna nodes linearly over the total height
-          const origSpan = band.yBottom - band.yTop;
-          const relY = origSpan > 0 ? (origY - band.yTop) / origSpan : 0.5;
-          const newY = newYTop + relY * (newYBottom - newYTop);
-          newPositions[n.id] = [origX, newY, r];
-        });
-      }
-    }
-    
-    // 7. Set dynamic SVG height based on number of active rows
-    H = topMargin + activeStandardRows.length * rowHeight + 20;
-  }
-
-  let viewBox = `0 0 ${W} ${H}`;
-  let svgWAttr = "100%";
-  let svgHAttr = "100%";
-
-  let svg = `<svg viewBox="${viewBox}" width="${svgWAttr}" height="${svgHAttr}" xmlns="http://www.w3.org/2000/svg">`;
-
-  // tier bands (Only draw active ones)
-  KG_TIER_BANDS.forEach((band,bi)=>{
-    const coords = newBandCoords[band.tier];
-    if (!coords) return; // Skip empty tiers!
-
-    const x = band.side ? 900 : (band.half==='right' ? W/2 : 0);
-    const w = band.side ? 100 : (band.half ? W/2 : W);
-    svg += `<rect x="${x}" y="${coords.yTop}" width="${w}" height="${coords.yBottom-coords.yTop}" fill="${bi%2 ? 'rgba(214,197,153,.10)' : 'rgba(230,216,176,.18)'}"/>`;
-    
-    const tier = TIER_BY_ID[band.tier];
-    if (!tier) return;
-    const lab = state.lang==='hi'?(tier.hi||tier.dev):state.lang==='dev'?tier.dev:state.lang==='kn'?tier.kn:tier.en;
-    svg += `<text x="${band.label.x}" y="${coords.labelY}" font-family="${fontFam}" font-size="13" fill="var(--ink-soft)" font-weight="600">${escapeHtml(lab)}</text>`;
-  });
-
-  // edges (Only draw if both source and target endpoints are in activeNodeIds)
-  EDGES.forEach(e=>{
-    if (showSet && !showSet.has(e.type)) return;
-    if (!activeNodeIds.has(e.source) || !activeNodeIds.has(e.target)) return;
-    const a = newPositions[e.source]; const b = newPositions[e.target];
-    if (!a || !b) return;
-    const [ax,ay] = a, [bx,by] = b;
-    const mx = (ax+bx)/2;
-    const my = (ay+by)/2 - Math.abs(by-ay)*0.08;
-    svg += `<path class="map-edge" d="M ${ax} ${ay} Q ${mx} ${my} ${bx} ${by}" stroke="var(--e-${e.type})" stroke-width="0.7"/>`;
-  });
-
-  // nodes (Only draw if present in activeNodeIds)
-  NODES.forEach(n=>{
-    if (!activeNodeIds.has(n.id)) return;
-    const p = newPositions[n.id]; if (!p) return;
-    const [x,y,r] = p;
-    const lab = labelOf(n);
-    // No truncation
-    const shown = lab;
-    svg += `<g class="map-node" data-id="${n.id}">
-      <circle cx="${x}" cy="${y}" r="${r}" fill="var(--t-${n.tier})" fill-opacity="0.88" stroke="var(--t-${n.tier})" stroke-width="1.2"/>
-      <text x="${x}" y="${y + r + 11}" font-family="${fontFam}" font-size="${state.lang==='en'?10:11}">${escapeHtml(shown)}</text>
-    </g>`;
-  });
-
-  svg += `</svg>`;
-
-  let mapContent = '';
-  if (activeNodeIds.size === 0) {
-    const emptyMsgs = {
-      en: {
-        title: 'No Mapped Concepts',
-        desc: 'No key concepts are currently mapped to this specific shloka in the Knowledge Graph yet. Try exploring other shlokas in this chapter.'
-      },
-      kn: {
-        title: 'ಯಾವುದೇ ಪರಿಕಲ್ಪನೆಗಳು ಕಂಡುಬಂದಿಲ್ಲ',
-        desc: 'ಜ್ಞಾನ ನಕ್ಷೆಯಲ್ಲಿ ಈ ನಿರ್ದಿಷ್ಟ ಶ್ಲೋಕಕ್ಕೆ ಯಾವುದೇ ಪ್ರಮುಖ ಪರಿಕಲ್ಪನೆಗಳನ್ನು ಇನ್ನು ಗುರುತಿಸಲಾಗಿಲ್ಲ. ದಯವಿಟ್ಟು ಈ ಅಧ್ಯಾಯದ ಬೇರೆ ಶ್ಲೋಕಗಳನ್ನು ನೋಡಿ.'
-      },
-      hi: {
-        title: 'कोई मुख्य विचार उपलब्ध नहीं',
-        desc: 'ज्ञान मानचित्र में इस विशेष श्लोक से जुड़ा कोई मुख्य विचार अभी उपलब्ध नहीं है। कृपया इस अध्याय के अन्य श्लोकों को देखें।'
-      },
-      dev: {
-        title: 'कोऽपि विचारो न लब्धः',
-        desc: 'अस्मिन् विशिष्टे श्लोके सम्बद्धः कोऽपि मुख्यसिद्धान्तः अधुना ज्ञानमानचित्रे न विद्यते। कृपया अस्य अध्यायस्य अन्यान् श्लोकान् पश्यतु।'
-      }
-    };
-    const msg = emptyMsgs[state.lang] || emptyMsgs.en;
-    mapContent = `
-      <div class="map-empty-state">
-        <div class="map-empty-icon">📭</div>
-        <h3 class="map-empty-title">${msg.title}</h3>
-        <p class="map-empty-desc">${msg.desc}</p>
-      </div>
-    `;
-  } else {
-    mapContent = svg;
-  }
-
-  root.innerHTML = `
-    ${controlPanelHtml}
-    <div class="map-canvas-wrap" id="map-canvas-wrap">
-      <canvas id="map-canvas"></canvas>
-      <div class="map-minimap">
-        <canvas id="minimap-canvas" width="150" height="100"></canvas>
-      </div>
-      <div class="map-zoom-btns">
-        <button id="map-zoom-in" title="Zoom in">+</button>
-        <button id="map-zoom-out" title="Zoom out">−</button>
-        <button id="map-zoom-reset" title="Reset view">⊙</button>
-      </div>
-      <div id="map-tooltip" class="map-tooltip"></div>
-    </div>
-  `;
-}
-
-function renderMapAuto(root, activeNodeIds, controlPanelHtml){
-  const activeNodes = NODES.filter(n => activeNodeIds.has(n.id));
-  const byTier = Object.fromEntries(TIERS.map(t=>[t.id,[]]));
-  activeNodes.forEach(n => { if (byTier[n.tier]) byTier[n.tier].push(n); });
-
-  // Active tiers in canonical order
-  const activeTiersList = TIERS.filter(t => byTier[t.id] && byTier[t.id].length > 0);
-  const numTiers = activeTiersList.length;
-
-  // Dynamic sizing
-  const maxPerTier = Math.max(...activeTiersList.map(t => byTier[t.id].length), 1);
-  // Extra label padding: labels can extend ~40px beyond node center
-  const W = Math.max(520, Math.min(1000, 80 + maxPerTier * 120));
-  const leftPad = 70;
-  const rightPad = 70;
-  const rowH = Math.max(90, Math.min(130, 680 / numTiers));
-  const H = numTiers * rowH + 50; // overridden below by H_actual
-
-  // Tier importance → node radius
-  const tierRadius = {
-    paramartha:15, tattva:13, kshetra:11, guna:11, yoga:11,
-    sadhana:10, antahkarana:9, dharma:9, dosha:9, pratika:9, phala:11, yajna:10
-  };
-
-  // Build adjacency for ordering nodes within tier by connectivity
-  const adj = {};
-  activeNodes.forEach(n => adj[n.id] = new Set());
-  EDGES.forEach(e => {
-    if (activeNodeIds.has(e.source) && activeNodeIds.has(e.target)) {
-      adj[e.source] && adj[e.source].add(e.target);
-      adj[e.target] && adj[e.target].add(e.source);
-    }
-  });
-
-  // Sort nodes within each tier: most connected first, then alphabetical
-  activeTiersList.forEach(tier => {
-    byTier[tier.id].sort((a,b) => {
-      const da = (adj[a.id]||new Set()).size, db = (adj[b.id]||new Set()).size;
-      return db - da || labelOf(a).localeCompare(labelOf(b));
-    });
-  });
-
-  // Calculate cumulative Y offsets (tiers with many nodes get extra height for wrapping)
-  const WRAP_THRESHOLD = 6; // nodes per tier before wrapping to 2 rows
-  const tierYStart = {};
-  let cumY = 40;
-  activeTiersList.forEach((tier, ti) => {
-    tierYStart[tier.id] = cumY;
-    const arr = byTier[tier.id];
-    const rows = arr.length > WRAP_THRESHOLD ? 2 : 1;
-    cumY += rowH * rows;
-  });
-  const H_actual = cumY + 20;
-
-  const pos = {};
-  activeTiersList.forEach((tier) => {
-    const arr = byTier[tier.id];
-    const usable = W - leftPad - rightPad;
-    const yBase = tierYStart[tier.id];
-    const rows = arr.length > WRAP_THRESHOLD ? 2 : 1;
-    const perRow = rows === 2 ? Math.ceil(arr.length / 2) : arr.length;
-    arr.forEach((n, i) => {
-      const row = rows === 2 ? Math.floor(i / perRow) : 0;
-      const col = i % perRow;
-      const rowCount = row === 0 ? Math.min(perRow, arr.length) : arr.length - perRow;
-      const x = rowCount === 1
-        ? leftPad + usable / 2
-        : leftPad + (col / (rowCount - 1)) * usable;
-      const cy = yBase + (rows === 1 ? rowH / 2 : (row === 0 ? rowH * 0.33 : rowH * 0.75));
-      const r = tierRadius[n.tier] || 10;
-      pos[n.id] = { x, y: cy, r };
-    });
-  });
-
-  const fontFam = state.lang==='hi'?'Tiro Devanagari Hindi':state.lang==='dev'?'Tiro Devanagari Sanskrit':state.lang==='kn'?'Tiro Kannada':'Cormorant Garamond';
-  const fontSize = state.lang === 'en' ? 11 : 12;
-  const H_final = typeof H_actual !== "undefined" ? H_actual : H;
-  let svg = `<svg viewBox="0 0 ${W} ${H_final}" width="100%" height="${H_final}" xmlns="http://www.w3.org/2000/svg">`;
-
-  // Tier bands
-  activeTiersList.forEach((tier, ti) => {
-    const yTop = 40 + ti * rowH;
-    svg += `<rect x="0" y="${yTop}" width="${W}" height="${rowH}" fill="${ti%2 ? 'rgba(214,197,153,.10)' : 'rgba(230,216,176,.18)'}"/>`;
-    const lab = state.lang==='hi'?(tier.hi||tier.dev):state.lang==='dev'?tier.dev:state.lang==='kn'?tier.kn:tier.en;
-    svg += `<text x="8" y="${yTop + 18}" font-family="${fontFam}" font-size="11" fill="var(--ink-soft)" font-weight="600" opacity="0.7">${escapeHtml(lab)}</text>`;
-  });
-
-  // Edges
-  EDGES.forEach(e => {
-    if (!activeNodeIds.has(e.source) || !activeNodeIds.has(e.target)) return;
-    const a = pos[e.source], b = pos[e.target];
-    if (!a || !b) return;
-    const mx = (a.x + b.x) / 2;
-    const my = (a.y + b.y) / 2 - Math.abs(b.y - a.y) * 0.12;
-    svg += `<path class="map-edge" d="M ${a.x} ${a.y} Q ${mx} ${my} ${b.x} ${b.y}" stroke="var(--e-${e.type})" stroke-width="1" opacity="0.7"/>`;
-  });
-
-  // Nodes
-  activeNodes.forEach(n => {
-    const p = pos[n.id]; if (!p) return;
-    const lab = labelOf(n);
-    const connected = (adj[n.id]||new Set()).size > 0;
-    const opacity = connected ? '0.92' : '0.55';
-    svg += `<g class="map-node" data-id="${n.id}" style="cursor:pointer">
-      <circle cx="${p.x}" cy="${p.y}" r="${p.r}" fill="var(--t-${n.tier})" fill-opacity="${opacity}" stroke="var(--t-${n.tier})" stroke-width="1.5"/>
-      <text x="${p.x}" y="${p.y + p.r + 13}" font-family="${fontFam}" font-size="${fontSize}" text-anchor="middle" fill="var(--ink)">${escapeHtml(lab)}</text>
-    </g>`;
-  });
-
-  svg += `</svg>`;
-
-  let mapContent = '';
-  if (activeNodeIds.size === 0) {
-    const emptyMsgs = {
-      en: {
-        title: 'No Mapped Concepts',
-        desc: 'No key concepts are currently mapped to this specific shloka in the Knowledge Graph yet. Try exploring other shlokas in this chapter.'
-      },
-      kn: {
-        title: 'ಯಾವುದೇ ಪರಿಕಲ್ಪನೆಗಳು ಕಂಡುಬಂದಿಲ್ಲ',
-        desc: 'ಜ್ಞಾನ ನಕ್ಷೆಯಲ್ಲಿ ಈ ನಿರ್ದಿಷ್ಟ ಶ್ಲೋಕಕ್ಕೆ ಯಾವುದೇ ಪ್ರಮುಖ ಪರಿಕಲ್ಪನೆಗಳನ್ನು ಇನ್ನು ಗುರುತಿಸಲಾಗಿಲ್ಲ. ದಯವಿಟ್ಟು ಈ ಅಧ್ಯಾಯದ ಬೇರೆ ಶ್ಲೋಕಗಳನ್ನು ನೋಡಿ.'
-      },
-      hi: {
-        title: 'कोई मुख्य विचार उपलब्ध नहीं',
-        desc: 'ज्ञान मानचित्र में इस विशेष श्लोक से जुड़ा कोई मुख्य विचार अभी उपलब्ध नहीं है। कृपया इस अध्याय के अन्य श्लोकों को देखें।'
-      },
-      dev: {
-        title: 'कोऽपि विचारो न लब्धः',
-        desc: 'अस्मिन् विशिष्टे श्लोके सम्बद्धः कोऽपि मुख्यसिद्धान्तः अधुना ज्ञानमानचित्रे न विद्यते। कृपया अस्य अध्यायस्य अन्यान् श्लोकान् पश्यतु।'
-      }
-    };
-    const msg = emptyMsgs[state.lang] || emptyMsgs.en;
-    mapContent = `
-      <div class="map-empty-state">
-        <div class="map-empty-icon">📭</div>
-        <h3 class="map-empty-title">${msg.title}</h3>
-        <p class="map-empty-desc">${msg.desc}</p>
-      </div>
-    `;
-  } else {
-    mapContent = svg;
-  }
-
-  root.innerHTML = `
-    ${controlPanelHtml}
-    <div class="map-canvas-wrap" id="map-canvas-wrap">
-      <canvas id="map-canvas"></canvas>
-      <div class="map-minimap">
-        <canvas id="minimap-canvas" width="150" height="100"></canvas>
-      </div>
-      <div class="map-zoom-btns">
-        <button id="map-zoom-in" title="Zoom in">+</button>
-        <button id="map-zoom-out" title="Zoom out">−</button>
-        <button id="map-zoom-reset" title="Reset view">⊙</button>
-      </div>
-      <div id="map-tooltip" class="map-tooltip"></div>
-    </div>
-  `;
 }
 
 window.onMapChapterChange = function(val) {
