@@ -62,11 +62,61 @@ removes a whole class of future regressions.
 
 ---
 
-## 2. The pinch bug (OPEN — highest priority)
+## 2. The pinch bug (PARTIALLY RESOLVED — state machine done; two residual causes found)
 
 ### Symptom
 Pinch-to-zoom ends by selecting whatever node is under a finger and jumping to
 Focus view. Zoom itself may also feel wrong.
+
+### Status update (2026-07-19 review)
+The three-part state-machine fix below **is implemented** in `viewer-src.html`
+and the built `viewer.html` (commit `3f4ae4e`): `mapPinching` exists, single-finger
+`touchstart` ignores strays during a pinch, the tap branch is guarded with
+`mapDragging && !mapDidDrag && !mapPinching && e.touches.length === 0`, and the
+pinch→one-finger handoff sets `mapDidDrag = true` so the last lift can't count as
+a tap. If spurious selection or bad zoom persists on device, the causes are the
+two residual bugs below, **not** the state machine.
+
+### Residual cause 1 — pinch zoom anchor drift (confirmed in code)
+In the pinch `touchmove` handler the anchor world point is computed as:
+
+```
+const wx = (cx - mapTransform.x) / mapPinchStartScale;
+```
+
+This mixes the **start** scale with the **current, already-mutated** translation.
+On the first move frame it's correct, but every frame after that
+`mapTransform.x/y` already encode the new scale `s1`, while the divisor is still
+`mapPinchStartScale` — so the recovered world point is wrong and the zoom centre
+drifts away from the fingers as the pinch continues. This is the "zoom feels
+wrong" symptom.
+
+**Fix:** snapshot the full start transform at pinch start
+(`mapPinchStartTransform = {x, y, scale: mapTransform.scale}`) and always anchor
+against the snapshot:
+
+```
+const wx = (cx - mapPinchStartTransform.x) / mapPinchStartTransform.scale;
+const wy = (cy - mapPinchStartTransform.y) / mapPinchStartTransform.scale;
+mapTransform.scale = s1;
+mapTransform.x = cx - wx * s1;
+mapTransform.y = cy - wy * s1;
+```
+
+(Equally valid: fully incremental math using the *current* transform each frame;
+just never mix start-scale with live-translation.)
+
+### Residual cause 2 — synthetic mouse events bypass the pinch guard
+After touch gestures, browsers (notably Android WebView) may fire **synthetic**
+`mousedown`/`mouseup`. The `window mouseup` tap branch has **no** `mapPinching`
+or recent-touch guard, so a selection can still sneak in via the mouse path even
+when the touch path is correctly suppressed.
+
+**Fix (either or both):**
+1. Record `mapLastTouchTs = Date.now()` in every touch handler; in
+   `mousedown`/`mouseup`, early-return if `Date.now() - mapLastTouchTs < 700`.
+2. Call `e.preventDefault()` in `touchend` when the event was fully handled
+   (note: the tap-handling `touchend` listener is not passive, so this is legal).
 
 ### Root cause (confirmed by reading the handlers)
 Finger sequence during a pinch:
@@ -79,7 +129,7 @@ Finger sequence during a pinch:
 4. Fingers lift. `touchend` fires with `mapDragging===true && mapDidDrag===false`.
    The tap branch runs → `mapHitNode` → **spurious node selection + Focus jump.**
 
-### Fix (do all three)
+### Original state-machine fix (IMPLEMENTED — kept for reference)
 1. **Track pinch state.** Add `let mapPinching = false;`. Set it `true` in the
    2-finger `touchstart`; keep it true until *all* fingers are up.
 2. **Suppress tap after pinch.** In the tap `touchend`, guard with
@@ -104,7 +154,7 @@ Finger sequence during a pinch:
 
 ---
 
-## 3. Language contamination (OPEN — separate from map mechanics)
+## 3. Language contamination (OPEN — data gap re-confirmed 2026-07-19: all 47 nodes in `data.js` are missing both `dev` and `hi`; transliteration step not yet done)
 
 ### Symptom
 With Hindi (`hi`) or Sanskrit/Devanagari (`dev`) selected, node labels, edge
@@ -159,9 +209,11 @@ the node/edge *labels* per the user's explicit choice.
 
 ---
 
-## 5. Recommended order of work
+## 5. Recommended order of work (updated 2026-07-19)
 
-1. **Pinch state-machine fix** (Section 2) — small, self-contained, unblocks touch UX.
-2. **Hit-rect hardening** (Section 1) — prevents transform regressions.
-3. **KN→Devanagari transliteration** (Section 3) — removes contamination.
-4. Commit + push, verify live.
+1. ~~Pinch state-machine fix~~ — **done** (commit `3f4ae4e`).
+2. **Pinch anchor-drift fix** (Section 2, residual cause 1) — one-line-class math fix.
+3. **Synthetic-mouse guard** (Section 2, residual cause 2) — small guard in mouse handlers.
+4. **Hit-rect hardening** (Section 1) — prevents transform regressions.
+5. **KN→Devanagari transliteration** (Section 3) — removes contamination.
+6. Rebuild `viewer.html`, commit + push, verify live.
