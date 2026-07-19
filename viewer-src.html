@@ -2793,37 +2793,44 @@ function renderMap(){
   }
 
   // Emit canvas scaffold (Phase 7: replaces renderMapHandLaid / renderMapAuto)
-  root.innerHTML = `
-    ${controlPanelHtml}
-    ${emptyStateHtml}
-    <div class="map-canvas-wrap" id="map-canvas-wrap" style="${activeNodeIds.size === 0 ? 'display:none' : ''}">
-      <canvas id="map-canvas"></canvas>
-      <div class="map-minimap">
-        <canvas id="minimap-canvas" width="150" height="100"></canvas>
-      </div>
-      <div class="map-zoom-btns">
-        <button id="map-zoom-in" title="Zoom in">+</button>
-        <button id="map-zoom-out" title="Zoom out">−</button>
-        <button id="map-zoom-reset" title="Reset view">⊙</button>
-      </div>
-      <div id="map-tooltip" class="map-tooltip"></div>
-    </div>
-  `;
+  // ── Build scaffold once; update controls in-place on subsequent renders ──
+  const existingWrap = document.getElementById('map-canvas-wrap');
 
-  // Phase 2: initialise or re-wire canvas after innerHTML is set
-  mapActiveSet = activeNodeIds;
-  if (!mapCanvas || !document.getElementById('map-canvas')) {
-    // Canvas doesn't exist yet (first render) — init from scratch
+  if (!existingWrap) {
+    // First render: write the full scaffold including the canvas
+    root.innerHTML = `
+      <div id="map-controls-slot"></div>
+      <div id="map-empty-slot"></div>
+      <div class="map-canvas-wrap" id="map-canvas-wrap">
+        <canvas id="map-canvas"></canvas>
+        <div class="map-minimap">
+          <canvas id="minimap-canvas" width="150" height="100"></canvas>
+        </div>
+        <div class="map-zoom-btns">
+          <button id="map-zoom-in" title="Zoom in">+</button>
+          <button id="map-zoom-out" title="Zoom out">−</button>
+          <button id="map-zoom-reset" title="Reset view">⊙</button>
+        </div>
+        <div id="map-tooltip" class="map-tooltip"></div>
+      </div>
+    `;
+    mapCanvas = null; // ensure initMapCanvas runs fresh
     initMapCanvas();
-  } else {
-    // Canvas already running — just sync active set and ensure zoom buttons re-bound
-    const btnIn    = document.getElementById('map-zoom-in');
-    const btnOut   = document.getElementById('map-zoom-out');
-    const btnReset = document.getElementById('map-zoom-reset');
-    if (btnIn)    btnIn.onclick    = () => mapZoomAt(mapCanvas.clientWidth/2, mapCanvas.clientHeight/2, 1.3);
-    if (btnOut)   btnOut.onclick   = () => mapZoomAt(mapCanvas.clientWidth/2, mapCanvas.clientHeight/2, 1/1.3);
-    if (btnReset) btnReset.onclick = mapResetView;
   }
+
+  // Always update controls and empty-state slots in-place (no canvas teardown)
+  const ctrlSlot  = document.getElementById('map-controls-slot');
+  const emptySlot = document.getElementById('map-empty-slot');
+  const wrap      = document.getElementById('map-canvas-wrap');
+  if (ctrlSlot)  ctrlSlot.innerHTML  = controlPanelHtml;
+  if (emptySlot) emptySlot.innerHTML = emptyStateHtml;
+  if (wrap)      wrap.style.display  = activeNodeIds.size === 0 ? 'none' : '';
+
+  // Sync active set then kick simulation
+  mapActiveSet = activeNodeIds;
+
+  // Refit the view so the whole active graph is visible in the viewport.
+  if (mapCanvas && mapActiveSet.size) mapResetView();
 
   // Phase 6: start force simulation for chapter-filtered views
   if (chSel !== 0) {
@@ -2842,8 +2849,10 @@ let mapActiveSet = new Set();
 let mapSelectedId = null;
 let mapAnimFrame = null;
 let mapDragging = false, mapDragStart = null, mapTransformStart = null;
+let mapTouchStartClient = { x: 0, y: 0 };
 let mapDidDrag = false;
 let mapPinchStartDist = 0, mapPinchStartScale = 1;
+let mapPinching = false;
 let mapSimRunning = false;   // true while force simulation is ticking
 let mapSimFrames  = 0;       // frame counter; stops at MAP_SIM_MAX_FRAMES
 const MAP_SIM_MAX_FRAMES = 300;
@@ -2891,19 +2900,62 @@ function mapZoomAt(cx, cy, factor) {
 
 function mapResetView() {
   if (!mapCanvas) return;
-  mapTransform.scale = 1;
-  mapTransform.x = (mapCanvas.clientWidth  - MAP_W) / 2;
-  mapTransform.y = (mapCanvas.clientHeight - MAP_H) / 2;
+  // Fit the entire graph's bounding box into the visible viewport (CSS px).
+  const vw = mapCanvas.clientWidth  || 391;
+  const vh = mapCanvas.clientHeight || 518;
+
+  // Compute bounds of the active nodes (fall back to full MAP area).
+  let minX = Infinity, minY = Infinity, maxX = -Infinity, maxY = -Infinity;
+  let any = false;
+  if (typeof mapNodes !== 'undefined' && mapNodes.length) {
+    for (const n of mapNodes) {
+      if (mapActiveSet && mapActiveSet.size && !mapActiveSet.has(n.id)) continue;
+      const r = n.r || 20;
+      any = true;
+      if (n.x - r < minX) minX = n.x - r;
+      if (n.y - r < minY) minY = n.y - r;
+      if (n.x + r > maxX) maxX = n.x + r;
+      if (n.y + r > maxY) maxY = n.y + r;
+    }
+  }
+  if (!any) { minX = 0; minY = 0; maxX = MAP_W; maxY = MAP_H; }
+
+  const pad = 40;
+  const bw = (maxX - minX) + pad * 2;
+  const bh = (maxY - minY) + pad * 2;
+  const scale = Math.min(vw / bw, vh / bh);
+  mapTransform.scale = Math.max(0.15, Math.min(scale, 2));
+
+  // Center the bounding box in the viewport.
+  const cx = (minX + maxX) / 2;
+  const cy = (minY + maxY) / 2;
+  mapTransform.x = vw / 2 - cx * mapTransform.scale;
+  mapTransform.y = vh / 2 - cy * mapTransform.scale;
+}
+
+function mapGetPos(clientX, clientY) {
+  // Drawing space is CSS pixels (context is pre-scaled by devicePixelRatio via
+  // setTransform in mapResizeCanvas), and mapTransform/node coords live in that
+  // same CSS-pixel space. So map the client point directly to CSS-local coords
+  // WITHOUT multiplying by the backing-store DPR ratio.
+  const rect = mapCanvas.getBoundingClientRect();
+  return {
+    x: clientX - rect.left,
+    y: clientY - rect.top
+  };
 }
 
 function mapHitNode(cx, cy) {
   if (!mapCanvas) return null;
+  // cx,cy are CSS pixels (from getBoundingClientRect). Drawing maps a world point
+  // to device px as: dev = dpr*(mapTransform + scale*world). A CSS-pixel tap equals
+  // dev/dpr, so: cssTap = mapTransform + scale*world  →  world = (cssTap - mapTransform)/scale.
   const wx = (cx - mapTransform.x) / mapTransform.scale;
   const wy = (cy - mapTransform.y) / mapTransform.scale;
-  for (const n of mapNodes) {
+  for (const n of [...mapNodes].reverse()) {
     if (!mapActiveSet.has(n.id)) continue;
-    const dx = n.x - wx, dy = n.y - wy;
-    if (Math.sqrt(dx*dx + dy*dy) <= (n.r || 12) + 6) return n;
+    const r = (n.r || 12) + 8;
+    if (Math.abs(n.x - wx) < r && Math.abs(n.y - wy) < r) return n;
   }
   return null;
 }
@@ -3010,7 +3062,7 @@ function mapDrawEdges(ctx, activeSet, selectedId) {
       ctx.font = '9px sans-serif';
       ctx.textAlign = 'center';
       ctx.textBaseline = 'middle';
-      ctx.fillText(e.type, mx, my);
+      ctx.fillText(UI(e.type) || e.type, mx, my);
     }
 
     ctx.restore();
@@ -3041,35 +3093,36 @@ function mapDrawNodes(ctx, activeSet, selectedId) {
       ctx.shadowBlur = 20;
     }
 
-    // Circle fill
+    // Filled circle — vivid tier color (filled always, not just when selected)
     ctx.beginPath();
     ctx.arc(n.x, n.y, n.r, 0, Math.PI * 2);
-    ctx.fillStyle = isSelected ? col : mapLighten(col, 0.82);
+    ctx.fillStyle = isSelected ? col : mapLighten(col, 0.25);
     ctx.fill();
 
-    // Circle stroke
+    // Stroke
     ctx.strokeStyle = col;
-    ctx.lineWidth = isSelected ? 3 : 1.5;
+    ctx.lineWidth = isSelected ? 3 : 2;
     ctx.stroke();
 
     ctx.shadowBlur = 0;
 
-    // Label inside circle (short)
-    const innerLabel = labelOf(n).slice(0, 10);
-    const fontSize = Math.max(8, Math.min(12, n.r * 0.6));
-    ctx.font = `${fontSize}px sans-serif`;
+    // Bold label inside node — white when selected, dark otherwise
+    const innerLabel = labelOf(n);
+    const words = innerLabel.split(/\s+/);
+    const line1 = words.slice(0, Math.ceil(words.length / 2)).join(' ');
+    const line2 = words.slice(Math.ceil(words.length / 2)).join(' ');
+    const fontSize = Math.max(9, Math.min(13, n.r * 0.55));
+    ctx.font = `bold ${fontSize}px sans-serif`;
     ctx.textAlign = 'center';
     ctx.textBaseline = 'middle';
-    ctx.fillStyle = isSelected ? '#fff' : (MAP_COLOR.ink || '#1f1a13');
-    ctx.globalAlpha = alpha * (isSelected ? 1 : 0.85);
-    ctx.fillText(innerLabel, n.x, n.y);
-
-    // Full label below circle
-    ctx.font = `${Math.max(9, n.r * 0.55)}px sans-serif`;
-    ctx.fillStyle = MAP_COLOR.ink || '#1f1a13';
-    ctx.globalAlpha = alpha * 0.75;
-    const fullLabel = labelOf(n);
-    ctx.fillText(fullLabel, n.x, n.y + n.r + 9);
+    ctx.fillStyle = isSelected ? '#fff' : '#1f1a13';
+    ctx.globalAlpha = alpha;
+    if (line2) {
+      ctx.fillText(line1, n.x, n.y - fontSize * 0.6);
+      ctx.fillText(line2, n.x, n.y + fontSize * 0.6);
+    } else {
+      ctx.fillText(line1, n.x, n.y);
+    }
 
     ctx.restore();
   });
@@ -3127,16 +3180,16 @@ function mapDrawMinimap() {
 /* Main draw frame */
 function mapDrawFrame() {
   if (!mapCtx || !mapCanvas) return;
-  const dpr = window.devicePixelRatio || 1;
-  const cw = mapCanvas.width, ch = mapCanvas.height;
+  const dpr = mapDevicePixelRatio();
 
-  mapCtx.clearRect(0, 0, cw, ch);
-
-  // Background
+  // Clear/fill entire backing store (device px), base transform is identity.
+  mapCtx.setTransform(1, 0, 0, 1, 0, 0);
+  mapCtx.clearRect(0, 0, mapCanvas.width, mapCanvas.height);
   mapCtx.fillStyle = MAP_COLOR.paper || '#fbf5e6';
-  mapCtx.fillRect(0, 0, cw, ch);
+  mapCtx.fillRect(0, 0, mapCanvas.width, mapCanvas.height);
 
   mapCtx.save();
+  // Composite transform: device_px = dpr * (mapTransform + scale * worldCoord)
   mapCtx.translate(mapTransform.x * dpr, mapTransform.y * dpr);
   mapCtx.scale(mapTransform.scale * dpr, mapTransform.scale * dpr);
 
@@ -3250,8 +3303,12 @@ function mapResizeCanvas() {
   const h = wrap ? wrap.clientHeight : 520;
   mapCanvas.width  = Math.round(w * dpr);
   mapCanvas.height = Math.round(h * dpr);
-  mapCtx.setTransform(dpr, 0, 0, dpr, 0, 0);
+  // Keep the base transform as IDENTITY. devicePixelRatio is applied explicitly
+  // and identically in BOTH mapDrawFrame and mapHitNode via mapDevicePixelRatio().
+  mapCtx.setTransform(1, 0, 0, 1, 0, 0);
 }
+
+function mapDevicePixelRatio() { return window.devicePixelRatio || 1; }
 
 function initMapCanvas() {
   mapCanvas = document.getElementById('map-canvas');
@@ -3262,7 +3319,6 @@ function initMapCanvas() {
 
   resolveMapColors();
   mapResizeCanvas();
-  mapResetView();
 
   // Initialize mapNodes from NODES + KG_POSITIONS
   mapNodes = NODES.map(n => {
@@ -3272,29 +3328,40 @@ function initMapCanvas() {
       : { ...n, x: MAP_W / 2, y: MAP_H / 2, r: 10, vx: 0, vy: 0 };
   });
 
-  // ── Pointer events (pan + click) ──────────────────────────────────────
-  mapCanvas.addEventListener('pointerdown', e => {
-    mapDragging = true;
-    mapDidDrag  = false;
-    mapDragStart      = { x: e.clientX, y: e.clientY };
+  // Fit view now that nodes exist (mapActiveSet is set by renderMap before draw)
+  mapResetView();
+
+  // ── Pointer/touch events (pan + click) ────────────────────────────────
+  mapCanvas.addEventListener('mousedown', e => {
+    mapDragging = true; mapDidDrag = false;
+    mapDragStart = mapGetPos(e.clientX, e.clientY);
     mapTransformStart = { x: mapTransform.x, y: mapTransform.y };
-    mapCanvas.setPointerCapture(e.pointerId);
+    e.preventDefault();
   });
 
-  mapCanvas.addEventListener('pointermove', e => {
+  mapCanvas.addEventListener('touchstart', e => {
+    if (e.touches.length !== 1) return; // let pinch handler deal with 2 fingers
+    if (mapPinching) return;            // ignore stray finger during pinch
+    mapDragging = true; mapDidDrag = false;
+    const t = e.touches[0];
+    mapDragStart = mapGetPos(t.clientX, t.clientY);
+    mapTouchStartClient = { x: t.clientX, y: t.clientY };
+    mapTransformStart = { x: mapTransform.x, y: mapTransform.y };
+  }, { passive: true });
+
+  window.addEventListener('mousemove', e => {
     if (!mapDragging) {
-      // Tooltip
-      const rect = mapCanvas.getBoundingClientRect();
-      const cx = e.clientX - rect.left;
-      const cy = e.clientY - rect.top;
-      const hit = mapHitNode(cx, cy);
+      // Hover tooltip (desktop only)
+      const pos = mapGetPos(e.clientX, e.clientY);
+      const hit = mapHitNode(pos.x, pos.y);
       const tip = document.getElementById('map-tooltip');
       if (tip) {
         if (hit) {
           const note = hit.note ? (typeof hit.note === 'object' ? (hit.note.en || '') : hit.note) : '';
           tip.textContent = labelOf(hit) + (note ? '\n' + note.slice(0, 80) + (note.length > 80 ? '…' : '') : '');
-          tip.style.left = (cx + 14) + 'px';
-          tip.style.top  = (cy - 10) + 'px';
+          const rect = mapCanvas.getBoundingClientRect();
+          tip.style.left = (e.clientX - rect.left + 14) + 'px';
+          tip.style.top  = (e.clientY - rect.top  - 10) + 'px';
           tip.classList.add('visible');
         } else {
           tip.classList.remove('visible');
@@ -3302,28 +3369,67 @@ function initMapCanvas() {
       }
       return;
     }
-    const dx = e.clientX - mapDragStart.x;
-    const dy = e.clientY - mapDragStart.y;
-    if (Math.abs(dx) + Math.abs(dy) > 3) mapDidDrag = true;
+    const pos = mapGetPos(e.clientX, e.clientY);
+    const dx = pos.x - mapDragStart.x, dy = pos.y - mapDragStart.y;
+    if (Math.abs(dx) > 4 || Math.abs(dy) > 4) mapDidDrag = true;
     mapTransform.x = mapTransformStart.x + dx;
     mapTransform.y = mapTransformStart.y + dy;
   });
 
-  mapCanvas.addEventListener('pointerup', e => {
+  mapCanvas.addEventListener('touchmove', e => {
+    if (!mapDragging || e.touches.length !== 1) return;
+    const t = e.touches[0];
+    // Drag detection in CLIENT (CSS px) space with a finger-friendly threshold
+    const cdx = t.clientX - mapTouchStartClient.x;
+    const cdy = t.clientY - mapTouchStartClient.y;
+    if (Math.abs(cdx) > 10 || Math.abs(cdy) > 10) mapDidDrag = true;
+    const pos = mapGetPos(t.clientX, t.clientY);
+    const dx = pos.x - mapDragStart.x, dy = pos.y - mapDragStart.y;
+    mapTransform.x = mapTransformStart.x + dx;
+    mapTransform.y = mapTransformStart.y + dy;
+    e.preventDefault();
+  }, { passive: false });
+
+  window.addEventListener('mouseup', e => {
+    if (!mapDragging) return;
     if (!mapDidDrag) {
-      const rect = mapCanvas.getBoundingClientRect();
-      const cx = e.clientX - rect.left;
-      const cy = e.clientY - rect.top;
-      const hit = mapHitNode(cx, cy);
-      if (hit) {
-        mapSelectedId = hit.id;
-        setView('focus', hit.id);
-      } else {
-        mapSelectedId = null;
-      }
+      const pos = mapGetPos(e.clientX, e.clientY);
+      const hit = mapHitNode(pos.x, pos.y);
+      if (hit) { mapSelectedId = hit.id; setView('focus', hit.id); }
+      else { mapSelectedId = null; }
     }
-    mapDragging = false;
+    mapDragging = false; mapDidDrag = false;
   });
+
+  mapCanvas.addEventListener('touchend', e => {
+    // Only treat as a tap if: a single-finger gesture was in progress, it didn't
+    // become a drag, no pinch happened, and this is the LAST finger lifting.
+    if (mapDragging && !mapDidDrag && !mapPinching && e.touches.length === 0) {
+      const t = (e.changedTouches && e.changedTouches[0]) || null;
+      let pos = mapDragStart;
+      if (t) pos = mapGetPos(t.clientX, t.clientY);
+      const hit = mapHitNode(pos.x, pos.y);
+      if (hit) { mapSelectedId = hit.id; setView('focus', hit.id); }
+    }
+    // Clear pinch only when all fingers are up; keep single-finger pan alive if
+    // one finger remains after a pinch (so the leftover finger can pan cleanly).
+    if (e.touches.length === 0) {
+      mapPinching = false;
+      mapDragging = false;
+      mapDidDrag  = false;
+    } else if (e.touches.length === 1 && mapPinching) {
+      // Transitioned from pinch to one finger: restart a pan from current point,
+      // do NOT allow this to later count as a tap.
+      const t = e.touches[0];
+      mapDragging = true;
+      mapDidDrag  = true;   // mark as drag so lifting won't trigger a tap
+      mapDragStart = mapGetPos(t.clientX, t.clientY);
+      mapTouchStartClient = { x: t.clientX, y: t.clientY };
+      mapTransformStart = { x: mapTransform.x, y: mapTransform.y };
+    }
+  });
+
+
 
   // ── Wheel zoom ────────────────────────────────────────────────────────
   mapCanvas.addEventListener('wheel', e => {
@@ -3341,6 +3447,9 @@ function initMapCanvas() {
       const t0 = e.touches[0], t1 = e.touches[1];
       mapPinchStartDist  = Math.hypot(t1.clientX - t0.clientX, t1.clientY - t0.clientY);
       mapPinchStartScale = mapTransform.scale;
+      mapPinching = true;      // entering pinch
+      mapDragging = false;     // cancel any single-finger drag in progress
+      mapDidDrag  = false;
       e.preventDefault();
     }
   }, { passive: false });
