@@ -2088,7 +2088,10 @@ function getActive(field){
   if (field == null) return '';
   if (typeof field === 'string') return field;
   if (typeof field === 'object'){
-    return field[state.lang] || field.en || field.dev || field.kn || '';
+    if (state.lang === 'kn')  return field.kn  || field.en || '';
+    if (state.lang === 'dev') return field.dev || field.kn || field.en || '';
+    if (state.lang === 'hi')  return field.hi  || field.en || field.kn || '';
+    return field.en || field.kn || '';
   }
   return String(field);
 }
@@ -2852,7 +2855,9 @@ let mapDragging = false, mapDragStart = null, mapTransformStart = null;
 let mapTouchStartClient = { x: 0, y: 0 };
 let mapDidDrag = false;
 let mapPinchStartDist = 0, mapPinchStartScale = 1;
+let mapPinchStartTransform = { x: 0, y: 0, scale: 1 };
 let mapPinching = false;
+let mapLastTouchTs = 0;
 let mapSimRunning = false;   // true while force simulation is ticking
 let mapSimFrames  = 0;       // frame counter; stops at MAP_SIM_MAX_FRAMES
 const MAP_SIM_MAX_FRAMES = 300;
@@ -3340,6 +3345,7 @@ function initMapCanvas() {
   });
 
   mapCanvas.addEventListener('touchstart', e => {
+    mapLastTouchTs = Date.now();
     if (e.touches.length !== 1) return; // let pinch handler deal with 2 fingers
     if (mapPinching) return;            // ignore stray finger during pinch
     mapDragging = true; mapDidDrag = false;
@@ -3392,6 +3398,7 @@ function initMapCanvas() {
 
   window.addEventListener('mouseup', e => {
     if (!mapDragging) return;
+    if (Date.now() - mapLastTouchTs < 700) { mapDragging = false; mapDidDrag = false; return; }
     if (!mapDidDrag) {
       const pos = mapGetPos(e.clientX, e.clientY);
       const hit = mapHitNode(pos.x, pos.y);
@@ -3402,6 +3409,7 @@ function initMapCanvas() {
   });
 
   mapCanvas.addEventListener('touchend', e => {
+    mapLastTouchTs = Date.now();
     // Only treat as a tap if: a single-finger gesture was in progress, it didn't
     // become a drag, no pinch happened, and this is the LAST finger lifting.
     if (mapDragging && !mapDidDrag && !mapPinching && e.touches.length === 0) {
@@ -3447,7 +3455,9 @@ function initMapCanvas() {
       const t0 = e.touches[0], t1 = e.touches[1];
       mapPinchStartDist  = Math.hypot(t1.clientX - t0.clientX, t1.clientY - t0.clientY);
       mapPinchStartScale = mapTransform.scale;
+      mapPinchStartTransform = { x: mapTransform.x, y: mapTransform.y, scale: mapTransform.scale };
       mapPinching = true;      // entering pinch
+      mapLastTouchTs = Date.now();
       mapDragging = false;     // cancel any single-finger drag in progress
       mapDidDrag  = false;
       e.preventDefault();
@@ -3464,8 +3474,8 @@ function initMapCanvas() {
         const cx = ((t0.clientX + t1.clientX) / 2) - rect.left;
         const cy = ((t0.clientY + t1.clientY) / 2) - rect.top;
         const s1 = mapClamp(mapPinchStartScale * factor, 0.2, 5);
-        const wx = (cx - mapTransform.x) / mapPinchStartScale;
-        const wy = (cy - mapTransform.y) / mapPinchStartScale;
+        const wx = (cx - mapPinchStartTransform.x) / mapPinchStartTransform.scale;
+        const wy = (cy - mapPinchStartTransform.y) / mapPinchStartTransform.scale;
         mapTransform.scale = s1;
         mapTransform.x = cx - wx * s1;
         mapTransform.y = cy - wy * s1;
