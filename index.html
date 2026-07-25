@@ -1,6 +1,7 @@
 <!doctype html>
 <html lang="en">
 <head>
+<script>if ('scrollRestoration' in history) history.scrollRestoration = 'manual';</script>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
 <meta name="theme-color" content="#f4ead8">
@@ -9900,6 +9901,11 @@ if ('history' in window && 'scrollRestoration' in window) {
 }
 window.scrollTo(0, 0);
 render();
+window.scrollTo(0, 0);
+window.addEventListener('load', () => {
+  window.scrollTo(0, 0);
+  requestAnimationFrame(() => window.scrollTo(0, 0));
+});
 </script>
 </body>
 </html>
