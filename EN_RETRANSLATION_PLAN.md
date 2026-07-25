@@ -24,7 +24,7 @@ The existing `bannanje_en.js` is raw machine translation of the Kannada (via `tr
 ## Progress
 | Chapter | Verses | Verified | Translated | Committed |
 |---------|--------|----------|------------|-----------|
-| 1 | 48 | ✅ 2026-07-25 (9 Latin verses vs pages; 3 fixes: 1.13 +(Resource), 1.24 +(Psychotherapy), 1.40 convention→Religion of Society) | 1.1–1.6 done | 1.1–1.6 |
+| 1 | 48 | ✅ 2026-07-25 (9 Latin verses vs pages; 3 fixes: 1.13 +(Resource), 1.24 +(Psychotherapy), 1.40 convention→Religion of Society) | 1.1–1.14 done | 1.1–1.14 |
 | 2–18 | 654 | — | — | — |
 
 ## Known debts folded in
