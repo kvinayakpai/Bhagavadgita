@@ -75,3 +75,21 @@ A secondary audit after Phase 1 found 11 garbled patterns that were missed. All 
 | 15.9 | `` ಆ*ಈ--ವ*ಚರ`ಏವಚ( 56!...`` | `ಅ+ಊ+ವ+ಚ=ಏವಚ(set of abbreviations-ಸಂಕ್ಷೇಪ-ಪದ)-` |
 | 15.13 | `೦೫೬1೫೦೧೩ 1006` | `Gravitational force` |
 | 17.24 | `ಸಂಕ್ಷಿಪ್ತಪದ(ಸಿ00೫0೦೧;` | `ಸಂಕ್ಷಿಪ್ತಪದ(Abbreviation;` |
+
+---
+
+## Phase 3 — Quran Quote Garbles (3.37 & 16.4)
+**Completed:** 2026-07-25 ✅
+
+Two garbled Quran quotes found via the ಕುರಾನ trail (unparenthesized, so earlier paren-based scans missed them). Both verified by vision-reading source PNGs at 2–3× zoom.
+
+| Verse | Book page | Garbled (KN form) | Fixed As |
+|-------|-----------|-------------------|----------|
+| 3.37 | page_0121.png | `"01೪೮ 17607 ೦೬! 17೦/3 ೧೮1೮ )/೦ 30೮ 0೦೦೧\n61967 ೦೪.` | `"Drive them out from where they drove\nyou out".` |
+| 16.4 | page_0497.png | `"ದಿ1೪ಅ 07077 ೦೮! 1017 ೫೧೦೯೮\n೫೦೮ 03%ಆ 0೦೦೧ 61067 ೦೮"` | `"Drive them out from where\nyou have been driven out"` |
+
+Note: the book genuinely uses two slightly different English wordings in the two locations; both preserved as printed.
+
+**Files fixed** (each carried its own mutated variant of the garble): `bannanje_kn.js`, `bannanje_en.js`, `bannanje_dev.js`, `bannanje_hi.js`, `data.js`, `index.html`, `viewer_online.html`; `viewer.html` regenerated via `build-bundle.py`. All files re-validated with `node` `new Function()`; zero residual fragments (`61967|61067|17607|07077|51098`) across the repo.
+
+**Sweep status:** fresh scans (Kannada-digit-in-parens, mixed-script token runs, no-vowel Latin words) return zero further suspects in `bannanje_kn.js`. The parenthesized-garble backlog from Phases 1–2 appears fully cleared; remaining risk is other unparenthesized garbles findable only by page-by-page vision reading.
