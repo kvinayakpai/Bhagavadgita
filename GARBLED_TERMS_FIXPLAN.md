@@ -93,3 +93,30 @@ Note: the book genuinely uses two slightly different English wordings in the two
 **Files fixed** (each carried its own mutated variant of the garble): `bannanje_kn.js`, `bannanje_en.js`, `bannanje_dev.js`, `bannanje_hi.js`, `data.js`, `index.html`, `viewer_online.html`; `viewer.html` regenerated via `build-bundle.py`. All files re-validated with `node` `new Function()`; zero residual fragments (`61967|61067|17607|07077|51098`) across the repo.
 
 **Sweep status:** fresh scans (Kannada-digit-in-parens, mixed-script token runs, no-vowel Latin words) return zero further suspects in `bannanje_kn.js`. The parenthesized-garble backlog from Phases 1–2 appears fully cleared; remaining risk is other unparenthesized garbles findable only by page-by-page vision reading.
+
+---
+
+## Phase 4 — 6.35 Socrates Passage Restoration + Raw-OCR Signature Sweep
+**Completed:** 2026-07-25 ✅
+
+Signature scan of all 576 raw OCR pages (`_extracted/clean_ocr/`) surfaced garbles on pages 219, 241, 497 (497 = Phase 3's 16.4, already fixed). Page reads done via tesseract `-l eng` on 1.8–2.5× upscales (the `view` tool's image rendering failed for these pages; English print OCRs cleanly even where legacy-font Kannada does not).
+
+**Page 241 / verse 7.10:** book reads `(exclusive quality)` — existing JS text verified correct, no change.
+
+**Page 219 / verse 6.35 (Socrates Triple Filter Test):** the earlier Phase 1 patch had drifted from the book. Nine corrections applied to `bannanje_kn.js`, each vision/OCR-verified against the page:
+
+| # | Type | Book text restored |
+|---|------|--------------------|
+| 1 | missing | `(The Socrates Triple Filter Test)` after ಕಥೆ |
+| 2 | missing | `(Do you know what I just heard about your friend?)` |
+| 3 | missing | `(Have you made absolutely sure that what you are about to tell me is true?)` |
+| 4 | missing | `(“No, actually I just heard about it and...)` |
+| 5 | **wrong** | `(Do you know what you are saying is true?)` → `(So you don’t really know if it’s true or not)` |
+| 6 | truncated | `(Is what you are about to tell me **about my friend** something good?)` |
+| 7 | missing | `(No, on the contrary...)` |
+| 8 | truncated | `(Is what you want to tell me **about my friend** going to be useful to me?)` |
+| 9 | truncated | `(Why tell it to me at all?)` → `(If what you want to tell me is neither true nor good nor even useful, why tell it to me at all)` |
+
+**Propagation:** all 9 applied to `data.js`, `index.html`, `viewer_online.html` (KN copies); corrections 5/6/8/9 applied to `bannanje_dev.js`, `bannanje_hi.js` and their bundled copies (English parentheticals carried verbatim there). Every replacement context audited — all landed inside 6.35 passage blocks only. `viewer.html` rebuilt.
+
+**Known gaps (deferred to EN re-translation):** `bannanje_en.js` 6.35 rephrased the parentheticals into MT prose, so it still reflects the pre-fix content and could not be anchor-patched. DEV/HI carry the 4 corrections but not the 5 newly-added parentheticals (their Kannada-derived text lacks the anchors); full fidelity comes with regeneration of derived files.
