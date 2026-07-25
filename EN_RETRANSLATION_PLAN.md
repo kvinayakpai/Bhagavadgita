@@ -1,28 +1,40 @@
-# English Re-translation Plan (bannanje_en.js)
+# Multilingual Retranslation & Audit Plan (bannanje_en.js / bannanje_dev.js / bannanje_hi.js)
 **Created:** 2026-07-25
-**Method:** Option 1 — in-session manual translation from verified `bannanje_kn.js`
-**Transliteration:** IAST for all shloka lines and Sanskrit terms
+**Method:** Option 1 — in-session manual translation/audit from verified `bannanje_kn.js`
+**Transliteration:** IAST for all shloka lines and Sanskrit terms (EN); Devanagari-native for DEV.
 
 ## Why
 The existing `bannanje_en.js` is raw machine translation of the Kannada (via `translate_all_meanings.py`), with broken grammar and meaning drift. An earlier proposal to import a third-party English Gita book was **rejected** (2026-07-25) because it mixes in non-Bannanje interpretations (incl. Prabhupada). The only policy-clean EN source is a faithful translation of Bannanje's own verified Kannada.
 
+**Scope expansion (2026-07-25, same day, later session):** `bannanje_dev.js` and `bannanje_hi.js` were assumed unstarted/out of scope. Checked directly — both already have **full 701-key coverage**, mirroring `bannanje_kn.js`/`bannanje_en.js` exactly, and almost certainly come from the same `translate_all_meanings.py` pipeline as the pre-fix `bannanje_en.js`. So they are suspected to carry the same class of defects (broken meaning, un-adapted literalism) rather than being empty. Confirmed example: HI 15.1 retains "कन्नड़" (Kannada) — a leftover from the KN original's own meta-reference ("if translated into plain Kannada...") that is meaningless to a Hindi reader. DEV 15.1, by contrast, reads as genuinely composed, grammatical Sanskrit prose (real case endings/sandhi, not a Kannada-transliteration) — though shorter/more condensed than the corresponding KN, so its completeness is still unverified. **Conclusion: DEV/HI move from "not started" to "unverified — audit before deciding whether to retranslate wholesale or fix in place."**
+
 ## Rules (non-negotiable)
 1. **Translation only.** Nothing added, nothing inferred, no general Gita knowledge. Bannanje's aphoristic voice preserved over polished English.
-2. **English-in-KN passes through verbatim** (Quran quotes, Socrates dialogue, parentheticals like "(exclusive quality)"). Never re-translate what the book already gives in English.
-3. **Structure mirrored exactly:** shloka lines → word-gloss ("--" section) → commentary paragraphs → bracketed asides → merge notes (3.43 pattern).
-4. **Empty KN entries stay empty** with the standard `[NOTE: KN source empty — cannot author without book page]` placeholder.
-5. **IAST** via `indic_transliteration` (Kannada→IAST) for shloka lines, manually reviewed per verse (anusvāra/visarga conventions checked).
-6. Kannada digits in verse refs (e.g. ॥ಅಥರ್ವ ೩-೨೭-೨॥) → Arabic numerals: ॥Atharva 3-27-2॥.
-7. **Deviation check is mandatory.** Any anomaly noticed while translating — stray digits, non-standard Sanskrit spellings (e.g. anaka vs ānaka), odd punctuation, suspected OCR artifacts — must be vision-checked against the `gita_pages/` PNG before the batch is committed. Locate the page via `_extracted/clean_ocr/p-NNN.txt` grep, then crop/upscale the exact glyph (tesseract TSV gives coordinates; `kan` tessdata_best is installed at /home/claude/tessdata — set TESSDATA_PREFIX; glyph-metric subscript analysis distinguishes rare ottus the model garbles). Fix KN + EN together if the source differs; record the verdict in the Progress table either way.
+2. **English-in-KN passes through verbatim** (Quran quotes, Socrates dialogue, parentheticals like "(exclusive quality)"). Never re-translate what the book already gives in English. Applies to DEV and HI too — keep such spans in Latin script, not transliterated/translated into Devanagari or Hindi.
+3. **Structure mirrored exactly (EN only):** shloka lines → word-gloss ("--" section) → commentary paragraphs → bracketed asides → merge notes (3.43 pattern). DEV is NOT required to mirror this line-by-line (see Rule 9).
+4. **Empty KN entries stay empty** with the standard `[NOTE: KN source empty — cannot author without book page]` placeholder, in all three target languages.
+5. **IAST** via `indic_transliteration` (Kannada→IAST) for EN shloka lines, manually reviewed per verse (anusvāra/visarga conventions checked). DEV shloka lines use native Devanagari (also via `indic_transliteration`, Kannada→Devanagari, same manual review).
+6. Kannada digits in verse refs (e.g. ॥ಅಥರ್ವ ೩-೨೭-೨॥) → Arabic numerals in EN (Atharva 3-27-2); Devanagari digits in DEV (॥अथर्व ३-२७-२॥); Devanagari digits in HI.
+7. **Deviation check is mandatory.** Any anomaly noticed while translating — stray digits, non-standard Sanskrit spellings (e.g. anaka vs ānaka), odd punctuation, suspected OCR artifacts — must be vision-checked against the `gita_pages/` PNG before the batch is committed. Locate the page via `_extracted/clean_ocr/p-NNN.txt` grep, then crop/upscale the exact glyph (tesseract TSV gives coordinates; `kan` tessdata_best is installed at /home/claude/tessdata — set TESSDATA_PREFIX; glyph-metric subscript analysis distinguishes rare ottus the model garbles). Fix KN + EN (+ DEV/HI if the same verse has already been audited) together if the source differs; record the verdict in the Progress table either way.
+8. **Audit before rewrite (DEV/HI only).** For any verse already covered by the EN pass, first read the existing DEV and HI entries against the freshly-verified KN + EN. Only rewrite if a real defect is found (leftover artifacts, meaning drift, missing substantive content, broken grammar) — do not discard a working translation just to reformat it.
+9. **DEV style:** the existing DEV entries appear to be independently-composed, condensed Sanskrit prose covering the same substantive points as KN, not a literal line-by-line rendering. Preserve this style unless a verse is found to be missing substantive content (in which case extend it, still in the same condensed-prose Sanskrit style — do not force EN's line-by-line structure onto DEV).
+10. **HI style:** unlike DEV, existing HI entries read as closer literal derivatives of the KN prose (same paragraph structure, similar length) — so HI defects are more likely literalism/meta-reference artifacts (e.g. "kannada" leftover) and mistranslation than missing content. Fix in place preserving the closer-to-KN structure, correcting only actual defects.
 
 ## Pipeline (per chapter)
 1. **Verify first:** vision/tesseract-check the chapter's slice of the 105 Latin-content verses against `gita_pages/` PNGs (tesseract `-l eng` on 1.8–2.5× upscale; `view` tool rendering is unreliable for some pages). Fix any KN discrepancies before translating.
-2. Translate the chapter's verses in-session.
+2. Translate the chapter's verses in-session (EN).
 3. Regenerate those keys in `bannanje_en.js` (exact current format: `window.BANNANJE_VERSE_MEANINGS_EN`, `C.V` keys, `\n` line conventions).
 4. `node` new Function() parse check → `python3 build-bundle.py` → spot-check ≥5 verses against KN.
 5. Commit + push per completed batch.
 
-## Progress
+## Pipeline addendum — DEV/HI audit (for chapters already covered in EN)
+1. Dump DEV and HI entries for the already-EN-covered verses.
+2. Screen for defect patterns: leftover Kannada-script bleed into DEV, un-adapted meta-references (e.g. "kannada"/"kannaḍa" mentions in HI that don't belong), drastically shorter length suggesting dropped content, empty/near-empty entries, garbled/mojibake text, Latin-script fragments where they shouldn't be.
+3. Spot-read flagged verses in full against KN/EN.
+4. Log findings per verse in the Progress tables below; only edit entries with confirmed defects (Rule 8).
+5. Commit + push per completed audit batch, same discipline as EN (validate JS, rebuild, spot-check).
+
+## Progress — EN (bannanje_en.js)
 | Chapter | Verses | Verified | Translated | Committed |
 |---------|--------|----------|------------|-----------|
 | 1 | 47 (+merge note) | ✅ 2026-07-25. Latin-verse pass (9 verses; 3 fixes: 1.13 +(Resource), 1.24 +(Psychotherapy), 1.40 convention→Religion of Society). Deviation checks, all vs source pages (kan tessdata_best + glyph metrics): 1.8 "1)"→"?)" fixed; 1.13 anaka as printed; 1.16 ಮಣಿಪುಷ್ಟಕೌ (book prints ṣṭa 3×; JS ṣpa fixed→maṇipuṣṭakau); 1.20 ಕಪಿಧ್ವಜಃ fixed (gloss ದ್ವಜದ as printed); 1.23 durbuddhe as printed (padaccheda drops sandhi-consumed visarga — book convention); 1.25 ಮಹೀಕ್ಷಿತಾಮ್ fixed; 1.26 ಪಿತೄನ್/ಭ್ರಾತೄನ್ fixed (long ṝ, subscript-width verified); 1.28 ದೃಷ್ಟ್ವಾ fixed (va-ottu verified); 1.34 syālāḥ as printed; 1.36 ಸ್ಯಾತ್ ಜನಾರ್ದನ fixed; 1.37 mādhavā as printed; 1.39 ಪ್ರಪಶ್ಯದ್ಭಿ fixed (bha-ottu top-stroke verified vs ddha control); 1.40 ಕೃತ್ಸ್ನಮ್ fixed. Structural: 1.28/1.29 merged per page 28 (shared padaccheda+commentary; 10.15-pattern note at 1.29; synthesized 1.28 filler from 03400a7 deleted); sandhi spillover removed from 1.21/1.26; stray key 1.73 (digit-misread duplicate of 1.33) merged into 1.33 — its gloss ಹರಣದ ಮತ್ತು ಹಣದ and extra closing paragraph are the book text (pages 31–32) — and 1.73 deleted from all four language files (701 keys each) | 1.1–1.47 done | 1.1–1.47 |
@@ -30,8 +42,22 @@ The existing `bannanje_en.js` is raw machine translation of the Kannada (via `tr
 | 2 (remaining) | 62 | — | — | — |
 | 3–18 | 582 | — | — | — |
 
+## Progress — DEV (bannanje_dev.js)
+| Chapter | Verses | Audited | Findings | Fixed |
+|---------|--------|---------|----------|-------|
+| 1 | 1.1–1.47 | 🔶 Automated length-ratio screen run on all 47; 7 verses flagged (1.4, 1.17, 1.28, 1.37 short; others below). Manually read 1.4, 1.17, 1.28, 1.37 in full against KN. **Result: quality is inconsistent, not uniform.** 1.4, 1.17, 1.28 — condensed but substantively complete (matches established house style, no fix needed), *except* shloka-line transliteration errors confirmed in 1.4: "महा ईशु असः"→should be "महेष्वासाः"; "भीमार्जुन सह युधि"→should be "भीमार्जुनसमाः युधि" (changes meaning: "with Bhīma-Arjuna" vs correct "equal to Bhīma-Arjuna"); "यियुनः विरतः च द्रुपादः"→should be "युयुधानो विराटश्च द्रुपदश्च". **1.37 is a confirmed defect**: commentary is severely truncated (~10% of KN length — entire Mādhava-etymology/Yaśodā discussion missing, not just condensed) AND the shloka line itself is corrupted ("तस्मातस्य" garbled, "स्याम" truncated to "सम"). Not yet fixed (per Rule 8, holding for a full-chapter pass rather than one-off patches). | 1.4 shloka errors + 1.37 (truncation + corruption) confirmed; remaining 43 verses not yet individually read | none yet |
+| 2 | 2.1–2.10 | 🔶 Automated screen: 2.3, 2.4, 2.6 flagged short. Manually read 2.3, 2.4, 2.6 in full. **Result: all three are legitimately condensed-but-complete** (matches house style) — 2.3's short ratio is expected/artefactual since it predates this session's KN paragraph-restoration fix (DEV was written against the old, shorter KN). No defects confirmed in this sub-batch, but note 2.3 will need re-auditing once its DEV entry is checked against the *restored* KN text (not yet done). | 2.3/2.4/2.6 read, no defects beyond the expected 2.3 staleness; 2.1/2.2/2.5/2.7–2.10 not yet individually read | none yet |
+
+## Progress — HI (bannanje_hi.js)
+| Chapter | Verses | Audited | Findings | Fixed |
+|---------|--------|---------|----------|-------|
+| 1 | 1.1–1.47 | 🔶 Automated length-ratio screen run on all 47; 3 verses flagged short (1.17, 1.28, plus 1.4 already flagged in DEV pass). Manually read 1.37 in full (near-full length, so not flagged by the ratio heuristic, but read as a DEV cross-check). **1.37 is a confirmed serious defect** — not a light touch-up case: (a) meaning-inversion — "हम धर्तराष्ट्र हैं" ("we ARE Dhṛtarāṣṭra") where KN says the opposite (we should not kill Dhṛtarāṣṭra's sons); (b) nonsense phrases from mistranslation — "हमारे उपांग" (our "sub-organs/appendages" — should be "kinsmen"), "कृष्णा बारी के साले का बेटा नहीं है" (garbled, unparseable); (c) **sandhi-spillover bug**, same class already fixed twice in KN (1.21/1.26, 2.10) — HI 1.37 ends with an unexplained extra Sanskrit line ("यद्यपेथे न पश्यन्ति...") that is actually verse 1.38's opening śloka, not part of 1.37. **Working hypothesis: HI needs the same wholesale-retranslation treatment as pre-fix EN, not a light audit-and-patch** — this one verse alone shows three distinct, serious defect classes. Not yet fixed. | 1.37 (three confirmed defects: meaning-inversion, nonsense mistranslation, sandhi-spillover); remaining 46 verses not yet individually read | none yet |
+| 2 | 2.1–2.10 | 🔶 Automated screen: 2.3, 2.4, 2.6 flagged short (2.3 expected-stale per the KN restoration, as with DEV). Not yet manually read in full. | not yet individually read beyond the automated screen | none yet |
+
+**Scope-impact note:** the 1.37 HI finding changes the working assumption for this whole track. What started as "audit for occasional leftover artifacts" now looks, on this sample, like it may need the same scale of wholesale retranslation as EN — HI in particular. Recommend confirming with Vinayak how to prioritize (continue current EN chapter-by-chapter cadence vs. pause EN to establish true DEV/HI scope first) before committing to a combined per-chapter pipeline.
+
 ## Known debts folded in
 - EN 6.35 (Socrates passage) resolves in chapter 6's pass.
-- DEV/HI regeneration is out of scope here; tracked separately. Note: KN 1.28/1.29 restructure and 1.33/1.73 merge are NOT yet reflected in bannanje_dev.js / bannanje_hi.js content (only the stray 1.73 key was deleted there).
+- Note: KN 1.28/1.29 restructure and 1.33/1.73 merge are NOT yet reflected in `bannanje_dev.js` / `bannanje_hi.js` content (only the stray 1.73 key was deleted there) — needs a structural fix once the ch1 DEV/HI audit reaches those verses.
 - 13.33 has the identical ಕೃತ್ಸ ಮ್ → ಕೃತ್ಸ್ನಮ್ OCR garble (its own sandhi line prints ಕೃತ್ಸ್ನಂ correctly); fix in the chapter 13 pass with page verification.
 - EN 10.16 still holds stale machine translation instead of the 10.15-merge note; fix in the chapter 10 pass.
