@@ -13,7 +13,7 @@ The existing `bannanje_en.js` is raw machine translation of the Kannada (via `tr
 4. **Empty KN entries stay empty** with the standard `[NOTE: KN source empty — cannot author without book page]` placeholder.
 5. **IAST** via `indic_transliteration` (Kannada→IAST) for shloka lines, manually reviewed per verse (anusvāra/visarga conventions checked).
 6. Kannada digits in verse refs (e.g. ॥ಅಥರ್ವ ೩-೨೭-೨॥) → Arabic numerals: ॥Atharva 3-27-2॥.
-7. **Deviation check is mandatory.** Any anomaly noticed while translating — stray digits, non-standard Sanskrit spellings (e.g. anaka vs ānaka), odd punctuation, suspected OCR artifacts — must be vision-checked against the `gita_pages/` PNG before the batch is committed. Locate the page via `_extracted/clean_ocr/p-NNN.txt` grep, then crop/upscale the exact glyph (tesseract TSV gives coordinates; only `eng` tessdata is installed). Fix KN + EN together if the source differs; record the verdict in the Progress table either way.
+7. **Deviation check is mandatory.** Any anomaly noticed while translating — stray digits, non-standard Sanskrit spellings (e.g. anaka vs ānaka), odd punctuation, suspected OCR artifacts — must be vision-checked against the `gita_pages/` PNG before the batch is committed. Locate the page via `_extracted/clean_ocr/p-NNN.txt` grep, then crop/upscale the exact glyph (tesseract TSV gives coordinates; `kan` tessdata_best is installed at /home/claude/tessdata — set TESSDATA_PREFIX; glyph-metric subscript analysis distinguishes rare ottus the model garbles). Fix KN + EN together if the source differs; record the verdict in the Progress table either way.
 
 ## Pipeline (per chapter)
 1. **Verify first:** vision/tesseract-check the chapter's slice of the 105 Latin-content verses against `gita_pages/` PNGs (tesseract `-l eng` on 1.8–2.5× upscale; `view` tool rendering is unreliable for some pages). Fix any KN discrepancies before translating.
@@ -25,9 +25,11 @@ The existing `bannanje_en.js` is raw machine translation of the Kannada (via `tr
 ## Progress
 | Chapter | Verses | Verified | Translated | Committed |
 |---------|--------|----------|------------|-----------|
-| 1 | 48 | ✅ 2026-07-25 (9 Latin verses vs pages; 3 fixes: 1.13 +(Resource), 1.24 +(Psychotherapy), 1.40 convention→Religion of Society). Deviation checks vs page_0016/page_0019: 1.8 "ಎನ್ನುವಂತೆ 1)" → "ಎನ್ನುವಂತೆ?)" (OCR misread "?" as digit; no footnote on page; fixed in KN+EN); 1.13 padaccheda ಅನಕ verified as printed (sandhi ambiguous; anaka kept in IAST) | 1.1–1.14 done | 1.1–1.14 |
+| 1 | 47 (+merge note) | ✅ 2026-07-25. Latin-verse pass (9 verses; 3 fixes: 1.13 +(Resource), 1.24 +(Psychotherapy), 1.40 convention→Religion of Society). Deviation checks, all vs source pages (kan tessdata_best + glyph metrics): 1.8 "1)"→"?)" fixed; 1.13 anaka as printed; 1.16 ಮಣಿಪುಷ್ಟಕೌ (book prints ṣṭa 3×; JS ṣpa fixed→maṇipuṣṭakau); 1.20 ಕಪಿಧ್ವಜಃ fixed (gloss ದ್ವಜದ as printed); 1.23 durbuddhe as printed (padaccheda drops sandhi-consumed visarga — book convention); 1.25 ಮಹೀಕ್ಷಿತಾಮ್ fixed; 1.26 ಪಿತೄನ್/ಭ್ರಾತೄನ್ fixed (long ṝ, subscript-width verified); 1.28 ದೃಷ್ಟ್ವಾ fixed (va-ottu verified); 1.34 syālāḥ as printed; 1.36 ಸ್ಯಾತ್ ಜನಾರ್ದನ fixed; 1.37 mādhavā as printed; 1.39 ಪ್ರಪಶ್ಯದ್ಭಿ fixed (bha-ottu top-stroke verified vs ddha control); 1.40 ಕೃತ್ಸ್ನಮ್ fixed. Structural: 1.28/1.29 merged per page 28 (shared padaccheda+commentary; 10.15-pattern note at 1.29; synthesized 1.28 filler from 03400a7 deleted); sandhi spillover removed from 1.21/1.26; stray key 1.73 (digit-misread duplicate of 1.33) merged into 1.33 — its gloss ಹರಣದ ಮತ್ತು ಹಣದ and extra closing paragraph are the book text (pages 31–32) — and 1.73 deleted from all four language files (701 keys each) | 1.1–1.47 done | 1.1–1.47 |
 | 2–18 | 654 | — | — | — |
 
 ## Known debts folded in
 - EN 6.35 (Socrates passage) resolves in chapter 6's pass.
-- DEV/HI regeneration is out of scope here; tracked separately.
+- DEV/HI regeneration is out of scope here; tracked separately. Note: KN 1.28/1.29 restructure and 1.33/1.73 merge are NOT yet reflected in bannanje_dev.js / bannanje_hi.js content (only the stray 1.73 key was deleted there).
+- 13.33 has the identical ಕೃತ್ಸ ಮ್ → ಕೃತ್ಸ್ನಮ್ OCR garble (its own sandhi line prints ಕೃತ್ಸ್ನಂ correctly); fix in the chapter 13 pass with page verification.
+- EN 10.16 still holds stale machine translation instead of the 10.15-merge note; fix in the chapter 10 pass.
