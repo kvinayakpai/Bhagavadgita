@@ -16,7 +16,7 @@ The existing `bannanje_en.js` is raw machine translation of the Kannada (via `tr
 5. **IAST** via `indic_transliteration` (Kannada→IAST) for EN shloka lines, manually reviewed per verse (anusvāra/visarga conventions checked). DEV shloka lines use native Devanagari (also via `indic_transliteration`, Kannada→Devanagari, same manual review).
 6. Kannada digits in verse refs (e.g. ॥ಅಥರ್ವ ೩-೨೭-೨॥) → Arabic numerals in EN (Atharva 3-27-2); Devanagari digits in DEV (॥अथर्व ३-२७-२॥); Devanagari digits in HI.
 7. **Deviation check is mandatory.** Any anomaly noticed while translating — stray digits, non-standard Sanskrit spellings (e.g. anaka vs ānaka), odd punctuation, suspected OCR artifacts — must be vision-checked against the `gita_pages/` PNG before the batch is committed. Locate the page via `_extracted/clean_ocr/p-NNN.txt` grep, then crop/upscale the exact glyph (tesseract TSV gives coordinates; `kan` tessdata_best is installed at /home/claude/tessdata — set TESSDATA_PREFIX; glyph-metric subscript analysis distinguishes rare ottus the model garbles). Fix KN + EN (+ DEV/HI if the same verse has already been audited) together if the source differs; record the verdict in the Progress table either way.
-8. **Audit before rewrite (DEV/HI only).** For any verse already covered by the EN pass, first read the existing DEV and HI entries against the freshly-verified KN + EN. Only rewrite if a real defect is found (leftover artifacts, meaning drift, missing substantive content, broken grammar) — do not discard a working translation just to reformat it.
+8. **Audit before deciding fix scope (DEV/HI).** For any verse already covered by the EN pass, first read the existing DEV and HI entries against the freshly-verified KN + EN. **Learned from chapter 1 (2026-07-25): do not assume patch-in-place will be sufficient.** The chapter 1 audit found defects too structurally varied for spot-fixes — some verses were fine, others severely truncated or shloka-corrupted — so a full rewrite from verified KN was done instead, and this produced a cleaner, more consistent result than patching would have. Audit first to see whether defects are isolated (patch) or pervasive/structurally varied (rewrite the whole chapter) — but default expectation for untouched chapters is now full rewrite, not patch.
 9. **DEV style:** the existing DEV entries appear to be independently-composed, condensed Sanskrit prose covering the same substantive points as KN, not a literal line-by-line rendering. Preserve this style unless a verse is found to be missing substantive content (in which case extend it, still in the same condensed-prose Sanskrit style — do not force EN's line-by-line structure onto DEV).
 10. **HI style:** unlike DEV, existing HI entries read as closer literal derivatives of the KN prose (same paragraph structure, similar length) — so HI defects are more likely literalism/meta-reference artifacts (e.g. "kannada" leftover) and mistranslation than missing content. Fix in place preserving the closer-to-KN structure, correcting only actual defects.
 
@@ -27,12 +27,13 @@ The existing `bannanje_en.js` is raw machine translation of the Kannada (via `tr
 4. `node` new Function() parse check → `python3 build-bundle.py` → spot-check ≥5 verses against KN.
 5. Commit + push per completed batch.
 
-## Pipeline addendum — DEV/HI audit (for chapters already covered in EN)
+## Pipeline addendum — DEV/HI (for chapters already covered in EN)
 1. Dump DEV and HI entries for the already-EN-covered verses.
-2. Screen for defect patterns: leftover Kannada-script bleed into DEV, un-adapted meta-references (e.g. "kannada"/"kannaḍa" mentions in HI that don't belong), drastically shorter length suggesting dropped content, empty/near-empty entries, garbled/mojibake text, Latin-script fragments where they shouldn't be.
-3. Spot-read flagged verses in full against KN/EN.
-4. Log findings per verse in the Progress tables below; only edit entries with confirmed defects (Rule 8).
-5. Commit + push per completed audit batch, same discipline as EN (validate JS, rebuild, spot-check).
+2. Screen for defect patterns: leftover Kannada-script bleed into DEV, un-adapted meta-references (e.g. "kannada"/"kannaḍa" mentions in HI that don't belong), drastically shorter length suggesting dropped content, empty/near-empty entries, garbled/mojibake text, Latin-script fragments where they shouldn't be. Spot-read a handful of flagged + unflagged verses in full against KN/EN to gauge whether defects are isolated or pervasive.
+3. **Decide scope** (per Rule 8): isolated defects in an otherwise-sound chapter → patch in place. Pervasive/structurally-varied defects (chapter 1's actual outcome) → full rewrite of the whole chapter from verified KN: DEV via the calibrated Kannada→Devanagari transliteration pipeline (`/tmp/dev_translit.py` pattern — rebuild if not present in a fresh session) for shlokas + freshly-composed condensed Sanskrit commentary (Rule 9 style); HI via freshly-composed Hindi commentary mirroring KN/EN structure (Rule 10 style).
+4. Log findings + which path was taken, per verse or per chapter, in the Progress tables below.
+5. `node` new Function() parse check on both files → `python3 build-bundle.py` → automated re-screen (empty/script-contamination/garbled-text) → spot-check ≥5 verses against KN.
+6. Commit + push per completed batch. Note: full-chapter DEV/HI rewrites are large compositions (composing fresh Sanskrit prose especially) — flag to Vinayak that DEV has not had native-speaker review.
 
 ## Progress — EN (bannanje_en.js)
 | Chapter | Verses | Verified | Translated | Committed |
@@ -58,6 +59,12 @@ The existing `bannanje_en.js` is raw machine translation of the Kannada (via `tr
 
 ## Known debts folded in
 - EN 6.35 (Socrates passage) resolves in chapter 6's pass.
-- Note: KN 1.28/1.29 restructure and 1.33/1.73 merge are NOT yet reflected in `bannanje_dev.js` / `bannanje_hi.js` content (only the stray 1.73 key was deleted there) — needs a structural fix once the ch1 DEV/HI audit reaches those verses.
+- ~~KN 1.28/1.29 restructure and 1.33/1.73 merge not reflected in DEV/HI~~ — **resolved 2026-07-25**: the chapter 1 DEV/HI full rewrite was done from the current (already-restructured) KN, so both now carry the correct 1.29 merge note and the 1.33 merge content.
 - 13.33 has the identical ಕೃತ್ಸ ಮ್ → ಕೃತ್ಸ್ನಮ್ OCR garble (its own sandhi line prints ಕೃತ್ಸ್ನಂ correctly); fix in the chapter 13 pass with page verification.
 - EN 10.16 still holds stale machine translation instead of the 10.15-merge note; fix in the chapter 10 pass.
+
+## Next decision point
+Chapter 1 is now done across EN/DEV/HI. Chapter 2 is EN-only partial (2.1–2.10) with DEV/HI not yet touched there. Two reasonable ways to proceed, not yet decided:
+- **(a) Chapter-complete cadence:** finish EN 2.11–2.72 first, then do DEV/HI for chapter 2 as its own pass (mirrors how chapter 1 went — EN first, DEV/HI as a follow-up).
+- **(b) All-three-languages-per-chapter cadence:** for each new chapter, do EN + DEV + HI together before moving on, so no chapter is ever left with a language gap.
+Recommend confirming with Vinayak before the next session picks a lane.
