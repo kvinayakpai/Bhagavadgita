@@ -63,8 +63,13 @@ The existing `bannanje_en.js` is raw machine translation of the Kannada (via `tr
 - 13.33 has the identical ಕೃತ್ಸ ಮ್ → ಕೃತ್ಸ್ನಮ್ OCR garble (its own sandhi line prints ಕೃತ್ಸ್ನಂ correctly); fix in the chapter 13 pass with page verification.
 - EN 10.16 still holds stale machine translation instead of the 10.15-merge note; fix in the chapter 10 pass.
 
-## Next decision point
-Chapter 1 is now done across EN/DEV/HI. Chapter 2 is EN-only partial (2.1–2.10) with DEV/HI not yet touched there. Two reasonable ways to proceed, not yet decided:
-- **(a) Chapter-complete cadence:** finish EN 2.11–2.72 first, then do DEV/HI for chapter 2 as its own pass (mirrors how chapter 1 went — EN first, DEV/HI as a follow-up).
-- **(b) All-three-languages-per-chapter cadence:** for each new chapter, do EN + DEV + HI together before moving on, so no chapter is ever left with a language gap.
-Recommend confirming with Vinayak before the next session picks a lane.
+## Cadence: all three languages per chapter
+**Decided 2026-07-25 (Vinayak):** going forward, do EN + DEV + HI together for each chapter before moving to the next — not chapter-complete-in-EN-then-circle-back. This applies starting with chapter 2's remaining verses (2.11–2.72) and all of chapters 3–18.
+
+Per-chapter order of operations:
+1. Verify (Latin-content scan + page-image deviation checks) — same as the existing EN pipeline, shared across all three languages since it's checking the KN source itself.
+2. Translate EN for the chapter (Rules 1–7).
+3. Immediately follow with DEV + HI for the same chapter (Rules 8–10, pipeline addendum) — audit existing content first if any exists, but default to full rewrite per the ch1 learning.
+4. Validate + rebuild + spot-check all three together, one combined commit (or a small number of closely-sequenced commits) per chapter, rather than leaving a chapter EN-only for a future session to circle back to.
+
+This means chapter 2 is currently **mid-cadence-switch**: 2.1–2.10 were done EN-only (old cadence); DEV/HI for 2.1–2.10 still needs to happen before or alongside 2.11–2.72's three-language pass, to bring chapter 2 fully into line with the new cadence before starting chapter 3.
