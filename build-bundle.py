@@ -17,6 +17,7 @@ def read(p):
 
 viewer = read('viewer-src.html')
 data_js = read('data.js')
+bridge_js = read('bridge_data.js')
 positions_js = read('positions.js')
 
 # Strip CJS module.exports tails so the bundled scripts don't reference `module`
@@ -27,6 +28,7 @@ def strip_cjs_export(s):
     return s[:i].rstrip() + '\n' if i != -1 else s
 
 data_inline = strip_cjs_export(data_js)
+bridge_inline = strip_cjs_export(bridge_js)
 positions_inline = strip_cjs_export(positions_js)
 
 # Replace the two external <script src="..."> tags with inline <script> blocks.
@@ -59,6 +61,7 @@ for suffix, var_name, filename in lang_configs:
         bundle = bundle.replace(tag, f'<script>window.{var_name} = null;</script>', 1)
 
 bundle = replace_tag(bundle, '<script src="data.js"></script>', data_inline)
+bundle = replace_tag(bundle, '<script src="bridge_data.js"></script>', bridge_inline)
 bundle = replace_tag(bundle, '<script src="positions.js"></script>', positions_inline)
 
 # Ensure UTF-8 meta is in head (it already is, but assert).

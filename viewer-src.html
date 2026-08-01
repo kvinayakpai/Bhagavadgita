@@ -529,6 +529,7 @@ body.lang-kn .sl-meaning {
   <button data-view="chapters">Chapters</button>
   <button data-view="map">Map</button>
   <button data-view="chat">Chat</button>
+  <button data-view="bridge">Bridge</button>
 </nav>
 
 <section class="search" id="search-bar">
@@ -541,6 +542,7 @@ body.lang-kn .sl-meaning {
   <div id="view-chapters" hidden></div>
   <div id="view-map" hidden></div>
   <div id="view-chat" hidden></div>
+  <div id="view-bridge" hidden></div>
 </main>
 
 </div>
@@ -554,6 +556,7 @@ body.lang-kn .sl-meaning {
 <script src="bannanje_hi_private.js" onerror="window.BANNANJE_VERSE_MEANINGS_HI = null;"></script>
 <script src="bannanje_dev_private.js" onerror="window.BANNANJE_VERSE_MEANINGS_DEV = null;"></script>
 <script src="data.js"></script>
+<script src="bridge_data.js"></script>
 <script src="positions.js"></script>
 <script>
 const FULL_GITA = {
@@ -2019,6 +2022,9 @@ const UI_STRINGS = {
   navChapters:       { en:'Chapters',         dev:'अध्यायाः',       kn:'ಅಧ್ಯಾಯಗಳು', hi:'अध्याय' },
   navMap:            { en:'Map',              dev:'मानचित्रम्',     kn:'ನಕ್ಷೆ', hi:'नक्शा' },
   navChat:           { en:'Chat',             dev:'संवादः',         kn:'ಸಂವಾದ', hi:'संवाद' },
+  navBridge:         { en:'Bridge',           dev:'सेतुः',          kn:'ಸೇತು', hi:'सेतु' },
+  bridgeHeader:      { en:'Where Bannanje himself links the Gita and the Katha Upanishad — his own cross-references, not ours.', dev:'यत्र बन्नंजे स्वयं गीतां कठोपनिषदं च सम्बध्नाति — तेषामेव उल्लेखाः, न अस्माकम्।', kn:'গಀತೆ ಮೕೖತ್ತು ಕఠೋಪನಿಷತ್ತನ್ನು ಬನ್ನಂಜೆಯವರೇ ಬೆಸೆಯುವ ಕಡೆ — ಇವು ಅವರ ಸ್ವಂತ ಉಲ्ಲೇಖಗಳು, ನಮ್ಮದಲ्ಲ.', hi:'जहाँ बन्नंजे स्वयं गीता और कठोपनिषद् को जोड़ते हैं — यह उन्हीं का उल्लेख है, हमारा नहीं।' },
+  bridgeExploreOn:   { en:'Explore the full text on Katopanishad →', dev:'कठोपनिषदि पूर्णं पाठं पश्यन्तु →', kn:'ಕఠೋಪನಿಷತ्‌ನಲ्ಲಿ ಪೂರ्ಣ ಪఠ्ಯ ನोಡಿ →', hi:'कठोपनिषद् में पूर्ण पाठ देखें →' },
   bannanjeHeader:    { en:'Bannanje commentary (personal study only — not for redistribution)', dev:'बन्नंजे-भाष्य (केवल वैयक्तिक अध्ययनार्थम् — न पुनर्वितरणाय)', kn:'ಬನ್ನಂಜೆ-ಭಾಷ್ಯ (ಕೇವಲ ವೈಯಕ್ತಿಕ ಅಧ್ಯಯನಕ್ಕಾಗಿ — ಪುನರ್ವಿತರಣೆಗಲ್ಲ)', hi:'बन्नंजे-भाष्य (केवल व्यक्तिगत अध्ययन हेतु — पुनर्वितरण के लिए नहीं)' },
   // Masthead — uses innerHTML so EN can keep the italic Gītā.
   brandName:         { en:'Bhagavad <em>Gītā</em> · Tatva Jalam', dev:'भगवद्गीता · तत्त्व-जालम्', kn:'ಭಗವದ್ಗೀತಾ · ತತ್ತ್ವ-ಜಾಲ', hi:'भगवद् <em>गीता</em> · तत्त्व-जाल' },
@@ -2045,7 +2051,8 @@ function setLang(lang){
             : b.dataset.view==='focus'    ? 'navFocus'
             : b.dataset.view==='chapters' ? 'navChapters'
             : b.dataset.view==='map'      ? 'navMap'
-            : b.dataset.view==='chat'     ? 'navChat' : null;
+            : b.dataset.view==='chat'     ? 'navChat'
+            : b.dataset.view==='bridge'   ? 'navBridge' : null;
     if (k) b.textContent = UI(k);
   });
   // Masthead brand strings
@@ -2069,7 +2076,8 @@ function setView(v, id){
   document.getElementById('view-chapters').hidden = v!=='chapters';
   document.getElementById('view-map').hidden    = v!=='map';
   document.getElementById('view-chat').hidden   = v!=='chat';
-  document.getElementById('search-bar').hidden  = v==='map' || v==='chat';
+  document.getElementById('view-bridge').hidden = v!=='bridge';
+  document.getElementById('search-bar').hidden  = v==='map' || v==='chat' || v==='bridge';
   window.scrollTo({top:0, behavior:'instant'});
   render();
 }
@@ -3525,6 +3533,7 @@ function render(){
   else if (state.view==='chapters') renderChapters();
   else if (state.view==='map') renderMap();
   else if (state.view==='chat') renderChat();
+  else if (state.view==='bridge') renderBridge();
   const f = document.getElementById('stats');
   if (f) f.textContent = `v3 · ${NODES.length} ${UI('concepts')} · ${EDGES.length} ${UI('relations')} · ${Object.keys(FULL_GITA).length} ${UI('shlokas')} · ${TIERS.length} ${UI('tiers')}`;
 }
@@ -4790,6 +4799,52 @@ function startVoice() {
     voiceRec = null;
     if (inp) inp.placeholder = '⚠️ Could not start mic — ' + e.message;
   }
+}
+
+function renderBridge(){
+  const root = document.getElementById('view-bridge');
+  const entries = (typeof BRIDGE_ENTRIES !== 'undefined') ? BRIDGE_ENTRIES : [];
+  const kindLabel = (k) => k === 'explicit_citation'
+    ? { en:'Bannanje\u2019s own citation', dev:'\u092c\u0928\u094d\u0928\u0902\u091c\u0947-\u0915\u0943\u0924 \u0909\u0932\u094d\u0932\u0947\u0916\u0903', kn:'\u0cac\u0ca8\u094d\u0ca8\u0c82\u0c9c\u0cc6\u092f\u0935\u0930 \u0cb8\u094d\u0cb5\u0c82\u0ca4 \u0909\u0932\u094d\u0932\u0947\u0916', hi:'\u092c\u0928\u094d\u0928\u0902\u091c\u0947 \u0915\u093e \u0905\u092a\u0928\u093e \u0909\u0932\u094d\u0932\u0947\u0916' }[state.lang] || 'Explicit citation'
+    : { en:'Shared concept tier', dev:'\u0938\u093e\u092e\u094d\u092f\u0938\u094d\u0924\u0930\u0903', kn:'\u0cb8\u092e\u093e\u0928 \u092a\u0930\u093f\u0915\u0932\u094d\u092a\u0928\u093e \u0938\u094d\u0924\u0930', hi:'\u0938\u093e\u091d\u093e \u0905\u0935\u0927\u093e\u0930\u0923\u093e \u0938\u094d\u0924\u0930' }[state.lang] || 'Shared tier';
+
+  let html = `<div style="padding:16px 18px 6px;color:var(--ink-soft);font-size:14px;line-height:1.6;max-width:720px">
+    ${escapeHtml(UI('bridgeHeader'))}
+  </div>
+  <div style="padding:0 18px 8px">
+    <a href="https://kvinayakpai.github.io/Katopanishad/#browse" target="_blank" rel="noopener" style="font-size:13px;color:var(--rust);text-decoration:none">${escapeHtml(UI('bridgeExploreOn'))}</a>
+  </div>
+  <ul class="entry-list" style="padding:0 12px">`;
+
+  entries.forEach(e=>{
+    const title = getActive(e.title);
+    const gNote = getActive(e.gita.note);
+    const kNote = getActive(e.katha.note);
+    const src = getActive(e.source_note);
+    html += `<li style="flex-direction:column;align-items:stretch;gap:6px;cursor:default">
+      <div style="display:flex;justify-content:space-between;align-items:baseline;gap:8px">
+        <div class="label">${escapeHtml(title)}</div>
+        <div class="ref" style="font-size:11px;opacity:.65">${escapeHtml(kindLabel(e.kind))}</div>
+      </div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;font-size:13px;line-height:1.55">
+        <div style="border-left:2px solid var(--rust);padding-left:10px">
+          <div style="font-weight:600;font-size:12px;opacity:.7;margin-bottom:2px">${escapeHtml(e.gita.ref)}</div>
+          <div>${escapeHtml(gNote)}</div>
+        </div>
+        <div style="border-left:2px solid var(--t-${e.tier}, var(--rust));padding-left:10px">
+          <div style="font-weight:600;font-size:12px;opacity:.7;margin-bottom:2px">${escapeHtml(e.katha.ref)}</div>
+          <div>${escapeHtml(kNote)}</div>
+        </div>
+      </div>
+      <div style="font-size:11px;opacity:.6;font-style:italic">${escapeHtml(src)}</div>
+    </li>`;
+  });
+
+  html += `</ul>`;
+  if (!entries.length){
+    html += `<div style="padding:40px 20px;text-align:center;color:var(--ink-fade)">Bridge entries not loaded \u2014 check bridge_data.js.</div>`;
+  }
+  root.innerHTML = html;
 }
 
 function renderChat() {
