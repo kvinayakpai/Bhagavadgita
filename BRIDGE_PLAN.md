@@ -86,7 +86,33 @@ flags as a cross-text link, so they don't meet this feature's bar.
   which touched both files together. Worth checking git blame on why they
   drifted, in case there was an intentional reason.
 
-## Phase 2+ (future sessions)
+## Phase 2 (this batch) — corpus sweep complete
+Full-text search of both `kata-upanishad-text.txt` (Katha side, "ಗೀತೆ") and
+`bannanje_kn.js` (Gita side, "ಕಠೋಪನಿಷ") for every explicit citation, cross-
+checked with exact verse numbers against each project's own transcription.
+10 new entries added (14 total):
+- eleven-nine-gates: Katha 2.2.1 ↔ BG 5.13
+- brahman-as-light: Katha 2.2.15 ↔ BG 15.6 (bidirectional — cited in both
+  commentaries)
+- ashvattha-tree: Katha 2.3.1 ↔ BG 15.1, also BG 14.18 (bidirectional,
+  cited twice on the Gita side)
+- cosmic-regulation: Katha 2.3.2 ↔ BG 9.19
+- om-tat-sat: Katha 2.3.12 ↔ BG 17.23
+- prana-apana-vamana: Katha 2.2.3 ↔ BG 15.14
+- angushthamatra-purusha: Katha 2.1.12–13 ↔ BG 15.15
+- nachiketa-refusal-of-wealth: Katha 1.1.23–29 ↔ BG 9.28, 14.17, 16.10
+  (three separate citations of the same episode — the most-cited pairing
+  found this session)
+- mahad-avyakta-purusha: Katha 1.3.11 ↔ BG 12.1 (commentary)
+- honoring-the-jnani: Katha 1.1.9–10 ↔ BG 4.3 (brief supporting citation)
+
+Both sweeps were exhaustive for their respective search terms ("ಗೀತೆ" in
+Katha source, "ಕಠೋಪನಿಷ" in Gita source) as of this session — a future
+session could still check for citations using other phrasings (e.g. "ಕೃಷ್ಣ
+ಹೇಳಿದ" without "ಗೀತೆ" nearby, or references to specific chapter numbers
+without naming the text).
+
+## Phase 3+ (future sessions)
 - Tier-correspondence entries for the 5 shared tiers (Parabrahma, Jivatattva/
   Jivatma, Antahkarana, Sadhana, Phala) — requires deciding per-tier which
   Katha concepts (chariot metaphor, Om, taratamya-adjacent teachings, etc.)
