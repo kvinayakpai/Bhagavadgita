@@ -2023,8 +2023,8 @@ const UI_STRINGS = {
   navMap:            { en:'Map',              dev:'मानचित्रम्',     kn:'ನಕ್ಷೆ', hi:'नक्शा' },
   navChat:           { en:'Chat',             dev:'संवादः',         kn:'ಸಂವಾದ', hi:'संवाद' },
   navBridge:         { en:'Bridge',           dev:'सेतुः',          kn:'ಸೇತು', hi:'सेतु' },
-  bridgeHeader:      { en:'Where Bannanje himself links the Gita and the Katha Upanishad — his own cross-references, not ours.', dev:'यत्र बन्नंजे स्वयं गीतां कठोपनिषदं च सम्बध्नाति — तेषामेव उल्लेखाः, न अस्माकम्।', kn:'গಀತೆ ಮೕೖತ್ತು ಕఠೋಪನಿಷತ್ತನ್ನು ಬನ್ನಂಜೆಯವರೇ ಬೆಸೆಯುವ ಕಡೆ — ಇವು ಅವರ ಸ್ವಂತ ಉಲ्ಲೇಖಗಳು, ನಮ್ಮದಲ्ಲ.', hi:'जहाँ बन्नंजे स्वयं गीता और कठोपनिषद् को जोड़ते हैं — यह उन्हीं का उल्लेख है, हमारा नहीं।' },
-  bridgeExploreOn:   { en:'Explore the full text on Katopanishad →', dev:'कठोपनिषदि पूर्णं पाठं पश्यन्तु →', kn:'ಕఠೋಪನಿಷತ्‌ನಲ्ಲಿ ಪೂರ्ಣ ಪఠ्ಯ ನोಡಿ →', hi:'कठोपनिषद् में पूर्ण पाठ देखें →' },
+  bridgeHeader:      { en:'Where Bannanje himself links the Gita and the Katha Upanishad — his own cross-references, not ours.', dev:'यत्र बन्नंजे स्वयं गीतां कठोपनिषदं च सम्बध्नाति — तेषामेव उल्लेखाः, न अस्माकम्।', kn:'ಗೀತೆ ಮತ್ತು ಕಠೋಪನಿಷತ್ತನ್ನು ಬನ್ನಂಜೆಯವರೇ ಬೆಸೆಯುವ ಕಡೆ — ಇವು ಅವರ ಸ್ವಂತ ಉಲ್ಲೇಖಗಳು, ನಮ್ಮದಲ್ಲ.', hi:'जहाँ बन्नंजे स्वयं गीता और कठोपनिषद् को जोड़ते हैं — यह उन्हीं का उल्लेख है, हमारा नहीं।' },
+  bridgeExploreOn:   { en:'Explore the full text on Katopanishad →', dev:'कठोपनिषदि पूर्णं पाठं पश्यन्तु →', kn:'ಕಠೋಪನಿಷತ್‌ನಲ್ಲಿ ಪೂರ್ಣ ಪಠ್ಯ ನೋಡಿ →', hi:'कठोपनिषद् में पूर्ण पाठ देखें →' },
   bannanjeHeader:    { en:'Bannanje commentary (personal study only — not for redistribution)', dev:'बन्नंजे-भाष्य (केवल वैयक्तिक अध्ययनार्थम् — न पुनर्वितरणाय)', kn:'ಬನ್ನಂಜೆ-ಭಾಷ್ಯ (ಕೇವಲ ವೈಯಕ್ತಿಕ ಅಧ್ಯಯನಕ್ಕಾಗಿ — ಪುನರ್ವಿತರಣೆಗಲ್ಲ)', hi:'बन्नंजे-भाष्य (केवल व्यक्तिगत अध्ययन हेतु — पुनर्वितरण के लिए नहीं)' },
   // Masthead — uses innerHTML so EN can keep the italic Gītā.
   brandName:         { en:'Bhagavad <em>Gītā</em> · Tatva Jalam', dev:'भगवद्गीता · तत्त्व-जालम्', kn:'ಭಗವದ್ಗೀತಾ · ತತ್ತ್ವ-ಜಾಲ', hi:'भगवद् <em>गीता</em> · तत्त्व-जाल' },
@@ -4801,51 +4801,231 @@ function startVoice() {
   }
 }
 
+let bridgeState = { current: null, onlyLinked: false };
+
+function bridgeTierColor(tier){
+  return getComputedStyle(document.documentElement).getPropertyValue('--t-' + tier).trim() || 'var(--rust)';
+}
+
+function bridgeConceptList(){
+  if (typeof NODES === 'undefined') return [];
+  const links = (typeof BRIDGE_CONCEPT_LINKS !== 'undefined') ? BRIDGE_CONCEPT_LINKS : {};
+  return NODES.map(n => ({ node: n, satellites: links[n.id] || [] }));
+}
+
+function bridgeFiltered(){
+  const list = bridgeConceptList();
+  return bridgeState.onlyLinked ? list.filter(c => c.satellites.length > 1) : list;
+}
+
 function renderBridge(){
   const root = document.getElementById('view-bridge');
-  const entries = (typeof BRIDGE_ENTRIES !== 'undefined') ? BRIDGE_ENTRIES : [];
-  const kindLabel = (k) => k === 'explicit_citation'
-    ? { en:'Bannanje\u2019s own citation', dev:'\u092c\u0928\u094d\u0928\u0902\u091c\u0947-\u0915\u0943\u0924 \u0909\u0932\u094d\u0932\u0947\u0916\u0903', kn:'\u0cac\u0ca8\u094d\u0ca8\u0c82\u0c9c\u0cc6\u092f\u0935\u0930 \u0cb8\u094d\u0cb5\u0c82\u0ca4 \u0909\u0932\u094d\u0932\u0947\u0916', hi:'\u092c\u0928\u094d\u0928\u0902\u091c\u0947 \u0915\u093e \u0905\u092a\u0928\u093e \u0909\u0932\u094d\u0932\u0947\u0916' }[state.lang] || 'Explicit citation'
-    : { en:'Shared concept tier', dev:'\u0938\u093e\u092e\u094d\u092f\u0938\u094d\u0924\u0930\u0903', kn:'\u0cb8\u092e\u093e\u0928 \u092a\u0930\u093f\u0915\u0932\u094d\u092a\u0928\u093e \u0938\u094d\u0924\u0930', hi:'\u0938\u093e\u091d\u093e \u0905\u0935\u0927\u093e\u0930\u0923\u093e \u0938\u094d\u0924\u0930' }[state.lang] || 'Shared tier';
+  const all = bridgeConceptList();
+  if (!all.length){
+    root.innerHTML = `<div style="padding:40px 20px;text-align:center;color:var(--ink-fade)">Bridge data not loaded — check data.js and bridge_data.js.</div>`;
+    return;
+  }
 
-  let html = `<div style="padding:16px 18px 6px;color:var(--ink-soft);font-size:14px;line-height:1.6;max-width:720px">
+  let html = `<div style="padding:14px 18px 6px;color:var(--ink-soft);font-size:13.5px;line-height:1.6;max-width:720px">
     ${escapeHtml(UI('bridgeHeader'))}
   </div>
-  <div style="padding:0 18px 8px">
-    <a href="https://kvinayakpai.github.io/Katopanishad/#browse" target="_blank" rel="noopener" style="font-size:13px;color:var(--rust);text-decoration:none">${escapeHtml(UI('bridgeExploreOn'))}</a>
+  <div style="padding:0 18px 10px">
+    <a href="https://kvinayakpai.github.io/Katopanishad/#browse" target="_blank" rel="noopener" style="font-size:12.5px;color:var(--rust);text-decoration:none">${escapeHtml(UI('bridgeExploreOn'))}</a>
   </div>
-  <ul class="entry-list" style="padding:0 12px">`;
+  <div style="display:flex;gap:10px;align-items:center;padding:0 16px 14px;flex-wrap:wrap">
+    <div style="position:relative;flex:1 1 auto;min-width:180px">
+      <select id="bridge-select" style="width:100%;appearance:none;background:var(--paper);border:1px solid var(--rule);border-radius:10px;padding:9px 30px 9px 12px;font-family:inherit;font-size:13px;font-weight:500;color:var(--ink);cursor:pointer"></select>
+    </div>
+    <label id="bridge-filter-toggle" style="display:flex;align-items:center;gap:7px;font-size:12px;color:var(--ink-soft);padding:8px 12px;border:1px solid var(--rule);border-radius:10px;background:var(--paper);cursor:pointer;white-space:nowrap">
+      <input type="checkbox" id="bridge-filter-checkbox" style="accent-color:var(--rust);width:14px;height:14px;cursor:pointer">
+      ${escapeHtml(UI('bridgeFilter'))}
+    </label>
+  </div>
+  <div id="bridge-overview"></div>
+  <div id="bridge-detail" style="display:none"></div>`;
 
-  entries.forEach(e=>{
-    const title = getActive(e.title);
-    const gNote = getActive(e.gita.note);
-    const kNote = getActive(e.katha.note);
-    const src = getActive(e.source_note);
-    html += `<li style="flex-direction:column;align-items:stretch;gap:6px;cursor:default">
-      <div style="display:flex;justify-content:space-between;align-items:baseline;gap:8px">
-        <div class="label">${escapeHtml(title)}</div>
-        <div class="ref" style="font-size:11px;opacity:.65">${escapeHtml(kindLabel(e.kind))}</div>
-      </div>
-      <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;font-size:13px;line-height:1.55">
-        <div style="border-left:2px solid var(--rust);padding-left:10px">
-          <div style="font-weight:600;font-size:12px;opacity:.7;margin-bottom:2px">${escapeHtml(e.gita.ref)}</div>
-          <div>${escapeHtml(gNote)}</div>
-        </div>
-        <div style="border-left:2px solid var(--t-${e.tier}, var(--rust));padding-left:10px">
-          <div style="font-weight:600;font-size:12px;opacity:.7;margin-bottom:2px">${escapeHtml(e.katha.ref)}</div>
-          <div>${escapeHtml(kNote)}</div>
-        </div>
-      </div>
-      <div style="font-size:11px;opacity:.6;font-style:italic">${escapeHtml(src)}</div>
-    </li>`;
+  root.innerHTML = html;
+
+  document.getElementById('bridge-filter-toggle').onclick = (e) => {
+    if (e.target.id !== 'bridge-filter-checkbox') document.getElementById('bridge-filter-checkbox').checked = !document.getElementById('bridge-filter-checkbox').checked;
+    bridgeState.onlyLinked = document.getElementById('bridge-filter-checkbox').checked;
+    document.getElementById('bridge-filter-toggle').style.background = bridgeState.onlyLinked ? 'var(--ink)' : 'var(--paper)';
+    document.getElementById('bridge-filter-toggle').style.color = bridgeState.onlyLinked ? 'var(--paper)' : 'var(--ink-soft)';
+    bridgeBuildSelect();
+    bridgeRenderOverview();
+  };
+
+  bridgeBuildSelect();
+  if (bridgeState.current) bridgeOpenDetail(bridgeState.current, true);
+  else bridgeRenderOverview();
+}
+
+function bridgeBuildSelect(){
+  const sel = document.getElementById('bridge-select');
+  if (!sel) return;
+  sel.innerHTML = `<option value="">${escapeHtml(UI('bridgeSelectPh'))}</option>`;
+  bridgeFiltered().forEach(c => {
+    const opt = document.createElement('option');
+    opt.value = c.node.id;
+    opt.textContent = `${labelOf(c.node)} (${c.satellites.length + 1})`;
+    if (bridgeState.current === c.node.id) opt.selected = true;
+    sel.appendChild(opt);
+  });
+  sel.onchange = () => {
+    const c = bridgeConceptList().find(x => x.node.id === sel.value);
+    if (c) bridgeOpenDetail(c.node.id);
+    else { bridgeState.current = null; document.getElementById('bridge-detail').style.display='none'; document.getElementById('bridge-overview').style.display=''; }
+  };
+}
+
+function bridgeRenderOverview(){
+  const list = bridgeFiltered();
+  const grid = document.getElementById('bridge-overview');
+  document.getElementById('bridge-detail').style.display = 'none';
+  grid.style.display = '';
+  if (!list.length){
+    grid.innerHTML = `<div style="padding:30px 16px;text-align:center;color:var(--ink-fade);font-size:12.5px;font-style:italic">${escapeHtml(UI('bridgeOverviewEmpty'))}</div>`;
+    return;
+  }
+  let html = `<div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(140px,1fr));gap:10px;padding:0 16px 20px">`;
+  list.forEach(c => {
+    const color = bridgeTierColor(c.node.tier);
+    const total = c.satellites.length + 1;
+    const zero = c.satellites.length === 0;
+    html += `<div class="bridge-tile" data-id="${c.node.id}" style="background:var(--paper);border:1px solid var(--rule);border-radius:14px;padding:14px 12px;cursor:pointer;position:relative;overflow:hidden;${zero?'opacity:.72':''}">
+      <div style="position:absolute;left:0;top:0;bottom:0;width:4px;background:${color}"></div>
+      <div style="font-family:'Cormorant Garamond',serif;font-weight:700;font-size:16px;color:var(--ink);margin-bottom:3px">${escapeHtml(labelOf(c.node))}</div>
+      <div style="font-size:9.5px;letter-spacing:.05em;text-transform:uppercase;color:var(--ink-fade);margin-bottom:9px">${escapeHtml(c.node.tier)}</div>
+      <div style="font-size:11px;color:var(--ink-soft)"><span style="font-weight:700;color:var(--rust)">${total}</span> ${total===1?escapeHtml(UI('bridgeSource')):escapeHtml(UI('bridgeSources'))}</div>
+    </div>`;
+  });
+  html += `</div>`;
+  grid.innerHTML = html;
+  grid.querySelectorAll('.bridge-tile').forEach(tile => {
+    tile.onclick = () => bridgeOpenDetail(tile.dataset.id);
+  });
+}
+
+function bridgeOpenDetail(nodeId, skipSelectSync){
+  bridgeState.current = nodeId;
+  document.getElementById('bridge-overview').style.display = 'none';
+  const detail = document.getElementById('bridge-detail');
+  detail.style.display = '';
+  if (!skipSelectSync) bridgeBuildSelect();
+
+  const c = bridgeConceptList().find(x => x.node.id === nodeId);
+  if (!c) return;
+  const color = bridgeTierColor(c.node.tier);
+  const sats = c.satellites;
+  const hasSats = sats.length > 0;
+
+  let picker = `<div style="display:flex;gap:8px;overflow-x:auto;padding:2px 2px 14px;margin:0 -2px">`;
+  bridgeFiltered().forEach(x => {
+    const on = x.node.id === nodeId;
+    picker += `<div class="bridge-chip" data-id="${x.node.id}" style="flex:0 0 auto;padding:7px 13px;border-radius:99px;background:${on?'var(--ink)':'var(--paper)'};border:1px solid ${on?'var(--ink)':'var(--rule)'};font-size:12.5px;font-weight:500;color:${on?'var(--paper)':'var(--ink-soft)'};cursor:pointer;white-space:nowrap">
+      <span style="display:inline-block;width:6px;height:6px;border-radius:50%;margin-right:6px;background:${bridgeTierColor(x.node.tier)}"></span>${escapeHtml(labelOf(x.node))}<span style="opacity:.55;font-size:10px;margin-left:5px">${x.satellites.length?('+'+(x.satellites.length+1)):'1'}</span>
+    </div>`;
+  });
+  picker += `</div>`;
+
+  const backLabel = escapeHtml(UI('bridgeBack'));
+  let html = `<div style="display:flex;align-items:center;gap:10px;padding:2px 2px 12px">
+    <span id="bridge-back" style="display:inline-flex;align-items:center;gap:5px;font-size:12.5px;font-weight:600;color:var(--rust);cursor:pointer">← ${backLabel}</span>
+  </div>${picker}
+  <div style="position:relative;background:var(--paper);border:1px solid var(--rule);border-radius:18px;overflow:hidden;box-shadow:0 1px 0 rgba(255,255,255,.6) inset, 0 8px 24px -12px rgba(60,40,10,.25)">
+    <div style="position:relative;width:100%;aspect-ratio:1/1;max-height:60vh">
+      <svg id="bridge-svg" viewBox="0 0 400 400" style="width:100%;height:100%;display:block"></svg>
+      ${!hasSats ? `<div style="position:absolute;left:50%;bottom:8%;transform:translateX(-50%);font-size:11px;color:var(--ink-fade);text-align:center;max-width:220px;font-style:italic">${escapeHtml(UI('bridgeEmptyHint'))}</div>` : ''}
+    </div>
+  </div>
+  <div id="bridge-drawer" style="margin-top:16px;background:var(--paper);border:1px solid var(--rule);border-radius:14px;padding:16px 18px;min-height:64px">
+    <div style="font-size:12.5px;color:var(--ink-fade);font-style:italic;padding:6px 2px">${escapeHtml(UI('bridgeDrawerPh'))}</div>
+  </div>`;
+
+  detail.innerHTML = html;
+  detail.querySelectorAll('.bridge-chip').forEach(chip => chip.onclick = () => bridgeOpenDetail(chip.dataset.id));
+  document.getElementById('bridge-back').onclick = () => {
+    bridgeState.current = null;
+    detail.style.display = 'none';
+    document.getElementById('bridge-overview').style.display = '';
+    bridgeBuildSelect();
+  };
+
+  bridgeDrawSvg(c, color, sats, hasSats);
+}
+
+function bridgeShowDrawer(kind, title, ref, note, sourceNote, isPending){
+  const drawer = document.getElementById('bridge-drawer');
+  if (!drawer) return;
+  const tag = kind === 'gita' ? UI('bridgeGitaTag') : UI('bridgeKathaTag');
+  const tagBg = kind === 'gita' ? '#fbeee3' : '#eef3ea';
+  const tagColor = kind === 'gita' ? 'var(--rust)' : '#3f7a4a';
+  drawer.innerHTML = `
+    <span style="display:inline-flex;align-items:center;gap:6px;font-size:10.5px;font-weight:600;letter-spacing:.05em;text-transform:uppercase;padding:3px 9px;border-radius:99px;margin-bottom:10px;background:${tagBg};color:${tagColor}">${escapeHtml(tag)}</span>
+    <h3 style="font-family:'Cormorant Garamond',serif;font-size:19px;margin:2px 0 3px;color:var(--ink)">${escapeHtml(title)}</h3>
+    <div style="font-size:11.5px;color:var(--ink-fade);margin-bottom:10px">${escapeHtml(ref)}</div>
+    <div style="font-size:13.5px;line-height:1.6;color:var(--ink-soft)">${escapeHtml(note)}${isPending ? `<span style="font-size:9.5px;opacity:.55;font-style:italic;margin-left:5px">${escapeHtml(UI('bridgePending'))}</span>` : ''}</div>
+    ${sourceNote ? `<div style="margin-top:10px;padding-top:10px;border-top:1px dashed var(--rule);font-size:11.5px;color:var(--ink-fade);font-style:italic">${escapeHtml(sourceNote)}</div>` : ''}
+  `;
+}
+
+function bridgeDrawSvg(c, color, sats, hasSats){
+  const svgEl = document.getElementById('bridge-svg');
+  if (!svgEl) return;
+  const NS = 'http://www.w3.org/2000/svg';
+  const mk = (tag, attrs) => { const e = document.createElementNS(NS, tag); for (const k in attrs) e.setAttribute(k, attrs[k]); return e; };
+  svgEl.innerHTML = '';
+  const cx = 200, cy = 200;
+
+  if (hasSats) {
+    svgEl.appendChild(mk('circle', { cx, cy, r:128, fill:'none', stroke:'var(--rule)', 'stroke-width':1, 'stroke-dasharray':'2 5', opacity:.9 }));
+  }
+
+  const gitaNote = getActive(c.node.note);
+  const allSats = [{ kind:'gita', ref: c.node.refs || '', note: gitaNote, noteField: c.node.note, title: labelOf(c.node) + ' — ' + UI('bridgeGitaTag') }]
+    .concat(sats.map(s => ({ kind:'katha', ref: s.ref, note: getActive(s.note), noteField: s.note, title: getActive(s.title), sourceNote: getActive(s.sourceNote) })));
+
+  const n = allSats.length;
+  const R = hasSats ? 128 : 92;
+  allSats.forEach((s, i) => {
+    const angle = (Math.PI * 2 * i / n) - Math.PI/2;
+    const sx = cx + R * Math.cos(angle);
+    const sy = cy + R * Math.sin(angle);
+    const threadColor = s.kind === 'gita' ? getComputedStyle(document.documentElement).getPropertyValue('--rust') : '#3f7a4a';
+    svgEl.appendChild(mk('path', { d:`M ${cx} ${cy} L ${sx} ${sy}`, fill:'none', stroke:threadColor, 'stroke-width':1.4, opacity:.55 }));
+
+    const g = mk('g', { transform:`translate(${sx},${sy})`, style:'cursor:pointer' });
+    const fillC = s.kind === 'gita' ? '#fbeee3' : '#eef3ea';
+    g.appendChild(mk('circle', { r:30, cx:0, cy:0, fill:fillC, stroke:threadColor, 'stroke-width':1.6 }));
+    const label = mk('text', { x:0, y:-2, 'text-anchor':'middle', 'font-size':'11', 'font-weight':600, fill:'var(--ink)' });
+    label.textContent = s.kind === 'gita' ? UI('bridgeGitaTag').split(' ')[0] : UI('bridgeKathaTag').split(' ')[0];
+    g.appendChild(label);
+    const sub = mk('text', { x:0, y:11, 'text-anchor':'middle', 'font-size':'8.5', fill:'var(--ink-fade)' });
+    sub.textContent = s.kind === 'gita' ? UI('bridgeThisText') : UI('bridgeCrossRef');
+    g.appendChild(sub);
+    g.addEventListener('click', () => {
+      const pending = s.noteField && typeof s.noteField === 'object' && !s.noteField[state.lang] && s.noteField.en;
+      bridgeShowDrawer(s.kind, s.title, s.ref, s.note, s.sourceNote || null, pending);
+    });
+    svgEl.appendChild(g);
   });
 
-  html += `</ul>`;
-  if (!entries.length){
-    html += `<div style="padding:40px 20px;text-align:center;color:var(--ink-fade)">Bridge entries not loaded \u2014 check bridge_data.js.</div>`;
-  }
-  root.innerHTML = html;
+  const cg = mk('g', { transform:`translate(${cx},${cy})`, style:'cursor:pointer' });
+  cg.appendChild(mk('circle', { r:54, cx:0, cy:0, fill:'var(--paper-2)', stroke:color, 'stroke-width':2.5 }));
+  const cLabel = mk('text', { x:0, y:-3, 'text-anchor':'middle', 'font-size':'16', 'font-family':'Cormorant Garamond, serif', 'font-weight':700, fill:'var(--ink)' });
+  cLabel.textContent = labelOf(c.node);
+  cg.appendChild(cLabel);
+  const cSub = mk('text', { x:0, y:14, 'text-anchor':'middle', 'font-size':'9.5', fill:'var(--ink-fade)' });
+  cSub.textContent = c.node.tier;
+  cg.appendChild(cSub);
+  cg.addEventListener('click', () => {
+    const pending = c.node.note && typeof c.node.note === 'object' && !c.node.note[state.lang] && c.node.note.en;
+    bridgeShowDrawer('gita', labelOf(c.node), c.node.refs || '', gitaNote, null, pending);
+  });
+  svgEl.appendChild(cg);
 }
+
+
 
 function renderChat() {
   const ui = CHAT_UI[state.lang] || CHAT_UI.en;

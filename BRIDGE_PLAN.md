@@ -134,31 +134,43 @@ session could still check for citations using other phrasings (e.g. "ಕೃಷ�
 ಹೇಳಿದ" without "ಗೀತೆ" nearby, or references to specific chapter numbers
 without naming the text).
 
-## Phase 3+ (future sessions) — toward the target vision
-This is now the primary backlog, in rough dependency order:
+## Phase 3 (this batch) — radial map integrated, live in both apps
+The card-list UI is retired. Both apps now render the target vision:
+- **Overview**: a grid of ALL 47 Gita concepts (not a 12-concept sample), each a
+  tile showing tier color, name, and total source count (Gita + any cross-refs).
+  A "2+ cross-references" filter toggle narrows both the grid and the dropdown.
+- **Detail**: tapping/selecting a concept opens its radial map — the concept as
+  a center bubble, its own Gita explanation as one satellite, and any verified
+  Katha citations as additional satellites, all as a genuinely new component
+  (not a modification of the existing Map tab / renderMap()/positions.js, which
+  is untouched).
+- **Data model**: `bridge_data.js` schema changed to concept-centric —
+  `BRIDGE_CONCEPT_LINKS` keyed by Gita concept-graph node id, each value a list
+  of source citations (currently only `source:'katha'`, ready for more sources).
+  The Gita-side "self" content is NOT duplicated in bridge_data.js for the
+  Bhagavadgita app (it reads its own live `NODES` from data.js). Katopanishad
+  has no access to that file, so `bridge_data.js` also carries a snapshot
+  (`BRIDGE_GITA_CONCEPTS` / `BRIDGE_GITA_TIERS`) — a straight copy of
+  Bhagavadgita's data.js TIERS+NODES arrays, taken Aug 2026. **This snapshot
+  will drift if data.js changes and isn't manually re-synced — worth automating
+  or at least checking each session.**
+- **Language**: both apps' existing language switchers now drive the Bridge
+  too (no separate switcher) — `state.lang`/`currentLanguage` triggers
+  `renderBridge()`/`renderBridgeView()` on every language change, same as
+  every other tab. Concept names/notes pull from data.js's existing en/kn/dev/hi
+  coverage; citation notes only have en/kn (see translation-status note above)
+  and fall back to English with a small "translation pending" tag.
+- **Bug found and fixed during this integration**: the very first Bridge commit
+  (`3f7c249`) had corrupted Kannada text in two UI strings (`bridgeHeader`,
+  `bridgeExploreOn`) — mixed-in Bengali/Telugu code points from a hand-typed
+  `\uXXXX` escape sequence typo. Fixed by retyping as literal Kannada
+  characters instead of escapes (much less error-prone) and verified with a
+  Unicode-block scan across both full built files — zero remaining corruption
+  as of this session. Lesson: avoid hand-typed `\uXXXX` escapes for non-Latin
+  scripts going forward; type the actual characters.
 
-1. **UI re-architecture: card list → radial concept map.** The BG viewer's
-   `renderMap()`/`positions.js` already draws a node-and-edge graph for
-   Gita-internal concept relations — the Bridge should reuse that same
-   rendering approach (SVG/canvas, hand-laid or force-directed positions)
-   rather than invent a new visual language. Center node = one Gita concept
-   (id matches `data.js` TIERS/NODES); surrounding nodes = each verified
-   cross-reference, grouped/colored by source text. Clicking a concept in
-   the *existing* Gita map should be able to jump into its Bridge view.
-2. **Data model generalization: `katha` field → generic `sources[]` array.**
-   Current `bridge_data.js` schema hardcodes a `katha` field per entry. To
-   support Vedas/Upanishads/Puranas/Itihasa generically, each entry needs
-   `sources: [{ text: 'Katha Upanishad', ref: '...', note: {...} }, ...]`
-   so one Gita concept can eventually point to citations in multiple texts
-   at once. This is a breaking schema change — plan a migration pass over
-   the 14 existing entries when this is tackled.
-3. **Restructure by concept, not by citation-pair.** Currently one entry =
-   one citation pair (e.g. `ashvattha-tree`). The target model is one entry
-   *per Gita concept node* (matching the ~47-node graph), with a list of
-   supporting references attached. Concepts with zero references yet should
-   still appear in the map (as a bare center node) rather than being
-   omitted, so the map visibly shows how much of the corpus is covered.
-4. **New source integrations beyond Katopanishad.** No other Bannanje-
+## Phase 4+ (still open)
+1. **New source integrations beyond Katopanishad.** No other Bannanje-
    commentary Vedic/Puranic/Itihasa project exists yet in this workspace.
    Before any new source can feed the Bridge, it needs the same treatment
    Katopanishad got: a transcribed/verified corpus, in the Bannanje-only
@@ -166,10 +178,20 @@ This is now the primary backlog, in rough dependency order:
    way this session swept Katopanishad's. Ask Vinayak which source to
    tackle next (a specific Upanishad, a Purana, the Mahabharata/Gita's own
    frame narrative, etc.) rather than assuming.
-5. **Coverage tracking.** Once (3) exists, add a simple completion metric
-   (e.g. "12 / 47 Gita concepts have at least one cross-reference") so
-   progress toward "every concept linked" is visible, mirroring how
-   `EN_RETRANSLATION_PLAN.md` tracks chapter-by-chapter translation status.
+2. **Translate the citation notes into Devanagari and Hindi.** `title` fields
+   are mostly multilingual already; `note`/`sourceNote` fields on every
+   citation are en/kn only. This needs the same rigor as the main chapter
+   translation pipeline, not a quick pass — flagged as a known gap, not done
+   yet.
+3. **`BRIDGE_GITA_CONCEPTS` snapshot sync.** Re-copy TIERS+NODES from
+   Bhagavadgita's data.js into bridge_data.js whenever the concept graph
+   changes; there's no automation for this yet, so check it's current at
+   the start of any Bridge session.
+4. **`katopanishad-offline.html`** (self-contained bundle) still needs the
+   new bridge_data.js/renderBridgeView wired in — it currently either has
+   the old card-list code or nothing at all; not checked this session.
+5. **Cross-site deep links** (bubble → jump to that verse in the other app)
+   remain unbuilt.
 
 ## Smaller/orthogonal open items (not blocking the re-architecture)
 - Tier-correspondence entries for the 5 shared tiers (Parabrahma, Jivatattva/
