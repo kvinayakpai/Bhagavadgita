@@ -27,274 +27,165 @@
  */
 
 const BRIDGE_CONCEPT_LINKS = {
-  "paramatma": [
+  paramatma: [
     {
-      "source": "katha",
-      "entryId": "vaishvanara-agni",
-      "title": {
-        "en": "Vaishvanara — the Lord as fire within the heart",
-        "kn": "ವೈಶ್ವಾನರ — ಹೃದಯದೊಳಗಿನ ಅಗ್ನಿಯಾಗಿ ಭಗವಂತ",
-        "dev": "वैश्वानरः — हृदयस्थोऽग्निरूपो भगवान्",
-        "hi": "वैश्वानर — हृदय में अग्निरूप भगवान्",
-        "sa": "वैश्वानरः — हृदयस्थोऽग्निरूपो भगवान्"
+      source: 'katha', entryId: 'vaishvanara-agni',
+      title: { en: 'Vaishvanara — the Lord as fire within the heart', kn: 'ವೈಶ್ವಾನರ — ಹೃದಯದೊಳಗಿನ ಅಗ್ನಿಯಾಗಿ ಭಗವಂತ', dev: 'वैश्वानरः — हृदयस्थोऽग्निरूपो भगवान्', hi: 'वैश्वानर — हृदय में अग्निरूप भगवान्', sa: 'वैश्वानरः — हृदयस्थोऽग्निरूपो भगवान्' },
+      ref: 'Katha 1.2.14–15 (Adhyaya 1, Valli 2)',
+      note: {
+        en: 'Explaining the fire-vidya Yama teaches Nachiketa, Bannanje says the Lord "abides in the cave of the heart" (nihitaṁ guhāyām) and quotes Gita 15.14 verbatim — "ahaṁ vaiśvānaro bhūtvā prāṇinām deham āśritaḥ" ("Becoming Vaishvanara, I dwell in the bodies of all beings") — to make the point: the same Vaishvanara indwelling the body is the fire Nachiketa is taught to worship.',
+        kn: 'ಯಮ ನಚಿಕೇತನಿಗೆ ಕೊಡುವ ಅಗ್ನಿವಿದ್ಯೆಯ ವಿವರಣೆಯಲ್ಲಿ, ಭಗವಂತ "ಹೃದಯಗುಹೆಯಲ್ಲೇ" ಇದ್ದಾನೆ ಎಂದು ಬನ್ನಂಜೆ ಹೇಳುತ್ತಾ, "ಅಹಂ ವೈಶ್ವಾನರೋ ಭೂತ್ವಾ ಪ್ರಾಣಿನಾಂ ದೇಹಮಾಶ್ರಿತಃ" (ಗೀತೆ ೧೫.೧೪) ಎಂಬ ಶ್ಲೋಕವನ್ನು ಯಥಾವತ್ತಾಗಿ ಉಲ್ಲೇಖಿಸುತ್ತಾರೆ — ದೇಹದೊಳಗಿನ ಅದೇ ವೈಶ್ವಾನರನೇ ನಚಿಕೇತ ಉಪಾಸಿಸಬೇಕಾದ ಅಗ್ನಿ.',
       },
-      "ref": "Katha 1.2.14–15 (Adhyaya 1, Valli 2)",
-      "note": {
-        "en": "Explaining the fire-vidya Yama teaches Nachiketa, Bannanje says the Lord \"abides in the cave of the heart\" (nihitaṁ guhāyām) and quotes Gita 15.14 verbatim to make the point: the same Vaishvanara indwelling the body is the fire Nachiketa is taught to worship.",
-        "kn": "ಯಮ ನಚಿಕೇತನಿಗೆ ಕೊಡುವ ಅಗ್ನಿವಿದ್ಯೆಯ ವಿವರಣೆಯಲ್ಲಿ, ಭಗವಂತ \"ಹೃದಯಗುಹೆಯಲ್ಲೇ\" ಇದ್ದಾನೆ ಎಂದು ಬನ್ನಂಜೆ ಹೇಳುತ್ತಾ, ಗೀತೆ ೧೫.೧೪ ಅನ್ನು ಯಥಾವತ್ತಾಗಿ ಉಲ್ಲೇಖಿಸುತ್ತಾರೆ — ದೇಹದೊಳಗಿನ ಅದೇ ವೈಶ್ವಾನರನೇ ನಚಿಕೇತ ಉಪಾಸಿಸಬೇಕಾದ ಅಗ್ನಿ."
-      },
-      "sourceNote": {
-        "en": "Bannanje directly quotes Gita 15.14 while teaching Katha 1.2.14–15 — an explicit cross-reference, not an inferred parallel.",
-        "kn": "ಕಠ ೧.೨.೧೪-೧೫ರ ವಿವರಣೆಯಲ್ಲಿ ಬನ್ನಂಜೆ ಗೀತೆ ೧೫.೧೪ ಅನ್ನು ನೇರವಾಗಿ ಉಲ್ಲೇಖಿಸುತ್ತಾರೆ — ಇದು ನಮ್ಮ ಊಹೆಯಲ್ಲ, ಬನ್ನಂಜೆಯವರ ಸ್ಪಷ್ಟ ಉಲ್ಲೇಖ."
-      }
+      sourceNote: { en: 'Bannanje directly quotes Gita 15.14 while teaching Katha 1.2.14–15 — an explicit cross-reference, not an inferred parallel.', kn: 'ಕಠ ೧.೨.೧೪-೧೫ರ ವಿವರಣೆಯಲ್ಲಿ ಬನ್ನಂಜೆ ಗೀತೆ ೧೫.೧೪ ಅನ್ನು ನೇರವಾಗಿ ಉಲ್ಲೇಖಿಸುತ್ತಾರೆ — ಇದು ನಮ್ಮ ಊಹೆಯಲ್ಲ, ಬನ್ನಂಜೆಯವರ ಸ್ಪಷ್ಟ ಉಲ್ಲೇಖ.' },
     },
     {
-      "source": "katha",
-      "entryId": "prana-apana-vamana",
-      "title": {
-        "en": "Prana-Apana and the Vamana Form",
-        "kn": "ಪ್ರಾಣ-ಅಪಾನ ಮತ್ತು ವಾಮನ ರೂಪ",
-        "hi": "प्राण-अपान और वामन रूप",
-        "sa": "प्राणापानौ वामनरूपं च"
+      source: 'katha', entryId: 'prana-apana-vamana',
+      title: { en: 'Prana-Apana and the Vamana Form', kn: 'ಪ್ರಾಣ-ಅಪಾನ ಮತ್ತು ವಾಮನ ರೂಪ', hi: 'प्राण-अपान और वामन रूप', sa: 'प्राणापानौ वामनरूपं च' },
+      ref: 'Katha 2.2.3 (Adhyaya 2, Valli 2)',
+      note: {
+        en: '"ūrdhvaṃ prāṇam unnayati apānaṃ pratyag-asyati / madhye vāmanam āsīnaṃ viśve devā upāsate" — all gods worship the Vamana-form seated in the middle, who directs prāṇa upward and apāna downward. Explaining Gita 15.14\u2019s Vaishvanara digesting food via prāṇa-apāna, Bannanje glosses the Lord\u2019s heart-seated Vamana form and cites this Katha verse by its exact reference.',
+        kn: '"ಊರ್ಧ್ವಂ ಪ್ರಾಣಮುನ್ನಯತಿ ಅಪಾನಂ ಪ್ರತ್ಯಗಸ್ಯತಿ" — ಮಧ್ಯದಲ್ಲಿ ಆಸೀನನಾದ ವಾಮನ ರೂಪವನ್ನೇ ಸಮಸ್ತ ದೇವತೆಗಳೂ ಉಪಾಸಿಸುತ್ತಾರೆ. ಗೀತಾ ೧೫.೧೪ರ ವೈಶ್ವಾನರ ಬೋಧನೆಯ ವಿವರಣೆಯಲ್ಲಿ ಬನ್ನಂಜೆ ಈ ಕಠ ಶ್ಲೋಕವನ್ನು (೨-೨-೩) ನಿಖರ ಉಲ್ಲೇಖದೊಂದಿಗೆ ಉಲ್ಲೇಖಿಸುತ್ತಾರೆ.',
       },
-      "ref": "Katha 2.2.3 (Adhyaya 2, Valli 2)",
-      "note": {},
-      "sourceNote": {
-        "en": "Bannanje cites this Katha verse (2-2-3) by its exact reference while explaining Gita 15.14’s Vaishvanara teaching — same neighborhood as the vaishvanara-agni entry above, different specific verse pairing.",
-        "kn": "ಗೀತಾ ೧೫.೧೪ರ ವೈಶ್ವಾನರ ಬೋಧನೆಯ ವಿವರಣೆಯಲ್ಲಿ ಬನ್ನಂಜೆ ಈ ಕಠ ಶ್ಲೋಕವನ್ನು (೨-೨-೩) ನಿಖರ ಉಲ್ಲೇಖದೊಂದಿಗೆ ಉಲ್ಲೇಖಿಸುತ್ತಾರೆ."
-      }
+      sourceNote: { en: 'Bannanje cites this Katha verse (2-2-3) by its exact reference while explaining Gita 15.14\u2019s Vaishvanara teaching — same neighborhood as the vaishvanara-agni entry above, different specific verse pairing.', kn: 'ಗೀತಾ ೧೫.೧೪ರ ವೈಶ್ವಾನರ ಬೋಧನೆಯ ವಿವರಣೆಯಲ್ಲಿ ಬನ್ನಂಜೆ ಈ ಕಠ ಶ್ಲೋಕವನ್ನು (೨-೨-೩) ನಿಖರ ಉಲ್ಲೇಖದೊಂದಿಗೆ ಉಲ್ಲೇಖಿಸುತ್ತಾರೆ.' },
     },
     {
-      "source": "katha",
-      "entryId": "angushthamatra-purusha",
-      "title": {
-        "en": "The Thumb-Sized Person Within",
-        "kn": "ಅಂಗುಷ್ಠಮಾತ್ರ ಪುರುಷ",
-        "hi": "अंगुष्ठमात्र पुरुष",
-        "sa": "अङ्गुष्ठमात्रः पुरुषः"
+      source: 'katha', entryId: 'angushthamatra-purusha',
+      title: { en: 'The Thumb-Sized Person Within', kn: 'ಅಂಗುಷ್ಠಮಾತ್ರ ಪುರುಷ', hi: 'अंगुष्ठमात्र पुरुष', sa: 'अङ्गुष्ठमात्रः पुरुषः' },
+      ref: 'Katha 2.1.12–13 (Adhyaya 2, Valli 1)',
+      note: {
+        en: '"aṅguṣṭha-mātraḥ puruṣo madhya ātmani tiṣṭhati" (12) — the Lord dwells, thumb-sized, at the center of the self; the following verse (13) extends this to "sadā janānāṃ hṛdaye sanniviṣṭaḥ," dwelling always in the heart of all people. Explaining the Lord\u2019s subtle-body presence as the inner "aham" at Gita 15.15, Bannanje quotes this Katha verse by its exact reference, and brings in Madhvacharya\u2019s own Katha commentary (Sarvamula) alongside it.',
+        kn: '"ಅಂಗುಷ್ಠಮಾತ್ರಃ ಪುರುಷೋ ಮಧ್ಯ ಆತ್ಮನಿ ತಿಷ್ಠತಿ" (೧೨) — ಭಗವಂತ ಆತ್ಮನ ಮಧ್ಯದಲ್ಲಿ ಅಂಗುಷ್ಠಗಾತ್ರದಲ್ಲಿ ನೆಲೆಸಿದ್ದಾನೆ; ಮುಂದಿನ ಶ್ಲೋಕ (೧೩) ಇದನ್ನೇ "ಸದಾ ಜನಾನಾಂ ಹೃದಯೇ ಸನ್ನಿವಿಷ್ಟಃ" ಎಂದು ವಿಸ್ತರಿಸುತ್ತದೆ. ಗೀತಾ ೧೫.೧೫ರ "ಅಹಂ" ಎಂಬ ಆಂತರಿಕ ಸ್ವರೂಪದ ವಿವರಣೆಯಲ್ಲಿ ಬನ್ನಂಜೆ ಈ ಕಠ ಶ್ಲೋಕವನ್ನು ನಿಖರ ಉಲ್ಲೇಖದೊಂದಿಗೆ ಉಲ್ಲೇಖಿಸಿ, ಮಧ್ವಾಚಾರ್ಯರ ಸ್ವಂತ ಕಠ ಭಾಷ್ಯವನ್ನೂ (ಸರ್ವಮೂಲ) ತರುತ್ತಾರೆ.',
       },
-      "ref": "Katha 2.1.12–13 (Adhyaya 2, Valli 1)",
-      "note": {},
-      "sourceNote": {
-        "en": "Bannanje quotes the Katha verse directly in his Gita commentary and even brings in Madhvacharya’s own Katha bhashya alongside it — a doubly-sourced citation.",
-        "kn": "ಬನ್ನಂಜೆ ಗೀತಾ ವ್ಯಾಖ್ಯಾನದಲ್ಲಿ ಕಠ ಶ್ಲೋಕವನ್ನು ನೇರವಾಗಿ ಉಲ್ಲೇಖಿಸಿ, ಜೊತೆಗೆ ಮಧ್ವಾಚಾರ್ಯರ ಸ್ವಂತ ಕಠ ಭಾಷ್ಯವನ್ನೂ ತರುತ್ತಾರೆ."
-      }
-    }
+      sourceNote: { en: 'Bannanje quotes the Katha verse directly in his Gita commentary and even brings in Madhvacharya\u2019s own Katha bhashya alongside it — a doubly-sourced citation.', kn: 'ಬನ್ನಂಜೆ ಗೀತಾ ವ್ಯಾಖ್ಯಾನದಲ್ಲಿ ಕಠ ಶ್ಲೋಕವನ್ನು ನೇರವಾಗಿ ಉಲ್ಲೇಖಿಸಿ, ಜೊತೆಗೆ ಮಧ್ವಾಚಾರ್ಯರ ಸ್ವಂತ ಕಠ ಭಾಷ್ಯವನ್ನೂ ತರುತ್ತಾರೆ.' },
+    },
   ],
-  "purushottama": [
+  purushottama: [
     {
-      "source": "katha",
-      "entryId": "om-tat-sat",
-      "title": {
-        "en": "Om Tat Sat — the Threefold Designation",
-        "kn": "ಓಂ ತತ್ ಸತ್ — ತ್ರಿವಿಧ ನಿರ್ದೇಶ",
-        "hi": "ॐ तत् सत् — त्रिविध निर्देश",
-        "sa": "ॐ तत् सत् त्रिविधो निर्देशः"
+      source: 'katha', entryId: 'om-tat-sat',
+      title: { en: 'Om Tat Sat — the Threefold Designation', kn: 'ಓಂ ತತ್ ಸತ್ — ತ್ರಿವಿಧ ನಿರ್ದೇಶ', hi: 'ॐ तत् सत् — त्रिविध निर्देश', sa: 'ॐ तत् सत् त्रिविधो निर्देशः' },
+      ref: 'Katha 2.3.12 (Adhyaya 2, Valli 3)',
+      note: {
+        en: '"naiva vācā na manasā prāptuṃ śakyo na cakṣuṣā / astīti bruvato\u2019nyatra kathaṃ tad-upalabhyate" — the Lord cannot be grasped except through the affirmation "He is" (asti). Bannanje: "there is a statement in the Gita" and quotes 17.23 — "oṃ tat sad iti nirdeśo brahmaṇas tri-vidhaḥ smṛtaḥ" — to explain this "sat"-mode of upāsanā.',
+        kn: '"ನೈವ ವಾಚಾ ನ ಮನಸಾ ಪ್ರಾಪ್ತುಂ ಶಕ್ಯೋ ನ ಚಕ್ಷುಷಾ" — "ಅಸ್ತಿ" ಎಂದು ಒಪ್ಪಿಕೊಳ್ಳುವವನಿಗಲ್ಲದೆ ಬೇರೆ ಯಾರಿಗೂ ಭಗವಂತ ಸಿಗಲಾರ. ಬನ್ನಂಜೆ "ಗೀತೆಯಲ್ಲಿ ಒಂದು ಮಾತು ಬಂದಿದೆ" ಎಂದು "ಓಂ ತತ್ ಸದಿತಿ ನಿರ್ದೇಶೋ ಬ್ರಹ್ಮಣಸ್ತ್ರಿವಿಧಃ ಸ್ಮೃತಃ" (ಗೀತೆ ೧೭.೨೩) ಅನ್ನು ಉಲ್ಲೇಖಿಸಿ ಈ "ಸತ್" ಉಪಾಸನೆಯ ಮುಖವನ್ನು ವಿವರಿಸುತ್ತಾರೆ.',
       },
-      "ref": "Katha 2.3.12 (Adhyaya 2, Valli 3)",
-      "note": {},
-      "sourceNote": {
-        "en": "Explicit citation while glossing the \"sat\" mode of worship in Katha.",
-        "kn": "ಕಠದ \"ಸತ್\" ಉಪಾಸನಾ ಮುಖವನ್ನು ವಿವರಿಸುತ್ತಾ ಸ್ಪಷ್ಟ ಉಲ್ಲೇಖ."
-      }
+      sourceNote: { en: 'Explicit citation while glossing the "sat" mode of worship in Katha.', kn: 'ಕಠದ "ಸತ್" ಉಪಾಸನಾ ಮುಖವನ್ನು ವಿವರಿಸುತ್ತಾ ಸ್ಪಷ್ಟ ಉಲ್ಲೇಖ.' },
     },
     {
-      "source": "katha",
-      "entryId": "brahman-as-light",
-      "title": {
-        "en": "Brahman as the Light Behind All Light",
-        "kn": "ಎಲ್ಲಾ ಬೆಳಕುಗಳ ಮೂಲ ಬೆಳಕಾಗಿ ಭಗವಂತ",
-        "hi": "सब प्रकाशों का मूल प्रकाश — ब्रह्म",
-        "sa": "सर्वप्रकाशानां मूलं तेजो ब्रह्म"
+      source: 'katha', entryId: 'brahman-as-light',
+      title: { en: 'Brahman as the Light Behind All Light', kn: 'ಎಲ್ಲಾ ಬೆಳಕುಗಳ ಮೂಲ ಬೆಳಕಾಗಿ ಭಗವಂತ', hi: 'सब प्रकाशों का मूल प्रकाश — ब्रह्म', sa: 'सर्वप्रकाशानां मूलं तेजो ब्रह्म' },
+      ref: 'Katha 2.2.15 (Adhyaya 2, Valli 2, closing verse)',
+      note: {
+        en: '"na tatra sūryo bhāti na candra-tārakam" — the same declaration in near-identical wording as Gita 15.6, "na tad bhāsayate sūryo na śaśāṅko na pāvakaḥ" (neither sun, moon, nor fire illumines that supreme abode). Bannanje writes: "Krishna says exactly this in the Gita" and quotes 15.6 in full alongside it.',
+        kn: '"ನ ತತ್ರ ಸೂರ್ಯೋ ಭಾತಿ ನ ಚಂದ್ರತಾರಕಂ" — "ನ ತದ್ ಭಾಸಯತೇ ಸೂರ್ಯೋ ನ ಶಶಾಂಕೋ ನ ಪಾವಕಃ" (ಗೀತೆ ೧೫.೬) ಎಂಬ ಬಹುತೇಕ ಒಂದೇ ಪದಗಳ ಘೋಷಣೆ. ಬನ್ನಂಜೆ "ಇದನ್ನೇ ಕೃಷ್ಣ ಗೀತೆಯಲ್ಲಿ ಹೀಗೆ ಹೇಳಿದ್ದಾನೆ" ಎಂದು ಬರೆದು ೧೫.೬ ಅನ್ನು ಪೂರ್ಣವಾಗಿ ಉಲ್ಲೇಖಿಸುತ್ತಾರೆ.',
       },
-      "ref": "Katha 2.2.15 (Adhyaya 2, Valli 2, closing verse)",
-      "note": {},
-      "sourceNote": {
-        "en": "A bidirectional citation — Bannanje quotes this pairing in BOTH his Katha commentary and his Gita 15.6 commentary, each time citing the other text explicitly by name.",
-        "kn": "ಪರಸ್ಪರ ಉಲ್ಲೇಖ — ಬನ್ನಂಜೆ ಈ ಶ್ಲೋಕಜೋಡಿಯನ್ನು ಕಠ ಮತ್ತು ಗೀತಾ ಎರಡೂ ವ್ಯಾಖ್ಯಾನಗಳಲ್ಲಿ, ಪ್ರತಿ ಬಾರಿ ಇನ್ನೊಂದನ್ನು ಹೆಸರಿಸುತ್ತಾ, ಉಲ್ಲೇಖಿಸುತ್ತಾರೆ."
-      }
-    }
+      sourceNote: { en: 'A bidirectional citation — Bannanje quotes this pairing in BOTH his Katha commentary and his Gita 15.6 commentary, each time citing the other text explicitly by name.', kn: 'ಪರಸ್ಪರ ಉಲ್ಲೇಖ — ಬನ್ನಂಜೆ ಈ ಶ್ಲೋಕಜೋಡಿಯನ್ನು ಕಠ ಮತ್ತು ಗೀತಾ ಎರಡೂ ವ್ಯಾಖ್ಯಾನಗಳಲ್ಲಿ, ಪ್ರತಿ ಬಾರಿ ಇನ್ನೊಂದನ್ನು ಹೆಸರಿಸುತ್ತಾ, ಉಲ್ಲೇಖಿಸುತ್ತಾರೆ.' },
+    },
   ],
-  "vibhuti": [
+  vibhuti: [
     {
-      "source": "katha",
-      "entryId": "ashvattha-tree",
-      "title": {
-        "en": "The Cosmic Ashvattha Tree",
-        "kn": "ಸಂಸಾರ ಅಶ್ವತ್ಥ ವೃಕ್ಷ",
-        "hi": "संसार-अश्वत्थ वृक्ष",
-        "sa": "संसाराश्वत्थवृक्षः"
+      source: 'katha', entryId: 'ashvattha-tree',
+      title: { en: 'The Cosmic Ashvattha Tree', kn: 'ಸಂಸಾರ ಅಶ್ವತ್ಥ ವೃಕ್ಷ', hi: 'संसार-अश्वत्थ वृक्ष', sa: 'संसाराश्वत्थवृक्षः' },
+      ref: 'Katha 2.3.1 (Adhyaya 2, Valli 3, opening verse)',
+      note: {
+        en: '"ūrdhvamūlo\u2019vāk-śākha eṣo\u2019śvatthaḥ sanātanaḥ" — the same tree-image opens Katha\u2019s final Valli as Gita 15.1\u2019s "ūrdhvamūlam adhaḥ-śākham aśvatthaṃ prāhur avyayam," with roots above and the Vedas as its leaves. Bannanje: "we see this same description explained by Krishna in the fifteenth chapter of the Gita" — and separately, discussing guṇas at BG 14.18, quotes this Katha verse by its exact reference (2-3-1) to explain the word "ūrdhva."',
+        kn: '"ಊರ್ಧ್ವಮೂಲೋಽವಾಕ್ಶಾಖ ಏಷೋಽಶ್ವತ್ಥಃ ಸನಾತನಃ" — "ಊರ್ಧ್ವಮೂಲಮ್ ಅಧಃಶಾಖಮ್ ಅಶ್ವತ್ಥಮ್ ಪ್ರಾಹುಃ ಅವ್ಯಯಮ್" (ಗೀತೆ ೧೫.೧) ಎಂಬ ಇದೇ ಮರದ ಚಿತ್ರಣ ಕಠದ ಕೊನೆಯ ವಲ್ಲಿಯ ಆರಂಭ. ಬನ್ನಂಜೆ: "ಇಲ್ಲಿ ಬಂದಿರುವ ವಿವರಣೆಯನ್ನೇ ಕೃಷ್ಣ ಗೀತೆಯ ಹದಿನೈದನೇ ಅಧ್ಯಾಯದಲ್ಲಿ ವಿವರಿಸಿ ಹೇಳಿರುವುದನ್ನು ಕಾಣುತ್ತೇವೆ" — ಮತ್ತು ಪ್ರತ್ಯೇಕವಾಗಿ ಗೀತೆ ೧೪.೧೮ ವ್ಯಾಖ್ಯಾನದಲ್ಲಿ ಈ ಕಠ ಶ್ಲೋಕವನ್ನು (೨-೩-೧) ನಿಖರ ಉಲ್ಲೇಖದೊಂದಿಗೆ ಉದಾಹರಿಸುತ್ತಾರೆ.',
       },
-      "ref": "Katha 2.3.1 (Adhyaya 2, Valli 3, opening verse)",
-      "note": {},
-      "sourceNote": {
-        "en": "Bidirectional and doubled: cited in Katha’s own commentary AND twice in the Gita commentary (15.1 and 14.18).",
-        "kn": "ಪರಸ್ಪರ ಮತ್ತು ಎರಡು ಬಾರಿ: ಕಠದ ಸ್ವಂತ ವ್ಯಾಖ್ಯಾನದಲ್ಲೂ, ಗೀತಾ ವ್ಯಾಖ್ಯಾನದಲ್ಲಿ (೧೫.೧ ಮತ್ತು ೧೪.೧೮) ಎರಡು ಬಾರಿಯೂ ಉಲ್ಲೇಖಿತ."
-      }
+      sourceNote: { en: 'Bidirectional and doubled: cited in Katha\u2019s own commentary AND twice in the Gita commentary (15.1 and 14.18).', kn: 'ಪರಸ್ಪರ ಮತ್ತು ಎರಡು ಬಾರಿ: ಕಠದ ಸ್ವಂತ ವ್ಯಾಖ್ಯಾನದಲ್ಲೂ, ಗೀತಾ ವ್ಯಾಖ್ಯಾನದಲ್ಲಿ (೧೫.೧ ಮತ್ತು ೧೪.೧೮) ಎರಡು ಬಾರಿಯೂ ಉಲ್ಲೇಖಿತ.' },
     },
     {
-      "source": "katha",
-      "entryId": "cosmic-regulation",
-      "title": {
-        "en": "The Devas Function Only Out of Fear of Him",
-        "kn": "ಭಗವಂತನ ಭಯದಿಂದಲೇ ದೇವತೆಗಳ ಕಾರ್ಯ",
-        "hi": "भगवान् के भय से ही देवताओं का कार्य",
-        "sa": "भगवद्भयादेव देवानां कार्यम्"
+      source: 'katha', entryId: 'cosmic-regulation',
+      title: { en: 'The Devas Function Only Out of Fear of Him', kn: 'ಭಗವಂತನ ಭಯದಿಂದಲೇ ದೇವತೆಗಳ ಕಾರ್ಯ', hi: 'भगवान् के भय से ही देवताओं का कार्य', sa: 'भगवद्भयादेव देवानां कार्यम्' },
+      ref: 'Katha 2.3.2 (Adhyaya 2, Valli 3)',
+      note: {
+        en: '"bhayād asyāgnis tapati bhayāt tapati sūryaḥ / bhayād indraś ca vāyuś ca mṛtyur dhāvati pañcamaḥ" — fire, sun, Indra, wind, and Death himself all function bound by fear of Him. Bannanje: "this same explanation appears in the Gita too" and quotes 9.19 — "tapāmy aham ahaṃ varṣaṃ nigṛhṇāmy utsṛjāmi ca / amṛtaṃ caiva mṛtyuś ca sad-asac cāham arjuna" ("I scorch, I withhold and send the rain, I am both immortality and death") — with its exact reference.',
+        kn: '"ಭಯಾದಸ್ಯಾಗ್ನಿಸ್ತಪತಿ ಭಯಾತ್ ತಪತಿ ಸೂರ್ಯಃ" — ಅಗ್ನಿ, ಸೂರ್ಯ, ಇಂದ್ರ, ವಾಯು, ಸ್ವತಃ ಮೃತ್ಯುವೂ ಭಗವಂತನ ಭಯದಿಂದಲೇ ಕಾರ್ಯ ನಿರ್ವಹಿಸುತ್ತಾರೆ. ಬನ್ನಂಜೆ: "ಇದೇ ವಿವರಣೆ ಗೀತೆಯಲ್ಲೂ ಕೂಡಾ ಬಂದಿದೆ" ಎಂದು "ತಪಾಮ್ಯಹಮ್ ಅಹಂ ವರ್ಷಂ ನಿಗೃಹ್ಣಾಮ್ಯುತ್ಸೃಜಾಮಿ ಚ" (ಗೀತೆ ೯.೧೯) ಅನ್ನು ನಿಖರ ಉಲ್ಲೇಖದೊಂದಿಗೆ ಉಲ್ಲೇಖಿಸುತ್ತಾರೆ.',
       },
-      "ref": "Katha 2.3.2 (Adhyaya 2, Valli 3)",
-      "note": {},
-      "sourceNote": {
-        "en": "Bannanje also notes the same idea appears in Taittiriya Upanishad’s Brahmananda Valli (8th anuvaka) — he is drawing a three-way parallel, of which the Gita link is explicit and named.",
-        "kn": "ಬನ್ನಂಜೆ ಇದೇ ಭಾವ ತೈತ್ತಿರೀಯ ಉಪನಿಷತ್ತಿನ ಬ್ರಹ್ಮಾನಂದವಲ್ಲಿಯಲ್ಲೂ (೮ನೇ ಅನುವಾಕ) ಬರುತ್ತದೆ ಎಂದು ಸೂಚಿಸುತ್ತಾರೆ — ಮೂರು-ಮೂಲಗಳ ಸಮಾನತೆ; ಗೀತಾ ಉಲ್ಲೇಖ ಸ್ಪಷ್ಟ ಮತ್ತು ಹೆಸರಿಸಲ್ಪಟ್ಟಿದೆ."
-      }
-    }
+      sourceNote: { en: 'Bannanje also notes the same idea appears in Taittiriya Upanishad\u2019s Brahmananda Valli (8th anuvaka) — he is drawing a three-way parallel, of which the Gita link is explicit and named.', kn: 'ಬನ್ನಂಜೆ ಇದೇ ಭಾವ ತೈತ್ತಿರೀಯ ಉಪನಿಷತ್ತಿನ ಬ್ರಹ್ಮಾನಂದವಲ್ಲಿಯಲ್ಲೂ (೮ನೇ ಅನುವಾಕ) ಬರುತ್ತದೆ ಎಂದು ಸೂಚಿಸುತ್ತಾರೆ — ಮೂರು-ಮೂಲಗಳ ಸಮಾನತೆ; ಗೀತಾ ಉಲ್ಲೇಖ ಸ್ಪಷ್ಟ ಮತ್ತು ಹೆಸರಿಸಲ್ಪಟ್ಟಿದೆ.' },
+    },
   ],
-  "shritattva": [
+  shritattva: [
     {
-      "source": "katha",
-      "entryId": "mahad-avyakta-purusha",
-      "title": {
-        "en": "Avyakta — Beyond the Mahat-Tattva",
-        "kn": "ಅವ್ಯಕ್ತ — ಮಹತ್ತತ್ವಕ್ಕಿಂತ ಮಿಗಿಲು",
-        "hi": "अव्यक्त — महत्तत्त्व से परे",
-        "sa": "अव्यक्तं महत्तत्त्वात् परम्"
+      source: 'katha', entryId: 'mahad-avyakta-purusha',
+      title: { en: 'Avyakta — Beyond the Mahat-Tattva', kn: 'ಅವ್ಯಕ್ತ — ಮಹತ್ತತ್ವಕ್ಕಿಂತ ಮಿಗಿಲು', hi: 'अव्यक्त — महत्तत्त्व से परे', sa: 'अव्यक्तं महत्तत्त्वात् परम्' },
+      ref: 'Katha 1.3.11 (Adhyaya 1, Valli 3)',
+      note: {
+        en: '"mahataḥ param avyaktam avyaktād puruṣaḥ paraḥ / puruṣān na paraṃ kiñcit sā kāṣṭhā sā parā gatiḥ" — beyond the great Self (mahān) is the unmanifest, and beyond the unmanifest is the Purusha; there is nothing higher than Purusha. Discussing why the unmanifest form still needs contemplation through named qualities at Gita 12.1, Bannanje lists Lakshmi\u2019s names — Shri-tattva, Akshara, Avyakta, Prakriti — and quotes this Katha verse verbatim to explain what "avyakta" and "akshara" mean.',
+        kn: '"ಮಹತಃ ಪರಮವ್ಯಕ್ತಮ್ ಅವ್ಯಕ್ತಾತ್ ಪುರುಷಃ ಪರಃ" — ಮಹತ್ತಿಗಿಂತ ಅವ್ಯಕ್ತ ಮಿಗಿಲು, ಅವ್ಯಕ್ತಕ್ಕಿಂತ ಪುರುಷ ಮಿಗಿಲು; ಪುರುಷನಿಗಿಂತ ಮಿಗಿಲಾದುದೇನೂ ಇಲ್ಲ. ಗೀತೆ ೧೨.೧ರ ಅವ್ಯಕ್ತ ರೂಪಕ್ಕೂ ಹೆಸರಿನ ಗುಣಗಳ ಮೂಲಕ ಚಿಂತನೆ ಏಕೆ ಬೇಕು ಎಂದು ವಿವರಿಸುತ್ತಾ, ಬನ್ನಂಜೆ ಶ್ರೀಲಕ್ಷ್ಮಿಯ ಹೆಸರುಗಳನ್ನು (ಶ್ರೀತತ್ವ, ಅಕ್ಷರಳು, ಅವ್ಯಕ್ತಳು, ಪ್ರಕೃತಿ) ಪಟ್ಟಿಮಾಡಿ, ಈ ಕಠ ಶ್ಲೋಕವನ್ನು ಯಥಾವತ್ತಾಗಿ ಉಲ್ಲೇಖಿಸುತ್ತಾರೆ.',
       },
-      "ref": "Katha 1.3.11 (Adhyaya 1, Valli 3)",
-      "note": {},
-      "sourceNote": {
-        "en": "Bannanje quotes the Katha verse verbatim in his Gita commentary to gloss Madhva-specific terms (Shri-tattva, Akshara) that appear across both texts.",
-        "kn": "ಇಬ್ಬಗೆಯ ಗ್ರಂಥಗಳಲ್ಲೂ ಬರುವ ಮಾಧ್ವ-ವಿಶಿಷ್ಟ ಪದಗಳ (ಶ್ರೀತತ್ವ, ಅಕ್ಷರ) ವಿವರಣೆಗಾಗಿ ಬನ್ನಂಜೆ ಗೀತಾ ವ್ಯಾಖ್ಯಾನದಲ್ಲಿ ಕಠ ಶ್ಲೋಕವನ್ನು ಯಥಾವತ್ತಾಗಿ ಉಲ್ಲೇಖಿಸುತ್ತಾರೆ."
-      }
-    }
+      sourceNote: { en: 'Bannanje quotes the Katha verse verbatim in his Gita commentary to gloss Madhva-specific terms (Shri-tattva, Akshara) that appear across both texts.', kn: 'ಇಬ್ಬಗೆಯ ಗ್ರಂಥಗಳಲ್ಲೂ ಬರುವ ಮಾಧ್ವ-ವಿಶಿಷ್ಟ ಪದಗಳ (ಶ್ರೀತತ್ವ, ಅಕ್ಷರ) ವಿವರಣೆಗಾಗಿ ಬನ್ನಂಜೆ ಗೀತಾ ವ್ಯಾಖ್ಯಾನದಲ್ಲಿ ಕಠ ಶ್ಲೋಕವನ್ನು ಯಥಾವತ್ತಾಗಿ ಉಲ್ಲೇಖಿಸುತ್ತಾರೆ.' },
+    },
   ],
-  "jiva": [
+  jiva: [
     {
-      "source": "katha",
-      "entryId": "eleven-nine-gates",
-      "title": {
-        "en": "The Body as a City of Gates",
-        "kn": "ದ್ವಾರಗಳ ಪಟ್ಟಣವಾಗಿ ಶರೀರ",
-        "hi": "द्वारों का नगर — शरीर",
-        "sa": "द्वाराणां पुरं शरीरम्"
+      source: 'katha', entryId: 'eleven-nine-gates',
+      title: { en: 'The Body as a City of Gates', kn: 'ದ್ವಾರಗಳ ಪಟ್ಟಣವಾಗಿ ಶರೀರ', hi: 'द्वारों का नगर — शरीर', sa: 'द्वाराणां पुरं शरीरम्' },
+      ref: 'Katha 2.2.1 (Adhyaya 2, Valli 2)',
+      note: {
+        en: 'Yama calls the body "ekādaśa-dvāram puram" — a city of eleven gates (the nine familiar openings plus the navel and the crown/sahasrāra). Bannanje explicitly notes "we know Krishna describes this as nava-dvāre pure dehī" — "navadvāre pure dehī" (Gita 5.13), the body as a city of nine gates in which the self-controlled soul dwells at ease.',
+        kn: 'ಯಮ ಶರೀರವನ್ನು "ಏಕಾದಶದ್ವಾರಂ ಪುರಂ" — ಹನ್ನೊಂದು ದ್ವಾರಗಳ ಪಟ್ಟಣ ಎಂದು ಕರೆಯುತ್ತಾನೆ (ಒಂಬತ್ತು ಸಾಮಾನ್ಯ ದ್ವಾರಗಳ ಜೊತೆಗೆ ಹೊಕ್ಕುಳು ಮತ್ತು ಸಹಸ್ರಾರ). ಬನ್ನಂಜೆ "ಗೀತೆಯಲ್ಲಿ ಕೃಷ್ಣ ನವದ್ವಾರೇ ಪುರೇ ದೇಹೀ ಎಂದು ವಿವರಿಸಿರುವುದು ನಮಗೆ ತಿಳಿದಿದೆ (ಗೀತಾ ೫.೧೩)" ಎಂದು ಸ್ಪಷ್ಟವಾಗಿ ಉಲ್ಲೇಖಿಸುತ್ತಾರೆ — ಒಂಬತ್ತು ದ್ವಾರಗಳ ಪಟ್ಟಣದಂತಿರುವ ಶರೀರದಲ್ಲಿ ಜೀವ ಸುಖವಾಗಿ ನೆಲೆಸಿರುತ್ತಾನೆ.',
       },
-      "ref": "Katha 2.2.1 (Adhyaya 2, Valli 2)",
-      "note": {},
-      "sourceNote": {
-        "en": "Bannanje names the Gita verse and chapter directly while explaining the Katha verse.",
-        "kn": "ಕಠ ಶ್ಲೋಕದ ವಿವರಣೆಯಲ್ಲಿ ಬನ್ನಂಜೆ ಗೀತಾ ಶ್ಲೋಕ-ಅಧ್ಯಾಯವನ್ನು ನೇರವಾಗಿ ಹೆಸರಿಸುತ್ತಾರೆ."
-      }
-    }
+      sourceNote: { en: 'Bannanje names the Gita verse and chapter directly while explaining the Katha verse.', kn: 'ಕಠ ಶ್ಲೋಕದ ವಿವರಣೆಯಲ್ಲಿ ಬನ್ನಂಜೆ ಗೀತಾ ಶ್ಲೋಕ-ಅಧ್ಯಾಯವನ್ನು ನೇರವಾಗಿ ಹೆಸರಿಸುತ್ತಾರೆ.' },
+    },
   ],
-  "shraddha": [
+  shraddha: [
     {
-      "source": "katha",
-      "entryId": "shreyas-preyas",
-      "title": {
-        "en": "Śreyas vs Preyas — the beneficial and the pleasant",
-        "kn": "ಶ್ರೇಯಸ್ಸು ಮತ್ತು ಪ್ರೇಯಸ್ಸು",
-        "dev": "श्रेयः प्रेयश्च",
-        "hi": "श्रेयस् और प्रेयस्",
-        "sa": "श्रेयः प्रेयश्च"
+      source: 'katha', entryId: 'shreyas-preyas',
+      title: { en: 'Śreyas vs Preyas — the beneficial and the pleasant', kn: 'ಶ್ರೇಯಸ್ಸು ಮತ್ತು ಪ್ರೇಯಸ್ಸು', dev: 'श्रेयः प्रेयश्च', hi: 'श्रेयस् और प्रेयस्', sa: 'श्रेयः प्रेयश्च' },
+      ref: 'Katha 1.2.1–2 (Adhyaya 1, Valli 2)',
+      note: {
+        en: '"śreyaśca preyaśca manuṣyam etastau samparītya vivinakti dhīraḥ / śreyo hi dhīro\u2019bhipreyaso vṛṇīte preyo mando yogakṣemād vṛṇīte" — both śreyas (the good) and preyas (the pleasant) present themselves to every person; the wise one weighs them and chooses śreyas, while the fool, out of concern for gain and security (yoga-kṣema), chooses preyas. Explaining equanimity toward pleasant and unpleasant outcomes at Gita 5.20, Bannanje quotes this verse directly: "preyo mando yogakṣemād vṛṇīte."',
+        kn: '"ಶ್ರೇಯಶ್ಚ ಪ್ರೇಯಶ್ಚ ಮನುಷ್ಯಮೇತಸ್ತೌ ಸಂಪರೀತ್ಯ ವಿವಿನಕ್ತಿ ಧೀರಃ | ಶ್ರೇಯೋ ಹಿ ಧೀರೋಽಭಿಪ್ರೇಯಸೋ ವೃಣೀತೇ ಪ್ರೇಯೋ ಮಂದೋ ಯೋಗಕ್ಷೇಮಾದ್ವೃಣೀತೇ ||೨||" — ಶ್ರೇಯಸ್ಸು ಮತ್ತು ಪ್ರೇಯಸ್ಸು ಇಬ್ಬಗೆಯ ದಾರಿಗಳು ಎಲ್ಲರಿಗೂ ಎದುರಾಗುತ್ತವೆ; ಧೀರನು ಶ್ರೇಯಸ್ಸನ್ನು, ಮಂದನು ಯೋಗಕ್ಷೇಮಕ್ಕಾಗಿ ಪ್ರೇಯಸ್ಸನ್ನೂ ಆರಿಸಿಕೊಳ್ಳುತ್ತಾನೆ ಎಂದು ಯಮ ನಚಿಕೇತನಿಗೆ ಉಪದೇಶಿಸುತ್ತಾನೆ. ಗೀತೆ ೫.೨೦ರ ಸುಖ-ದುಃಖಗಳಲ್ಲಿ ಸಮಬುದ್ಧಿಯ ವಿವರಣೆಯಲ್ಲಿ, ಬನ್ನಂಜೆ ಈ ಶ್ಲೋಕವನ್ನು ನೇರವಾಗಿ ಉಲ್ಲೇಖಿಸುತ್ತಾರೆ: "ಪ್ರೇಯೋ ಮಂದೋ ಯೋಗಕ್ಷೇಮಾದ್ ವೃಣೀತೇ".',
       },
-      "ref": "Katha 1.2.1–2 (Adhyaya 1, Valli 2)",
-      "note": {
-        "en": "Yama\\'s teaching to Nachiketa that śreyas (the good) and preyas (the pleasant) present themselves to every person; the wise chooses śreyas, the foolish chooses preyas out of desire for gain and security (yoga-kṣema).",
-        "kn": "ಶ್ರೇಯಸ್ಸು ಮತ್ತು ಪ್ರೇಯಸ್ಸು ಇಬ್ಬಗೆಯ ದಾರಿಗಳು ಎಲ್ಲರಿಗೂ ಎದುರಾಗುತ್ತವೆ; ಧೀರನು ಶ್ರೇಯಸ್ಸನ್ನು, ಮಂದನು ಯೋಗಕ್ಷೇಮಕ್ಕಾಗಿ ಪ್ರೇಯಸ್ಸನ್ನೂ ಆರಿಸಿಕೊಳ್ಳುತ್ತಾನೆ ಎಂದು ಯಮ ನಚಿಕೇತನಿಗೆ ಉಪದೇಶಿಸುತ್ತಾನೆ."
-      },
-      "sourceNote": {
-        "en": "A reciprocal citation: Bannanje\\'s Gita commentary quotes the Katha verse by name to reinforce the same teaching in a different setting.",
-        "kn": "ಇದೊಂದು ಪರಸ್ಪರ ಉಲ್ಲೇಖ — ಬನ್ನಂಜೆಯವರ ಗೀತಾ ವ್ಯಾಖ್ಯಾನ ಕಠ ಶ್ಲೋಕವನ್ನು ಹೆಸರಿಸಿ ಉಲ್ಲೇಖಿಸುತ್ತದೆ."
-      }
+      sourceNote: { en: 'A reciprocal citation: Bannanje\u2019s Gita commentary quotes the Katha verse by name to reinforce the same teaching in a different setting.', kn: 'ಇದೊಂದು ಪರಸ್ಪರ ಉಲ್ಲೇಖ — ಬನ್ನಂಜೆಯವರ ಗೀತಾ ವ್ಯಾಖ್ಯಾನ ಕಠ ಶ್ಲೋಕವನ್ನು ಹೆಸರಿಸಿ ಉಲ್ಲೇಖಿಸುತ್ತದೆ.' },
     },
     {
-      "source": "katha",
-      "entryId": "nachiketa-refusal-of-wealth",
-      "title": {
-        "en": "Nachiketa’s Refusal — Knowledge Over Every Worldly Gift",
-        "kn": "ನಚಿಕೇತನ ನಿರಾಕರಣೆ — ಎಲ್ಲಾ ಲೌಕಿಕ ಕೊಡುಗೆಗಿಂತ ಜ್ಞಾನ",
-        "hi": "नचिकेता का अस्वीकार — हर सांसारिक उपहार से बढ़कर ज्ञान",
-        "sa": "नचिकेतसो नाकरणम् — सर्वलौकिकदानात् परं ज्ञानम्"
+      source: 'katha', entryId: 'nachiketa-refusal-of-wealth',
+      title: { en: 'Nachiketa\u2019s Refusal — Knowledge Over Every Worldly Gift', kn: 'ನಚಿಕೇತನ ನಿರಾಕರಣೆ — ಎಲ್ಲಾ ಲೌಕಿಕ ಕೊಡುಗೆಗಿಂತ ಜ್ಞಾನ', hi: 'नचिकेता का अस्वीकार — हर सांसारिक उपहार से बढ़कर ज्ञान', sa: 'नचिकेतसो नाकरणम् — सर्वलौकिकदानात् परं ज्ञानम्' },
+      ref: 'Katha 1.1.23–29 (Adhyaya 1, Valli 1)',
+      note: {
+        en: 'Yama offers Nachiketa sons, wealth, a kingdom, celestial pleasures — "if you think this equal to your third boon, choose it instead." Nachiketa refuses all of it, in his own words: "na vittena tarpaṇīyo manuṣyo lapsyāmahe vittam adrākṣma cet tvām / jīviṣyāmo yāvad īśiṣyasi tvaṁ varas tu me varaṇīyaḥ sa eva" (1.1.27) — "man cannot be satisfied with wealth; we would possess wealth if we have seen you [Death himself]; we shall live only as long as you allow — that alone remains the boon I choose." Bannanje returns to this episode three times across the Gita: at 9.28 as proof that knowledge burns away sin more than any other means; at 14.17 as the model of full sattva-guna resolve; at 16.10 as the model of a desire that can never be filled by wealth.',
+        kn: 'ಯಮ ನಚಿಕೇತನಿಗೆ ಪುತ್ರ-ಪೌತ್ರ, ಧನ, ಸಾಮ್ರಾಜ್ಯ, ದೇವಲೋಕ ಭೋಗಗಳನ್ನು ಕೊಡುತ್ತೇನೆ ಎಂದಾಗ, ನಚಿಕೇತ ಸ್ವತಃ ಹೀಗೆ ಹೇಳಿ ಎಲ್ಲವನ್ನೂ ನಿರಾಕರಿಸುತ್ತಾನೆ: "ನ ವಿತ್ತೇನ ತರ್ಪಣೀಯೋ ಮನುಷ್ಯೋ ಲಪ್ಸ್ಯಾಮಹೇ ವಿತ್ತಮದ್ರಾಕ್ಷ್ಮ ಚೇತ್ ತ್ವಾಮ್ | ಜೀವಿಷ್ಯಾಮೋ ಯಾವದೀಶಿಷ್ಯಸಿ ತ್ವಂ ವರಸ್ತು ಮೇ ವರಣೀಯಃ ಸ ಏವ ||೨೭||" — "ಮನುಷ್ಯನು ಧನದಿಂದ ತೃಪ್ತನಾಗುವುದಿಲ್ಲ; ನಿನ್ನನ್ನು (ಸಾಕ್ಷಾತ್ ಮೃತ್ಯುವನ್ನೇ) ಕಂಡ ಮೇಲೆ ಧನ ಸಿಕ್ಕಂತೆಯೇ; ನೀನಿರುವ ತನಕ ಮಾತ್ರ ನಾವು ಬದುಕುತ್ತೇವೆ — ಆದ್ದರಿಂದ ನಾನು ಕೇಳಿದ ವರವೇ ನನಗೆ ಬೇಕಾದ್ದು." ಬನ್ನಂಜೆ ಗೀತೆಯುದ್ದಕ್ಕೂ ಇದೇ ಕಠ ಪ್ರಸಂಗಕ್ಕೆ ಮೂರು ಬಾರಿ ಮರಳುತ್ತಾರೆ: ೯.೨೮ರಲ್ಲಿ ಜ್ಞಾನ ಬೇರೆ ಯಾವುದಕ್ಕಿಂತ ಹೆಚ್ಚು ಪಾಪ ಸುಡುತ್ತದೆ ಎಂಬುದಕ್ಕೆ ನಿದರ್ಶನ; ೧೪.೧೭ರಲ್ಲಿ ಪೂರ್ಣ ಸತ್ವಗುಣ ದೃಢಸಂಕಲ್ಪದ ಮಾದರಿ; ೧೬.೧೦ರಲ್ಲಿ ಎಂದೂ ತೃಪ್ತಿಯಾಗದ ಧನಬಯಕೆಯ ಮಾದರಿಯಾಗಿ.',
       },
-      "ref": "Katha 1.1.23–29 (Adhyaya 1, Valli 1)",
-      "note": {},
-      "sourceNote": {
-        "en": "The most frequently cross-cited episode found this session — Bannanje reaches for it three separate times in his Gita commentary alone.",
-        "kn": "ಈ ಅಧಿವೇಶನದಲ್ಲಿ ಪತ್ತೆಯಾದ ಅತ್ಯಂತ ಹೆಚ್ಚು ಬಾರಿ ಉಲ್ಲೇಖಿಸಲ್ಪಟ್ಟ ಪ್ರಸಂಗ — ಬನ್ನಂಜೆ ಗೀತಾ ವ್ಯಾಖ್ಯಾನದಲ್ಲೇ ಮೂರು ಪ್ರತ್ಯೇಕ ಬಾರಿ ಇದನ್ನು ಬಳಸುತ್ತಾರೆ."
-      }
+      sourceNote: { en: 'The most frequently cross-cited episode found in this sweep — Bannanje reaches for it three separate times in his Gita commentary alone (BG 9.28, 14.17, 16.10).', kn: 'ಈ ಶೋಧನೆಯಲ್ಲಿ ಪತ್ತೆಯಾದ ಅತ್ಯಂತ ಹೆಚ್ಚು ಬಾರಿ ಉಲ್ಲೇಖಿಸಲ್ಪಟ್ಟ ಪ್ರಸಂಗ — ಬನ್ನಂಜೆ ಗೀತಾ ವ್ಯಾಖ್ಯಾನದಲ್ಲೇ ಮೂರು ಪ್ರತ್ಯೇಕ ಬಾರಿ (ಗೀತೆ ೯.೨೮, ೧೪.೧೭, ೧೬.೧೦) ಇದನ್ನು ಬಳಸುತ್ತಾರೆ.' },
     },
     {
-      "source": "katha",
-      "entryId": "honoring-the-jnani",
-      "title": {
-        "en": "Yama’s Apology — Honoring the Knower",
-        "kn": "ಯಮನ ಕ್ಷಮಾಯಾಚನೆ — ಜ್ಞಾನಿಯ ಗೌರವ",
-        "hi": "यम की क्षमायाचना — ज्ञानी का सम्मान",
-        "sa": "यमस्य क्षमायाचनम् — ज्ञानिनः सम्मानः"
+      source: 'katha', entryId: 'honoring-the-jnani',
+      title: { en: 'Yama\u2019s Apology — Honoring the Knower', kn: 'ಯಮನ ಕ್ಷಮಾಯಾಚನೆ — ಜ್ಞಾನಿಯ ಗೌರವ', hi: 'यम की क्षमायाचना — ज्ञानी का सम्मान', sa: 'यमस्य क्षमायाचनम् — ज्ञानिनः सम्मानः' },
+      ref: 'Katha 1.1.9–10 area (Adhyaya 1, Valli 1)',
+      note: {
+        en: 'When Yama returns to find Nachiketa has waited three nights unfed as a guest, he bows and asks forgiveness. Bannanje: "this is the great quality of elders" — as Krishna says in the Gita (4.3), "śraddhāvān labhate jñānam" ("the one with faith attains knowledge") — because a knower is supremely dear to the Lord, so disrespecting one is disrespecting the Lord himself.',
+        kn: 'ಮೂರು ದಿನ ಆಹಾರವಿಲ್ಲದೆ ಕಾದ ಜ್ಞಾನಿ ಅತಿಥಿ ನಚಿಕೇತನನ್ನು ಕಂಡ ಯಮ ನಮಸ್ಕರಿಸಿ ಕ್ಷಮೆ ಬೇಡುತ್ತಾನೆ. ಬನ್ನಂಜೆ: "ಇದು ಹಿರಿಯರ ದೊಡ್ಡ ಗುಣ" — "ಶ್ರದ್ಧಾವಾನ್ ಲಭತೇ ಜ್ಞಾನಂ" (ಗೀತೆ ೪.೩) ಎಂದು ಕೃಷ್ಣ ಗೀತೆಯಲ್ಲಿ ಹೇಳಿರುವಂತೆ — ಜ್ಞಾನಿಗಳಿಗೆ ಅಪಮಾನ ಮಾಡಿದರೆ ಅದು ಭಗವಂತನನ್ನು ಅಪಮಾನ ಮಾಡಿದಂತೆ, ಏಕೆಂದರೆ ಜ್ಞಾನಿಗಳು ಭಗವಂತನಿಗೆ ಪರಮ ಪ್ರಿಯರು.',
       },
-      "ref": "Katha 1.1.9–10 area (Adhyaya 1, Valli 1)",
-      "note": {},
-      "sourceNote": {
-        "en": "A brief supporting citation — shorter than the others, but still an explicit named reference, not an inferred parallel.",
-        "kn": "ಸಣ್ಣ ಪುಷ್ಟೀಕರಣ ಉಲ್ಲೇಖ — ಇತರರಿಗಿಂತ ಚಿಕ್ಕದಾದರೂ ಸ್ಪಷ್ಟ ಹೆಸರಿಸಿದ ಉಲ್ಲೇಖ, ಊಹಿತ ಸಾಮ್ಯವಲ್ಲ."
-      }
-    }
+      sourceNote: { en: 'A brief supporting citation — shorter than the others, but still an explicit named reference, not an inferred parallel.', kn: 'ಸಣ್ಣ ಪುಷ್ಟೀಕರಣ ಉಲ್ಲೇಖ — ಇತರರಿಗಿಂತ ಚಿಕ್ಕದಾದರೂ ಸ್ಪಷ್ಟ ಹೆಸರಿಸಿದ ಉಲ್ಲೇಖ, ಊಹಿತ ಸಾಮ್ಯವಲ್ಲ.' },
+    },
   ],
-  "yajna": [
+  yajna: [
     {
-      "source": "katha",
-      "entryId": "yajna-dana-tapas",
-      "title": {
-        "en": "Yajña, Dāna, Tapas — the three daily karmas",
-        "kn": "ಯಜ್ಞ, ದಾನ, ತಪಃ — ಮೂರು ನಿತ್ಯಕರ್ಮಗಳು",
-        "dev": "यज्ञ-दान-तपांसि",
-        "hi": "यज्ञ, दान, तप — तीन नित्यकर्म",
-        "sa": "यज्ञ-दान-तपांसि"
+      source: 'katha', entryId: 'yajna-dana-tapas',
+      title: { en: 'Yajña, Dāna, Tapas — the three daily karmas', kn: 'ಯಜ್ಞ, ದಾನ, ತಪಃ — ಮೂರು ನಿತ್ಯಕರ್ಮಗಳು', dev: 'यज्ञ-दान-तपांसि', hi: 'यज्ञ, दान, तप — तीन नित्यकर्म', sa: 'यज्ञ-दान-तपांसि' },
+      ref: 'Katha 1.1.16–17, the Nachiketa-agni teaching (Adhyaya 1, Valli 1)',
+      note: {
+        en: 'While explaining how an ordinary person can perform the "three karmas" daily to become a "triṇāciketa" (one who has kindled the Nachiketa fire three times), Bannanje explicitly points the reader to "the seventeenth chapter of the Gita" for a fuller explanation of yajña, dāna, and tapas and their sāttvika/rājasa/tāmasa divisions (Gita 17).',
+        kn: 'ಪ್ರತಿಯೊಬ್ಬರೂ "ತ್ರಿಣಾಚಿಕೇತ"ರಾಗಲು ಮೂರು ಕರ್ಮಗಳನ್ನು ದಿನವೂ ಹೇಗೆ ಮಾಡಬಹುದು ಎಂದು ವಿವರಿಸುತ್ತಾ, ಬನ್ನಂಜೆ ಓದುಗರನ್ನು ನೇರವಾಗಿ "ಗೀತೆಯ ಹದಿನೇಳನೇ ಅಧ್ಯಾಯ"ಕ್ಕೆ ಸೂಚಿಸುತ್ತಾರೆ — ಯಜ್ಞ, ದಾನ, ತಪಃ ಎನ್ನುವ ಮೂರು ಕರ್ಮಗಳ ಸಾತ್ವಿಕ-ರಾಜಸ-ತಾಮಸ ವಿಭಜನೆಯ ಪೂರ್ಣ ವಿವರಣೆಗಾಗಿ (ಗೀತೆ ೧೭).',
       },
-      "ref": "Katha 1.1.16–17, the Nachiketa-agni teaching (Adhyaya 1, Valli 1)",
-      "note": {
-        "en": "While explaining how an ordinary person can perform the \"three karmas\" daily to become a \"triṇāciketa,\" Bannanje explicitly points the reader to \"the seventeenth chapter of the Gita\" for a fuller explanation of yajña, dāna, and tapas.",
-        "kn": "ಪ್ರತಿಯೊಬ್ಬರೂ ‘ತ್ರಿಣಾಚಿಕೇತ’ರಾಗಲು ಮೂರು ಕರ್ಮಗಳನ್ನು ದಿನವೂ ಹೇಗೆ ಮಾಡಬಹುದು ಎಂದು ವಿವರಿಸುತ್ತಾ, ಬನ್ನಂಜೆ ಓದುಗರನ್ನು ನೇರವಾಗಿ \"ಗೀತೆಯ ಹದಿನೇಳನೇ ಅಧ್ಯಾಯ\"ಕ್ಕೆ ಸೂಚಿಸುತ್ತಾರೆ."
-      },
-      "sourceNote": {
-        "en": "Bannanje names the Gita chapter directly in his Katha exposition, pointing readers there for the fuller treatment.",
-        "kn": "ಬನ್ನಂಜೆ ತಮ್ಮ ಕಠ ವಿವರಣೆಯಲ್ಲಿ ಗೀತಾ ಅಧ್ಯಾಯವನ್ನು ಹೆಸರಿಸಿ ಸೂಚಿಸುತ್ತಾರೆ."
-      }
-    }
+      sourceNote: { en: 'Bannanje names the Gita chapter directly in his Katha exposition, pointing readers there for the fuller treatment.', kn: 'ಬನ್ನಂಜೆ ತಮ್ಮ ಕಠ ವಿವರಣೆಯಲ್ಲಿ ಗೀತಾ ಅಧ್ಯಾಯವನ್ನು ಹೆಸರಿಸಿ ಸೂಚಿಸುತ್ತಾರೆ.' },
+    },
   ],
-  "karmayoga": [
+  karmayoga: [
     {
-      "source": "katha",
-      "entryId": "karma-as-worship",
-      "title": {
-        "en": "Turning every action into worship",
-        "kn": "ಪ್ರತಿಯೊಂದು ಕರ್ಮವನ್ನೂ ಪೂಜೆಯಾಗಿಸುವುದು",
-        "dev": "सर्वकर्मणां पूजारूपत्वम्",
-        "hi": "हर कर्म को पूजा बनाना",
-        "sa": "सर्वकर्मणां पूजारूपत्वम्"
+      source: 'katha', entryId: 'karma-as-worship',
+      title: { en: 'Turning every action into worship', kn: 'ಪ್ರತಿಯೊಂದು ಕರ್ಮವನ್ನೂ ಪೂಜೆಯಾಗಿಸುವುದು', dev: 'सर्वकर्मणां पूजारूपत्वम्', hi: 'हर कर्म को पूजा बनाना', sa: 'सर्वकर्मणां पूजारूपत्वम्' },
+      ref: 'Katha 1.1.20 area (Adhyaya 1, Valli 1)',
+      note: {
+        en: 'Addressing whether an ordinary person can really perform yajña, dāna, and tapas every day, Bannanje answers by pointing to "a beautiful explanation Krishna gives in the Gita (chapter 12)" — Bhakti-yoga\u2019s teaching that every word can be a hymn, every step a circumambulation, every action an offering, so daily life itself becomes worship.',
+        kn: 'ಸಾಮಾನ್ಯ ಮನುಷ್ಯನಿಗೆ ದಿನವೂ ಯಜ್ಞ-ದಾನ-ತಪಸ್ಸು ಸಾಧ್ಯವೇ ಎನ್ನುವ ಪ್ರಶ್ನೆಗೆ ಬನ್ನಂಜೆ "ಶ್ರೀಕೃಷ್ಣ ಗೀತೆಯಲ್ಲಿ (ಅಧ್ಯಾಯ ೧೨) ಕೊಟ್ಟ ಸುಂದರ ವಿವರಣೆ" ಎಂದು ಸೂಚಿಸಿ ಉತ್ತರಿಸುತ್ತಾರೆ — ಪ್ರತಿಯೊಂದು ಮಾತೂ ಸ್ತೋತ್ರ, ಪ್ರತಿಯೊಂದು ಹೆಜ್ಜೆಯೂ ಪ್ರದಕ್ಷಿಣೆ, ಪ್ರತಿಯೊಂದು ಕ್ರಿಯೆಯೂ ಅರ್ಪಣೆಯಾಗಬಲ್ಲದು ಎಂಬ ಭಕ್ತಿಯೋಗದ ಬೋಧನೆ.',
       },
-      "ref": "Katha 1.1.20 area (Adhyaya 1, Valli 1)",
-      "note": {
-        "en": "Addressing whether an ordinary person can really perform yajña, dāna, and tapas every day, Bannanje answers by pointing to \"a beautiful explanation Krishna gives in the Gita (chapter 12)\" — every word a hymn, every step a circumambulation, every action an offering.",
-        "kn": "ಸಾಮಾನ್ಯ ಮನುಷ್ಯನಿಗೆ ದಿನವೂ ಯಜ್ಞ-ದಾನ-ತಪಸ್ಸು ಸಾಧ್ಯವೇ ಎನ್ನುವ ಪ್ರಶ್ನೆಗೆ ಬನ್ನಂಜೆ \"ಶ್ರೀಕೃಷ್ಣ ಗೀತೆಯಲ್ಲಿ (ಅಧ್ಯಾಯ ೧೨) ಕೊಟ್ಟ ಸುಂದರ ವಿವರಣೆ\" ಎಂದು ಸೂಚಿಸಿ ಉತ್ತರಿಸುತ್ತಾರೆ."
-      },
-      "sourceNote": {
-        "en": "A direct, named pointer from the Katha commentary to a specific Gita chapter answering the same practical question.",
-        "kn": "ಕಠ ವ್ಯಾಖ್ಯಾನದಿಂದ ಗೀತೆಯ ನಿರ್ದಿಷ್ಟ ಅಧ್ಯಾಯಕ್ಕೆ ನೇರ ಸೂಚನೆ."
-      }
-    }
-  ]
+      sourceNote: { en: 'A direct, named pointer from the Katha commentary to a specific Gita chapter answering the same practical question.', kn: 'ಕಠ ವ್ಯಾಖ್ಯಾನದಿಂದ ಗೀತೆಯ ನಿರ್ದಿಷ್ಟ ಅಧ್ಯಾಯಕ್ಕೆ ನೇರ ಸೂಚನೆ.' },
+    },
+  ],
 };
 
-if (typeof window !== 'undefined') {
-  window.BRIDGE_CONCEPT_LINKS = BRIDGE_CONCEPT_LINKS;
-}
 
-/* Snapshot of the Gita concept-graph (Bhagavadgita repo's data.js TIERS + NODES),
- * embedded here so the Katopanishad app can render the Bridge concept map without
- * depending on the Bhagavadgita repo's data.js at runtime. The Bhagavadgita app
- * itself uses its own live NODES/TIERS (not this copy) as its source of truth --
- * this snapshot must be re-synced here whenever data.js changes meaningfully.
- * Snapshot taken: Aug 2026 session, chapters 1-18 complete state. */
 const BRIDGE_GITA_TIERS = [
   { id:'parabrahma',  en:'Parabrahma',  kn:'ಪರಬ್ರಹ್ಮ',  dev:'परब्रह्म',   hi:'परब्रह्म',   gloss:'The Supreme Lord — Bhagavanta, Hari, Krishna' },
   { id:'shritattva',  en:'Shritattva',  kn:'ಶ್ರೀತತ್ವ',   dev:'श्रीतत्त्व',  hi:'श्रीतत्त्व',  gloss:'Lakshmi as aksharaprakriti — second principle' },
@@ -658,6 +549,7 @@ const BRIDGE_GITA_CONCEPTS = [
   },
 ];
 if (typeof window !== 'undefined') {
+  window.BRIDGE_CONCEPT_LINKS = BRIDGE_CONCEPT_LINKS;
   window.BRIDGE_GITA_TIERS = BRIDGE_GITA_TIERS;
   window.BRIDGE_GITA_CONCEPTS = BRIDGE_GITA_CONCEPTS;
 }

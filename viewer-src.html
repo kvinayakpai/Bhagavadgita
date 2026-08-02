@@ -4828,6 +4828,16 @@ function bridgeTierLabel(tierId){
   return labelOf(t);
 }
 
+/* Extracts a short verse locator (e.g. "1.2.14" from "Katha 1.2.14–15
+   (Adhyaya 1, Valli 2)") so satellite bubbles from the same source text
+   are visually distinguishable instead of all reading identical "Katha /
+   cross-ref" labels. */
+function bridgeShortRef(ref){
+  if (!ref) return '';
+  const m = ref.match(/(\d[\d.\u2013\u2014-]*\d|\d+)/);
+  return m ? m[0] : ref.split(' ').slice(0, 2).join(' ');
+}
+
 function bridgeConceptList(){
   if (typeof NODES === 'undefined') return [];
   const links = (typeof BRIDGE_CONCEPT_LINKS !== 'undefined') ? BRIDGE_CONCEPT_LINKS : {};
@@ -5040,7 +5050,7 @@ function bridgeDrawSvg(c, color, sats, hasSats){
     label.textContent = s.kind === 'gita' ? UI('bridgeGitaTag').split(' ')[0] : UI('bridgeKathaTag').split(' ')[0];
     g.appendChild(label);
     const sub = mk('text', { x:0, y:11, 'text-anchor':'middle', 'font-size':'8.5', fill:'var(--ink-fade)' });
-    sub.textContent = s.kind === 'gita' ? UI('bridgeThisText') : UI('bridgeCrossRef');
+    sub.textContent = s.kind === 'gita' ? UI('bridgeThisText') : bridgeShortRef(s.ref);
     g.appendChild(sub);
     g.addEventListener('click', () => {
       const pending = bridgeIsPending(s.noteField);
