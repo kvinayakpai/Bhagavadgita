@@ -1,9 +1,31 @@
-# Bridge Tab — Tatvam Jalam Gita ⟷ Katopanishad
+# Bridge — Gita Concept Map ⟷ Vedic Corpus
 
-## Purpose
-A new "Bridge" tab in both Tatvam Jalam (Bhagavad Gita) and Katopanishad viewers,
-surfacing genuine connections between the two texts as read through Bannanje
-Govindacharya's commentary. Both apps share the same Madhva/Bannanje framework
+## TARGET VISION (Vinayak, Aug 2 2026 — this is the north star, read first)
+The Bridge is **not a list of citation cards**. The finished feature is a
+**conceptual/radial map**: a Gita concept — one of the ~47 nodes already in
+Tatvam Jalam's knowledge graph — sits at the **center**, and supporting
+content from other sources is arranged **around it** as connected nodes/
+spokes, the way the existing Tatva Jalam concept map already visualizes
+Gita-internal relations (see `positions.js` / `renderMap` in Bhagavadgita).
+
+**The complete state of this project** is reached when **every concept in
+the Gita knowledge graph can be linked to references across the Vedas, the
+Upanishads, the Puranas, and the Itihasa (Ramayana/Mahabharata)** — not just
+the Katha Upanishad. Katopanishad is the *first* source integrated because
+it's the sibling project already built in the same Bannanje framework, but
+it is one spoke of many the finished map needs, not the destination.
+
+Everything below this point (Phase 1 and Phase 2, both shipped Aug 2026) is
+a **stepping-stone data layer** — a card-list UI holding verified Gita↔Katha
+citations — built before this radial-map vision was articulated. It is
+useful as-is (real, verified content) but the UI needs re-architecture, and
+the data model needs to generalize from "Katha" to "any Vedic source," to
+reach the target state. See "Phase 3+" for the concrete gap list.
+
+## Purpose (original framing, still valid as content policy)
+A "Bridge" surfacing genuine connections between the Gita and other Vedic
+literature as read through Bannanje Govindacharya's commentary. Both the
+Bhagavadgita and Katopanishad apps share the same Madhva/Bannanje framework
 and largely overlapping concept-graph tiers (Parabrahma, Jivatattva/Jivatma,
 Antahkarana, Sadhana/Marga, Phala), so a bridge is a natural extension of the
 existing knowledge-graph work in both repos.
@@ -112,15 +134,59 @@ session could still check for citations using other phrasings (e.g. "ಕೃಷ�
 ಹೇಳಿದ" without "ಗೀತೆ" nearby, or references to specific chapter numbers
 without naming the text).
 
-## Phase 3+ (future sessions)
+## Phase 3+ (future sessions) — toward the target vision
+This is now the primary backlog, in rough dependency order:
+
+1. **UI re-architecture: card list → radial concept map.** The BG viewer's
+   `renderMap()`/`positions.js` already draws a node-and-edge graph for
+   Gita-internal concept relations — the Bridge should reuse that same
+   rendering approach (SVG/canvas, hand-laid or force-directed positions)
+   rather than invent a new visual language. Center node = one Gita concept
+   (id matches `data.js` TIERS/NODES); surrounding nodes = each verified
+   cross-reference, grouped/colored by source text. Clicking a concept in
+   the *existing* Gita map should be able to jump into its Bridge view.
+2. **Data model generalization: `katha` field → generic `sources[]` array.**
+   Current `bridge_data.js` schema hardcodes a `katha` field per entry. To
+   support Vedas/Upanishads/Puranas/Itihasa generically, each entry needs
+   `sources: [{ text: 'Katha Upanishad', ref: '...', note: {...} }, ...]`
+   so one Gita concept can eventually point to citations in multiple texts
+   at once. This is a breaking schema change — plan a migration pass over
+   the 14 existing entries when this is tackled.
+3. **Restructure by concept, not by citation-pair.** Currently one entry =
+   one citation pair (e.g. `ashvattha-tree`). The target model is one entry
+   *per Gita concept node* (matching the ~47-node graph), with a list of
+   supporting references attached. Concepts with zero references yet should
+   still appear in the map (as a bare center node) rather than being
+   omitted, so the map visibly shows how much of the corpus is covered.
+4. **New source integrations beyond Katopanishad.** No other Bannanje-
+   commentary Vedic/Puranic/Itihasa project exists yet in this workspace.
+   Before any new source can feed the Bridge, it needs the same treatment
+   Katopanishad got: a transcribed/verified corpus, in the Bannanje-only
+   framework, that can be swept for explicit Gita cross-citations the same
+   way this session swept Katopanishad's. Ask Vinayak which source to
+   tackle next (a specific Upanishad, a Purana, the Mahabharata/Gita's own
+   frame narrative, etc.) rather than assuming.
+5. **Coverage tracking.** Once (3) exists, add a simple completion metric
+   (e.g. "12 / 47 Gita concepts have at least one cross-reference") so
+   progress toward "every concept linked" is visible, mirroring how
+   `EN_RETRANSLATION_PLAN.md` tracks chapter-by-chapter translation status.
+
+## Smaller/orthogonal open items (not blocking the re-architecture)
 - Tier-correspondence entries for the 5 shared tiers (Parabrahma, Jivatattva/
   Jivatma, Antahkarana, Sadhana, Phala) — requires deciding per-tier which
   Katha concepts (chariot metaphor, Om, taratamya-adjacent teachings, etc.)
   genuinely match BG's node list, verified against source pages.
-- Sweep both full corpora (`bannanje_*.js` in Bhagavadgita, `kata-upanishad-text.txt` /
-  `katopanishad_data.js` in Katopanishad) for more explicit cross-citations —
-  there are likely more than the 4 found in this session's spot-reading.
-- UI: cross-site links (each bridge card links out to the other site's viewer
-  URL, e.g. `https://kvinayakpai.github.io/Bhagavadgita/#focus/15.14` and
-  `https://kvinayakpai.github.io/Katopanishad/#focus/1-2-14`) once each site's
-  deep-link/anchor scheme is confirmed.
+- Both corpora were swept for explicit citations using literal search terms
+  ("ಗೀತೆ" / "ಕಠೋಪನಿಷ") — a future pass could catch citations phrased without
+  naming the other text directly (e.g. "ಕೃಷ್ಣ ಹೇಳಿದ" alone, or a bare chapter
+  number).
+- `katopanishad-offline.html` (the self-contained offline bundle) still needs
+  `bridge_data.js` inlined the way `katopanishad_data.js` already is there.
+- Katopanishad's `viewer.html` and `index.html` had drifted out of sync
+  before the Aug 2026 session (different content, not just stale copies);
+  worth checking git blame on why, in case something was lost when they were
+  resynced.
+- Cross-site deep links (each bridge node links out to the other app's
+  focus view, e.g. `https://kvinayakpai.github.io/Bhagavadgita/#focus/15.14`)
+  once each site's anchor scheme is confirmed — useful regardless of card-
+  list vs. radial-map UI.
