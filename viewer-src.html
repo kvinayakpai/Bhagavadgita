@@ -4968,7 +4968,7 @@ function bridgeOpenDetail(nodeId, skipSelectSync){
   bridgeDrawSvg(c, color, sats, hasSats);
 }
 
-function bridgeShowDrawer(kind, title, ref, note, sourceNote, isPending){
+function bridgeShowDrawer(kind, title, ref, note, sourceNote, isPending, isSourceNotePending){
   const drawer = document.getElementById('bridge-drawer');
   if (!drawer) return;
   const tag = kind === 'gita' ? UI('bridgeGitaTag') : UI('bridgeKathaTag');
@@ -4979,8 +4979,26 @@ function bridgeShowDrawer(kind, title, ref, note, sourceNote, isPending){
     <h3 style="font-family:'Cormorant Garamond',serif;font-size:19px;margin:2px 0 3px;color:var(--ink)">${escapeHtml(title)}</h3>
     <div style="font-size:11.5px;color:var(--ink-fade);margin-bottom:10px">${escapeHtml(ref)}</div>
     <div style="font-size:13.5px;line-height:1.6;color:var(--ink-soft)">${escapeHtml(note)}${isPending ? `<span style="font-size:9.5px;opacity:.55;font-style:italic;margin-left:5px">${escapeHtml(UI('bridgePending'))}</span>` : ''}</div>
-    ${sourceNote ? `<div style="margin-top:10px;padding-top:10px;border-top:1px dashed var(--rule);font-size:11.5px;color:var(--ink-fade);font-style:italic">${escapeHtml(sourceNote)}</div>` : ''}
+    ${sourceNote ? `<div style="margin-top:10px;padding-top:10px;border-top:1px dashed var(--rule);font-size:11.5px;color:var(--ink-fade);font-style:italic">${escapeHtml(sourceNote)}${isSourceNotePending ? `<span style="font-size:9.5px;opacity:.7;margin-left:5px">${escapeHtml(UI('bridgePending'))}</span>` : ''}</div>` : ''}
   `;
+}
+
+/* Citation content (Katha satellite title/note/sourceNote) was authored in
+   parallel EN+KN with no canonical-source relationship between them (unlike
+   the rest of the app, where KN genuinely is Bannanje's canonical text and
+   dev/hi are derived translations, so getActive()'s dev→kn→en chain is
+   correct there). For Bridge citations, falling back to KN on a Devanagari
+   or Hindi page would silently show unrelated Kannada script instead of
+   English — worse than the fallback it's meant to prevent. So citation
+   content always falls straight to English when the active language isn't
+   available, and bridgeIsPending() reports accordingly. */
+function bridgeActive(field){
+  if (field == null) return '';
+  if (typeof field === 'string') return field;
+  return field[state.lang] || field.en || '';
+}
+function bridgeIsPending(field){
+  return !!(field && typeof field === 'object' && !field[state.lang] && field.en);
 }
 
 function bridgeDrawSvg(c, color, sats, hasSats){
@@ -4997,7 +5015,7 @@ function bridgeDrawSvg(c, color, sats, hasSats){
 
   const gitaNote = getActive(c.node.note);
   const allSats = [{ kind:'gita', ref: c.node.refs || '', note: gitaNote, noteField: c.node.note, title: labelOf(c.node) + ' — ' + UI('bridgeGitaTag') }]
-    .concat(sats.map(s => ({ kind:'katha', ref: s.ref, note: getActive(s.note), noteField: s.note, title: getActive(s.title), sourceNote: getActive(s.sourceNote) })));
+    .concat(sats.map(s => ({ kind:'katha', ref: s.ref, note: bridgeActive(s.note), noteField: s.note, title: bridgeActive(s.title), sourceNote: bridgeActive(s.sourceNote), sourceNoteField: s.sourceNote })));
 
   const n = allSats.length;
   const R = hasSats ? 128 : 92;
@@ -5018,8 +5036,9 @@ function bridgeDrawSvg(c, color, sats, hasSats){
     sub.textContent = s.kind === 'gita' ? UI('bridgeThisText') : UI('bridgeCrossRef');
     g.appendChild(sub);
     g.addEventListener('click', () => {
-      const pending = s.noteField && typeof s.noteField === 'object' && !s.noteField[state.lang] && s.noteField.en;
-      bridgeShowDrawer(s.kind, s.title, s.ref, s.note, s.sourceNote || null, pending);
+      const pending = bridgeIsPending(s.noteField);
+      const srcPending = bridgeIsPending(s.sourceNoteField);
+      bridgeShowDrawer(s.kind, s.title, s.ref, s.note, s.sourceNote || null, pending, srcPending);
     });
     svgEl.appendChild(g);
   });
@@ -5033,7 +5052,7 @@ function bridgeDrawSvg(c, color, sats, hasSats){
   cSub.textContent = c.node.tier;
   cg.appendChild(cSub);
   cg.addEventListener('click', () => {
-    const pending = c.node.note && typeof c.node.note === 'object' && !c.node.note[state.lang] && c.node.note.en;
+    const pending = c.node.note && typeof c.node.note === 'object' && !c.node.note[state.lang] && gitaNote === c.node.note.en && state.lang !== 'en';
     bridgeShowDrawer('gita', labelOf(c.node), c.node.refs || '', gitaNote, null, pending);
   });
   svgEl.appendChild(cg);
