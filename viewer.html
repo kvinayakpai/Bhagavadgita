@@ -339,6 +339,7 @@ footer{
 
 /* ============ CHAT ============ */
 #view-chat{display:flex;flex-direction:column;height:calc(100vh - 120px);padding:0}
+#view-chat[hidden]{display:none}
 .chat-msgs{flex:1;overflow-y:auto;padding:14px 14px 8px;display:flex;flex-direction:column;gap:12px}
 .chat-bubble{max-width:86%;padding:10px 14px;border-radius:16px;font-size:14px;line-height:1.7;white-space:pre-wrap;word-break:break-word}
 .chat-bubble.user{align-self:flex-end;background:var(--ink);color:var(--paper);border-radius:16px 16px 4px 16px}
@@ -8077,6 +8078,19 @@ const UI_STRINGS = {
   navBridge:         { en:'Bridge',           dev:'सेतुः',          kn:'ಸೇತು', hi:'सेतु' },
   bridgeHeader:      { en:'Where Bannanje himself links the Gita and the Katha Upanishad — his own cross-references, not ours.', dev:'यत्र बन्नंजे स्वयं गीतां कठोपनिषदं च सम्बध्नाति — तेषामेव उल्लेखाः, न अस्माकम्।', kn:'ಗೀತೆ ಮತ್ತು ಕಠೋಪನಿಷತ್ತನ್ನು ಬನ್ನಂಜೆಯವರೇ ಬೆಸೆಯುವ ಕಡೆ — ಇವು ಅವರ ಸ್ವಂತ ಉಲ್ಲೇಖಗಳು, ನಮ್ಮದಲ್ಲ.', hi:'जहाँ बन्नंजे स्वयं गीता और कठोपनिषद् को जोड़ते हैं — यह उन्हीं का उल्लेख है, हमारा नहीं।' },
   bridgeExploreOn:   { en:'Explore the full text on Katopanishad →', dev:'कठोपनिषदि पूर्णं पाठं पश्यन्तु →', kn:'ಕಠೋಪನಿಷತ್‌ನಲ್ಲಿ ಪೂರ್ಣ ಪಠ್ಯ ನೋಡಿ →', hi:'कठोपनिषद् में पूर्ण पाठ देखें →' },
+  bridgeFilter:      { en:'Only concepts with 2+ cross-references', dev:'केवलं द्वयधिकाऽडउल्लेखयुक्तानि तत्त्वानि', kn:'೨+ ಅಡ್ಡ-ಉಲ್ಲೇಖಗಳಿರುವ ಪರಿಕಲ್ಪನೆಗಳು ಮಾತ್ರ', hi:'केवल 2+ क्रॉस-रेफ़रेंस वाली अवधारणाएँ' },
+  bridgeSelectPh:    { en:'Choose a concept…', dev:'तत्त्वं चिनुत…', kn:'ಪರಿಕಲ್ಪನೆ ಆರಿಸಿ…', hi:'एक अवधारणा चुनें…' },
+  bridgeBack:        { en:'All concepts', dev:'सर्वाणि तत्त्वानि', kn:'ಎಲ್ಲಾ ಪರಿಕಲ್ಪನೆಗಳು', hi:'सभी अवधारणाएँ' },
+  bridgeDrawerPh:    { en:'Tap the center bubble or any satellite to read its explanation here.', dev:'पठितुं मध्यबुद्बुदं वा कमपि उपग्रहबुद्बुदं स्पृशत।', kn:'ಓದಲು ಮಧ್ಯದ ಗುಳ್ಳೆ ಅಥವಾ ಯಾವುದೇ ಉಪಗ್ರಹ ಗುಳ್ಳೆಯನ್ನು ಒತ್ತಿ.', hi:'पढ़ने के लिए केंद्र बुलबुला या कोई भी उपग्रह बुलबुला टैप करें।' },
+  bridgeEmptyHint:   { en:'No cross-references yet for this concept — only its own Gita bubble shows.', dev:'अस्य तत्त्वस्य कृते अद्यापि अडउल्लेखाः न सन्ति — केवलं तस्य स्वकीयः गीताबुद्बुदः दृश्यते।', kn:'ಈ ಪರಿಕಲ್ಪನೆಗೆ ಇನ್ನೂ ಅಡ್ಡ-ಉಲ್ಲೇಖಗಳಿಲ್ಲ — ಅದರ ಸ್ವಂತ ಗೀತಾ ಗುಳ್ಳೆ ಮಾತ್ರ ಕಾಣಿಸುತ್ತದೆ.', hi:'इस अवधारणा के लिए अभी तक कोई क्रॉस-रेफ़रेंस नहीं है — केवल इसका अपना गीता बुलबुला दिखता है।' },
+  bridgeOverviewEmpty:{ en:'No concepts have 2+ links yet — try unchecking the filter.', dev:'अद्यापि द्वयधिकलिंकयुक्तानि तत्त्वानि न सन्ति — फिल्टरं निष्कासयित्वा पश्यन्तु।', kn:'ಇನ್ನೂ ೨+ ಲಿಂಕ್‌ಗಳಿರುವ ಪರಿಕಲ್ಪನೆಗಳಿಲ್ಲ — ಫಿಲ್ಟರ್ ತೆಗೆದು ನೋಡಿ.', hi:'अभी तक 2+ लिंक वाली कोई अवधारणा नहीं है — फ़िल्टर हटाकर देखें।' },
+  bridgeSources:     { en:'sources', dev:'स्रोतांसि', kn:'ಮೂಲಗಳು', hi:'स्रोत' },
+  bridgeSource:      { en:'source', dev:'स्रोतः', kn:'ಮೂಲ', hi:'स्रोत' },
+  bridgeGitaTag:     { en:'Bhagavad Gita', dev:'भगवद्गीता', kn:'ಭಗವದ್ಗೀತೆ', hi:'भगवद्गीता' },
+  bridgeKathaTag:    { en:'Katha Upanishad', dev:'कठोपनिषद्', kn:'ಕಠೋಪನಿಷತ್', hi:'कठोपनिषद्' },
+  bridgeThisText:    { en:'this text', dev:'अयं ग्रन्थः', kn:'ಈ ಗ್ರಂಥ', hi:'यह ग्रंथ' },
+  bridgeCrossRef:    { en:'cross-ref', dev:'अडउल्लेखः', kn:'ಅಡ್ಡ-ಉಲ್ಲೇಖ', hi:'क्रॉस-रेफ़' },
+  bridgePending:     { en:'(EN — translation pending)', dev:'(EN — अनुवादः प्रतीक्षमाणः)', kn:'(EN — ಅನುವಾದ ಬಾಕಿ)', hi:'(EN — अनुवाद लंबित)' },
   bannanjeHeader:    { en:'Bannanje commentary (personal study only — not for redistribution)', dev:'बन्नंजे-भाष्य (केवल वैयक्तिक अध्ययनार्थम् — न पुनर्वितरणाय)', kn:'ಬನ್ನಂಜೆ-ಭಾಷ್ಯ (ಕೇವಲ ವೈಯಕ್ತಿಕ ಅಧ್ಯಯನಕ್ಕಾಗಿ — ಪುನರ್ವಿತರಣೆಗಲ್ಲ)', hi:'बन्नंजे-भाष्य (केवल व्यक्तिगत अध्ययन हेतु — पुनर्वितरण के लिए नहीं)' },
   // Masthead — uses innerHTML so EN can keep the italic Gītā.
   brandName:         { en:'Bhagavad <em>Gītā</em> · Tatva Jalam', dev:'भगवद्गीता · तत्त्व-जालम्', kn:'ಭಗವದ್ಗೀತಾ · ತತ್ತ್ವ-ಜಾಲ', hi:'भगवद् <em>गीता</em> · तत्त्व-जाल' },
