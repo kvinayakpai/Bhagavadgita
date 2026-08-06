@@ -1,0 +1,219 @@
+# Content-Gap Audit Plan
+
+**Status: NOT YET STARTED. Read this whole file before doing any work.**
+
+## Why this plan exists
+
+On 2026-08-03, Vinayak flagged that BG 11.16 in the app was missing a
+substantial paragraph that exists in the book (a Puruṣa-sūkta citation and
+meditation-practice advice, on `gita_pages/page_0376.png`, book-printed
+page 375). Investigation found:
+
+- This paragraph was **never** present in `bannanje_kn.js` at any point in
+  the repo's git history, back to the earliest commit (2026-05-16).
+- It was **also missing** from `_extracted/clean_verses_700.json`, the
+  pre-existing per-verse extraction artifact that (as far as we can tell)
+  `bannanje_kn.js` was built from.
+- So this is a gap in the **original book→data extraction**, not something
+  introduced by any edit this project has made. It predates this project
+  entirely, and it is very likely **not the only verse affected** — the
+  extraction pipeline that produced the source data evidently dropped
+  paragraphs in at least some places, silently (no error, no placeholder,
+  just a shorter `meaning` field than the book actually has).
+
+This plan is for **systematically finding and fixing every other instance
+of this same problem** across all 18 chapters / ~700 verses, using the
+same method that worked for 11.16: vision-read the actual page image and
+compare against what's in the data files.
+
+**This is a different, additional problem from the ones already tracked
+in `EN_RETRANSLATION_PLAN.md`.** That file tracks: (a) whether each
+chapter's EN/DEV/HI translations exist and are full-fidelity, and (b) a
+handful of specific known bugs (duplicated verse content, off-by-one
+mislabeling, OCR garbles in English loanwords). This plan tracks a
+third, orthogonal thing: **whether the Kannada source itself is
+complete**, independent of translation status. A chapter can be marked
+"COMPLETE" in `EN_RETRANSLATION_PLAN.md` and still have gaps this plan
+would catch — chapter 11 is proof of that.
+
+## Resources already available (don't rebuild these)
+
+- `gita_pages/page_NNNN.png` — 576 scanned page images, 1-indexed, 4-digit
+  zero-padded. These are the ground truth. Vision-reading these is the
+  only fully reliable verification method (OCR text has known noise —
+  see `EN_RETRANSLATION_PLAN.md`'s notes on the ~265 garbled English
+  terms and various OCR corruption patterns).
+- `_extracted/clean_ocr/p-NNN.txt` — OCR text per page (3-digit, **not**
+  zero-padded to 4 — e.g. `p-9.txt`, `p-376.txt`). Useful for fast
+  approximate scanning, but treat it as a *signal to prioritize
+  candidates*, never as ground truth to patch from directly — it has its
+  own OCR errors independent of whatever errors are in `bannanje_kn.js`.
+- `_extracted/clean_verses_700.json` — 702 entries, each with `chapter`,
+  `verse`, `ref`, `shloka`, `meaning`, `source_page`, and `status`. This
+  looks like the direct precursor to `bannanje_kn.js`'s content. Two
+  things make it valuable for this audit:
+  1. **`source_page` reliably equals the PNG filename number** — e.g.
+     `source_page: 376` means `gita_pages/page_0376.png`. Verified during
+     the 11.16 investigation. No manual page-offset arithmetic needed.
+  2. **`status` field** takes four values: `clean` (657), `screenshot_patch`
+     (21), `auto_extracted` (18), `phantom_disregard` (6). The non-`clean`
+     statuses mark verses the original extraction pipeline itself flagged
+     as lower-confidence. **This is a ready-made priority list** — see
+     Phase 1 below. Note `clean` does NOT mean complete — 11.16 was marked
+     `clean` and still missing a paragraph, so Phase 2 (below) is still
+     needed to catch the rest.
+- `_extracted/clean_markers.json`, `_extracted/patched_refs.json`,
+  `_extracted/bannanje_clean.json`, `_extracted/verses.json` — other
+  artifacts from whatever produced `clean_verses_700.json`. Not yet
+  explored for this purpose; may contain useful additional signal
+  (e.g. `clean_markers.json` might mark exact verse-boundary offsets
+  within pages). Worth a quick look before starting Phase 2's tooling,
+  in case something here already solves part of it.
+
+## The audit, in two phases
+
+### Phase 1 — the free list (do this first, it's cheap)
+
+Every verse with `status != "clean"` in `clean_verses_700.json` is a
+known-flagged candidate from the original extraction. There are 45 of
+them. List them all (chapter, verse, status, current length), vision-read
+each one's page against `bannanje_kn.js`'s current content, and fix any
+genuine gaps found, using the exact procedure from Phase 3 below.
+
+Quick way to regenerate the list:
+
+```python
+import json
+d = json.load(open('_extracted/clean_verses_700.json', encoding='utf-8'))
+flagged = sorted(
+    ((v['chapter'], v['verse'], v['status'], v['source_page']) for v in d if v['status'] != 'clean'),
+    key=lambda x: (x[0], x[1])
+)
+for ch, vs, status, pg in flagged:
+    print(f"{ch}.{vs}\t{status}\t\tpage_{pg:04d}.png")
+```
+
+Expect roughly 45 items, spread across chapters 1, 2, 3, 4, 6, 7, 8, 11,
+12, 13, 14, 15, 16, 17, 18 (not an exhaustive list — regenerate it, don't
+trust this paragraph's memory of the exact set).
+
+### Phase 2 — the systematic sweep (do this for everything else)
+
+Phase 1 only catches what the *original* pipeline already suspected.
+11.16 shows the pipeline can also fail silently. For full coverage:
+
+1. **Build a per-page aggregate-length comparison.** For each of the 576
+   pages, sum the `meaning` length (from the current `bannanje_kn.js`,
+   not the stale `clean_verses_700.json`) of every verse whose
+   `source_page` equals that page number, and compare against that
+   page's OCR text length (`_extracted/clean_ocr/p-{N}.txt`, where N is
+   *not* zero-padded).
+2. **This ratio is noisy — do not use a hard cutoff.** Verified during
+   planning: known-good pages showed ratios from ~0.9 to ~2.7 (a verse's
+   commentary often spans multiple pages, gets attributed to one
+   "primary" `source_page`, and page OCR text includes chapter headers/
+   footers/page numbers that inflate or deflate the raw comparison). The
+   known-bad page (376, containing 11.16) showed a ratio of 0.42. Use
+   **relative ranking within each chapter**, not an absolute threshold:
+   for each chapter, sort its pages by ratio and manually check the
+   lowest ~20% first. Combine with the chapter-relative length-outlier
+   scan already established in `EN_RETRANSLATION_PLAN.md`'s pipeline
+   (verses whose `bannanje_kn.js` length is well below their chapter's
+   own average) as a second cross-check — a verse that's both a low-ratio
+   page AND a length outlier in its chapter is a high-confidence
+   candidate.
+3. **Vision-read every flagged candidate's page** against current
+   `bannanje_kn.js` content, verse by verse, the same way 11.16 was
+   checked. Do not trust the OCR text or the ratio score as a substitute
+   for actually looking at the page image — both are just triage tools
+   to avoid vision-reading all 576 pages blind.
+4. Chapters 1–11 already have translations built on top of whatever KN
+   content currently exists, so gaps found there need the full four-file
+   fix (see Phase 3). Chapters 12–18 haven't been translated yet, so for
+   those, doing this audit **before** starting each chapter's translation
+   pass (folding it into the existing "verify KN source against
+   `gita_pages/` PNGs" pipeline step already documented in
+   `EN_RETRANSLATION_PLAN.md`) avoids doing the work twice.
+
+### Phase 3 — the fix procedure (same as used for 11.16)
+
+For each confirmed genuine gap:
+
+1. Vision-read the exact page image(s) with the `view` tool and
+   transcribe the missing text exactly as printed (matching existing
+   `bannanje_kn.js` conventions: zero-width joiner `\u200c` after certain
+   consonant clusters, `।`/`॥` for daṇḍa, etc. — look at neighboring text
+   in the same verse for the local convention).
+2. Patch `bannanje_kn.js` first, using the established
+   `python3` read → `content.count(old) == 1` assert → `str.replace()` →
+   write pattern (never `re.sub()` — see `EN_RETRANSLATION_PLAN.md`).
+3. Compose matching additions for EN (full IAST), DEV (Sanskrit prose,
+   matching whatever fidelity standard that chapter is currently held
+   to — full-fidelity for ch. 11 per Vinayak's 2026-08-03 direction, the
+   older condensed style for chapters not yet reworked), and HI, and
+   append them to the existing translated content in the same way.
+4. **Escaping pitfall (bit this session on 2026-08-03, costing a revert):**
+   when adding text to these JS data files, do **not** use the `str_replace`
+   tool with plain multi-line text — it inserts literal newline
+   characters, which breaks the JS string literal (these files store
+   multi-line content as a literal two-character `\n` escape sequence
+   within a single-line-per-key string, not as real embedded newlines).
+   Always build the addition as a Python string, run it through a
+   `js_escape()` helper (`\` → `\\`, `"` → `\"`, real newline → literal
+   `\n`), and splice it into the existing escaped value before writing.
+5. Validate all four files parse (`new Function(s.replace(varname, 'const X'))`
+   per file) before rebuilding.
+6. Rebuild `viewer.html` via `build-bundle.py`.
+7. Commit with a message that documents: what was missing, where it was
+   vision-verified from (page filename), and confirmation that git
+   history was checked to rule out an accidental prior deletion (so the
+   commit message accurately says "gap in original extraction" rather
+   than implying some past edit is at fault, unless git history actually
+   shows that).
+8. Push (rebase-and-retry if another session has pushed in the meantime —
+   this has already happened once this project; don't assume you have
+   the only session touching the repo).
+
+## What does NOT count as a gap (don't "fix" these)
+
+- **Genuine mid-sentence truncations in the source itself**, where the
+  book's own text visibly cuts off (see 11.46's documented known debt in
+  `EN_RETRANSLATION_PLAN.md`). Confirm by checking that the *next* page
+  doesn't pick the sentence back up — if it doesn't, this is the book's
+  own printing/scanning artifact, not a data-extraction gap. Document as
+  a known debt; don't fabricate a completion.
+- **Correctly-structured merge verses** (two verses sharing one
+  padaccheda+commentary block, with a merge-note in the first verse — the
+  8.12/8.13, 10.15/10.16, 11.10/11.11, 11.52/11.53 pattern). These are
+  supposed to be short on one side. Don't "fix" them by duplicating
+  content into both halves.
+- **Verses that are just genuinely terse in the original.** Not every
+  short verse is a bug — some of Bannanje's commentary really is a single
+  paragraph. Only patch when the page image shows content that isn't in
+  the data file.
+
+## Tracking
+
+Add a running log below as chapters/pages get audited, in the same
+spirit as `EN_RETRANSLATION_PLAN.md`'s progress tables. Suggested
+columns: chapter, phase-1 items checked/fixed, phase-2 pages checked,
+gaps found, gaps fixed, date.
+
+| Chapter | Phase 1 (flagged) checked | Phase 2 (sweep) done | Gaps found | Gaps fixed | Date |
+|---|---|---|---|---|---|
+| 11 | 11.7, 11.41, 11.52, 11.54, 11.55 not yet checked; 11.16 found+fixed via ad hoc report, not via this plan | Not started | 11.16 (confirmed) | 11.16 | 2026-08-03 |
+| 1–10, 12–18 | Not started | Not started | — | — | — |
+
+## Session startup checklist for whoever picks this up
+
+1. Read this file in full.
+2. Read `EN_RETRANSLATION_PLAN.md` too — check current chapter-completion
+   state, since translation work may have continued in the meantime.
+3. `git log --oneline -10` to see what's actually landed vs. what these
+   plan files claim (plan files can go stale — verify against real state,
+   per this project's established practice).
+4. Decide Phase 1 vs Phase 2 vs a specific chapter based on what Vinayak
+   asks for that session; this file doesn't mandate an order beyond
+   "Phase 1 is cheap, do it first if scope is otherwise unconstrained."
+5. Update the tracking table above as you go, and update this file's
+   own "Status" line at the top once work begins.
