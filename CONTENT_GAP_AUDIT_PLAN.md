@@ -1,6 +1,6 @@
 # Content-Gap Audit Plan
 
-**Status: NOT YET STARTED. Read this whole file before doing any work.**
+**Status: IN PROGRESS. Chapter 11 fully swept (Phase 1 + full page-by-page Phase 2, not just the bottom-20% sample) 2026-08-06. Read this whole file before doing any work.**
 
 ## Why this plan exists
 
@@ -201,8 +201,10 @@ gaps found, gaps fixed, date.
 
 | Chapter | Phase 1 (flagged) checked | Phase 2 (sweep) done | Gaps found | Gaps fixed | Date |
 |---|---|---|---|---|---|
-| 11 | 11.7, 11.41, 11.52, 11.54, 11.55 not yet checked; 11.16 found+fixed via ad hoc report, not via this plan | Not started | 11.16 (confirmed) | 11.16 | 2026-08-03 |
+| 11 | All 5 flagged items checked (11.7, 11.41, 11.52, 11.54, 11.55); 11.16 found+fixed 2026-08-03 via ad hoc report before this plan existed | **Full page-by-page sweep completed, all 28 pages (`page_0368.png`–`page_0395.png`), not just the bottom-20% ratio sample** | Three distinct bugs beyond 11.16: (1) **11.41** — contaminated with a duplicated śloka + a misplaced paragraph actually belonging to 11.44's commentary; (2) **11.26** — contained fully **fabricated commentary not present in the source at all** (content-policy violation, not caught by length-ratio heuristics — this verse was not even a significant outlier); (3) **11.46** — a previously-documented "known debt" (genuine mid-sentence book truncation) turned out on reinspection to be a **misdiagnosis**: the sentence completes cleanly on the next page. All three were true gaps/contamination, not spillover artifacts. | 11.41, 11.26 restructured as proper merge-notes (8.12/8.13 convention); 11.46 completed with the actual missing text. All fixes applied across KN/EN/DEV/HI, validated, `EN_RETRANSLATION_PLAN.md`'s Known Debts section corrected. | 2026-08-06 |
 | 1–10, 12–18 | Not started | Not started | — | — | — |
+
+**Key takeaway from the chapter-11 sweep:** length-ratio heuristics and "does it read as plausible, well-formed prose" checks are both insufficient on their own — 11.26's fabricated paragraph was well-written and not a length outlier, and 11.46's genuine gap had previously been signed off as a "known, low-priority, unfixable" source truncation without the next page ever actually being checked. Direct page-image vision-verification, applied to every verse rather than a sampled subset, is what caught both. This raises the question of whether other chapters' "known debts" (3.42/4.42/6.47's spillover truncations, 13.33's kṛtsna note, etc.) deserve the same re-check rather than being taken on faith from prior sessions' documentation — not yet done, flagged here for whoever picks this up next.
 
 ## Session startup checklist for whoever picks this up
 
