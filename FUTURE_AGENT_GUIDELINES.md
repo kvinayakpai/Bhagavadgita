@@ -2,6 +2,17 @@
 
 This document outlines user expectations, common pitfalls, and strict checklists for any future agents working on spelling fixes, book-alignment audits, or data correction tasks in this repository.
 
+**Updated 2026-08-06** with a consolidated error taxonomy (section 2E)
+distilled from a six-session character-level audit of chapter 11 — the most
+thorough review this project's methodology has produced to date. Read
+section 2E before starting any similar audit on another chapter; it will
+save time relative to rediscovering these patterns from scratch. The
+session-by-session raw detail (which page, which exact fix, which false
+leads were ruled out and why) lives in `CH11_CHAR_AUDIT_11.1-11.9.md`
+through `CH11_CHAR_AUDIT_11.41-11.55.md`, `CH11_VAKRA_VAKTRA_SYSTEMIC_FIX.md`,
+and `CH11_REAUDIT_CHECKLIST.md` — this document only holds the distilled,
+reusable patterns, not the full history.
+
 ---
 
 ## 1. User Expectations & Philosophy
@@ -30,7 +41,129 @@ This document outlines user expectations, common pitfalls, and strict checklists
 * A major issue encountered earlier was that edits made to `bannanje_kn.js` were ignored by the browser. This was because `data.js` had a duplicate global definition of `BANNANJE_VERSE_MEANINGS` that shadowed/overwrote the loaded values.
 * **Checklist**: Ensure no global variables in the bundled scripts (like `data.js`, `positions.js`, or the inlined `bannanje_*.js`) shadow each other.
 
-### E. Scroll Restoration Bug
+### E1. Recurring Conjunct/Character-Confusion Patterns (found via chapter-11
+character-level audit, 2026-08-06 — six-session series, `CH11_CHAR_AUDIT_*.md`
+and `CH11_VAKRA_VAKTRA_SYSTEMIC_FIX.md`)
+
+These are **systemic OCR/transcription confusions**, not isolated typos —
+each has recurred multiple times within a single chapter, meaning a targeted
+regex search across the whole book (not just character-by-character reading)
+is the efficient way to check for them in any chapter not yet audited this
+way.
+
+* **ವಕ್ರ / ವಕ್ತ್ರ (vakra/vaktra)** — "crooked" vs "face/mouth". The complex
+  ಕ್ತ್ರ conjunct gets flattened to ಕ್ರ, silently changing meaning. Found 9
+  times in chapter 11 alone (11.10, 11.11 ×2, 11.16, 11.23, 11.27, 11.28,
+  11.29), confirmed closed book-wide by a full regex search for `ವಕ್ರ` (with
+  manual review — a few genuine, unrelated words like `ವಿಶ್ವಕ್ರಿಯೆ` contain
+  it as a coincidental substring and are not errors).
+* **ಭು / ಳು (bhu/lu)** — e.g. `ಅದ್ಭುತ` (adbhuta, "wondrous") corrupted to
+  `ಅದ್ಳು ತ` or `ಅದ್ಳು`. Found at least 3 times (11.9's spillover, 11.17,
+  11.46's Bhāgavata citation). Not yet swept whole-book — flagged as a
+  candidate.
+* **ಎಲ್ಲೆಡೆ / ಎಲ್ದೆಡೆ (elledeya/eldedeya)** — "everywhere" corrupted by
+  substituting ದ for ಲ. Found 5 times (11.11, 11.30, 11.40 ×2). Not yet swept
+  whole-book — flagged as a candidate, same treatment as vakra/vaktra above.
+* **Other single-letter/conjunct swaps seen once each** (worth keeping in
+  mind as a general class, not necessarily worth a dedicated regex sweep
+  individually): ಥ↔ಸ (`ಉತ್ಥಿತಾ`→`ಉತ್ಸಿತಾ`), ಟ↔ಪ (`ಸ್ಪೃಶಮ್`→`ಸ್ಟೃಶಮ್`),
+  ತ್ತ↔ತ್ರ (`ವ್ಯಾತ್ತ`→`ವ್ಯಾತ್ರ`), ಣ↔ಟ + wrong vowel length together
+  (`ಆವಿಷ್ಟಃ`→`ಅವಿಷ್ಣಃ`), ಮ↔ಕ (`ಉಷ್ಮಪಾಃ`→`ಉಷ್ಕಪಾಃ`), ಸ↔ಪ
+  (`ತತ್ಪರಮ್`→`ತತ್ಸರಮ್`), ಕಾ↔ಮಾ (`ಸಾಕ್ಷಾತ್ಕಾರ`→`ಸಾಕ್ಷಾತ್ಮಾರ` — also found
+  once outside chapter 11, in chapter 7, so this specific one may be worth a
+  book-wide search too).
+
+### E2. Stray-Space and Missing-Space Word-Boundary Errors
+Very common (roughly a third of all fixes in the chapter-11 character audit):
+a single word gets a stray internal space inserted (`ಎನ್ನು ವ`, `ಸಖಾ ನ್ನು`,
+`ಅದ್ಭು ತ`), or conversely two separate words get merged with a missing space
+(`ಹೇಯಾದವ` for `ಹೇ ಯಾದವ`, `ಮಾತೇ` for `ಮಾ ತೇ`, `ಸಖಾಇವ` for `ಸಖಾ ಇವ`). These
+don't show up in paragraph-level "does the content match" checks because the
+surrounding text still reads as plausible — only a tight, word-by-word
+comparison against the page catches them.
+
+### E3. Punctuation/Symbol Corruption
+* **Doubled or unmatched punctuation**: `((` instead of `(`; a closing quote
+  with no opening quote (or vice versa); stray mid-sentence periods that
+  break a sentence in two (`ನೀನು. ಆದಿದೇವಃ` for `ನೀನು ಆದಿದೇವಃ`).
+* **Wrong etymology-notation symbol**: this book's convention writes
+  compound-word etymologies as `word1+word2-compound` (e.g.
+  `ವಾಸು+ದೇವ-ವಾಸುದೇವ`). Watch for `+` silently degrading to `-`
+  (`ಜನ-ಅರ್ದನ-ಜನಾರ್ದನ` instead of `ಜನ+ಅರ್ದನ-ಜನಾರ್ದನ`).
+* **Stray non-Kannada characters embedded mid-sentence**: found a literal
+  Latin digit `6` inserted into a Kannada sentence (11.47), and a literal
+  ASCII underscore `_` inserted mid-word (11.13's `ಕೃತ್ಸ್ನಮ್` corrupted to
+  `ಕೃತ್ಸ _ಮ್`). A regex scan for any Latin/ASCII character inside a run of
+  Kannada text is a cheap, high-value check per chapter.
+
+### E4. Stray Orphaned Fragments
+Small, meaningless fragments (a single syllable or two-character sequence)
+sometimes appear on their own line with no grammatical connection to
+anything around them — e.g. a bare `ಕಛ` prepended before a verse even
+starts, or a bare `ಕೆ` sitting alone between two sentences that read
+perfectly well without it. These read as obvious noise once spotted but are
+easy to skim past. Check: does removing the fragment leave a complete,
+grammatical sentence? If yes, it's noise.
+
+### E5. Content-Level Bugs (distinct from character-level; found via the
+`CONTENT_GAP_AUDIT_PLAN.md` sweep, see that file for full detail)
+* **Fabricated/synthesized content**: a full paragraph of plausible,
+  well-written commentary that does not exist anywhere in the source book.
+  Caught once (chapter 11.26) — critically, this was *not* a length outlier
+  and read as completely natural prose, so neither a length-ratio check nor
+  a "does this sound right" read would catch it. Only direct page comparison
+  works.
+* **Misdiagnosed "known debt"**: a gap previously logged as "genuine
+  mid-sentence truncation in the book itself, unfixable" that turns out, on
+  actually checking the next page, to complete cleanly — meaning it was a
+  real, fixable data gap the whole time. Caught once (11.46). Any chapter
+  with a documented "known debt" of this shape deserves the next-page check
+  before being taken on faith.
+* **Duplicate/garbled spillover of the next verse into the current one**:
+  distinct from the known, harmless page-transition spillover pattern
+  (e.g. 3.42/4.42/6.47/11.31/11.51, where a verse's raw entry trails off
+  mid-word into the next verse's heading — cosmetic only, since the next
+  verse's own key already holds the complete correct text) — this is
+  *corrupted* duplicate content (missing conjuncts, stray characters, Latin
+  digits substituted for Kannada numerals) appended after a verse's own
+  complete, correct content. Found twice (11.6, 11.9). Tell the two apart by
+  checking: is the duplicate text clean/complete, or garbled? Harmless
+  spillover matches the next verse's real content exactly; this bug class
+  does not.
+
+### E6. Method Notes — What Catches This, What Doesn't
+* **Paragraph-level "does the content match" comparison** (reading a whole
+  paragraph and checking it says the same thing) catches missing/duplicate
+  *content* but reliably misses single-word swaps, stray spaces, and
+  punctuation corruption, because the paragraph still reads as sensible.
+* **Length-ratio / outlier checks** catch verses that are suspiciously
+  short or long but miss errors that don't change length (word swaps,
+  space/no-space, punctuation) and can also be fooled by coincidental page
+  formatting (headers, justified-text gaps).
+* **Character-by-character zoomed comparison against the source page** is
+  what actually catches the classes in E1–E4. It is also the slowest and
+  the only one of the four requiring the reader's own visual accuracy —
+  which is itself fallible (see below).
+* **The reader's own vision is not perfectly reliable.** Documented
+  misreads during the audit: a Kannada numeral misread at low zoom (೩೬ as
+  ೩೭), a font's ರ್ (virāma-ra) ligature misread as a doubled consonant, and
+  at least one case where re-examining a "clearly wrong" word at higher zoom
+  reversed the initial finding. **Always re-zoom and re-confirm before
+  editing scripture text — do not trust a single read, including your own.**
+* **When applying a fix via search-and-replace, scope the search to the
+  specific verse key first**, not the whole file. The same typo can appear
+  coincidentally in an unrelated verse or chapter; a whole-file
+  find-and-replace risks either failing (if the string isn't unique) or
+  silently fixing the wrong occurrence. Extract the value bounded by
+  `"KEY": "..."` and `",\n  "NEXT_KEY"` markers, edit within that slice, then
+  write back.
+* **Re-read the file after every edit, before moving to the next one.**
+  Slicing/indexing mistakes during a fix (accidentally duplicating or
+  truncating adjacent text) happened twice during the chapter-11 audit and
+  were only caught because the fix was re-verified immediately rather than
+  assumed correct.
+
+### F. Scroll Restoration Bug
 * On page refresh, the browser by default tries to restore the previous scroll position. Because the page is dynamically rendered, this was causing the viewport to snap to the bottom, giving the user the impression that the app was not loading.
 * **Checklist**: Maintain the scroll-restore disable rule in `viewer-src.html` (`history.scrollRestoration = 'manual'`) and the explicit `window.scrollTo(0,0)` on initial page load.
 

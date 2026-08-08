@@ -206,6 +206,8 @@ gaps found, gaps fixed, date.
 
 **Key takeaway from the chapter-11 sweep:** length-ratio heuristics and "does it read as plausible, well-formed prose" checks are both insufficient on their own — 11.26's fabricated paragraph was well-written and not a length outlier, and 11.46's genuine gap had previously been signed off as a "known, low-priority, unfixable" source truncation without the next page ever actually being checked. Direct page-image vision-verification, applied to every verse rather than a sampled subset, is what caught both. This raises the question of whether other chapters' "known debts" (3.42/4.42/6.47's spillover truncations, 13.33's kṛtsna note, etc.) deserve the same re-check rather than being taken on faith from prior sessions' documentation — not yet done, flagged here for whoever picks this up next.
 
+**Follow-up (2026-08-06):** this content-gap sweep was itself followed by a much deeper character-level audit of all 55 verses in chapter 11 (six sessions, `CH11_CHAR_AUDIT_*.md`), which found ~60 further transcription-level errors this content-gap pass's methods could not have caught (single-word swaps, stray spaces, punctuation corruption, systemic conjunct confusions). The consolidated, reusable error taxonomy from that deeper pass now lives in `FUTURE_AGENT_GUIDELINES.md` section 2E — read it before auditing another chapter, whether via this content-gap method or the character-level one.
+
 ## Session startup checklist for whoever picks this up
 
 1. Read this file in full.
