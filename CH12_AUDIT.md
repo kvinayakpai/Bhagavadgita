@@ -97,17 +97,87 @@ language files, prior to this session.
 - Wrong quote-mark pairing: `"ಅಧಿಕ ತರ ಕ್ಲೇಶಃ:` (curly open-quote + colon) →
   `'ಅಧಿಕ ತರ ಕ್ಲೇಶಃ'` (matching single quotes, confirmed on the page).
 
-## Not yet done in this session
+## Remaining verses (12.5, 12.8, 12.12, 12.14, 12.15, 12.19, 12.20) — completed
 
-A first read-through of all 20 verses' raw KN text (before vision-checking)
-flagged further suspects that have **not yet been verified against the
-pages**: 12.8 (`ಆಧತ್ಸೃ`), 12.12 (`ಮೋಶ್ಷಪ್ರಾಪ್ತಿ`, a stray mid-phrase
-period), 12.14 (`ನಿರ್ಲಿಪ್ರತೆ`, `ಇನ್ನೊ ಬ್ಬರ`, `ಅತೃಪ್ಪಿ` ×2,
-`ಯೋಗಿ ಅನ್ನು ವುದಕ್ಕೆ`, `ದೃಢನಿಶ್ಚ ಯದಿಂದ`, `ಇರವುದನ್ನು`), 12.15 (a garbled
-raw śloka line, `ಲೋಕಾತಶ್ ನ ಉದ್ವಿಜತೇಚಯಃ`), 12.19 (multiple stray-period and
-stray-space instances, `ಒಡನಾಟಮಾಡುಮೈತ್ರಿ)`), and 12.20 (`ಮೋಕ್ಬಸಾಧನಾ`). These
-all need the same page-comparison treatment as 12.1–12.4/12.6/12.7 before
-being trusted as real fixes.
+All remaining flagged suspects were verified against `page_0400.png`–
+`page_0411.png` and fixed. This closes out full character-level coverage of
+all 20 verses in chapter 12.
+
+**12.5**: `ದೇಹವದ್ಳಿಃ` → `ದೇಹವದ್ಭಿಃ` (another ಭ→ಳ conjunct confusion, same
+class as the chapter-11 pattern); mismatched quote-mark pair fixed to match
+the page's single quotes.
+
+**12.8**: `ಆಧತ್ಸೃ` → `ಆಧತ್ಸ್ವ` (wrong ending); `ಲಕ್ಷ್ಮಿಸಮೇತ` → `ಲಕ್ಷ್ಮೀಸಮೇತ`
+(vowel length); another fabricated ellipsis with no basis on the page,
+removed.
+
+**12.12**: A genuinely missing embedded English term — the page prints
+"**(Fundamental requirement)**" in bold; entirely absent from the stored
+text. Restored, along with a stray period breaking the same sentence, and
+`ಮೋಶ್ಷಪ್ರಾಪ್ತಿ` → `ಮೋಕ್ಷಪ್ರಾಪ್ತಿ`.
+
+**12.14**: Eight fixes in one verse — a fabricated ellipsis; a missing
+embedded term "**(Detached attachment)**" plus the typo it was attached to
+(`ನಿರ್ಲಿಪ್ರತೆ` → `ನಿರ್ಲಿಪ್ತ`); a stray period; two stray-space word-splits
+(`ಇನ್ನೊ ಬ್ಬರ`, `ಯೋಗಿ ಅನ್ನು ವುದಕ್ಕೆ`, `ದೃಢನಿಶ್ಚ ಯದಿಂದ`); and two
+`ಅತೃಪ್ಪಿ` → `ಅತೃಪ್ತಿ` spelling fixes. One item (`ಇರವುದನ್ನು`) was
+double-checked at high zoom and found to already match the page exactly —
+a book-internal spelling quirk, not a transcription error — and correctly
+left unchanged.
+
+**12.15**: The suspected garbled śloka line was real: `ಲೋಕಾತಶ್‌ ನ
+ಉದ್ವಿಜತೇಚಯಃ` (extra `ಶ್`, two words wrongly merged) → `ಲೋಕಾತ್‌ ನ ಉದ್ವಿಜತೇ
+ಚ ಯಃ`, confirmed against the padaccheda on `page_0406.png`. Also fixed a
+doubled period.
+
+**12.19**: Six fixes — a missing open-parenthesis (`ಒಡನಾಟಮಾಡುಮೈತ್ರಿ)` →
+`ಒಡನಾಟಮಾಡು(ಮೈತ್ರಿ)`); three stray-space word-splits around `ಇನ್ನೊಬ್ಬರು`;
+and **two more wrong/missing embedded English terms**: a missing
+"**(Instinct)**" (page has it after `ಸಹಜಪ್ರವೃತ್ತಿ`, entirely absent from
+storage), and — same bug class as the "(Reputation)"→"(Name and fame)" fix
+in 12.4 — `(Movable and immovable)` was simply the **wrong term**; the page
+clearly prints "**(Making own property)**" at that location instead.
+
+**12.20**: `ಈ ಅಮೃತ(ಮೋಕ್ಬಸಾಧನಾ` (garbled letter, missing closing
+parenthesis) → `ಈ ಅಮೃತ(ಮೋಕ್ಷ)ಸಾಧನಾ`, confirmed against `page_0411.png`.
+
+**Also noted, not acted on**: a duplicate instance of the `ಇನ್ನೊ ಬ್ಬರ`
+stray-space typo pattern exists in chapter 18 (verse 18.63), and one exists
+in chapter 6 (verse 6.9) — both outside this session's scope, flagged here
+for whoever next touches those chapters.
+
+## Translation-layer check (this batch)
+
+Checked EN for every embedded-English-term case in this batch (12.12,
+12.14, 12.19). In every case, EN already conveys the underlying meaning in
+natural prose ("a fundamental necessity," "detachment," "natural to human
+beings," "movable and immovable possessions") without needing a literal
+bracket match — consistent with the precedent already established for
+12.4's "(Reputation)"/"(Name and fame)" case. No EN/DEV/HI changes made for
+this batch.
+
+## Chapter 12 status: COMPLETE
+
+All 20 verses have now been read character-by-character against the source
+page images (`page_0396.png`–`page_0411.png`) and cross-checked against
+EN/DEV/HI wherever a fix was made. Summary of everything found in chapter
+12 across this whole session:
+
+- **1 major structural bug** (12.3/12.4: verse 4's content entirely missing,
+  replaced by misplaced chapter-intro material, across all four languages)
+- **1 fabrication** (12.6/12.7: invented commentary matching the 11.26
+  pattern exactly, across all four languages)
+- **3 wrong/missing embedded English terms** (12.4's "(Reputation)" should
+  be "(Name and fame)"; 12.12 missing "(Fundamental requirement)"; 12.14
+  missing "(Detached attachment)"; 12.19 missing "(Instinct)" and wrong
+  "(Movable and immovable)" instead of "(Making own property)" — six
+  distinct term-level errors in total)
+- Roughly 25 smaller KN fixes: conjunct confusions, stray spaces, stray
+  periods, fabricated ellipses, missing/mismatched punctuation, and one
+  garbled śloka line
+- 2 false leads correctly investigated and ruled out
+
+viewer.html rebuilt via build-bundle.py after all fixes above.
 
 ## SECOND FABRICATION FOUND: 12.6/12.7 (fixed)
 
