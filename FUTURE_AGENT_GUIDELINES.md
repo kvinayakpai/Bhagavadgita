@@ -2,16 +2,15 @@
 
 This document outlines user expectations, common pitfalls, and strict checklists for any future agents working on spelling fixes, book-alignment audits, or data correction tasks in this repository.
 
-**Updated 2026-08-06** with a consolidated error taxonomy (section 2E)
-distilled from a six-session character-level audit of chapter 11 — the most
-thorough review this project's methodology has produced to date. Read
-section 2E before starting any similar audit on another chapter; it will
-save time relative to rediscovering these patterns from scratch. The
-session-by-session raw detail (which page, which exact fix, which false
-leads were ruled out and why) lives in `CH11_CHAR_AUDIT_11.1-11.9.md`
-through `CH11_CHAR_AUDIT_11.41-11.55.md`, `CH11_VAKRA_VAKTRA_SYSTEMIC_FIX.md`,
-and `CH11_REAUDIT_CHECKLIST.md` — this document only holds the distilled,
-reusable patterns, not the full history.
+**Updated 2026-08-09** with findings from a character-level audit of
+chapter 12, following the chapter-11 update below. Read section 2E before
+starting any similar audit on another chapter; it will save time relative
+to rediscovering these patterns from scratch. The session-by-session raw
+detail (which page, which exact fix, which false leads were ruled out and
+why) lives in `CH11_CHAR_AUDIT_11.1-11.9.md` through
+`CH11_CHAR_AUDIT_11.41-11.55.md`, `CH11_VAKRA_VAKTRA_SYSTEMIC_FIX.md`,
+`CH11_REAUDIT_CHECKLIST.md`, and `CH12_AUDIT.md` — this document only holds
+the distilled, reusable patterns, not the full history.
 
 ---
 
@@ -106,13 +105,34 @@ easy to skim past. Check: does removing the fragment leave a complete,
 grammatical sentence? If yes, it's noise.
 
 ### E5. Content-Level Bugs (distinct from character-level; found via the
-`CONTENT_GAP_AUDIT_PLAN.md` sweep, see that file for full detail)
+`CONTENT_GAP_AUDIT_PLAN.md` sweep and the chapter-12 full audit, see those
+files for full detail)
 * **Fabricated/synthesized content**: a full paragraph of plausible,
   well-written commentary that does not exist anywhere in the source book.
-  Caught once (chapter 11.26) — critically, this was *not* a length outlier
-  and read as completely natural prose, so neither a length-ratio check nor
-  a "does this sound right" read would catch it. Only direct page comparison
-  works.
+  **Confirmed twice now — chapter 11's 11.26 and chapter 12's 12.6 — with
+  the identical signature both times**: a genuine merge-verse pair where the
+  *first* verse's key held invented content instead of the expected short
+  merge-note. Neither instance was a length outlier and both read as
+  completely natural prose, so neither a length-ratio check nor a "does this
+  sound right" read would catch either one — only direct page comparison
+  works. **Given this is now a confirmed repeating pattern, not a one-off,
+  it's worth specifically checking every existing merge-verse pair in the
+  whole book for this failure mode as a standalone, cheap task**: a
+  merge-note's first key should always be short (one śloka line plus a
+  one-sentence pointer); anything substantially longer than that at a
+  known or suspected merge-pair's first key is suspicious by construction
+  and should be checked before trusting it.
+* **Missing verse content, replaced by real-but-misplaced book content**:
+  distinct from fabrication (the content isn't invented, just filed under
+  the wrong key) and distinct from spillover (see below). Found once so far
+  (chapter 12's 12.3/12.4): verse 4's own śloka, padaccheda, and half its
+  commentary were entirely absent, and the "12.4" key instead held a long
+  passage that *is* genuine book content but belongs elsewhere entirely (in
+  that case, chapter-opening material that precedes verse 1). The tell is
+  the same as fabrication's: read the content at the key and check it
+  actually matches what the verse number and surrounding shloka claim it
+  should be about, not just whether it reads as plausible prose from the
+  book.
 * **Misdiagnosed "known debt"**: a gap previously logged as "genuine
   mid-sentence truncation in the book itself, unfixable" that turns out, on
   actually checking the next page, to complete cleanly — meaning it was a
@@ -130,6 +150,23 @@ grammatical sentence? If yes, it's noise.
   checking: is the duplicate text clean/complete, or garbled? Harmless
   spillover matches the next verse's real content exactly; this bug class
   does not.
+* **Wrong embedded English term** (distinct from a *missing* one, which is
+  a simpler catch): the book sometimes prints a bracketed English gloss
+  after a Kannada term (e.g. `ಕೀರ್ತಿ(Name and fame)`), and the stored text
+  can have a bracket that is present, correctly formatted, and plausible —
+  but simply **not what the page says**. Found repeatedly in chapter 12
+  (12.4 had "(Reputation)" where the page prints "(Name and fame)"; 12.19
+  had "(Movable and immovable)" where the page prints "(Making own
+  property)") alongside separate instances of the term being missing
+  entirely (12.12, 12.14, 12.19). A scan for the *presence* of a bracketed
+  term is not sufficient — every embedded English term needs its literal
+  text checked against the page, not just its existence confirmed. Translation
+  layers (EN/DEV/HI) generally do **not** need to mirror these brackets
+  literally — established practice is to translate the underlying Kannada
+  word naturally into fluent prose (e.g. "reputation" in lowercase, "a
+  fundamental necessity," "detachment") rather than reproduce the bracket —
+  so a KN-only fix is normal and expected here, not a sign the other three
+  files were missed.
 
 ### E6. Method Notes — What Catches This, What Doesn't
 * **Paragraph-level "does the content match" comparison** (reading a whole
