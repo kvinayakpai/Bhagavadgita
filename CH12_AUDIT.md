@@ -90,17 +90,59 @@ language files, prior to this session.
 - "ಮಾತ" vs "ಮಾತೆ" (12.1) — same, misread at low zoom; "ಮಾತೆ" was already
   correct.
 
+## Smaller fixes verified and applied (12.5)
+
+- `ದೇಹವದ್ಳಿಃ` (nonsensical) → `ದೇಹವದ್ಭಿಃ` (dehavadbhiḥ, "by those embodied")
+  — same ಭ→ಳ conjunct-confusion class as before.
+- Wrong quote-mark pairing: `"ಅಧಿಕ ತರ ಕ್ಲೇಶಃ:` (curly open-quote + colon) →
+  `'ಅಧಿಕ ತರ ಕ್ಲೇಶಃ'` (matching single quotes, confirmed on the page).
+
 ## Not yet done in this session
 
 A first read-through of all 20 verses' raw KN text (before vision-checking)
 flagged further suspects that have **not yet been verified against the
-pages**: 12.5 (`ದೇಹವದ್ಳಿಃ`, likely another ಭ→ಳ corruption), 12.7
-(`ನನ್ನ ಲ್ದೇ`), 12.8 (`ಆಧತ್ಸೃ`), 12.12 (`ಮೋಶ್ಷಪ್ರಾಪ್ತಿ`, a stray mid-phrase
+pages**: 12.8 (`ಆಧತ್ಸೃ`), 12.12 (`ಮೋಶ್ಷಪ್ರಾಪ್ತಿ`, a stray mid-phrase
 period), 12.14 (`ನಿರ್ಲಿಪ್ರತೆ`, `ಇನ್ನೊ ಬ್ಬರ`, `ಅತೃಪ್ಪಿ` ×2,
 `ಯೋಗಿ ಅನ್ನು ವುದಕ್ಕೆ`, `ದೃಢನಿಶ್ಚ ಯದಿಂದ`, `ಇರವುದನ್ನು`), 12.15 (a garbled
 raw śloka line, `ಲೋಕಾತಶ್ ನ ಉದ್ವಿಜತೇಚಯಃ`), 12.19 (multiple stray-period and
 stray-space instances, `ಒಡನಾಟಮಾಡುಮೈತ್ರಿ)`), and 12.20 (`ಮೋಕ್ಬಸಾಧನಾ`). These
-all need the same page-comparison treatment as 12.1–12.4 before being
-trusted as real fixes — none have been applied yet.
+all need the same page-comparison treatment as 12.1–12.4/12.6/12.7 before
+being trusted as real fixes.
 
-viewer.html rebuilt via build-bundle.py after the 12.1–12.4 fixes above.
+## SECOND FABRICATION FOUND: 12.6/12.7 (fixed)
+
+Same pattern as 11.26 in chapter 11: plausible, well-formed content that
+does not exist anywhere on the actual page. Verses 12.6 and 12.7 are also a
+genuine merge pair (confirmed via `page_0401.png` — both ślokas printed
+together, one shared padaccheda). But key "12.6" held a Kannada paraphrase
+plus a phrase-by-phrase Sanskrit gloss ("ಇದು ಸಗುಣ ಭಕ್ತಿಯ ಸ್ವರೂಪ. 'ಸರ್ವಾಣಿ
+ಕರ್ಮಾಣಿ ಮಯಿ ಸಂನ್ಯಸ್ಯ' — ..." etc.) that does not appear anywhere near this
+location on the page — the page goes directly from the end of verse 5's
+commentary to the raw śloka block for verses 6 and 7, with no such gloss.
+Confirmed present in **all four languages** (KN, EN, DEV, HI all had their
+own version of this fabricated explanatory paragraph, meaning it predates
+even the earliest translation pass rather than being a newer, single-file
+corruption).
+
+Also found: key "12.7" was missing the *first half* of the combined
+padaccheda (verse 6's own word-split portion, "ಯೇ ತು ಸರ್ವಾಣಿ ಕರ್ಮಾಣಿ ಮಯಿ
+ಸಂನ್ಯಸ್ಯ ಮತ್ ಪರಾಃ। ಅನನ್ಯೇನ ಏವ ಯೋಗೇನ ಮಾಮ್ ಧ್ಯಾಯಂತಃ ಉಪಾಸತೇ") — it jumped
+straight to verse 7's portion, same class of gap as the original 12.3/12.4
+bug though smaller in scope.
+
+**Fix applied, across all four files:** rebuilt "12.6" as a proper
+merge-note pointing to 12.7 (removing the fabricated content entirely), and
+prepended the missing verse-6 padaccheda portion to "12.7". Also fixed a
+genuine typo caught in the same pass: KN's `ನನ್ನ ಲ್ದೇ` (stray space) →
+`ನನ್ನಲ್ಲೇ`.
+
+One thing worth flagging about the fabrication finding specifically: this is
+now the **second** confirmed instance of this exact bug class across the
+whole project (chapter 11's 11.26 was the first). Both instances shared the
+same signature — a genuine merge-verse pair where the *first* key held
+invented content instead of a proper merge-note. That's a strong enough
+pattern that it may be worth specifically checking every other merge-verse
+pair already in the data (in any chapter) for the same failure mode, rather
+than only catching it when a chapter gets a full audit.
+
+viewer.html rebuilt via build-bundle.py after the 12.6/12.7 fixes.
