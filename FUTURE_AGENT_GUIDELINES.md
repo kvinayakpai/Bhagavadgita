@@ -199,6 +199,42 @@ files for full detail)
   truncating adjacent text) happened twice during the chapter-11 audit and
   were only caught because the fix was re-verified immediately rather than
   assumed correct.
+* **Some verse blocks in `bannanje_kn.js` are stored as literal `\uXXXX`
+  JS-escape sequences instead of raw UTF-8 Kannada text** (found in
+  chapter 16, verses 16.5/16.6/16.9/16.19 at least — likely scattered
+  elsewhere too, cause unknown). A plain-text regex sweep for the known
+  corruption patterns (E1/E3) will silently skip these blocks, because the
+  Kannada characters aren't literally present as Kannada characters in the
+  file — they're six-character ASCII escape sequences. **Always decode
+  `\uXXXX` escapes before running any regex sweep** (e.g. `re.sub(r'\\u([0-9a-fA-F]{4})',
+  lambda m: chr(int(m.group(1),16)), text)` in Python) — check both the raw
+  file text and the decoded text, since some individual verse strings mix
+  escaped and literal encoding within the same value. When editing an
+  escaped block, either edit the literal `\uXXXX` sequence directly and
+  keep it consistent, or replace it outright with literal UTF-8 — both
+  parse identically in JS, and the file already contains verses in both
+  styles side by side without issue.
+* **The avagraha character (ऽ / ಽ, U+0CBD) renders in this book's font in
+  a way that gets visually misread as several different characters**:
+  a dollar sign, a stray digit "5", "ಈ", "ಇ", or a Latin-looking "s"
+  glyph, depending on zoom and context. This has now been found corrupted
+  this way in chapters 14 and 16 (multiple instances). When a sandhi-form
+  śloka line has a suspicious stray character sitting right where an
+  avagraha would grammatically belong (after a visarga-to-'o' sandhi, e.g.
+  "-ೋ" + expected elided "अ"), check it against the padaccheda line's split
+  form and the page image before assuming it's a different kind of typo.
+  Fix to the file's standard convention: literal U+0CBD (ಽ), not U+0C3D
+  (the *Telugu* avagraha, which is visually similar but a different
+  codepoint — a mistake made and caught during the chapter-16 audit).
+* **A verse's tail-end can contain an orphaned duplicate of the *next*
+  verse's opening śloka**, with no commentary of its own attached (distinct
+  from the documented merge-note convention, which has bracketed forward-
+  pointing prose, not a bare duplicated śloka). Found once in chapter 16
+  (16.8's tail duplicated 16.9's opening exactly, including the same
+  corruption in both copies). If a śloka line appears with no commentary
+  following it and the *next* key opens with the identical line, it's very
+  likely this duplication bug — verify against the page (the śloka should
+  appear on the page only once) and remove the orphan copy.
 
 ### F. Scroll Restoration Bug
 * On page refresh, the browser by default tries to restore the previous scroll position. Because the page is dynamically rendered, this was causing the viewport to snap to the bottom, giving the user the impression that the app was not loading.
