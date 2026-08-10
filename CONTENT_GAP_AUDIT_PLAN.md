@@ -192,6 +192,49 @@ For each confirmed genuine gap:
   paragraph. Only patch when the page image shows content that isn't in
   the data file.
 
+### Phase 3 — audit `FULL_GITA` against `bannanje_kn.js` (new, added 2026-08-10)
+
+**This is a different data source from everything else in this plan, and it
+was previously completely unaudited.** Discovered via Vinayak flagging a
+corrupted verse header on the live app for 11.26.
+
+Background: the chapter-browsing view's "BG {ch.v}" header card renders its
+shloka line from `FULL_GITA['{ch.v}']` (defined directly inside
+`viewer-src.html`, ~701 entries of Devanagari text, transliterated on the
+fly via `devToKn`/`devToIast` for KN/EN display) — **not** from
+`bannanje_kn.js`. Meanwhile the expandable "ವಿವರಣೆ"/commentary panel below
+it renders from `BANNANJE_VERSE_MEANINGS` (`bannanje_kn.js`), which is what
+every other phase of this plan and all of `EN_RETRANSLATION_PLAN.md`'s work
+has been auditing. **These two are separate copies of the same underlying
+Sanskrit verses and can silently drift out of sync** — confirmed on 11.26,
+where `FULL_GITA` held corrupted, ungrammatical Sanskrit
+("...सूतपुत्रस्तथासावसह्यामद्धि कौरवैर्अपि") while `bannanje_kn.js`'s own
+shloka line for the same verse was correct. Fixed 2026-08-10 (see git log).
+11.25, 11.27, 11.28 were spot-checked and found correct at the same time —
+this may be an isolated corruption rather than a systemic pattern, but that
+hasn't been verified at scale.
+
+**How to audit:** `bannanje_kn.js`'s value for each verse key always opens
+with that verse's own shloka line(s) before the em-dash gloss marker (except
+for merge-note stub verses, which hold only their own single verse's line —
+see the "what does NOT count as a gap" section above for the merge-verse
+pattern). Extract that opening shloka line from each `bannanje_kn.js` entry,
+transliterate `FULL_GITA`'s corresponding Devanagari entry to Kannada (the
+app's own `devToKn` logic in `viewer-src.html` is the reference
+implementation — reuse its rules rather than reimplementing transliteration
+from scratch), and diff the two per verse. Flag mismatches for manual
+review — some will be genuine `FULL_GITA` corruptions like 11.26; others
+may be legitimate variant readings or `bannanje_kn.js` OCR noise, so don't
+auto-patch either side without checking which one (if either) matches the
+book page.
+
+Note: for merge-verse pairs, `FULL_GITA` likely stores each verse's own
+line under its own key (i.e. `FULL_GITA['11.26']` and `FULL_GITA['11.27']`
+each hold just their own single verse, unlike `bannanje_kn.js`'s
+convention of putting the combined content under the second key). Account
+for this structural difference when diffing — don't flag every merge pair
+as a false-positive mismatch.
+
 ## Tracking
 
 Add a running log below as chapters/pages get audited, in the same
@@ -212,6 +255,20 @@ gaps found, gaps fixed, date.
 **Key takeaway from the chapter-11 sweep:** length-ratio heuristics and "does it read as plausible, well-formed prose" checks are both insufficient on their own — 11.26's fabricated paragraph was well-written and not a length outlier, and 11.46's genuine gap had previously been signed off as a "known, low-priority, unfixable" source truncation without the next page ever actually being checked. Direct page-image vision-verification, applied to every verse rather than a sampled subset, is what caught both. This raises the question of whether other chapters' "known debts" (3.42/4.42/6.47's spillover truncations, 13.33's kṛtsna note, etc.) deserve the same re-check rather than being taken on faith from prior sessions' documentation — not yet done, flagged here for whoever picks this up next.
 
 **Follow-up (2026-08-06):** this content-gap sweep was itself followed by a much deeper character-level audit of all 55 verses in chapter 11 (six sessions, `CH11_CHAR_AUDIT_*.md`), which found ~60 further transcription-level errors this content-gap pass's methods could not have caught (single-word swaps, stray spaces, punctuation corruption, systemic conjunct confusions). The consolidated, reusable error taxonomy from that deeper pass now lives in `FUTURE_AGENT_GUIDELINES.md` section 2E — read it before auditing another chapter, whether via this content-gap method or the character-level one.
+
+**Addendum (2026-08-10, found independently via a different route):** the
+same 11.26 fabrication this table documents was also caught this same day
+via a Vinayak-reported discrepancy in the live app's verse-header display,
+which led to discovering a *second*, entirely separate bug in the same
+verse: `FULL_GITA['11.26']` (see the new Phase 3 section above) held
+corrupted, ungrammatical Sanskrit in its own right, independent of the
+`bannanje_kn.js` fabrication this sweep fixed. Both fixes landed
+independently and merged cleanly (the `bannanje_kn.js` side matched
+byte-for-byte with this sweep's own fix). **Phase 3 (auditing `FULL_GITA`
+against `bannanje_kn.js`) has not been run against chapters 12-16 despite
+their Phase 1/2 sweeps being complete** — worth doing, since Phase 1/2's
+page-verification work centered on `bannanje_kn.js` and would not have
+caught a `FULL_GITA`-only corruption like this one.
 
 ## Session startup checklist for whoever picks this up
 
