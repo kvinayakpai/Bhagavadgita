@@ -2,15 +2,22 @@
 
 This document outlines user expectations, common pitfalls, and strict checklists for any future agents working on spelling fixes, book-alignment audits, or data correction tasks in this repository.
 
-**Updated 2026-08-09** with findings from a character-level audit of
-chapter 12, following the chapter-11 update below. Read section 2E before
-starting any similar audit on another chapter; it will save time relative
-to rediscovering these patterns from scratch. The session-by-session raw
-detail (which page, which exact fix, which false leads were ruled out and
-why) lives in `CH11_CHAR_AUDIT_11.1-11.9.md` through
-`CH11_CHAR_AUDIT_11.41-11.55.md`, `CH11_VAKRA_VAKTRA_SYSTEMIC_FIX.md`,
-`CH11_REAUDIT_CHECKLIST.md`, and `CH12_AUDIT.md` — this document only holds
-the distilled, reusable patterns, not the full history.
+**Updated 2026-08-13** with findings from the chapter 17 and chapter 18
+content-gap audits (section E7) — chapter 18 in particular surfaced a new
+full-verse-duplication bug class and a chapter-local recurring
+word-truncation pattern, both worth checking for in any chapter not yet
+audited. Originally updated 2026-08-09 with findings from a
+character-level audit of chapter 12, following the chapter-11 update
+below. Read section 2E (all of E1 through E7) before starting any similar
+audit on another chapter; it will save time relative to rediscovering
+these patterns from scratch. The session-by-session raw detail (which
+page, which exact fix, which false leads were ruled out and why) lives in
+`CH11_CHAR_AUDIT_11.1-11.9.md` through `CH11_CHAR_AUDIT_11.41-11.55.md`,
+`CH11_VAKRA_VAKTRA_SYSTEMIC_FIX.md`, `CH11_REAUDIT_CHECKLIST.md`, and
+`CH12_AUDIT.md` — this document only holds the distilled, reusable
+patterns, not the full history. Chapter 17/18 audit detail lives in
+`CONTENT_GAP_AUDIT_PLAN.md`'s per-verse table and the corresponding git
+commit messages.
 
 ---
 
@@ -235,6 +242,64 @@ files for full detail)
   following it and the *next* key opens with the identical line, it's very
   likely this duplication bug — verify against the page (the śloka should
   appear on the page only once) and remove the orphan copy.
+
+### E7. Findings from the Chapter 17/18 Content-Gap Audit (2026-08-10 and
+2026-08-13 — see `CONTENT_GAP_AUDIT_PLAN.md` for the full per-verse table)
+
+* **Full-verse duplication**: an entire adjacent verse's complete
+  content — shloka, padaccheda, and commentary — gets prepended
+  verbatim to the *next* verse's key, before that verse's own actual
+  content begins. Found once, chapter 18 (18.5's key opened with an exact
+  copy of all of 18.4's content, then continued into 18.5's real shloka
+  and commentary). This is different from both the harmless
+  page-transition spillover (E5, cosmetic trailing-off) and the
+  corrupted-duplicate-spillover bug (E5, garbled copy appended after a
+  verse's own content): here the duplicate is clean/uncorrupted, sits at
+  the *start* of the key rather than the end, and duplicates the *previous*
+  verse rather than the next one. Tell: does the key's content begin with
+  text that reads as a complete, already-concluded verse (ending in a
+  natural "wrap-up" sentence) before pivoting to a new shloka opening? If
+  so, check whether that opening block is identical to the previous verse's
+  own key — if it is, it's this duplication bug. Confirm against the page
+  image that the verse in question actually starts directly with its own
+  shloka, then remove the duplicate block entirely.
+* **Corrupted verse-number markers**: the `॥NN॥` marker that normally
+  closes a shloka line sometimes degrades into something that isn't
+  Kannada numerals at all — a Latin-digit sequence resembling neither the
+  verse number nor anything meaningful (`1891` in 18.5, where the verse is
+  18.5 — not the source of the digits), a bare `೨.` with a stray period
+  (18.48), or a mixed form like `1೫೭॥` (18.57, where `೫೭` is the correct
+  Kannada 57 but prefixed with a stray Latin `1`). This joins the
+  already-documented "stray Latin digit inside Kannada text" class (E3) as
+  its own recognizable sub-pattern — specifically at the point where a
+  shloka line ends. Fix to the book's standard `॥<Kannada numeral>॥`
+  convention, verified against the actual verse number, not against
+  whatever digits happen to be sitting there.
+* **Chapter-local recurring word-truncation**: distinct from the
+  book-wide systemic patterns in E1 (vakra/vaktra, bhu/lu, elledeya/eldedeya),
+  a single word can recur as a consistent typo *within one chapter* without
+  necessarily being a book-wide pattern. Found in chapter 18: `ಪ್ರಸಾದ`
+  (prasāda, "grace/blessing") missing its `ಪ್ರ` prefix and reading as
+  `ಹಸಾದ`, at three separate verses (18.56, 18.58, 18.73), while the same
+  word appears correctly as `ಪ್ರಸಾದ` elsewhere in the same chapter (18.62).
+  Once a word-level corruption is found once, grep the rest of the
+  *current* chapter for the same corrupted form before moving on — it may
+  not be worth a book-wide search (that's a judgment call based on how
+  distinctive the corrupted string is), but a same-chapter check is cheap
+  and this pattern shows it can pay off.
+* **False leads worth naming so they aren't re-flagged**: not every
+  suspicious-looking string is a bug — some are the source page's own
+  quirks, faithfully transcribed. Confirmed harmless in chapter 18: (a) a
+  specific glyph rendering where numeral ೮ (8) visually renders as ಲ in
+  this book's font in certain item-list contexts (e.g. `(ಲ)` where `(೮)`
+  is meant) — appears identically on the page image itself, not a
+  transcription error; (b) inconsistent Kannada spelling of the same
+  Sanskrit word across nearby lines within a single verse (e.g. `ದೀರ್ಥ`
+  vs `ದೀರ್ಘ`, `ವಿಷಾದೀ` vs `ವಿಶಾದೀ`) — both forms independently verified
+  against the page and both are what the book actually prints, not a data
+  slip. Before "fixing" an inconsistency like this, check both
+  occurrences against the page individually; don't assume the two should
+  match each other.
 
 ### F. Scroll Restoration Bug
 * On page refresh, the browser by default tries to restore the previous scroll position. Because the page is dynamically rendered, this was causing the viewport to snap to the bottom, giving the user the impression that the app was not loading.
