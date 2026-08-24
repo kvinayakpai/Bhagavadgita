@@ -273,6 +273,20 @@ their Phase 1/2 sweeps being complete** — worth doing, since Phase 1/2's
 page-verification work centered on `bannanje_kn.js` and would not have
 caught a `FULL_GITA`-only corruption like this one.
 
+**Addendum (2026-08-24, found independently via a different route):**
+Vinayak spotted a further gap in chapter 11, despite this chapter's full
+Phase 1/2 sweep and the separate six-session character-level audit both
+having been marked complete. **11.49** was missing its closing sentence
+of commentary — verified against `page_0392.png`, the book continues past
+"...ಬಗೆಯೊಳಕ್ಕರೆ ತುಂಬಿ." with one further sentence
+("ಶತ್ರು ಸಂಹಾರಕವಾದ ನನ್ನ ಈ ರೂಪವನ್ನು ಕಂಡು ಗಾಬರಿಯಾಗಬೇಡ. ನಿನ್ನೆಲ್ಲಾ ಭಯವನ್ನು
+ಬಿಟ್ಟು ನೋಡು ನಿನಗಿಷ್ಟವಾದ ನನ್ನ ಚತುರ್ಭುಜ ರೂಪವನ್ನು ಎನ್ನುತ್ತಾನೆ ಕೃಷ್ಣ.") that
+was absent from `bannanje_kn.js` (and, since it was never in the KN
+source, from EN/DEV/HI too). Fixed in all four files and freshly
+translated into EN/DEV/HI; bundle rebuilt. This reinforces the note above
+about re-checking "complete" chapters — even a full character-level audit
+did not catch a trailing-sentence omission at a verse boundary.
+
 ## Session startup checklist for whoever picks this up
 
 1. Read this file in full.
