@@ -287,6 +287,29 @@ translated into EN/DEV/HI; bundle rebuilt. This reinforces the note above
 about re-checking "complete" chapters — even a full character-level audit
 did not catch a trailing-sentence omission at a verse boundary.
 
+**Addendum (2026-08-24, second gap found the same session -- CORRECTED):**
+a further chapter-11 issue was spotted via a Vinayak-reported screenshot,
+and the first attempt at fixing it was wrong -- recorded here for the
+record. **11.51** in all four language files ended with a truncated
+fragment of the *next* verse's raw śloka (KN: "...ದೇವಾ ಅಪ್ಯ", cut off
+mid-word). The first fix (since reverted) completed that fragment in
+place, on the mistaken assumption that it was book structure being
+preserved (by loose analogy with the legitimate 11.52-to-11.53 merge
+convention). Vinayak caught this: 11.51 is a complete, standalone verse
+(Arjuna's speech) that already has its own full commentary ending at
+"...ಸಂಬೋಧನೆಯಲ್ಲಿದೆ." -- it is not part of any merge pair, so nothing
+from the next verse's śloka (which is 11.52's own content, already
+present there correctly with its own merge-note deferring to 11.53)
+belongs in 11.51's entry at all. The actual fix: removed the leaked
+fragment from 11.51 in all four languages entirely, closing each at
+Arjuna's own commentary; confirmed 11.52 was never touched and already
+stood correctly on its own. Bundle rebuilt.
+
+Lesson for future sessions: when a chunk of text at a verse boundary
+looks structurally odd, check whether the *content itself* (which
+verse's śloka is it?) belongs under that key before assuming a
+formatting quirk needs completing rather than removing.
+
 ## Session startup checklist for whoever picks this up
 
 1. Read this file in full.
