@@ -2,17 +2,24 @@
 
 This document outlines user expectations, common pitfalls, and strict checklists for any future agents working on spelling fixes, book-alignment audits, or data correction tasks in this repository.
 
-**Updated 2026-08-13** with findings from the chapter 17 and chapter 18
-content-gap audits (section E7) — chapter 18 in particular surfaced a new
-full-verse-duplication bug class and a chapter-local recurring
-word-truncation pattern, both worth checking for in any chapter not yet
-audited. Originally updated 2026-08-09 with findings from a
-character-level audit of chapter 12, following the chapter-11 update
-below. Read section 2E (all of E1 through E7) before starting any similar
-audit on another chapter; it will save time relative to rediscovering
-these patterns from scratch. The session-by-session raw detail (which
-page, which exact fix, which false leads were ruled out and why) lives in
-`CH11_CHAR_AUDIT_11.1-11.9.md` through `CH11_CHAR_AUDIT_11.41-11.55.md`,
+**Updated 2026-08-24** with findings from a systematic cross-verse-leak
+sweep (section E9) — this also **retracts** the earlier "harmless
+page-transition spillover" classification in section E5's duplicate/
+garbled-spillover bullet, which was wrong. Read E9 before trusting any
+verse-boundary text that looks like it trails off into the next verse's
+opening; it is very likely a leak that needs removing, not completing.
+Previously updated 2026-08-13 with findings from the chapter 17 and
+chapter 18 content-gap audits (section E7) — chapter 18 in particular
+surfaced a new full-verse-duplication bug class and a chapter-local
+recurring word-truncation pattern, both worth checking for in any
+chapter not yet audited. Originally updated 2026-08-09 with findings
+from a character-level audit of chapter 12, following the chapter-11
+update below. Read section 2E (all of E1 through E9) before starting any
+similar audit on another chapter; it will save time relative to
+rediscovering these patterns from scratch. The session-by-session raw
+detail (which page, which exact fix, which false leads were ruled out
+and why) lives in `CH11_CHAR_AUDIT_11.1-11.9.md` through
+`CH11_CHAR_AUDIT_11.41-11.55.md`,
 `CH11_VAKRA_VAKTRA_SYSTEMIC_FIX.md`, `CH11_REAUDIT_CHECKLIST.md`, and
 `CH12_AUDIT.md` — this document only holds the distilled, reusable
 patterns, not the full history. Chapter 17/18 audit detail lives in
@@ -147,10 +154,13 @@ files for full detail)
   with a documented "known debt" of this shape deserves the next-page check
   before being taken on faith.
 * **Duplicate/garbled spillover of the next verse into the current one**:
-  distinct from the known, harmless page-transition spillover pattern
+  ~~distinct from the known, harmless page-transition spillover pattern
   (e.g. 3.42/4.42/6.47/11.31/11.51, where a verse's raw entry trails off
   mid-word into the next verse's heading — cosmetic only, since the next
-  verse's own key already holds the complete correct text) — this is
+  verse's own key already holds the complete correct text)~~ **CORRECTION
+  (2026-08-24): this "harmless" classification was wrong and has been
+  retracted — see E9 below.** This bullet's own subject (corrupted
+  duplicate content) is still valid and distinct from E9 — this is
   *corrupted* duplicate content (missing conjuncts, stray characters, Latin
   digits substituted for Kannada numerals) appended after a verse's own
   complete, correct content. Found twice (11.6, 11.9). Tell the two apart by
@@ -300,6 +310,75 @@ files for full detail)
   slip. Before "fixing" an inconsistency like this, check both
   occurrences against the page individually; don't assume the two should
   match each other.
+
+### E9. Cross-Verse Content Leaks (found 2026-08-24, via a user-reported
+screenshot at 11.51 — see `CONTENT_GAP_AUDIT_PLAN.md` addenda for the
+full incident writeup)
+
+* **The pattern**: a verse's raw śloka (sometimes with its speaker
+  heading, e.g. "ಭಗವಾನುವಾಚ") appears at the *end* of the *previous*
+  verse's key — with no bracketed merge-note — when that previous verse
+  is already a complete, standalone entry with its own full commentary.
+  The leaked fragment is often *also* truncated mid-word (since it was
+  never meant to be there and extraction cut it off arbitrarily), which
+  is what usually surfaces the bug, but the truncation is not the real
+  problem — the duplication is. The correct fix is to **remove** the
+  fragment entirely, not complete it.
+* **This directly overturns the earlier "harmless page-transition
+  spillover" classification** that used to sit in the E5 bullet above,
+  which cited 3.42/4.42/6.47/11.31/11.51 as examples and called this
+  pattern "cosmetic only." It is not cosmetic. On direct page-image
+  verification, none of these boundaries show the leaked verse
+  appearing twice in the actual book — it appears once, on the *next*
+  verse's own page, and the copy on the *previous* verse's key does not
+  exist in the source at all.
+* **How to tell this apart from the legitimate merge-verse convention**
+  (see the "Merge-verse convention" note near the top of memory, and the
+  working 11.52→11.53 / 6.7→6.8 pairs): the legitimate pattern always
+  carries an explicit bracketed note ("ಈ ... ಶ್ಲೋಕ ... ಕೊಡಲಾಗಿದೆ" / "next
+  verse" / "अग्रिमे श्लोके" / "अगले श्लोक") explaining that explanation is
+  deferred. A leak has no such note — the previous verse's own
+  commentary just ends normally, and then unexplained śloka text from
+  the next verse is simply appended.
+* **Confirmed instances, found via a systematic same-chapter sweep across
+  all 4 language files (script: tail-of-key vs head-of-next-key overlap,
+  filtered for the absence of a merge-note marker) plus the four
+  previously-flagged-as-harmless cases**: 4.1→4.2, 6.1→6.2, 6.6→6.7 (a
+  mirror case — 6.7 itself already had the correct merge-note structure,
+  but 6.6 *also* carried a leaked copy), 6.29→6.30, 11.31→11.32,
+  11.51→11.52, 13.14→13.15, 14.21→14.22 (this one's leaked copy was also
+  independently garbled/truncated — a compound bug), 17.8→17.9. Fixed in
+  all four language files where present; some boundaries only had the
+  leak in a subset of languages (e.g. 6.29's leak was KN-only; 11.31's
+  was DEV-only) — always check all four independently rather than
+  assuming a leak found in one language implies the others have it too,
+  or that a clean check in one language means the others are clean.
+* **Known false-positive shapes from the sweep** (do not re-flag these):
+  short recurring narrative-attribution phrases ("ಎನ್ನುತ್ತಾನೆ ಕೃಷ್ಣ" / "so
+  says Krishna", "इति अर्जुनः आह" / "thus says Arjuna"); intentional
+  forward-referencing transition sentences that share vocabulary with the
+  next verse's theme without duplicating its actual text ("ಮುಂದಿನ ಶ್ಲೋಕದಲ್ಲಿ
+  ..." / "in the verse that follows..."); thematic vocabulary echoes
+  between adjacent verses discussing the same concept. The distinguishing
+  test is the same as always: does the tail contain the *next verse's
+  actual śloka text* (checkable against `FULL_GITA` in `viewer-src.html`,
+  which holds the standard-numbered raw Sanskrit independently of
+  `bannanje_kn.js`'s own book-numbered structure), not just words that
+  happen to overlap.
+* **A related, separate issue found in the same sweep, not yet
+  resolved**: 13.34 and 13.35 both carry an identical bracketed editorial
+  note (about 13.35 not existing separately in Bannanje's text) verbatim,
+  in all three of DEV/EN/HI. This is not a leak in the E9 sense — it's a
+  deliberate-looking note appearing in two places rather than one — and
+  needs a decision from Vinayak on whether that's intentional (so either
+  verse page shows the explanation) before touching it.
+* **Chapter coverage caveat**: the within-chapter sweep and a full
+  cross-chapter boundary sweep (all 17 chapter-to-chapter transitions,
+  68 checks across 4 languages) have both been run as of 2026-08-24. The
+  cross-chapter sweep found zero genuine leaks — one false positive at
+  17.28→18.1 (coincidental word overlap between closing/opening chapter
+  colophons, not a real duplication). This E9 pattern search is
+  considered closed out for the whole book unless new evidence surfaces.
 
 ### F. Scroll Restoration Bug
 * On page refresh, the browser by default tries to restore the previous scroll position. Because the page is dynamically rendered, this was causing the viewport to snap to the bottom, giving the user the impression that the app was not loading.

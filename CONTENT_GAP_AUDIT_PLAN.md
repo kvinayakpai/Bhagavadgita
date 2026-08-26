@@ -310,6 +310,48 @@ looks structurally odd, check whether the *content itself* (which
 verse's śloka is it?) belongs under that key before assuming a
 formatting quirk needs completing rather than removing.
 
+**Addendum (2026-08-24, cross-verse leak sweep — full session summary):**
+following the 11.51 correction above, Vinayak asked for a systematic
+search for the same bug class across all 18 chapters. Built a scanner
+(`scan_verse_leaks.py`, not committed to this repo — lived in the
+session's scratch space) comparing the tail of each verse's stored text
+against the head of the next verse's, across all 4 language files,
+flagging overlaps that lack a legitimate merge-note marker. Combined
+with the 4 previously-flagged (and wrongly dismissed) cases from
+`FUTURE_AGENT_GUIDELINES.md`, this surfaced **8 confirmed leak
+boundaries**, all verified against page images and fixed:
+
+4.1→4.2, 6.1→6.2, 6.6→6.7, 6.29→6.30, 11.31→11.32, 11.51→11.52 (already
+fixed earlier in this session), 13.14→13.15, 14.21→14.22, 17.8→17.9.
+
+Full methodology, the false-positive shapes ruled out, and the exact
+list are now written up as §2E.E9 in `FUTURE_AGENT_GUIDELINES.md` —
+read that before any future sweep of this kind. Three previously-flagged
+cases (3.42, 4.42, 6.47 — all chapter-ending verses) were checked and
+found already clean in all four languages, so no fix was needed there.
+
+**Not yet done, left for a future session:**
+- A decision from Vinayak on the 13.34/13.35 duplicate bracketed-note
+  issue (see E9 in `FUTURE_AGENT_GUIDELINES.md` for detail) — not a leak,
+  but a duplicate identical note across two keys, not yet resolved.
+- The scanner script itself was not committed to the repo; recreate from
+  the E9 writeup's description if a future sweep is wanted (tail/head
+  overlap via `difflib.SequenceMatcher`, filtered by absence of
+  merge-note marker text, cross-checked against `FULL_GITA` in
+  `viewer-src.html` for ground-truth verse boundaries).
+
+**Addendum (2026-08-24, cross-chapter boundary sweep):** ran the same
+tail/head overlap scan on all 17 chapter-to-chapter boundaries (last
+verse of chapter N vs. first verse of N+1), across all 4 languages —
+68 checks total. Found exactly one candidate (EN, 17.28→18.1, 24-char
+overlap) which was a false positive: 17.28's closing colophon ("Thus
+ends the seventeenth chapter") coincidentally shares words with 18.1's
+chapter-intro header ("In the previous seventeen chapters..."). No
+genuine leaks found at any chapter boundary in any language. Combined
+with the within-chapter sweep above, this closes out the E9 leak-pattern
+search for the entire book as originally scoped — the only open item is
+the 13.34/13.35 duplicate-note decision noted above.
+
 ## Session startup checklist for whoever picks this up
 
 1. Read this file in full.
