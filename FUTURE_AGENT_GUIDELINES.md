@@ -75,8 +75,16 @@ way.
   11.46's Bhāgavata citation). Not yet swept whole-book — flagged as a
   candidate.
 * **ಎಲ್ಲೆಡೆ / ಎಲ್ದೆಡೆ (elledeya/eldedeya)** — "everywhere" corrupted by
-  substituting ದ for ಲ. Found 5 times (11.11, 11.30, 11.40 ×2). Not yet swept
-  whole-book — flagged as a candidate, same treatment as vakra/vaktra above.
+  substituting ದ for ಲ. Found 5 times in chapter 11 (11.11, 11.30, 11.40 ×2),
+  and confirmed **book-wide** by a chapter-2 sweep (2026-08-14): found once at
+  2.24, where the corrupted form sits right next to the correct form in the
+  same sentence ("...ಎಂದೆಂದೂ ಎಲ್ದೆಡೆ ಹಬ್ಬಿರುವ..." followed shortly after by
+  the same word spelled correctly, "ಎಲ್ಲೆಡೆ ಹಬ್ಬಿರುವ ಭಗವಂತನನ್ನು..." in a
+  bracketed gloss) — confirmed against `page_0056.png`, which prints ಎಲ್ಲೆಡೆ
+  both times. This pattern predates the project (present in
+  `clean_verses_700.json`'s original extraction too, not introduced by any
+  edit here). Worth a decoded whole-book regex sweep for this pattern
+  specifically when auditing any not-yet-swept chapter.
 * **Other single-letter/conjunct swaps seen once each** (worth keeping in
   mind as a general class, not necessarily worth a dedicated regex sweep
   individually): ಥ↔ಸ (`ಉತ್ಥಿತಾ`→`ಉತ್ಸಿತಾ`), ಟ↔ಪ (`ಸ್ಪೃಶಮ್`→`ಸ್ಟೃಶಮ್`),
@@ -379,6 +387,80 @@ full incident writeup)
   17.28→18.1 (coincidental word overlap between closing/opening chapter
   colophons, not a real duplication). This E9 pattern search is
   considered closed out for the whole book unless new evidence surfaces.
+
+* **Findings from the chapter 2 content-gap audit (2026-08-14), added here as
+  a continuation of this section since they're further examples of the same
+  kind of character-confusion typo, not new pattern classes:**
+
+* **ನಾವು / ಸಾವು (nāvu/sāvu) — "we" corrupted into "death"** — found via the chapter 2
+  content-gap audit. A ನ→ಸ character confusion that turns "ನಾವು"
+  ("we") into "ಸಾವು" ("death"), producing sentences that are grammatically
+  well-formed but semantically nonsensical if not read carefully (e.g. "ಯಾವ
+  ರೀತಿ ಸಾವು ಇಂದ್ರಿಯ ನಿಗ್ರಹ ಮಾಡಿ ಸಾಧನೆ ಮಾಡಬೇಕು" — "how death must practice
+  sense-control" instead of "how we must..."). Found twice in chapter 2 (2.49,
+  2.57), both confirmed against page images. The same ನ→ಸ substitution also
+  hit a different word once in the same chapter: ನಾಸ್ತಿಕ ("faithless one") →
+  ಸಾಸ್ತಿಕ (not a real word) at 2.61. Because the corrupted form often still
+  parses as a plausible (if odd) sentence, this pattern is easy to read past
+  without noticing — it doesn't produce visible garbage the way most other
+  patterns in this section do. Worth a targeted regex sweep for isolated
+  "ಸಾವು" tokens that don't fit a death/mortality context when auditing any
+  not-yet-swept chapter.
+
+* **ಬ / ವ (ba/va) — appears in `brahma-nirvāṇam`** — found at 2.72
+  (`ಬ್ರಹ್ಮನಿರ್ಬಾಣಮ್‌ ಖುಚ್ಛತಿ` instead of the expected `ಬ್ರಹ್ಮನಿರ್ವಾಣಮ್‌
+  ಋಚ್ಛತಿ`). Deliberately **not corrected**: the source page (`page_0094.png`)
+  itself renders both the śloka line and the padaccheda this same way,
+  consistently, and the EN file's independently-produced transliteration
+  (`brahmanirbāṇam`) has the same substitution — suggesting this is a
+  genuine artifact of this specific print/scan rather than a transcription
+  error introduced by data entry. Recorded here as a deliberate non-fix, not
+  an oversight, in case a future agent encounters the same spot and is
+  tempted to "correct" it from Sanskrit-grammar knowledge alone without
+  re-checking the page. (Note: EN's `ṛcchati` was already correctly spelled
+  and needed no change; only the `nirbāṇam`/`nirvāṇam` half shows the
+  cross-language-consistent substitution.)
+
+### E8. Missing Chapter-Opening Preamble (found via the chapter 1 and chapter
+2 content-gap audits, 2026-08-14 — now a confirmed recurring pattern, not a
+one-off)
+
+* **Some chapters open with a short prose essay — a few sentences to a
+  paragraph — printed on the page *before* that chapter's verse-1 śloka even
+  begins**, framing the chapter (e.g. chapter 1's page explains why the
+  chapter shouldn't be dismissively titled "Arjuna Viṣāda Yoga" and previews
+  its psychology angle; chapter 2's page explains that the chapter is the
+  "pañcāṅga" — compendium — of the whole Gita, with the remaining sixteen
+  chapters just unfolding what's said here). **This preamble text is not
+  attached to any verse key at all** — it sits above and separate from the
+  verse-1 content on the page — which is exactly why it was silently dropped
+  from the original book→data extraction: every other gap-detection method
+  in this project (length-ratio checks, Phase 1's flagged-status list,
+  paragraph-level comparison against a verse's own key) starts from a verse
+  key and compares content *within* that key, so preamble content with no
+  key of its own is invisible to all of them. Found missing in **both**
+  chapter 1 and chapter 2 — confirmed recurring, not a one-off.
+* **How to catch it**: when auditing any chapter, always view the *first*
+  page of that chapter (the one with the "ಅಧ್ಯಾಯ [N]" / chapter-number
+  heading) in full, before jumping to verse 1's śloka — do not assume the
+  page opens directly with the first verse. Check whether there's prose
+  above the heading-adjacent śloka block that isn't reflected anywhere in
+  `bannanje_kn.js`'s verse-1 key (a quick grep for a few distinctive words
+  from the page against the whole file settles it, the way the ch1 and ch2
+  fixes were confirmed absent via `grep`).
+* **How to fix**: transcribe the preamble from the page image and prepend it
+  to that chapter's `"N.1"` key in all four language files (KN transcribed
+  from the page; EN/HI translated closely; DEV composed as condensed
+  independent Sanskrit prose per that chapter's established house style),
+  clearly delimited from the verse's own content (a bracketed
+  `[ಬನ್ನಂಜೆಯವರ ... ಪೀಠಿಕೆ]` / `[Bannanje's introduction to ...]` label works
+  well and was used for both fixes so far). This is a distinct fix shape
+  from every other gap class in this document — there's no "previous verse"
+  or "next verse" content to disentangle it from, since it was never
+  attributed to any key.
+* **Worth checking in every remaining chapter** (3-10, since this document
+  now reflects both chapter 1's and chapter 2's cases) as a cheap first step
+  before the rest of that chapter's Phase 1/2 sweep.
 
 ### F. Scroll Restoration Bug
 * On page refresh, the browser by default tries to restore the previous scroll position. Because the page is dynamically rendered, this was causing the viewport to snap to the bottom, giving the user the impression that the app was not loading.
