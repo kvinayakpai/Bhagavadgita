@@ -530,13 +530,99 @@ content-gap audit, 2026-08-27)
   the already-documented dropped-conjunct "ನಿಷ್ಕ್ರಿಯ" typo (E1-class) were
   spotted incidentally: one in **chapter 2, verse 2.47** (`ನಿಷ್ಕ ಯಗೊಳಿಸುತ್ತದೆ`
   should be `ನಿಷ್ಕ್ರಿಯಗೊಳಿಸುತ್ತದೆ`) and one in **chapter 4, verse 4.31**
-  (`ನಿಷ್ಕ ೀಯನಾಗದೇ` should be `ನಿಷ್ಕ್ರೀಯನಾಗದೇ`). Both were left **unfixed**
-  deliberately — they're outside chapter 3's scope and weren't verified
-  against their own page images in this session. A future agent auditing
-  chapter 2 (already marked complete — this is a residual miss from that
-  earlier sweep) or chapter 4 should check and fix these against
-  `page_00XX.png` for the relevant verse before relying on either chapter's
-  "complete" status too strongly.
+  (`ನಿಷ್ಕ ೀಯನಾಗದೇ`). The chapter-4 instance was checked against
+  `page_0153.png` and fixed during the chapter-4 audit (2026-08-27) — see
+  E12 below, since it turned out to belong to a wider vowel-length pattern,
+  not just the dropped-conjunct one. **The chapter-2 instance at 2.47
+  remains unfixed** — still outside the scope of both the chapter 3 and
+  chapter 4 sessions that found it. A future agent auditing chapter 2
+  (already marked complete — this is a residual miss from that earlier
+  sweep) should check and fix it against its page image before relying on
+  chapter 2's "complete" status too strongly.
+
+### E12. ನಿಷ್ಕ್ರಿಯ Vowel-Length Corruption (found via the chapter 4
+content-gap audit, 2026-08-27)
+
+* Distinct from (but related to) the E11 dropped-conjunct corruption of
+  this same word: **ನಿಷ್ಕ್ರಿಯ** (niṣkriya, "inactive" — short ಿ) recurs
+  throughout the book miswritten with a long vowel, **ನಿಷ್ಕ್ರೀಯ**, which is
+  not a real Sanskrit/Kannada word. Found 4 times in chapter 4 alone: 4.15
+  (twice, `ನಿಷ್ಕ್ರೀಯತೆ`), 4.18 (`ನಿಷ್ಕ್ರೀಯರಾಗಿದ್ದರೂ`), and 4.31
+  (`ನಿಷ್ಕ ೀಯನಾಗದೇ` — this instance also had the E11 dropped-conjunct
+  problem stacked on top, i.e. both the ್ರ conjunct and the vowel length
+  were wrong at once). All 4 confirmed against page images
+  (`page_0138.png`, `page_0140.png`, `page_0153.png`), which consistently
+  print the short-vowel form. Given it recurred 4 times in one chapter
+  alone, this is very likely present elsewhere in the book too — worth a
+  decoded whole-book regex sweep for `ನಿಷ್ಕ್ರೀ` the next time any chapter
+  is audited, similar to the established practice for ವಕ್ರ/ವಕ್ತ್ರ and
+  ಎಲ್ಲೆಡೆ/ಎಲ್ದೆಡೆ.
+
+### E13. Systemic Stray-Ellipsis Corruption (found via the chapter 4
+content-gap audit, 2026-08-27)
+
+* A run of three or more literal periods (`...`) appears scattered through
+  `bannanje_kn.js`'s commentary prose at points where the book itself has
+  either a single period or no punctuation at all (just a word-wrapped
+  space). This is a distinct corruption class from the already-documented
+  E3 "stray mid-sentence period" (a single stray `.`) — here the tell is
+  specifically a **triple-dot run**, and unlike E3 it does not always
+  break a sentence into two grammatically-complete pieces; sometimes it
+  just sits mid-word-flow with no syntactic justification at all (e.g.
+  `ಕೆಲವರು... ದ್ರವ್ಯದ`, `ಬಾಹ್ಯ... ಪರಿಕರಗಳ`).
+* **Checked 9 instances in chapter 4 alone (4.17-area, 4.18, 4.24, 4.28
+  ×4, 4.32, 4.37) — every single one, on inspection against its page
+  image, turned out to be a corruption**, not a deliberate stylistic
+  pause. This is a much higher hit rate than most other pattern classes in
+  this taxonomy, meaning **a bare `\.\.\.+` regex sweep (after decoding
+  `\uXXXX` escapes per the existing rule) is worth running on any
+  not-yet-audited chapter as a cheap, high-value first pass** — though
+  each hit should still be individually confirmed against its page before
+  editing, per the project's standing rule never to fix scripture text
+  from a pattern match alone.
+* **How to fix**: read the exact page-image line the ellipsis falls in;
+  in every chapter-4 instance found so far, the correct replacement was
+  either a single `.` (when the surrounding text is a real sentence
+  break) or nothing at all — i.e. the two sides just need to be joined
+  with the ordinary single space already present in the surrounding text
+  (when the ellipsis was inserted mid-sentence with no sentence break on
+  the page). Never assume the ellipsis should just be shortened to a
+  single `.`; check whether the page has any punctuation there at all
+  first.
+* One instance (4.28, "ಆತ್ಮಸಂಯಮ-ಇದನ್ನು ತಪಸ್ಸು ಎನ್ನುತ್ತಾರೆ...") also
+  co-occurred with a missing bracketed English gloss (`(discipline)`) at
+  the same spot — worth checking immediately before/after any ellipsis fix
+  for an English gloss that may have been dropped in the same corruption
+  event, per the existing E5 "wrong/missing embedded English term"
+  pattern.
+
+### E14. Genuine (Non-Fabricated) Duplicate Commentary Across a
+Merge-Verse Pair — Open Question, Not Yet Resolved (chapter 4 audit,
+2026-08-27)
+
+* At **4.34/4.35**, the book presents both verses' ślokas back-to-back
+  followed by *one* shared translation and commentary discourse — the
+  same merge-verse convention documented elsewhere in this book (e.g.
+  15.3/15.4, 17.5/17.6). But unlike those cases, where the *first* key of
+  the pair holds a short, forward-pointing note, here **the "4.34" key
+  holds a genuine, non-fabricated, but truncated copy of the shared
+  commentary**, and the "4.35" key holds a longer, more complete version
+  of the *same* commentary (verified word-for-word — 4.34's text is a
+  strict prefix-with-omissions of 4.35's, not an independent or invented
+  passage). This is different from every other merge-pair-adjacent bug in
+  this taxonomy: it isn't E5 fabrication (the content is real, page-
+  verified), and it isn't quite E10 embedding (nothing needs to move to a
+  new key — both keys already have their own home, it's just redundant
+  between them).
+* **Left unfixed**, flagged here for Vinayak's decision, analogous to the
+  still-open 13.34/13.35 duplicate-note question: should 4.34 be trimmed
+  down to a short forward-pointing note (matching the established
+  convention for every other merge-pair in the book), or is preserving a
+  standalone (if truncated) commentary under 4.34 actually preferable for
+  this viewer's UX (e.g. so a reader landing on 4.34 alone still gets
+  *something* rather than a bare pointer)? Whichever convention is chosen
+  should probably also be applied retroactively to 13.34/13.35 if the two
+  turn out to be the same shape of issue — worth checking.
 
 ### F. Scroll Restoration Bug
 * On page refresh, the browser by default tries to restore the previous scroll position. Because the page is dynamically rendered, this was causing the viewport to snap to the bottom, giving the user the impression that the app was not loading.
