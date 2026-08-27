@@ -462,6 +462,82 @@ one-off)
   now reflects both chapter 1's and chapter 2's cases) as a cheap first step
   before the rest of that chapter's Phase 1/2 sweep.
 
+### E10. Embedded-Verse Cascading Key Shift (found via the chapter 3
+content-gap audit, 2026-08-27)
+
+* **A verse's full content (śloka + padaccheda + complete commentary) can be
+  appended inside the *previous* verse's key instead of getting a key of its
+  own**, exactly like the E4/E9 "orphaned fragment" and "cross-verse leak"
+  patterns, except here the embedded block is not a stray fragment — it's the
+  *entire, genuine, non-fabricated* content for the next verse, complete with
+  its own proper śloka box and full discussion on the page. Confirmed on the
+  page: the book gives the skipped verse its own distinct, normally-formatted
+  śloka block and commentary, just like every other verse — nothing about the
+  book's own layout suggests a merge. This is a data-entry/extraction defect,
+  not a reflection of the source.
+* **Why it's worse than a normal one-off gap**: because every subsequent key
+  in the chapter is a simple sequential label (`"N.v"`), embedding one verse's
+  content in the previous key with no replacement key of its own shifts every
+  later key by one position relative to the actual verse it should represent,
+  until something coincidentally self-corrects. In the chapter-3 case this
+  ran three keys deep (`3.32`→held verse 33's content, `3.33`→held a truncated
+  duplicate stub of verse 34, `3.34`→coincidentally still held verse 34's
+  correct content) before self-correcting at `3.35`. It happened a **second,
+  independent time** in the same chapter, at the very end (`3.42`→`3.43`),
+  where it also **produced a false-negative** for an unrelated check: the
+  chapter's `phantom_disregard` note for the final key claimed the book's
+  commentary "concludes with 42 verses" and verse 43 has no content of its
+  own — flatly false. The book gives verse 43 a full, distinct treatment;
+  its content was just misfiled under the previous key.
+* **How to catch it**: this bug is invisible to length-ratio checks, Phase 1's
+  flagged-status list, and ordinary within-key page comparison, because every
+  standard verse's content technically exists somewhere in the file — just
+  under the wrong key. What exposes it: (a) a verse's key seems unusually
+  long relative to its neighbors, or contains what looks like a second,
+  complete śloka-plus-commentary block after the first one clearly wraps up;
+  (b) a corrupted verse-number marker sitting inside that second block (in
+  both chapter-3 instances, the marker itself was garbled — `॥೩೦೨॥` and
+  `ಇಷ೩` — which is often the tell that flags the spot to begin with); (c) most
+  reliably, **cross-referencing every key's opening line in the suspect range
+  against `FULL_GITA` in `viewer-src.html`**, which holds the ground-truth
+  Sanskrit per verse number and is untouched by whatever bug is in
+  `bannanje_kn.js`/EN/DEV/HI — a mismatch there is unambiguous proof, and
+  running this check across a wider span (e.g. ±10 verses) immediately shows
+  where the shift starts and where it self-corrects or doesn't. Do this
+  check any time a `phantom_disregard` note's stated reasoning doesn't
+  actually match what the cited page shows — treat existing phantom notes as
+  claims to verify, not as settled fact, especially for a chapter's final
+  verse.
+* **How to fix**: extract the embedded block into its own properly-keyed
+  entry (fixing any corrupted marker/scrambled lines within it against the
+  page), then shift the surviving misfiled content down into its correct
+  key, discarding any redundant truncated duplicate stub left over from the
+  self-correction point. Do this identically across all four language files
+  — check whether each mirrors the same shift before assuming so (chapter 3's
+  did, in KN/EN/DEV/HI alike). Always re-validate total key count (should be
+  unchanged, since one key's worth of embedded content becomes one key's
+  worth of newly-split content) and spot-check every affected key's opening
+  line against `FULL_GITA` afterward.
+* **Worth checking in every remaining chapter** (4-10): specifically, any
+  time a chapter's final key carries a `phantom_disregard`/merge-style note,
+  verify the note's claim against the actual final pages before trusting it,
+  and watch for unusually long keys mid-chapter that might contain a second
+  complete śloka block.
+
+### E11. Residual Findings Flagged But Not Fixed (chapter 3 audit, 2026-08-27)
+
+* While chasing the E10 pattern above, two **out-of-chapter** instances of
+  the already-documented dropped-conjunct "ನಿಷ್ಕ್ರಿಯ" typo (E1-class) were
+  spotted incidentally: one in **chapter 2, verse 2.47** (`ನಿಷ್ಕ ಯಗೊಳಿಸುತ್ತದೆ`
+  should be `ನಿಷ್ಕ್ರಿಯಗೊಳಿಸುತ್ತದೆ`) and one in **chapter 4, verse 4.31**
+  (`ನಿಷ್ಕ ೀಯನಾಗದೇ` should be `ನಿಷ್ಕ್ರೀಯನಾಗದೇ`). Both were left **unfixed**
+  deliberately — they're outside chapter 3's scope and weren't verified
+  against their own page images in this session. A future agent auditing
+  chapter 2 (already marked complete — this is a residual miss from that
+  earlier sweep) or chapter 4 should check and fix these against
+  `page_00XX.png` for the relevant verse before relying on either chapter's
+  "complete" status too strongly.
+
 ### F. Scroll Restoration Bug
 * On page refresh, the browser by default tries to restore the previous scroll position. Because the page is dynamically rendered, this was causing the viewport to snap to the bottom, giving the user the impression that the app was not loading.
 * **Checklist**: Maintain the scroll-restore disable rule in `viewer-src.html` (`history.scrollRestoration = 'manual'`) and the explicit `window.scrollTo(0,0)` on initial page load.
