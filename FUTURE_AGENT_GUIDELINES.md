@@ -523,6 +523,18 @@ content-gap audit, 2026-08-27)
   verify the note's claim against the actual final pages before trusting it,
   and watch for unusually long keys mid-chapter that might contain a second
   complete śloka block.
+* **Recurred a third time, chapter 5 (2026-08-29), in a related but
+  distinct shape**: at **5.7/5.8/5.9**, verse 8's complete śloka had been
+  truncated mid-line and orphaned at the tail of `"5.7"`; `"5.8"` wrongly
+  held verse 9's śloka instead of its own; `"5.9"` held both verses'
+  padacchedas/commentary but was missing verse 9's own śloka box. Unlike
+  the chapter-3 cases, this didn't cascade indefinitely — it resolved into
+  the book's own standard two-verse merge-note convention (matching
+  6.7/8.12/11.10/17.24/18.36) once corrected, rather than needing three
+  or more keys reshuffled. Confirmed and fixed identically across all
+  four language files. This confirms E10-style embedding isn't unique to
+  chapter 3 and is worth actively watching for in every remaining
+  chapter, not just chapters with a suspicious final-verse note.
 
 ### E11. Residual Findings Flagged But Not Fixed (chapter 3 audit, 2026-08-27)
 
@@ -623,6 +635,87 @@ Merge-Verse Pair — Open Question, Not Yet Resolved (chapter 4 audit,
   *something* rather than a bare pointer)? Whichever convention is chosen
   should probably also be applied retroactively to 13.34/13.35 if the two
   turn out to be the same shape of issue — worth checking.
+
+### E15. ಕರ್ತೃತ್ವ Vocalic-R-to-್ಯ Corruption (found via the chapter 5
+content-gap audit, 2026-08-29)
+
+* **ಕರ್ತೃತ್ವ** (kartṛtva, "agency/doership" — a central term in chapter 5's
+  doership discussion) recurs miswritten as **ಕರ್ತ್ಯತ್ವ**, i.e. the vocalic
+  ೃ degrading to a ್ಯ conjunct. Found 5 times in one session, all within
+  chapter 5: 5.13 (`ಕರ್ತೃತ್ವದಲ್ಲೂ`), and four more clustered in 5.14-5.15's
+  extended doership passage (one instance also had a stray `ಶ` prefix,
+  `ಶಕರ್ತ್ಯತ್ವ`). All confirmed against page images (`page_0171.png`,
+  `page_0172.png`, `page_0177.png`), which consistently print the vocalic-ೃ
+  form. A chapter-wide regex sweep after fixing confirmed no further
+  instances in chapter 5. Given the clustering, worth a decoded whole-book
+  regex sweep for `ಕರ್ತ್ಯತ್ವ` (and the general ೃ→್ಯ shape on other words)
+  the next time any chapter is audited — same rationale as E12's
+  ನಿಷ್ಕ್ರೀಯ sweep recommendation.
+
+### E16. ಪಕ್ವ ("ripened") ವ-to-ಚ Corruption — Resolved Despite Matching
+OCR (chapter 5 content-gap audit, 2026-08-29)
+
+* **ಪಕ್ವ** (pakva, "ripened" — used in a recurring suffering/growth
+  metaphor in chapter 5) recurs miswritten as **ಪಕ್ಚ** three times: 5.14
+  (`ಪಕ್ಚವಾಗುವುದೇ`), 5.15 (`ಪಕ್ಚವಾಗಿದೆ`), and 5.20 (`ಪಕ್ಚ್ವವಾಗಬಹುದು` — this
+  instance had an extra stray `ಚ್` inserted before an otherwise-correct
+  `್ವ`, rather than a straight ವ→ಚ swap).
+* **This one required extra care**: the independently-extracted OCR text
+  (`_extracted/clean_ocr/`) for the relevant pages *also* read ಚ at these
+  same spots, agreeing with the data's error rather than the correct
+  form. A first visual pass suggested ವ (correct), but a bare visual read
+  next to a matching OCR reading is a situation where it's easy to
+  second-guess yourself into leaving a real bug unfixed. **Resolution
+  method**: crop the disputed glyph and a confirmed-correct nearby
+  instance of the same conjunct (e.g. `ಪಕ್ವವಾಗಬೇಕು` elsewhere on the same
+  page) at matching pixel scale, and compare the two shapes directly
+  side-by-side. All three disputed instances matched the confirmed-ವ
+  shape exactly, not a ಚ shape, meaning the OCR extraction itself had
+  independently made the same misread — plausible, since ವ and ಚ conjunct
+  subscripts can look similar at typeset resolution. **Lesson for future
+  sessions**: when OCR and a first-pass visual read agree on a
+  suspicious-looking word, don't treat that agreement as proof of
+  correctness — do the matched-scale side-by-side glyph comparison
+  before concluding it's a genuine print artifact (contrast with E-cases
+  like ಜಿಫ್ರ or ನಿರ್ದುಷ್ಟ below, where OCR and multiple direct
+  high-resolution reads all agreed and no fix was made).
+* **Not yet checked**: the same ಪಕ್ಚ→ಪಕ್ವ pattern also appears outside
+  chapter 5, at **4.38, 7.15, and 7.25** — flagged here for whoever
+  audits chapters 4 (already marked complete, so this would be a
+  re-opening) and 7.
+
+### E17. Confirmed False Leads in Chapter 5 — Do Not "Fix" These Again
+(chapter 5 content-gap audit, 2026-08-29)
+
+Several spellings in chapter 5 look like plausible typos on a first pass
+but were checked directly against the page images (in some cases via the
+matched-scale glyph comparison described in E16) and confirmed to match
+the source exactly. Recording these so a future session doesn't waste
+time re-flagging them:
+
+* **ಜಿಫ್ರ** (in "jighran", 5.7) — the book consistently prints ಫ (not ಘ)
+  in this word at all three occurrences on `page_0167.png` (boxed śloka,
+  padaccheda, and word-gloss list). A confirmed print artifact.
+* **ನಿರ್ದುಷ್ಟ** (5.19 commentary) — expected ನಿರ್ದೋಷ ("faultless") on
+  first read, but both the independently-extracted OCR and a direct
+  high-resolution crop of `page_0181.png` agree on ನಿರ್ದುಷ್ಟ. Left
+  unchanged; flagged as a possible page-level quirk worth a second look
+  if it recurs elsewhere, but not touched on the strength of a single
+  uncertain instance.
+* **ಯತಆತ್ಮಾನಃ** (5.25) — the unusual sandhi-less double-vowel join
+  (ತ+ಆ with no elision) matches `page_0187.png` exactly, including in
+  the padaccheda line. Not a typo.
+* **ಸ್ಥಗನಗೊಳಿಸಬೇಕು / ಸ್ಥಗನಗೊಳಿಸುತ್ತಾರೆ** (5.28, prāṇāyāma/kumbhaka
+  discussion) — expected ಸ್ಥಗಿತ ("stopped/stilled") but the page
+  (`page_0189.png`) prints ಸ್ಥಗನ at both occurrences. Confirmed as the
+  book's actual word choice, not a corruption.
+* **ಬ್ರಹ್ಮನಿರ್ಬಾಣಮ್** (5.24, and again within the same verse's extended
+  discussion) — expected ಬ್ರಹ್ಮನಿರ್ವಾಣಮ್ (brahma-nirvāṇa). This is the
+  same print artifact already documented at chapter 2 (2.72, see the
+  chapter-2 tracking-table entry) recurring in chapter 5; confirmed
+  against `page_0186.png`. Worth remembering this isn't a one-off — the
+  book's print consistently substitutes ಬ for ವ in this specific
+  compound wherever it occurs.
 
 ### F. Scroll Restoration Bug
 * On page refresh, the browser by default tries to restore the previous scroll position. Because the page is dynamically rendered, this was causing the viewport to snap to the bottom, giving the user the impression that the app was not loading.
