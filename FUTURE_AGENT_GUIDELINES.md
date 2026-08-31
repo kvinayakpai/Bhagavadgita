@@ -717,6 +717,82 @@ time re-flagging them:
   book's print consistently substitutes ಬ for ವ in this specific
   compound wherever it occurs.
 
+### E18. Stray Truncated Next-Verse Fragment Appended at End of Verse
+(found via the chapter 6 content-gap audit, 2026-08-31)
+
+A distinct pattern from E10 (embedded-verse cascading key shift): here the
+*current* verse's own content is intact and correctly structured, but a
+**truncated, sometimes badly garbled duplicate of the immediately following
+verse's shloka opening** is appended at the very end of the value, cut off
+mid-word (e.g. ending in a bare consonant+virama or an incomplete syllable).
+Unlike E10, there's no cascading key-numbering shift — the next verse's own
+key already holds the complete, correct version independently. This looks
+like a copy-paste artifact from an editing pass rather than an extraction
+bug.
+
+Found three times in chapter 6, each confirmed by comparing the trailing
+fragment's opening words against the *next* verse's own key (which was
+independently correct):
+* **6.4** — ended with a severely corrupted duplicate of 6.5's opening:
+  `ಉದ್ಧರೇದಾತ್ಮನಾ$55ತ್ಮಾನಂ ನಾ*ತ್ಮಾನಮವಸಾದಯೇತ್| ಆತೆ ಟ್ಮವೆ ಹ್ಯಾತ್ಮನೋ ಬಂಧುರಾತೆ
+  ಟ್ಮವೆ ರಿಪುರಾತ್ಮನಃ` — note this fragment is *also* internally corrupted
+  (stray `$55`, `*`, and `ಆತ್ಮೈವ` mangled into `ಆತೆ ಟ್ಮವೆ`) independent of
+  being a stray duplicate; both problems needed fixing by simply deleting
+  the whole fragment, since 6.5's own key was already clean.
+* **6.23** — ended with a truncated duplicate of 6.24's opening, cut off
+  mid-word: `ಸಂಕಲ್ಪಪ್ರಭವಾನ್ ಕಾಮಾಂಸ್ಕಕ್ತ್ವಾ ಸರ್ವಾನಶೇಷತಃ । ಮನಸೈವೇ` (note also
+  the internal corruption ಕಾಮಾಂಸ್ಕಕ್ತ್ವಾ vs. the correct ಕಾಮಾಂಸ್ತ್ಯಕ್ತ್ವಾ
+  which 6.24's own key already has correctly).
+* **6.38** — ended with a truncated duplicate of 6.39's opening, cut off
+  mid-word: `ಏತನ್ಮೇ ಸಂಶಯಂ ಕೃಷ್ಣ ಚ್` (6.39's own key already had the
+  complete, correct shloka).
+
+**Detection heuristic**: check whether a verse's content ends abruptly
+mid-word/mid-syllable without terminal punctuation (period, ॥, ।, closing
+quote/bracket) — genuine verse content in this book always ends cleanly.
+A quick per-chapter script comparing each verse's trimmed ending against
+a short whitelist of valid terminal characters/suffixes catches this
+reliably (see chapter 6 session for the exact regex used). When found,
+verify the fragment's opening words against the *next* verse's own key —
+if that key already holds the complete correct version, the fragment is
+pure duplication and should simply be deleted, not merged or reconciled.
+
+### E19. Fabricated/Synthesized Commentary — Em-Dash Style Marker
+(found via the chapter 6 content-gap audit, 2026-08-31; same underlying
+issue as E5/the 11.26 and 12.6/12.7 fabrication findings, but this is a
+new *detection heuristic* for catching it)
+
+**6.39** was discovered to have fully fabricated commentary: the
+padaccheda (word-split Sanskrit) line was missing entirely and replaced
+with a paraphrased "translation" in single-quotes, followed by a
+synthesized analytical paragraph in a style completely foreign to
+Bannanje's prose — short em-dash-separated glosses like `'ತ್ವದನ್ಯಃ' —
+ನಿನ್ನನ್ನು ಬಿಟ್ಟು. 'ನ ಹ್ಯುಪಪದ್ಯತೇ' — ಸಾಧ್ಯವಿಲ್ಲ.` and meta-commentary like
+`ಅರ್ಜುನನ ವಿನಮ್ರ ಒಪ್ಪಿಗೆ — ಭಗವಂತನೊಬ್ಬನೇ ಉತ್ತರಿಸಲು ಶಕ್ತ`. Real Bannanje
+commentary in this book never uses em dashes this way, and never presents
+a dictionary-style term-by-term gloss list — it writes discursive prose.
+The real verse 6.39 (verified against `page_0221.png`) is much shorter:
+just the shloka, a short padaccheda, and one plain sentence, before
+moving directly into Krishna's answer at 6.40.
+
+**New detection heuristic**: a simple regex/string search for the em-dash
+character (—, U+2014) across `bannanje_kn.js` is a cheap, high-signal way
+to surface candidate fabrications, since Bannanje's actual prose in this
+book does not use this punctuation mark at all (it uses plain hyphens `-`
+or `--` for its padaccheda-to-commentary transition marker instead). A
+whole-book sweep run at the end of the chapter 6 audit turned up 7 more
+hits **outside** chapter 6, all unverified and **not yet fixed**:
+**7.7, 8.22, 10.12, 12.13, 12.18, 16.13, 16.14** — note two of these
+(12.13, 12.18) are in chapter 12, which was already audited and had two
+*other* fabrications found and fixed there (12.6/12.7) via the
+length-ratio heuristic, meaning that audit's method didn't catch
+everything; and two more (16.13, 16.14) are in chapter 16, also marked
+fully audited. **A future session should verify and fix these 7 em-dash
+hits before considering any of chapters 7, 8, 10, 12, or 16 complete.**
+This heuristic should be added to the standard sweep toolkit alongside
+the E1/E3 regex sweeps for all future chapter audits (7-10 onward), run
+proactively rather than only after a suspicious verse is spotted by eye.
+
 ### F. Scroll Restoration Bug
 * On page refresh, the browser by default tries to restore the previous scroll position. Because the page is dynamically rendered, this was causing the viewport to snap to the bottom, giving the user the impression that the app was not loading.
 * **Checklist**: Maintain the scroll-restore disable rule in `viewer-src.html` (`history.scrollRestoration = 'manual'`) and the explicit `window.scrollTo(0,0)` on initial page load.
