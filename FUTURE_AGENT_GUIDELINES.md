@@ -775,23 +775,63 @@ The real verse 6.39 (verified against `page_0221.png`) is much shorter:
 just the shloka, a short padaccheda, and one plain sentence, before
 moving directly into Krishna's answer at 6.40.
 
-**New detection heuristic**: a simple regex/string search for the em-dash
+**Detection heuristic**: a simple regex/string search for the em-dash
 character (—, U+2014) across `bannanje_kn.js` is a cheap, high-signal way
 to surface candidate fabrications, since Bannanje's actual prose in this
 book does not use this punctuation mark at all (it uses plain hyphens `-`
-or `--` for its padaccheda-to-commentary transition marker instead). A
-whole-book sweep run at the end of the chapter 6 audit turned up 7 more
-hits **outside** chapter 6, all unverified and **not yet fixed**:
-**7.7, 8.22, 10.12, 12.13, 12.18, 16.13, 16.14** — note two of these
-(12.13, 12.18) are in chapter 12, which was already audited and had two
-*other* fabrications found and fixed there (12.6/12.7) via the
-length-ratio heuristic, meaning that audit's method didn't catch
-everything; and two more (16.13, 16.14) are in chapter 16, also marked
-fully audited. **A future session should verify and fix these 7 em-dash
-hits before considering any of chapters 7, 8, 10, 12, or 16 complete.**
-This heuristic should be added to the standard sweep toolkit alongside
-the E1/E3 regex sweeps for all future chapter audits (7-10 onward), run
-proactively rather than only after a suspicious verse is spotted by eye.
+or `--` for its padaccheda-to-commentary transition marker instead).
+
+**Follow-up session (2026-08-31, same day): all 7 whole-book hits verified
+and resolved.** A whole-book sweep at the end of the chapter 6 audit
+found 7 hits outside chapter 6: 7.7, 8.22, 10.12, 12.13, 12.18, 16.13,
+16.14. Each was individually checked against its page image before
+concluding anything — **not every em-dash hit is a fabrication**:
+
+* **7.7 — false positive.** Not fabricated; just punctuation-convention
+  drift (em-dash used where the page prints a plain hyphen with no
+  surrounding spaces) plus one unrelated word-level typo
+  (ನನ್ನಲ್ಲದೆ→ನಾನಲ್ಲದೆ). Fixed the punctuation and typo, nothing more.
+* **8.22 — confirmed fabrication, most severe case.** Cross-checking
+  `clean_verses_700.json` showed this key had **`source_page: 0` and
+  `status: "phantom_disregard"`** — a strong, checkable signal that the
+  extraction pipeline itself never found a real source page for this
+  content. No shloka box at all, just a paraphrased quote-block
+  translation plus term glosses. The real verse spans `page_0281.png`–
+  `page_0282.png` (sitting between 8.21 and 8.23, both already correct);
+  replaced entirely with the transcribed real content. **Lesson**: check
+  `source_page`/`status` metadata for suspect keys before doing anything
+  else — a page-0/phantom_disregard combination is close to definitive
+  proof of fabrication without needing to open a single page image.
+* **10.12, 12.13, 12.18, 16.13+16.14 — confirmed fabrications, all the
+  same underlying shape.** In every one of these cases, the verse was
+  actually part of the book's two- or three-verse merge-note convention
+  (shloka repeated at the head of each merged verse, full padaccheda
+  and commentary given once under the *last* verse in the group), but
+  instead of being left as a short forward-pointing note, the "should be
+  a stub" key had fabricated commentary invented for it. The giveaway
+  each time: the *last* verse in the apparent group (10.13, 12.14, 12.19,
+  16.15) already held complete, correct, extensive commentary that
+  explicitly covered the earlier verse(s) too (16.15 says outright "ಈ
+  ಮೂರು ಶ್ಲೋಕದಲ್ಲಿ ವಿವರಿಸಿದ್ದಾನೆ" — "explained across these three
+  verses"). Fixed by restructuring each stub key to the standard
+  bracket-note format (`[ಈ ಎರಡು/ಮೂರು ಶ್ಲೋಕಗಳ (X.Y ಮತ್ತು/, X.Z) ಪದಚ್ಛೇದ,
+  ಅರ್ಥ ಮತ್ತು ವಿವರಣೆಯನ್ನು ಒಟ್ಟಿಗೆ ಮುಂದಿನ ಶ್ಲೋಕದಲ್ಲಿ (X.Z) ಕೊಡಲಾಗಿದೆ.]`),
+  each time also fixing the shloka's sandhi form and/or adding a missing
+  verse-number marker to match the page. **Lesson**: when an em-dash (or
+  other fabrication marker) hit turns out to be short/stub-shaped, check
+  whether the *next* verse (or next two) already independently contains
+  a complete, correct commentary that covers the current verse's
+  content — if so, this is a merge-pair miswrite, not a case needing
+  fresh content authored/translated from the page; just restructure to
+  a stub pointing forward.
+
+**This heuristic should be added to the standard sweep toolkit** (an
+em-dash regex sweep across the whole book, or at minimum the current
+chapter, run proactively) for all future chapter audits (7-10 onward),
+not only re-run when a suspicious verse is spotted by eye. Two of the
+five confirmed-fabrication chapters here (12, 16) were previously
+marked fully audited, so this sweep is worth re-running even on
+"complete" chapters periodically.
 
 ### F. Scroll Restoration Bug
 * On page refresh, the browser by default tries to restore the previous scroll position. Because the page is dynamically rendered, this was causing the viewport to snap to the bottom, giving the user the impression that the app was not loading.
