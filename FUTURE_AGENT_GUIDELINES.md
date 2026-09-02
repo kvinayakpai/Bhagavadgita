@@ -833,6 +833,62 @@ five confirmed-fabrication chapters here (12, 16) were previously
 marked fully audited, so this sweep is worth re-running even on
 "complete" chapters periodically.
 
+### E20. Chapter 7 Findings — Stray `ಸ;` Artifact, Avagraha-Dollar
+Recurrence, and a Very High Density of Stray/Missing Mid-Word Spaces
+(found via the chapter 7 content-gap audit, 2026-09-02)
+
+**Stray `ಸ;` artifact replacing a comma.** Found three times in this
+chapter alone (7.4, 7.5, and 7.26), each time sitting where the page
+simply has a comma (`,`) — e.g. `ಆಕಾಶ, ಮನಸ್ಸು ಸ;` should read `ಆಕಾಶ,
+ಮನಸ್ಸು,`. This looks like a small garbled fragment (possibly an OCR
+misread of a comma plus stray trailing punctuation) rather than a
+meaningful word. Worth a book-wide regex sweep (`[ಀ-೿] ಸ;`) in a future
+session, since three independent occurrences in one chapter suggests
+this is systemic, not chapter-local. One instance (7.4) was missed by
+the initial page-by-page read and only caught by a follow-up decoded
+regex sweep at the end of the session — a reminder that page-reading
+and regex-sweeping are complementary, not redundant.
+
+**Avagraha (ಽ) misread as `$` — third confirmed occurrence.** 7.28's
+quoted prayer-śloka had `ಪಾಪೋ$ಹಂ` for `ಪಾಪೋಽಹಂ`, matching the same
+corruption class already documented for chapters 6 and 14. Confirmed by
+zooming into the source glyph at high magnification — the printed
+avagraha in this book's font can look deceptively close to other small
+marks, so always verify at high zoom before concluding it's a `$`.
+
+**Unusually high density of stray/missing mid-word spaces this
+chapter.** Chapters 7.16, 7.18, 7.27, and 7.29 in particular had many
+instances of a space inserted mid-word (e.g. `ಹುಟ್ಟು ವಾಗಲೇ` for
+`ಹುಟ್ಟುವಾಗಲೇ`, `ಎನ್ನು ವ` for `ಎನ್ನುವ`) or, less often, a required space
+dropped (e.g. `ಇನ್ನೊದಿಲ್ಲ` for `ಇನ್ನೊಂದಿಲ್ಲ`). None of these affected
+meaning once corrected, but there were enough of them (a dozen-plus
+across just those four verses) that a future audit of a not-yet-swept
+chapter should specifically watch for this pattern rather than assume
+it's rare. All instances found this session were confirmed against the
+page image before fixing — none were book/print artifacts.
+
+**Spurious mid-paragraph garbage block, no page counterpart at all.**
+7.12 had a short block of nonsense characters (`ದ`, `೦0`, `ದ`, `೦0`,
+`. ೫ 8೩`) sitting between two otherwise-correct sentences, with
+absolutely nothing corresponding to it anywhere on the source page
+(`page_0244.png`). Same category as the E4 stray-orphaned-fragment
+pattern, but denser/stranger than typical E4 examples — worth flagging
+as its own sub-case since a quick skim might mistake it for a table or
+footnote reference rather than pure garbage.
+
+**Confirmed false leads — do not re-flag these:** the Mundaka Upanishad
+3.2.4 citation's unusual spellings in 7.11 (`ಏತೈರುಪಾಯ್ಕೆರ್ಯತತೇ
+ಯಸ್ತು ವಿದ್ವಾಂಸ್ಪಸ್ಯೈಷ ಆತ್ಮಾ ವಿಶತೇ ಬ್ರಹ್ಮಧಾಮ`, matches the page exactly,
+character for character); the unclosed parenthesis after `ಮಾನಿನಿ(ಶ್ರೀ
+ಲಕ್ಷ್ಮಿಯೂ` in 7.14 (page itself has no closing paren there); `ಆಸೂಹೆ`
+(for the expected ಅಸೂಯೆ, "envy") in 7.21, confirmed printed that way on
+the page; `ಸಾವಿರದ` in 7.25 and the doubled `ತಿಳಿದಿದಿದ್ದೇನೆ` in 7.26,
+both confirmed as the book's own typos, reproduced faithfully rather
+than "corrected" from outside knowledge; `ಪ್ರರಾಬ್ಧ` (for the expected
+ಪ್ರಾರಬ್ಧ) in 7.28; and `ಬ್ರಹ್ಮ-ಕರ್ಮ-ಅಧಿಆತ್ಮ` plus `ಇದರ ವಿಸ್ತಾರವಾದ` in
+7.29/7.30, both matching the page precisely despite looking odd out of
+context.
+
 ### F. Scroll Restoration Bug
 * On page refresh, the browser by default tries to restore the previous scroll position. Because the page is dynamically rendered, this was causing the viewport to snap to the bottom, giving the user the impression that the app was not loading.
 * **Checklist**: Maintain the scroll-restore disable rule in `viewer-src.html` (`history.scrollRestoration = 'manual'`) and the explicit `window.scrollTo(0,0)` on initial page load.
