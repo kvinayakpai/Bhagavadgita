@@ -893,6 +893,20 @@ context.
 * On page refresh, the browser by default tries to restore the previous scroll position. Because the page is dynamically rendered, this was causing the viewport to snap to the bottom, giving the user the impression that the app was not loading.
 * **Checklist**: Maintain the scroll-restore disable rule in `viewer-src.html` (`history.scrollRestoration = 'manual'`) and the explicit `window.scrollTo(0,0)` on initial page load.
 
+### G. Missing Web-Font Fallback for Complex Conjuncts (found 2026-09-02/03,
+via a user-reported rendering glitch at BG 12.12)
+* **Symptom**: the śloka line for 12.12 (`ಶ್ರೇಯೋ ಹಿ ಜ್ಞಾನಮಭ್ಯಾಸಾಜ್ಜ್ಞಾನಾದ್ಧ್ಯಾನಂ ...`) rendered with broken/detached glyphs on-device, even though the underlying Kannada text in `bannanje_kn.js` was correct (confirmed by comparing against `getval.py` output and the page image — this was **not** a data-corruption bug).
+* **Root cause**: `viewer-src.html`'s `.shloka-script` rules pinned `font-family:'Tiro Kannada',serif` with no web-font fallback. `Tiro Kannada` is a thin Google Font that lacks ligature glyphs for rare 3–4 consonant conjunct clusters that only appear in the *sandhi-joined* śloka form (e.g. `ಜ್ಜ್ಞಾ` in ...ಮಭ್ಯಾಸಾ**ಜ್ಜ್ಞಾ**ನಾ..., `ದ್ಧ್ಯಾ` in ...ಜ್ಞಾನಾ**ದ್ಧ್ಯಾ**ನಂ). Bannanje's word-by-word (padaccheda) commentary text below it never triggered the bug because splitting the words apart avoids those exact clusters — which is why the commentary looked fine while the heading above it didn't, and why pasting the text elsewhere (using the system's own default font) also looked fine.
+* **Fix**: added `'Noto Sans Kannada'` (already loaded via the Google Fonts `<link>`) as a fallback after `'Tiro Kannada'` on every `.shloka-script`-family rule.
+* **Full sweep, not a one-off patch**: the same `'Tiro <Script>',serif`-with-no-fallback pattern was found and fixed in 11 more rules across all three non-English scripts (Kannada, Devanagari Sanskrit, Devanagari Hindi) — concept-title `h1`, related-concept labels (`.relations li .other`), the default/`lang-dev` śloka rules, and `.map-empty-title`. Any future `font-family` rule for `lang-kn`/`lang-dev`/`lang-hi` **must** include a `Noto Sans Kannada` or `Noto Sans Devanagari` fallback — the Tiro fonts are decorative/thin and cannot be trusted alone for real Sanskrit/Kannada text.
+* **Checklist**: when adding any new CSS rule that renders Kannada, Devanagari-Sanskrit, or Hindi script content, always pair the `Tiro *` font with the matching `Noto Sans *` fallback. Grep `font-family:'Tiro` (and the double-quote variant) across `viewer-src.html` periodically to catch regressions.
+
+### H. `'Tiro Devanagari Hindi'` Was Never Actually Loaded (found during the
+Section G font audit, 2026-09-03)
+* **Separate bug from G, found while investigating it.** `viewer-src.html`'s CSS references `font-family:'Tiro Devanagari Hindi'` in several `body.lang-hi` rules, but the Google Fonts `<link>` (`fonts.googleapis.com/css2?family=...`) only requests `Tiro+Devanagari+Sanskrit` and `Tiro+Kannada` — **`Tiro+Devanagari+Hindi` was never in the request string at all**, and is not a real Google Fonts family name to begin with.
+* **Effect**: for every `hi`-language user, that font-family reference has always silently failed to resolve, so all Hindi labels and śloka text have been rendering in the browser's next fallback (generic `serif` before the Section G fix; `Noto Sans Devanagari` after it, since Noto Sans Devanagari *is* correctly loaded). The Section G fallback fix incidentally repairs the visible symptom, but the dead `Tiro Devanagari Hindi` reference itself is still there and should be treated as dead weight, not a working font choice.
+* **Recommendation (not yet done)**: either remove the `'Tiro Devanagari Hindi'` references entirely and set `lang-hi` to use `'Noto Sans Devanagari'` directly as the primary font, or confirm there's no real Google Fonts family Vinayak intended (e.g. a Devanagari-Hindi-specific display face) and load it properly. Until decided, leave the dead reference in place since the fallback now masks it correctly.
+
 ---
 
 ## 3. Reference Validation Tools & Scripts Created
