@@ -58,7 +58,7 @@ const FONTS = {
   en:  { head: 'Cormorant Garamond', body: 'Cormorant Garamond' },
   dev: { head: 'Tiro Devanagari Sanskrit', body: 'Tiro Devanagari Sanskrit' },
   kn:  { head: 'Tiro Kannada', body: 'Tiro Kannada' },
-  hi:  { head: 'Tiro Devanagari Hindi', body: 'Tiro Devanagari Hindi' },
+  hi:  { head: 'Noto Sans Devanagari', body: 'Noto Sans Devanagari' },
 };
 
 function loc(obj, lang) {

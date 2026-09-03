@@ -126,7 +126,7 @@ ul.entry-list li .sub{font-size:11px;color:var(--ink-fade);margin-top:2px}
 ul.entry-list li .ref{font-size:10px;color:var(--ink-fade);letter-spacing:.04em}
 ul.entry-list li.dev .label,
 body.lang-dev ul.entry-list li .label{font-family:'Tiro Devanagari Sanskrit','Noto Sans Devanagari',serif;font-size:18px}
-body.lang-hi ul.entry-list li .label{font-family:'Tiro Devanagari Hindi','Noto Sans Devanagari',serif;font-size:18px}
+body.lang-hi ul.entry-list li .label{font-family:'Noto Sans Devanagari',serif;font-size:18px}
 body.lang-kn ul.entry-list li .label{font-family:'Tiro Kannada','Noto Sans Kannada',serif;font-size:18px}
 .hl{background:var(--hl);padding:0 1px;border-radius:2px}
 
@@ -147,7 +147,7 @@ body.lang-kn ul.entry-list li .label{font-family:'Tiro Kannada','Noto Sans Kanna
   margin:6px 0 2px;line-height:1.1;
 }
 body.lang-dev .focus-card h1{font-family:'Tiro Devanagari Sanskrit','Noto Sans Devanagari',serif;font-size:30px}
-body.lang-hi  .focus-card h1{font-family:'Tiro Devanagari Hindi','Noto Sans Devanagari',serif;font-size:30px}
+body.lang-hi  .focus-card h1{font-family:'Noto Sans Devanagari',serif;font-size:30px}
 body.lang-kn  .focus-card h1{font-family:'Tiro Kannada','Noto Sans Kannada',serif;font-size:30px}
 .focus-card .subtitle{font-size:13px;color:var(--ink-soft);font-style:italic;margin-bottom:8px}
 .focus-card .note{font-size:14px;line-height:1.5;color:var(--ink);margin:8px 0}
@@ -260,7 +260,7 @@ body.lang-en .shloka .shloka-script{font-family:'Cormorant Garamond',serif;font-
   font-family:'Cormorant Garamond',serif;font-size:15px;font-weight:600;color:var(--ink);text-align:right;
 }
 body.lang-dev .relations li .other{font-family:'Tiro Devanagari Sanskrit','Noto Sans Devanagari',serif;font-size:17px}
-body.lang-hi  .relations li .other{font-family:'Tiro Devanagari Hindi','Noto Sans Devanagari',serif;font-size:17px}
+body.lang-hi  .relations li .other{font-family:'Noto Sans Devanagari',serif;font-size:17px}
 body.lang-kn  .relations li .other{font-family:'Tiro Kannada','Noto Sans Kannada',serif;font-size:17px}
 
 /* ============ BRIDGE — Viṣṇu-sahasranāma chips ============ */
@@ -325,7 +325,7 @@ body.lang-en .vsn-chip{font-family:'Cormorant Garamond',serif;font-style:italic}
   margin: 0;
 }
 body.lang-kn .map-empty-title { font-family: 'Tiro Kannada', 'Noto Sans Kannada', serif; font-size: 20px; }
-body.lang-hi .map-empty-title { font-family: 'Tiro Devanagari Hindi', 'Noto Sans Devanagari', serif; font-size: 20px; }
+body.lang-hi .map-empty-title { font-family: 'Noto Sans Devanagari', serif; font-size: 20px; }
 body.lang-dev .map-empty-title { font-family: 'Tiro Devanagari Sanskrit', 'Noto Sans Devanagari', serif; font-size: 20px; }
 
 /* ============ FOOTER ============ */
@@ -8634,7 +8634,7 @@ function renderMap(){
   state.lastChapterSel = state.chapterSel;
   state.mapUserOverride = false; // Reset after consuming
 
-  const fontFam = state.lang==='hi'?'Tiro Devanagari Hindi':state.lang==='dev'?'Tiro Devanagari Sanskrit':state.lang==='kn'?'Tiro Kannada':'Cormorant Garamond';
+  const fontFam = state.lang==='hi'?'Noto Sans Devanagari':state.lang==='dev'?'Tiro Devanagari Sanskrit':state.lang==='kn'?'Tiro Kannada':'Cormorant Garamond';
   const chSel = state.mapChapterSel; // 0 to 18
   const vSel = state.mapVerseSel || ''; // 'ch.v' or ''
   
