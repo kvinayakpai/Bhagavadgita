@@ -67,7 +67,7 @@ publication-final.
 | Chapter | Verses | Status | Notes |
 |---------|--------|--------|-------|
 | 11 | 11.1–11.55 | ✅ Already done (2026-08-03), pre-dates this plan | Precedent/model for this whole re-pass |
-| 12 | 12.1–12.20 | 🔶 In progress — 12.16 done (2026-09-03) | Rest of chapter 12 (12.1–12.15, 12.17–12.20) still condensed; pending |
+| 12 | 12.1–12.20 | ✅ **COMPLETE 2026-09-03** | Full chapter re-derived from KN: 12.16 first, then 12.1–12.15 and 12.17–12.20 in one pass. Merge-verse pairs (12.3/12.4, 12.6/12.7, 12.13/12.14, 12.18/12.19) handled with the standard stub-then-full convention. Validated (701 keys), rebuilt. |
 | 1 | 1.1–1.47 | ⬜ Not started | |
 | 2 | 2.1–2.72 | ⬜ Not started | |
 | 3 | 3.1–3.43 | ⬜ Not started | |
