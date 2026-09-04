@@ -2,7 +2,15 @@
 
 This document outlines user expectations, common pitfalls, and strict checklists for any future agents working on spelling fixes, book-alignment audits, or data correction tasks in this repository.
 
-**Updated 2026-08-24** with findings from a systematic cross-verse-leak
+**Updated 2026-09-04** with findings from the chapter 8 content-gap
+audit (section E21) — a second confirmed E9 leak (8.21→8.22), two
+high-value single-word restorations, a fourth recurring instance of the
+ಎಲ್ಲಕ್ಕಿಂತ vowel-confusion typo, two duplicate-passage typos scoped-fixed
+in-chapter with untouched twins flagged at 10.13 and 4.29, and an
+important lesson about trusting the padaccheda line over the compressed
+śloka line when the two disagree. Read E21 before auditing chapter 9 or
+10, or before revisiting chapters 4, 10, or 15.
+Previously updated 2026-08-24 with findings from a systematic cross-verse-leak
 sweep (section E9) — this also **retracts** the earlier "harmless
 page-transition spillover" classification in section E5's duplicate/
 garbled-spillover bullet, which was wrong. Read E9 before trusting any
@@ -888,6 +896,94 @@ than "corrected" from outside knowledge; `ಪ್ರರಾಬ್ಧ` (for the exp
 ಪ್ರಾರಬ್ಧ) in 7.28; and `ಬ್ರಹ್ಮ-ಕರ್ಮ-ಅಧಿಆತ್ಮ` plus `ಇದರ ವಿಸ್ತಾರವಾದ` in
 7.29/7.30, both matching the page precisely despite looking odd out of
 context.
+
+### E21. Chapter 8 Findings — Second E9 Leak, Two High-Value Word
+Restorations, and Padaccheda-Line-Is-Ground-Truth Lesson (found via the
+chapter 8 content-gap audit, 2026-09-04)
+
+**Second confirmed E9 cross-verse leak, at 8.21→8.22.** Same shape as
+the chapter-11/4.1/6.1/etc. leaks already documented under E9: a stray
+duplicate of 8.22's own śloka opening line had been appended to the
+tail of 8.21's entry, with its own independent corruption
+(`ಲಭ್ಯಸ್ತ್ರನನ್ಯಯಾ` for the correct `ಲಭ್ಯಸ್ತ್ವನನ್ಯಯಾ`). Removed outright
+since 8.22 already held the correct, complete version of the same
+line — confirmed against `page_0281.png`, which shows nothing between
+8.21's closing sentence and 8.22's own śloka box. Worth noting this
+pattern keeps recurring chapter after chapter despite the 2026-08-24
+book-wide sweep (see E9 above) — that sweep predates chapter 8's audit
+(chapters 1-7 hadn't all been through content-gap review yet at the
+time), so it's not a contradiction, but it's a reminder that any
+not-yet-swept chapter should be treated as a candidate for this bug
+class by default.
+
+**Two high-value single-word corruptions, both in verses discussing
+big philosophical claims.** (1) **8.8**: `ಅಹೋರಣೀಯವಾಗಿ` should read
+`ಅಣೋರಣೀಯವಾಗಿ` — a single consonant substitution (ಹ for ಣ) had turned
+the famous Upanishadic phrase *aṇor aṇīyān* ("smaller than the
+smallest," describing the ātman/paramātman) into a meaningless
+non-word. This is exactly the kind of corruption that's easy to read
+past if you're not tracking the underlying Sanskrit concept being
+described — the sentence still parses grammatically as nonsense-Kannada
+without obviously breaking. (2) **8.9**'s padaccheda gloss had
+`ಅವನನ್ನು ಸ ,ಲಿಸುವವನು` — a comma sitting where a whole syllable-cluster
+should be, restored to `ಅವನನ್ನು ಸ್ಮರಿಸುವವನು` ("one who remembers him").
+Both confirmed against page images before fixing.
+
+**Recurring ಎಲ್ಲಕ್ಕೆಂತ→ಎಲ್ಲಕ್ಕಿಂತ vowel-confusion, four hits in one
+chapter.** Found at 8.9, 8.20, and twice in 8.28 — all four confirmed
+against page images (the page consistently uses `ಕ್ಕಿಂತ`). A fifth,
+untouched instance of the identical string exists at **15.15** —
+flagged for that chapter's future audit rather than fixed now, since
+15 has already been marked fully swept and this is a single scoped
+typo, not grounds for reopening the whole chapter.
+
+**Two other duplicate-passage fixes, scoped to chapter 8 only.** Both
+of these turned out to have an identical (uncorrected) twin elsewhere
+in the book — likely because Bannanje's commentary itself repeats a
+stock explanation verbatim in more than one chapter, and the same OCR
+error hit both copies independently:
+- `ಇಚ್ಚೆಯಿಂದ`/`ಇಚ್ಚೆ ಯನ್ನು` → `ಇಚ್ಛೆಯಿಂದ`/`ಇಚ್ಛೆಯನ್ನು` at **8.8** (the
+  "seven meanings of divya" etymology digression) — an untouched
+  duplicate of the same passage exists at **10.13**.
+- `ಪ್ರಾಹಾಯಾಮ` → `ಪ್ರಾಣಾಯಾಮ` (×2) at **8.10** — an untouched duplicate
+  exists at **4.29**.
+
+Both fixes were applied with the replacement scoped strictly to the
+current verse's key boundaries (slicing `content[i_verse:i_next_verse]`
+before replacing) specifically to avoid accidentally also patching the
+other chapter's copy sight-unseen — that chapter's own page images
+need to confirm the same fix is warranted there before touching it.
+
+**Lesson: the padaccheda (word-split) line is ground truth for this
+data file, not the compressed śloka line above it.** Twice this
+session a fix was applied and then reverted after a second, higher-zoom
+look: `ಅಪ್ಪುವಂತಿ` at **8.15** and `ತದಾ` at **8.25**. In both cases the
+compressed śloka line at the top of the shloka box used the
+grammatically "expected" spelling (`ಆಪ್ನುವಂತಿ`, `ತಥಾ`), which is what a
+first zoom pass (and general Sanskrit knowledge) suggested was correct
+— but the padaccheda/word-split line immediately below it, which is
+what this data file actually stores, consistently used the other
+spelling on the page itself. Since the JS data mirrors the padaccheda
+line (see every other verse in this book — the compressed compound
+śloka is never separately stored), the padaccheda line's spelling is
+what must be matched, even where it disagrees with the compressed
+line just above it on the same page. Future sessions encountering a
+mismatch between a verse's compressed śloka and its own padaccheda
+line should trust the padaccheda line and not "correct" it toward the
+compressed form.
+
+**Confirmed false leads — do not re-flag these:** `ದೃಡೀಕರಿಸಿ` (ಡ, not
+ಢ) at 8.2; `ಕೊಡತಕ್ಕವ` (short-o, matches page) at 8.9; `ತನ್ತಮೇವೈತಿ` in
+8.6's śloka (an anusvara-before-dental-consonant sandhi variant,
+grammatically valid, matches page); `ಪ್ರರಾಬ್ಧ` at 8.6 (matches the
+same non-standard book-spelling already documented at 7.28); `ಥಂದಃಪುರುಷ`
+at 8.4 — the book consistently prints ಥ where ಛ (chandaḥ-puruṣa) would
+be grammatically expected, confirmed at two separate occurrences on the
+same page, so this is the book's own spelling, not a scan artifact;
+`ಧರ್ಮವ್ಯಾದ` at 8.7 (for the expected ಧರ್ಮವ್ಯಾಧ, matches page); `ಅವನನ್ನೇನ್ನೆ`
+at 8.8 (an odd-looking doubled ending, matches page exactly); `ಧೀರ್ಥವಾದ`
+at 8.10 (for the expected ದೀರ್ಘವಾದ, "lengthy" — matches page); and
+`ಅಪ್ಪುವಂತಿ`/`ತದಾ` per the lesson above.
 
 ### F. Scroll Restoration Bug
 * On page refresh, the browser by default tries to restore the previous scroll position. Because the page is dynamically rendered, this was causing the viewport to snap to the bottom, giving the user the impression that the app was not loading.
