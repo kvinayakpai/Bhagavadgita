@@ -37,6 +37,7 @@ commit messages.
 ---
 
 ## 1. User Expectations & Philosophy
+* **Definition of "complete" (Vinayak's explicit standard, stated repeatedly — do not lose this again):** A chapter is only complete when its content matches the source **in all four language files** — `bannanje_kn.js`, `bannanje_en.js`, `bannanje_dev.js`, `bannanje_hi.js`. KN-only fixes are not "chapter complete," even when KN is the only file that had an error (in that case, the other three files still need to be *checked* and confirmed to already match before the chapter can be marked done — see chapter 14's tracking-table entry for the right way to phrase this: "EN/DEV/HI already had all of this correct, so only KN needed fixing"). If a chapter has a restored preamble, missing content, or restructured verses, that content must exist in **all four files**, not just KN, before the chapter is reported as complete. A session that only touches KN must say so plainly and explicitly flag the chapter as incomplete, not describe it as "fully swept" or "complete." Do not repeat the chapter-9 mistake (2026-09-05): a preamble was restored in KN only, and the session's own summary called the chapter "complete" — this was wrong and had to be corrected after Vinayak pointed it out. When in doubt, under-claim completeness rather than over-claim it.
 * **Perfect Alignment with the Book**: The sole source of truth is Bannanje Govindacharya's printed Kannada commentary book.
   * Any spelling, spacing, punctuation, or formatting deviation from the book is considered **contamination** and must be resolved.
   * Do not attempt to "normalize" or "correct" Sanskrit or Kannada words to standard forms if the book prints them differently. For example, if the shloka in the book has `ಪ್ರುಷ್ಣಾಮಿ` (with ra-vatthu) but the commentary has `ಪುಷ್ಣಾಮಿ` (without ra-vatthu), preserve both exactly as they are.
@@ -1053,15 +1054,15 @@ more standard); `ಇದಮ್ ನ ಮಮಃ` at 9.27 (non-standard visarga, matc
 page); `ಭಗವದಃ`/`ವಾಸುದೇವಸ್ಯಃ` visarga forms in a quoted verse at 9.28
 (matches page exactly).
 
-**Note on EN/DEV/HI**: unlike chapters 1/2/4/5/7/8, this session's
-chapter 9 preamble restoration (before 9.1) and all typo fixes were
-applied to `bannanje_kn.js` only — the EN/DEV/HI equivalents have not
-yet been added/checked for the preamble gap. A future session should
-translate the restored KN preamble into EN (close translation)/DEV
-(condensed independent Sanskrit prose, house style)/HI (close to KN
-structure), matching the treatment given to every other chapter's
-restored preamble, before considering chapter 9 fully complete across
-all four languages.
+**Note on EN/DEV/HI**: this gap was identified and fixed within the
+same overall audit — the preamble is now present in all four language
+files (KN transcribed from the page, EN close translation, DEV
+condensed independent Sanskrit prose per house style, HI close to KN
+structure), all validated to parse at 701 keys. It's recorded here as
+a process lesson: a session initially reported chapter 9 as "complete"
+having only touched `bannanje_kn.js`, which is a real mistake, not
+just an incomplete report — see the completeness definition at the
+top of §1 of this file, added specifically because of this incident.
 
 ### F. Scroll Restoration Bug
 * On page refresh, the browser by default tries to restore the previous scroll position. Because the page is dynamically rendered, this was causing the viewport to snap to the bottom, giving the user the impression that the app was not loading.
