@@ -985,6 +985,84 @@ at 8.8 (an odd-looking doubled ending, matches page exactly); `ಧೀರ್ಥ�
 at 8.10 (for the expected ದೀರ್ಘವಾದ, "lengthy" — matches page); and
 `ಅಪ್ಪುವಂತಿ`/`ತದಾ` per the lesson above.
 
+### E22. Chapter 9 Findings — Semantic OCR Corruption, a Self-Corrected
+Glyph-Read Error, and the Value of Cross-Referencing Correlated Content
+(found via the chapter 9 content-gap audit, 2026-09-05)
+
+**One meaningful semantic OCR corruption.** At **9.12**,
+`ಇವರು ಯಾವಾಗಲೂ ಹತ್ಯಕ್ಕೆ ವಿರುದ್ಧವಾಗಿ ಚಿಂತಿಸುತ್ತಿರುತ್ತಾರೆ` ("they always
+think contrary to *murder*") should read `ಸತ್ಯಕ್ಕೆ` ("contrary to
+*truth*") — confirmed against `page_0295.png`. Unlike most character-
+confusion typos in this book, this one changes the literal meaning of
+the sentence rather than just garbling a word into nonsense, so it's
+worth flagging as a reminder that ಸ/ಹ confusion (both simple,
+easily-confused glyphs) can silently flip meaning rather than just
+break grammar.
+
+**A self-corrected glyph-misread — worth internalizing as a
+methodology point.** While auditing 9.17's Om/akṣara enumeration (a
+list of the 16 Sanskrit vowels), a blurry-scan first read led to
+"fixing" `ಅ ಆ ಇ ಈ ಉ ಊ ಋ ೠ ಌ ೡ ಏ ಐ ಓ ಔ ಅಂ ಅಃ` (using the vocalic-L
+letters ಌ/ೡ) to `ಅ ಆ ಇ ಈ ಉ ಊ ಋ ೠ ಎ ಏ ಐ ಒ ಓ ಔ ಅಂ ಅಃ` (using Kannada
+short-e/short-o instead), based on a font-rendered comparison that
+looked convincing in isolation. This was wrong, and was caught before
+committing by noticing that the *same verse* contains a correlated
+51-divine-names list (one name per letter, in order) a few paragraphs
+later — name #9 is `ಌಶ` and name #10 is `ೡಜಿ`, both starting with the
+vocalic-L letters, and name #11 (`ಏಕಾತ್ಮ`) and #12 (`ಐರ`) only line up
+correctly if positions 9-10 in the letter list are ಌ/ೡ, not ಎ/ಏ. The
+fix was reverted before commit. **Lesson: when two pieces of content
+on the same page (or in the same verse) are structurally correlated —
+an enumerated list and a list of items keyed to it, a padaccheda line
+and its compressed śloka, etc. — cross-check an ambiguous glyph read
+against the correlated content before trusting a single zoomed crop,**
+even a fairly confident-looking one. A rendered-font comparison is
+only as good as the crop you fed it.
+
+**A separate false alarm in the same verse's consonant enumeration**,
+worth recording so it isn't re-litigated: the ಟ-varga (retroflex
+consonant group) list `ಟ ಠ ಡ ಢ ಣ` initially looked like it might read
+`ಟ ರ ಡ ಢ ಣ` (ಠ misread as ರ) at low zoom, since the two letters differ
+only by a small bindu dot inside the loop. A closer, max-resolution
+crop showed the dot clearly present, confirming ಠ was correct all
+along and no fix was needed.
+
+**A badly garbled phrase**, at **9.31**: `ಮಾಡಬಾರಡದ್ದನ್ನೆ ಲ್ಡಾ ಮಾಡಿದ
+ಅಜಾಮಿಳ` should read `ಮಾಡಬಾರದ್ದನ್ನೆಲ್ಲಾ ಮಾಡಿದ ಅಜಾಮಿಳ` ("Ajāmiḷa, who did
+everything one should not do") — a stray extra `ಡ` and a word broken
+across a spurious space/character run. Confirmed against
+`page_0315.png`.
+
+**Confirmed false leads — do not re-flag these:** `ಅಶ್ರದ್ದಧಾನಾಃ` at 9.3
+(book's own ದ್ದ spelling, matches page); combined `ನಚ` at 9.5
+(intentional — the commentary explicitly discusses it as a fused
+sandhi term, contrasted with the separate `ನ ಚ` in the śloka itself);
+`ಪಾರ್ಥಾ` and `ಪ್ರಥೆಯ ಮಗನೇ` at 9.13 (both match the page; the latter is
+a deliberate etymological wordplay on the "ಪ್ರಥ" (to spread) root,
+consistent with the same paragraph's later gloss "ಪ್ರಥ- ವಿಸ್ತಾರ
+ಧಾತು"); `ದೃಡ` vs `ದೃಢ` inconsistency within 9.14 (both spellings occur
+on the page itself, a book-internal inconsistency, not a data bug);
+`ಪ್ರರಾಬ್ಧ` at 9.30 (matches the same non-standard book-spelling
+already documented at 7.28/8.6); `ಬೀಷ್ಮ` vs `ಭೀಷ್ಮ` inconsistency
+within 9.31 (both spellings occur on the page itself); `ಆಸಾದ್ಯ` vs
+`ಆಸಾಧ್ಯ` conflicting instances within 9.20's compressed-śloka vs.
+padaccheda lines (left matching the compressed-śloka/grammatically-
+correct instance, per the general principle that ambiguous page
+evidence shouldn't be "resolved" by picking whichever reading looks
+more standard); `ಇದಮ್ ನ ಮಮಃ` at 9.27 (non-standard visarga, matches
+page); `ಭಗವದಃ`/`ವಾಸುದೇವಸ್ಯಃ` visarga forms in a quoted verse at 9.28
+(matches page exactly).
+
+**Note on EN/DEV/HI**: unlike chapters 1/2/4/5/7/8, this session's
+chapter 9 preamble restoration (before 9.1) and all typo fixes were
+applied to `bannanje_kn.js` only — the EN/DEV/HI equivalents have not
+yet been added/checked for the preamble gap. A future session should
+translate the restored KN preamble into EN (close translation)/DEV
+(condensed independent Sanskrit prose, house style)/HI (close to KN
+structure), matching the treatment given to every other chapter's
+restored preamble, before considering chapter 9 fully complete across
+all four languages.
+
 ### F. Scroll Restoration Bug
 * On page refresh, the browser by default tries to restore the previous scroll position. Because the page is dynamically rendered, this was causing the viewport to snap to the bottom, giving the user the impression that the app was not loading.
 * **Checklist**: Maintain the scroll-restore disable rule in `viewer-src.html` (`history.scrollRestoration = 'manual'`) and the explicit `window.scrollTo(0,0)` on initial page load.
