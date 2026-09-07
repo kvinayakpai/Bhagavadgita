@@ -1064,6 +1064,81 @@ having only touched `bannanje_kn.js`, which is a real mistake, not
 just an incomplete report — see the completeness definition at the
 top of §1 of this file, added specifically because of this incident.
 
+### E23. Chapter 10 Findings — a New Recurring Pattern, a Resolved
+Cross-Chapter Duplicate Flag, and the Audit's Completion
+(found via the chapter 10 content-gap audit, 2026-09-07 — this
+completes the content-gap audit for all 18 chapters of the book)
+
+**New recurring pattern: `ಸನ್ನಿದಾನ`→`ಸನ್ನಿಧಾನ` (ದ/ಧ confusion in
+"sannidhāna," meaning "presence/proximity").** Found and fixed 6+
+times across 10.24-10.25 alone, all confirmed against page images
+before fixing. Once confirmed twice, a proactive text search across
+the rest of the chapter's not-yet-reached verses turned up 3 more
+instances in 10.25 immediately — worth doing this kind of forward
+search as soon as a pattern repeats twice in nearby verses, rather
+than waiting to stumble on each instance in sequential order.
+
+**The ch.8-flagged duplicate at 10.13 was real and is now fixed.**
+Chapter 8's audit (§E-series entry, "seven meanings of divya") noted
+an untouched duplicate of a fixed `ಇಚ್ಚೆಯಿಂದ`/`ಇಚ್ಚೆ ಯನ್ನು` →
+`ಇಚ್ಛೆಯಿಂದ`/`ಇಚ್ಛೆಯನ್ನು` bug existing at 10.13, deliberately left alone
+at the time so as not to touch a chapter that hadn't been swept yet.
+When chapter 10's audit reached 10.13, a naive `content.index()` check
+on the phrase actually returned chapter 8's *already-fixed* instance
+(since it occurs earlier in the file) rather than 10.13's, which very
+nearly caused this to be logged as "already correct" and skipped.
+**Lesson: when checking whether a cross-chapter-flagged duplicate has
+been fixed, always scope the search to the target verse's own key
+boundaries** (slice `content[i_verse:i_next_verse]` first) — an
+unscoped substring search across the whole file will silently return
+a different chapter's copy of a repeated stock passage and give a
+false "already fine" reading. The actual 10.13 instance was still
+broken and has now been fixed, scoped strictly to that verse.
+
+**A second E-class instance: restored etymological breakdown at
+10.13.** `ಪುರುಷಃ` had silently replaced a specific word-part breakdown
+`ಪುರಾ+ಷಃ` (an etymological gloss explaining the name), matching the
+same "collapsed etymology notation" gap class documented for chapter
+9. Worth watching for in any not-yet-audited material — etymology
+digressions with `+`/`=` notation seem to be a spot where OCR or an
+earlier cleanup pass sometimes silently normalizes a broken-down word
+back to its plain form, discarding the actual point being explained.
+
+**One restored content gap: a missing book title at 10.23.** The file
+had `ಸ್ವಾಮಿರಾಮ್ ಅವರು ಪುಸ್ತಕದಲ್ಲಿ` ("Swami Ram, in [a] book"), silently
+dropping the specific title `"Living with Himalayan Masters"` that
+sits right there on the page between "ಅವರು" and "ಎನ್ನುವ ಪುಸ್ತಕದಲ್ಲಿ."
+Same lesson as above — a quoted proper noun or title is exactly the
+kind of content an OCR/cleanup pipeline can drop without leaving any
+obviously broken grammar behind.
+
+**Several deity/sage-name corrections, useful as a reminder that named
+entities deserve extra scrutiny even when the surrounding sentence
+reads fine:** `ಅಹಿರ್ಬುದ್ದಿ`→`ಅಹಿರ್ಬುಧ್ನ್ಯ` (a Rudra), `ಪುಲಸ್ಕೃ`→`ಪುಲಸ್ತ್ಯ`
+(a sage), `ಸ್ಮಂದಃ`→`ಸ್ಕಂದಃ` (Skanda, found twice), `ಬೃಹಸ್ವತಿಪತ್ನಿ`→
+`ಬೃಹಸ್ಪತಿಪತ್ನಿ` (Bṛhaspati's wife). None of these broke the sentence
+grammatically; all were confirmed only by checking the specific
+glyphs against the page.
+
+**Confirmed false leads worth not re-flagging:** `ಸಪ್ಪರ್ಷಿಗಳು` (10.6,
+double-pa, the book's own spelling of "seven sages," cross-verified
+against a name in the chapter's own 51-names-style list, matching the
+E22 methodology from chapter 9); `ಗಂದರ್ವ` vs `ಗಂಧರ್ವ` inconsistency
+within 10.26 (both spellings genuinely occur on the page); `ಆಶ್ರೈಸ-
+ಬೇಕಾದ` (10.31, matches page despite looking like it should be
+`ಆಶ್ರಯಿಸಬೇಕಾದ`); `ಬೈಲ` for the sage traditionally spelled "Paila"
+(10.37, matches page exactly despite the expected spelling being
+`ಪೈಲ`); `ಬೀರ` used consistently for "hero/heroism" across 10.24 and
+10.36 (not a `ವೀರ` typo — this is the book's own word choice, checked
+in two different verses before concluding it's consistent rather than
+random).
+
+**The audit is now complete for all 18 chapters.** Any future session
+opening this file should treat the whole content-gap-audit project as
+finished baseline work — further passes should be scoped, targeted
+fixes (a specific reported error, a specific flagged duplicate) rather
+than re-sweeping an already-completed chapter from scratch.
+
 ### F. Scroll Restoration Bug
 * On page refresh, the browser by default tries to restore the previous scroll position. Because the page is dynamically rendered, this was causing the viewport to snap to the bottom, giving the user the impression that the app was not loading.
 * **Checklist**: Maintain the scroll-restore disable rule in `viewer-src.html` (`history.scrollRestoration = 'manual'`) and the explicit `window.scrollTo(0,0)` on initial page load.
