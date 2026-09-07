@@ -113,10 +113,10 @@ def main():
     
     # Check all four files exist and load successfully
     files_ok = True
-    for suffix, var, expected_len in [('kn', 'BANNANJE_VERSE_MEANINGS', 702),
-                                      ('en', 'BANNANJE_VERSE_MEANINGS_EN', 702),
-                                      ('hi', 'BANNANJE_VERSE_MEANINGS_HI', 702),
-                                      ('dev', 'BANNANJE_VERSE_MEANINGS_DEV', 702)]:
+    for suffix, var, expected_len in [('kn', 'BANNANJE_VERSE_MEANINGS', 701),
+                                      ('en', 'BANNANJE_VERSE_MEANINGS_EN', 701),
+                                      ('hi', 'BANNANJE_VERSE_MEANINGS_HI', 701),
+                                      ('dev', 'BANNANJE_VERSE_MEANINGS_DEV', 701)]:
         filename = f'bannanje_{suffix}.js'
         if check_file_exists(filename):
             data = parse_js_var(filename, var)

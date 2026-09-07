@@ -8,7 +8,7 @@ A concept-centered knowledge graph of the Bhagavad Gītā, read through Madhva s
 
 ## Live viewer
 
-Open `index.html` in any browser — the SPA is a single file that pulls `data.js`, `positions.js`, and the four Bannanje commentary files from the same folder. For a fully self-contained experience (phone, USB stick, file:// context), open `viewer-bundled.html` instead: it inlines all data into one HTML file.
+Open `viewer.html` in any browser (or `index.html`, which redirects to it) — it's a single self-contained file with all data (`data.js`, `positions.js`, the four Bannanje commentary files) already inlined by `build-bundle.py`. Works fully offline from `file://`: phone, tablet, USB stick, no server needed. The source you actually edit is `viewer-src.html`; `viewer.html` is always a regenerated build artifact.
 
 - **Browse** — every concept under its tier, with live quad-script search
 - **Focus** — concept detail card: title, doctrinal note, Madhva-distinctive callout, the anchor verse in the active script, every outgoing and incoming relation with localized type badges; plus the full **Bannanje Govindacharya per-verse commentary** in the active language
@@ -26,7 +26,7 @@ One-click language toggle: English (IAST diacritics) · देवनागरी
 | Anchor verses (quad-script) | **112** |
 | Tiers | **12** |
 | Madhva-distinctive callouts | **22** |
-| Bannanje commentary entries | **702** (all 18 chapters, all 4 languages) |
+| Bannanje commentary entries | **701** (all 18 chapters, all 4 languages) |
 
 Every concept has its own anchor verse in all four scripts. 115 of the 124 typed relations carry a quad-script gloss; the remaining 9 (`is-a` / `opposite-of` taxonomic edges whose meaning is given by the type badge alone) carry no per-edge gloss.
 
@@ -42,7 +42,7 @@ The viewer is genuinely quadrilingual end-to-end. The pieces that get translated
 - **Edge labels** — relations carry an optional `label: { en, dev, hi, kn }` with the per-edge gloss.
 - **Edge type pill badges** — `IS-A` / `प्रकारः` / `ಪ್ರಕಾರ` etc., all four scripts.
 - **Chrome strings** — tab labels, search placeholder, footer counter words, empty-states.
-- **Per-shloka Bannanje commentary** — 702 entries in KN (source), EN, HI, and DEV (Sanskrit). Commentary appears in the Chapters tab and the Focus card.
+- **Per-shloka Bannanje commentary** — 701 entries in KN (source), EN, HI, and DEV (Sanskrit). Commentary appears in the Chapters tab and the Focus card.
 
 All UI strings live under `UI_STRINGS` in `viewer.html`. `verify.js` asserts that every UI string and every node field has all four scripts present and non-empty. `verify.py` checks data integrity and bundle consistency.
 
@@ -99,11 +99,12 @@ Core viewer
 ───────────
 data.js                 112 concept nodes + 124 edges + 112 shlokas (quad-script)
 positions.js            hand-laid x,y,r coordinates for the map view
-viewer.html             SPA — Browse / Focus / Map / Chapters / Chat, quad-script toggle
-index.html              entry-point alias to viewer.html
-viewer-bundled.html     self-contained 11 MB: all JS + data inlined (recommended for offline/phone distribution)
+viewer-src.html         source of truth for the SPA — edit this, not viewer.html
+viewer.html             build artifact — self-contained, regenerated from viewer-src.html by build-bundle.py
+index.html              redirect to viewer.html
+bridge_data.js          cross-corpus link data for the Bridge feature (see BRIDGE_PLAN.md)
 
-Bannanje commentary (702 verses × 4 languages)
+Bannanje commentary (701 verse-keys × 4 languages)
 ──────────────────────────────────────────────
 bannanje_kn.js          Kannada (source language — Bannanje Govindacharya's direct commentary)
 bannanje_en.js          English (translated from Kannada)
@@ -112,7 +113,7 @@ bannanje_dev.js         Sanskrit/Devanāgarī (translated from Kannada)
 
 Build & verification
 ────────────────────
-build-bundle.py         regenerates viewer-bundled.html from source files
+build-bundle.py         regenerates viewer.html from viewer-src.html and the data/commentary files
 verify.py               data.js integrity: concept coverage, edge structure, bundle consistency
 verify.js               SPA verification: script shape, refs, positions
 
@@ -123,22 +124,20 @@ decks/Bhagavadgita_Concept_KG_{en,dev,hi,kn}.pdf    PDF versions (LibreOffice-co
 
 Documents (optional outputs)
 ────────────────────────────
-Bhagavad_Gita_All_Verses_CLEAN.docx    702 verses with commentary (4 languages)
+Bhagavad_Gita_All_Verses_CLEAN.docx    701 verses with commentary (4 languages)
 Bhagavad_Gita_All_Verses_CLEAN.xlsx    same data in spreadsheet form
 ```
 
 ## Usage
 
 ```bash
-# Open the viewer in browser (no build needed)
+# Open the viewer in browser (no build needed) — self-contained, works offline
 open viewer.html                # macOS
 start viewer.html               # Windows
 xdg-open viewer.html            # Linux
 
-# For offline/mobile use, open the bundled version instead
-open viewer-bundled.html        # self-contained, no external dependencies
-
-# If modifying data.js, positions.js, or commentary files, rebuild the bundle
+# If modifying data.js, positions.js, bridge_data.js, or the commentary files,
+# or editing viewer-src.html, rebuild the bundle:
 python3 build-bundle.py
 
 # Verify data integrity
@@ -153,19 +152,26 @@ node verify.js                  # JS: SPA-internal verification
 The app is deployed via GitHub Pages and updates automatically from the `main` branch.
 
 **Alternative deployment options:**
-1. **Open locally** — `viewer-bundled.html` opens cleanly from file:// on any device (desktop, phone, USB stick).
-2. **Self-hosted** — copy `viewer-bundled.html` to any web server; no build or server-side processing required.
-3. **Download for offline use** — share `viewer-bundled.html` directly; works completely offline on phones, tablets, USB sticks.
+1. **Open locally** — `viewer.html` opens cleanly from file:// on any device (desktop, phone, USB stick); it's already fully self-contained.
+2. **Self-hosted** — copy `viewer.html` to any web server; no build or server-side processing required.
+3. **Download for offline use** — share `viewer.html` directly; works completely offline on phones, tablets, USB sticks.
 
 ## Translation & Source
 
-All 702 verses derive exclusively from **Bannanje Govindacharya's Gītā Pravachana**:
+All 701 verses derive exclusively from **Bannanje Govindacharya's Gītā Pravachana**:
 
 - **Kannada** — Bannanje's direct source text
 - **English, Hindi, Sanskrit** — translated from Kannada source
 - **Quality assurance** — all files verified clean; zero contamination from other commentaries
 
 The commentary has been verified to contain zero entries from Prabhupada, Advaita, or other non-Madhva traditions. All content is grounded in Madhva Vedānta siddhānta as presented by Bannanje Govindacharya.
+
+## Project documents
+
+- `PROJECT_STATUS.md` — current build/completion status
+- `FUTURE_AGENT_GUIDELINES.md` — error-pattern reference and verification checklists for anyone doing further content correction
+- `BRIDGE_PLAN.md` — active plan for linking Gita concepts across the wider Vedic/Puranic/Itihasa corpus
+- `archive/` — completed plans and historical audit logs, kept for reference
 
 ## License
 

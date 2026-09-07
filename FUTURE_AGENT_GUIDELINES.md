@@ -2,6 +2,8 @@
 
 This document outlines user expectations, common pitfalls, and strict checklists for any future agents working on spelling fixes, book-alignment audits, or data correction tasks in this repository.
 
+**Project status (2026-09-07): all three major correction passes are now complete for all 18 chapters** — the KN-source content-gap audit (`archive/CONTENT_GAP_AUDIT_PLAN.md`), the four-language translation pass (`archive/EN_RETRANSLATION_PLAN.md`), and the DEV (Sanskrit) full-fidelity re-derivation (`archive/DEV_FULL_REPASS_PLAN.md`). Those three plan documents, along with the chapter-specific audit logs they superseded, have been moved to `archive/` since they now describe finished work rather than open tasks — see `archive/README.md`. **This document remains active**: the error-pattern taxonomy in section 2E below is the distilled, reusable lesson set from all of that work, and should still be read before any future correction session, spot-check, or re-verification pass on this book's content.
+
 **Updated 2026-09-04** with findings from the chapter 8 content-gap
 audit (section E21) — a second confirmed E9 leak (8.21→8.22), two
 high-value single-word restorations, a fourth recurring instance of the
@@ -26,12 +28,12 @@ update below. Read section 2E (all of E1 through E9) before starting any
 similar audit on another chapter; it will save time relative to
 rediscovering these patterns from scratch. The session-by-session raw
 detail (which page, which exact fix, which false leads were ruled out
-and why) lives in `CH11_CHAR_AUDIT_11.1-11.9.md` through
-`CH11_CHAR_AUDIT_11.41-11.55.md`,
-`CH11_VAKRA_VAKTRA_SYSTEMIC_FIX.md`, `CH11_REAUDIT_CHECKLIST.md`, and
-`CH12_AUDIT.md` — this document only holds the distilled, reusable
+and why) lives in `archive/CH11_CHAR_AUDIT_11.1-11.9.md` through
+`archive/CH11_CHAR_AUDIT_11.41-11.55.md`,
+`archive/CH11_VAKRA_VAKTRA_SYSTEMIC_FIX.md`, `archive/CH11_REAUDIT_CHECKLIST.md`, and
+`archive/CH12_AUDIT.md` — this document only holds the distilled, reusable
 patterns, not the full history. Chapter 17/18 audit detail lives in
-`CONTENT_GAP_AUDIT_PLAN.md`'s per-verse table and the corresponding git
+`archive/CONTENT_GAP_AUDIT_PLAN.md`'s per-verse table and the corresponding git
 commit messages.
 
 ---
@@ -64,8 +66,8 @@ commit messages.
 * **Checklist**: Ensure no global variables in the bundled scripts (like `data.js`, `positions.js`, or the inlined `bannanje_*.js`) shadow each other.
 
 ### E1. Recurring Conjunct/Character-Confusion Patterns (found via chapter-11
-character-level audit, 2026-08-06 — six-session series, `CH11_CHAR_AUDIT_*.md`
-and `CH11_VAKRA_VAKTRA_SYSTEMIC_FIX.md`)
+character-level audit, 2026-08-06 — six-session series, `archive/CH11_CHAR_AUDIT_*.md`
+and `archive/CH11_VAKRA_VAKTRA_SYSTEMIC_FIX.md`)
 
 These are **systemic OCR/transcription confusions**, not isolated typos —
 each has recurred multiple times within a single chapter, meaning a targeted
@@ -136,7 +138,7 @@ easy to skim past. Check: does removing the fragment leave a complete,
 grammatical sentence? If yes, it's noise.
 
 ### E5. Content-Level Bugs (distinct from character-level; found via the
-`CONTENT_GAP_AUDIT_PLAN.md` sweep and the chapter-12 full audit, see those
+`archive/CONTENT_GAP_AUDIT_PLAN.md` sweep and the chapter-12 full audit, see those
 files for full detail)
 * **Fabricated/synthesized content**: a full paragraph of plausible,
   well-written commentary that does not exist anywhere in the source book.
@@ -271,7 +273,7 @@ files for full detail)
   appear on the page only once) and remove the orphan copy.
 
 ### E7. Findings from the Chapter 17/18 Content-Gap Audit (2026-08-10 and
-2026-08-13 — see `CONTENT_GAP_AUDIT_PLAN.md` for the full per-verse table)
+2026-08-13 — see `archive/CONTENT_GAP_AUDIT_PLAN.md` for the full per-verse table)
 
 * **Full-verse duplication**: an entire adjacent verse's complete
   content — shloka, padaccheda, and commentary — gets prepended
@@ -329,7 +331,7 @@ files for full detail)
   match each other.
 
 ### E9. Cross-Verse Content Leaks (found 2026-08-24, via a user-reported
-screenshot at 11.51 — see `CONTENT_GAP_AUDIT_PLAN.md` addenda for the
+screenshot at 11.51 — see `archive/CONTENT_GAP_AUDIT_PLAN.md` addenda for the
 full incident writeup)
 
 * **The pattern**: a verse's raw śloka (sometimes with its speaker
