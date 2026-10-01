@@ -30,6 +30,11 @@ Items are added to the categories below as new kinds of error turn up.
 * Ch.14: 14.2 bracket gloss (up/upper – ऊपर – über – ಉಪ್ಪರಿಗೆ); 14.17 bracket line (Garuḍa-Suparṇā, Śeṣa-Vāruṇī, Śiva-Pārvatī); 14.27 colophon (ಇತಿ ಚತುರ್ದಶೋಽಧ್ಯಾಯಃ). Carried into EN/DEV/HI where absent, together with the 14.8, 14.15, 14.17 and 14.19 additions.
 * Verse-1 header block (speaker line + two Sanskrit lines + ॥೧॥) missing at 11.1, 15.1, 17.1.
 
+### B2. Verse-boundary / misfiled commentary (new, 13.4–13.6)
+* The commentary paragraph "ಜ್ಞಾನಿಗಳು ಕೂಡಾ…" belongs to 13.4 but was stored as 13.5; verse 5's own text sat inside 13.6. Fixed in KN/EN/DEV/HI: 13.4 now holds its full commentary; 13.5 holds the verse-5 word-split plus a "given together in 13.6" note (same convention as 12.3/12.4); 13.6 holds the combined commentary.
+* 13.6 letter/space fixes: ವಿಘ್ನ ನಾಶ→ವಿಘ್ನನಾಶ, ಬ್ರಹ್ಮ ವಾಯು→ಬ್ರಹ್ಮವಾಯು, ವಾಯುಪುತ್ರರಿಬ್ಬ ರು, ಎಚ್ಚ ರ, "ನಾಲಿಗೆ(ವರುಣ]" bracket, stray periods after ಐದು / ಕರ್ಮೇಂದ್ರಿಯಗಳಿವೆ / ಮೊದಲನೆಯದಾಗಿ, quote marks around ‘ನನ್ನ ಅಸ್ತಿತ್ವದ ಅರಿವು…’ and ‘ನಾನು’, blank line wrongly splitting the 13.6 verse lines.
+* Check for other chapters: a key that starts mid-commentary (no Sanskrit line) is a sign of misfiling.
+
 ### C. English glosses in parentheses (printed in the book) wrong or missing
 (sense organs)→(Receiver); (twenty virtues)→(discipline); (code of conduct) missing; (face-saving)→(Insult);
 (honest life)→(Sincerity-Straightforwardness); (Steadfastness)→(Conviction); (Attachment)→(Ego) at 13.8;
@@ -53,6 +58,7 @@ Stray "ಎ", stray "|" before "[", "ಇಲ್ಲಃ)" for "ಇಲ್ಲ!)", extr
 ### F. Kept as printed in the book (NOT errors in our text)
 ಸೂಕ್ಷಕ್ಕಿಂತ (13.17), ಸಂಬೊಧಿಸಿ (13.0), ಬಗೆಗೆಡಡಿರುವುದು (13.11), ಉಪದ್ಯತೇ (13.18), ಜ್ಞಾನೊ ಚಕ್ಷುಷಾ (13.34),
 ಹದಿಮೂರನೆಯಯ (colophon), ಗಾಥ/ಗಾಢ (13.21, glyph unclear), ಮುಕ್ತಾssಮುಕ್ತ normalised to ಮುಕ್ತಾಮುಕ್ತ.
+Ch.13: ದಷ (13.5/13.6 word-split, printed so), ಪ್ರಥಿವಿ and ಕರೆಯತ್ತಾರೆ (13.6).
 Ch.14: ಭಗವಂತವಂತನನ್ನು (14.27), ಘಜೇಂದ್ರನಾಗಿ (14.15), (intututional flash) (14.11).
 
 ## Per-chapter status
