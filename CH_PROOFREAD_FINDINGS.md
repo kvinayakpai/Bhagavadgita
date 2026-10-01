@@ -35,6 +35,18 @@ Items are added to the categories below as new kinds of error turn up.
 * 13.6 letter/space fixes: ವಿಘ್ನ ನಾಶ→ವಿಘ್ನನಾಶ, ಬ್ರಹ್ಮ ವಾಯು→ಬ್ರಹ್ಮವಾಯು, ವಾಯುಪುತ್ರರಿಬ್ಬ ರು, ಎಚ್ಚ ರ, "ನಾಲಿಗೆ(ವರುಣ]" bracket, stray periods after ಐದು / ಕರ್ಮೇಂದ್ರಿಯಗಳಿವೆ / ಮೊದಲನೆಯದಾಗಿ, quote marks around ‘ನನ್ನ ಅಸ್ತಿತ್ವದ ಅರಿವು…’ and ‘ನಾನು’, blank line wrongly splitting the 13.6 verse lines.
 * Check for other chapters: a key that starts mid-commentary (no Sanskrit line) is a sign of misfiling.
 
+### B3. Text in our data that is NOT in the book (new, 15.7)
+* 15.7 carried two commentary paragraphs ("ಜೀವನು ಭಗವಂತನ ಸನಾತನವಾದ ಅಂಕ…", "ಜೀವನು ಪ್ರಕೃತಿಯಲ್ಲಿರುವ ಮನಸ್ಸು…") that do not appear on p.474 or anywhere in the chapter; removed from KN/EN/DEV/HI. Also seen in 15.11: an extra word ಅಸೌ. Worth checking every chapter for keys that are longer than the scans support.
+* Ch.15 missing text restored: 15.4 sentence "ಇದರ ಇರುವು ಇದ್ದ ಹಾಗೆ ಕಾಣಿಸುವುದಿಲ್ಲ… ಹರಿತವಾದ ಕತ್ತಿಯಿಂದ ತರಿದು," (EN already covers it; DEV/HI wording to be checked by a native reader).
+
+### A3. Chapter 15 patterns
+* Upanishad quotations in small type (Brihadaranyaka 4-2…4-6, Katha, Taittiriya etc.): avagraha dropped (ಚಂದ್ರಮಸ್ಯಽಸ್ತಮಿತೇ, ಶಾಂತಾಽಯಾಂ, ಪುರುಷೋಽನ್ತರಾತ್ಮಾ), ದ್ವೈ→ದ್ದೈಕ, ಜ್ಞ→ಜ, ಛಾ→ಚ, verse-number bars ॥ read as | or dropped, "?" for ”.
+* "+" and "=" in etymology lines read as "-": ಅ+ಶ್ವಃ+ತ್ಥ=, ಅಶು+ವಾ+ತ+ಥ, ಅ=ಅಜಃ, ಆ=ಆದಿಃ, ವರ=ಶ್ರೇಷ್ಠ.
+* Opening single quote stored as " or “ (about 40 places in 15.x) — normalised to the ' used elsewhere.
+* More wrong-letter OCR: ಸಾಕ್ಷೆ→ಸಾಕ್ಷಿ, ನಿಲ್ಬಬಲ್ಲವು→ನಿಲ್ಲಬಲ್ಲವು, ವೇದವಾಹ್ಮಯ→ವೇದವಾಙ್ಮಯ, ಕಲುಪಿತ→ಕಲುಷಿತ, ತಿಳಿಯಲ್ಬಡುವವನು→ಪಡುವವನು, ಗುಹಾನ್ವಿತಮ್→ಗುಣಾನ್ವಿತಮ್, ಉತ್ಕಾಮತಿ→ಉತ್ಕ್ರಾಮತಿ, ಉದ್ಭವಗೀತೆ→ಉದ್ಧವಗೀತೆ, ಹರಡಿ→ಹರವಿ, ಕುಳಿತಿ→ಕೂತಿ.
+* English glosses: (hypnosis)→(hypnotism), (desire for fruit)→(demand), (by awareness of self)→(awareness of self), (A-04)→(ಅ-೦೪); (Space) and (abbreviation) restored.
+* Agent-reported "corrections" must be re-checked against the scan: one (ಸ್ತಬ್ಧ for ಸ್ಥಬ್ಧ, 15.1) was wrong on zoom and was not applied.
+
 ### C. English glosses in parentheses (printed in the book) wrong or missing
 (sense organs)→(Receiver); (twenty virtues)→(discipline); (code of conduct) missing; (face-saving)→(Insult);
 (honest life)→(Sincerity-Straightforwardness); (Steadfastness)→(Conviction); (Attachment)→(Ego) at 13.8;
@@ -59,6 +71,7 @@ Stray "ಎ", stray "|" before "[", "ಇಲ್ಲಃ)" for "ಇಲ್ಲ!)", extr
 ಸೂಕ್ಷಕ್ಕಿಂತ (13.17), ಸಂಬೊಧಿಸಿ (13.0), ಬಗೆಗೆಡಡಿರುವುದು (13.11), ಉಪದ್ಯತೇ (13.18), ಜ್ಞಾನೊ ಚಕ್ಷುಷಾ (13.34),
 ಹದಿಮೂರನೆಯಯ (colophon), ಗಾಥ/ಗಾಢ (13.21, glyph unclear), ಮುಕ್ತಾssಮುಕ್ತ normalised to ಮುಕ್ತಾಮುಕ್ತ.
 Ch.13: ದಷ (13.5/13.6 word-split, printed so), ಪ್ರಥಿವಿ and ಕರೆಯತ್ತಾರೆ (13.6).
+Ch.15: ಎನಾಶ್ರುತಂ (15.4 Chandogya quote), ಅಗ್ನಿರ್ ಎವಾಸ್ಯ (15.6), (etymologicaly) (15.1), ಪಟಿಥಾನಿ and ಅಹಾರವನ್ನು (15.14/15), ಸ್ಥಬ್ಧ (15.1), ಬಸ್ಮ/ಬಿನ್ನ (15.16, 15.19), ಸೂಕ್ಷ (15.8). Open: ಕಠೋಪನಿಷತ್ vs ಕರೋಪನಿಷತ್ (15.14/15.15) — glyph ambiguous, left as stored.
 Ch.14: ಭಗವಂತವಂತನನ್ನು (14.27), ಘಜೇಂದ್ರನಾಗಿ (14.15), (intututional flash) (14.11).
 
 ## Per-chapter status
@@ -66,4 +79,5 @@ Ch.14: ಭಗವಂತವಂತನನ್ನು (14.27), ಘಜೇಂದ್ರನ
 |---|---|
 | 13 | Proofread against all 25 scan pages; fixes applied (commit f1f650e) |
 | 14 | Kannada proofread against all 28 scan pages (22 keys, 109 edits); missing content ported to EN/DEV/HI |
-| 11, 12, 15, 16, 17, 18 and 1–10 | not yet proofread |
+| 15 | Kannada proofread against all 24 scan pages (about 130 edits); filler removed from 15.7 in all four languages |
+| 1–12, 16–18 | not yet proofread |
