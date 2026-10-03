@@ -54,6 +54,15 @@ Items are added to the categories below as new kinds of error turn up.
 * Kept as printed: ಇಪ್ಪಾತ್ತಾರು, ತ್ರಿಬಿಃ, ಒಳ್ಳಯ, ಕಾಮ-ಕ್ರೋದ; ಅಪ್ಪೈಶುನಮ್ unsure. Atharva reference digits in 16.4 are ambiguous on the scan.
 * A quote-normalisation false positive (16.18, opening double quote turned single) was caught and reverted.
 
+### A5. Chapter 17 patterns
+* Duplicated/misfiled content: the whole 17.19 block (compact verse, padachheda, translation, commentary) was repeated at the end of 17.18, followed by a stray fragment of the 17.20 verse ("ದಾತವ್ಯಮಿತಿ ಯದ್‌ ದಾನಂ ದೀಯತೇಇ"); removed. The large-type compact verse block of 17.19 (with "$" for avagraha) was removed from 17.19, as for other verses.
+* Wrong-letter OCR: ತೀಕ್ಷ→ತೀಕ್ಷ್ಣ, ತಾತ್ಮರ್ಯ→ತಾತ್ಪರ್ಯ, ತೋಳ್ಪಲ→ತೋಳ್ಬಲ, ಧೀರ್ಥಕಾಲ→ದೀರ್ಘಕಾಲ, ಅಸೆ→ಆಸೆ, ಕಲುಪಿತ→ಕಲುಷಿತ, ವೇದಜ್ಜ→ವೇದಜ್ಞ, ಹೊಮಬೇಕು→ಹೊಮ್ಮಬೇಕು, ಅಚ್ಯುತಾಯನಮ;→ಅಚ್ಯುತಾಯನಮಃ, ಸಾತ್ವಿಕ;→ಸಾತ್ವಿಕಃ, ಬೀರುವಂತವ→ಬೀರುವಂತವು.
+* Broken vowel signs with a stray space: ಮೇಲ್ನೊ ೀಟ, ವಿಧಿದೃಷ್ಟೊ ೀ; many stray spaces inside words (ಮನಸ್ಸಿ ನಲ್ಲಿ, ಎನ್ನು ವ, ಇನ್ನೊ ಬ್ಬರಿಗೆ) and stray periods.
+* Quotes: opening single quote stored as " or “ (about 25 places, mostly around 'ತತ್‌', 'ಸತ್‌', 'ಓಂ') normalised to '; missing opening quotes restored.
+* "|" → "।" in verse lines; "[[" → ".["; "..." → "'.".
+* Kept as printed: ಶ್ರದ್ದೆ (ದ್ದ, 17.28, all three places), ಸ್ವಾರ್ಥವಿರಕೂಡಾದು, ಎನ್ನುವದು, ಸ್ಥಗನಗೊಳಿಸಿ, ಮೀಸಲಾಗಿರುವಂತಾದ್ದು, ಅದೇಶ ಕಾಲೇ, ಉಚ್ಛಿಷ್ಟಮ್, ಅಷಿತಂ ತ್ರೇಧಾ ವಿಧ್ಯತೆ, ಕ್ರಿಯೆವನ್ನು.
+* Agent-reported "ಧೀರ್ಘ" was wrong on zoom (print is ದೀರ್ಘ). Connecting dashes that look like en dashes were left as stored (font difference).
+
 ### C. English glosses in parentheses (printed in the book) wrong or missing
 (sense organs)→(Receiver); (twenty virtues)→(discipline); (code of conduct) missing; (face-saving)→(Insult);
 (honest life)→(Sincerity-Straightforwardness); (Steadfastness)→(Conviction); (Attachment)→(Ego) at 13.8;
@@ -88,4 +97,5 @@ Ch.14: ಭಗವಂತವಂತನನ್ನು (14.27), ಘಜೇಂದ್ರನ
 | 14 | Kannada proofread against all 28 scan pages (22 keys, 109 edits); missing content ported to EN/DEV/HI |
 | 15 | Kannada proofread against all 24 scan pages (about 130 edits); filler removed from 15.7 in all four languages |
 | 16 | Kannada proofread against all 20 scan pages; missing text ported to EN/DEV/HI (16.15, 16.18) |
-| 1–12, 17–18 | not yet proofread |
+| 17 | Kannada proofread against all 19 scan pages; duplicated 17.19 text removed from 17.18 |
+| 1–12, 18 | not yet proofread |
