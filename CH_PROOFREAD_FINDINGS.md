@@ -74,6 +74,14 @@ Items are added to the categories below as new kinds of error turn up.
 * Kept as printed: ಶ್ರದ್ಧೆ/ಶ್ರದ್ದೆ variants where printed, ವಿಶಾದೀ (18.28), ಭೂರ್ತಾನಾಂ (18.46), ಪ್ರರಾಬ್ಧ, ತನ್ನತನ್ನ, ನಿನ್ನನಿನ್ನ, ಅಣ್ಣ-ತಮ್ಮಂದಿರರಿದ್ದಾರೆ, ಶ್ರಿಲಕ್ಷ್ಮಿ, ಕೊನೇಯ, ವಿಶಿಷ್ಠ. ಸಮಾವಿಷ್ಠ (18.10) left as stored (unsure).
 * Agent-reported "ಧೀರ್ಘ" / "ಧೀರ್ಥ" corrected to ದೀರ್ಘ (print, confirmed on zoom in 17.8).
 
+### A7. Chapter 1 patterns
+* Stored text had been "corrected" away from the print in 1.5: ಕುಂತಿದೇವಿಯವರ ಸಂಬಂಧಿಗಳು (print: ಕುಂತಿದೇಶದವರು), ವಿಂಗಡಿಸಿವೆ (print: ವಿಂಗಡಣೆ ಮಾಡಿವೆ), 'ಪೃಥಾ' (print: 'ಪ್ರಥು'), ಜಯದ್ರಥ (print: ಜಯದ್ರತ), ಆತ್ಮಸ್ಥೈರ್ಯ (print: ಆತ್ಮಸ್ಥರ್ಯ), ಕಾಣಬಹುದು (print: ಕಾಣುತ್ತೇವೆ) etc.; restored to the print (EN/DEV/HI adjusted for the Kunti-country and 'Pṛthu' points). The OCR text layer confirmed each one.
+* Missing content: "ಯುದ್ಧ." (1.1), the numerology sentence "(ಇಲ್ಲಿರುವ ಸಂಖ್ಯಾ ಚಮತ್ಕಾರವನ್ನು ಗಮನಿಸಿ: 2+1+8+7+0=18 …)" (1.2), the clause "ಇಲ್ಲಿ ಬರುವ ಒಂದೊಂದು ವ್ಯಕ್ತಿಗಳ ಹಿಂದಿರುವ" lost at a page break (1.5), the chapter colophon "ಇತಿ ಪ್ರಥಮೋಽಧ್ಯಾಯಃ / ಮೊದಲನೇ ಅಧ್ಯಾಯ ಮುಗಿಯಿತು." (1.47), English glosses (Quality), (Psychotherapy).
+* 1.14: the stored padachheda was a word-by-word split not in the print; replaced by the printed three-line form.
+* Wrong-letter OCR: ಗುಲ್ಕ→ಗುಲ್ಮ, ತುಶಡಿ→ತುಕಡಿ, ವಿಪ್ಣವ→ವಿಪ್ಲವ, ಮನುಃ→ಮನಃ, ಉಚ್ಚೆಃ→ಉಚ್ಚೈಃ, ಮಣಿಪುಷ್ಟ→ಮಣಿಪುಷ್ಪ, ಬಿಲ್ದೋಜ→ಬಿಲ್ಲೋಜ, ಧರ್ಮಯದ್ಧ→ಧರ್ಮಯುದ್ಧ, ಉಳಿಡುತ್ತಿದ್ದವು→ಊಳಿಡುತ್ತಿದ್ದವು, ವಾಜ್ಮಯ→ವಾಙ್ಮಯ, ಬಲ್ಗೆವು→ಬಲ್ಲೆವು, ಆಅಚೆಗೆ→ಆಚೆಗೆ, ಕೈ:→ಕೈಃ; "+"/"=" read as "-" (ಶಿಖ+ಅಂಡ, ಕಾ+ಈಶ+ವ, ಜ=8 ಯ=1).
+* Numeral ೮ read as ಲ: "(ಲ) ಅನೀಕಿನಿ" → "(೮)".
+* Kept as printed: ಎತಾಮ್ (1.3), ಗುಲ್ಮ spelling issues none, ನಿರ್ಧಿಷ್ಟ, ವಿಧ್ಯಾಭಾಸ, ಕಣ್ಗಾಪಿನ, ಮೊಮ್ಮೊಕ್ಕಳು, ಕುಟುಬದವರು, ದುಖಃ (1.27), ಭೋಗ್ಯೈಃ (1.32), ವ್ಯವಸ್ತೆ, ನಂಬಿಕಯನ್ನು, ಜನಾರ್ಧನಾ. Left alone (unsure): ದೋಷೈಃ/ದೋಷ್ಯೈ and ಸಂಖ್ಯೇ/ಸಂಖೇ in the 1.43/1.47 padachheda; danda "|" vs "।" in the ch.1 padachheda lines (print shows a plain bar); the editorial "[ಬನ್ನಂಜೆಯವರ … ಪೀಠಿಕೆ]" label in 1.1/2.1/3.1/4.1 is kept.
+
 ### C. English glosses in parentheses (printed in the book) wrong or missing
 (sense organs)→(Receiver); (twenty virtues)→(discipline); (code of conduct) missing; (face-saving)→(Insult);
 (honest life)→(Sincerity-Straightforwardness); (Steadfastness)→(Conviction); (Attachment)→(Ego) at 13.8;
@@ -110,4 +118,5 @@ Ch.14: ಭಗವಂತವಂತನನ್ನು (14.27), ಘಜೇಂದ್ರನ
 | 16 | Kannada proofread against all 20 scan pages; missing text ported to EN/DEV/HI (16.15, 16.18) |
 | 17 | Kannada proofread against all 19 scan pages; duplicated 17.19 text removed from 17.18 |
 | 18 | Kannada proofread against all 47 scan pages (about 190 edits, three restored passages); missing text ported to EN/DEV/HI |
-| 1–12 | not yet proofread |
+| 1 | Kannada proofread against all 33 scan pages (about 110 edits); non-print rewordings in 1.5 and the 1.14 padachheda restored to the print; colophon added |
+| 2–12 | not yet proofread |
