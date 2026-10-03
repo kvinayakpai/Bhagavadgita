@@ -63,6 +63,17 @@ Items are added to the categories below as new kinds of error turn up.
 * Kept as printed: ಶ್ರದ್ದೆ (ದ್ದ, 17.28, all three places), ಸ್ವಾರ್ಥವಿರಕೂಡಾದು, ಎನ್ನುವದು, ಸ್ಥಗನಗೊಳಿಸಿ, ಮೀಸಲಾಗಿರುವಂತಾದ್ದು, ಅದೇಶ ಕಾಲೇ, ಉಚ್ಛಿಷ್ಟಮ್, ಅಷಿತಂ ತ್ರೇಧಾ ವಿಧ್ಯತೆ, ಕ್ರಿಯೆವನ್ನು.
 * Agent-reported "ಧೀರ್ಘ" was wrong on zoom (print is ದೀರ್ಘ). Connecting dashes that look like en dashes were left as stored (font difference).
 
+### A6. Chapter 18 patterns
+* Missing content: the commentary paragraph of 18.3 (no Kannada commentary at all was stored; Devanagari also lacked it), the closing paragraph of 18.40 about the varṇa classification with the four-brothers example (missing in all four languages), and the line "ರಾಜಸ ಬುದ್ಧಿ." after the 18.31 translation. English and Hindi already had the 18.3 paragraph.
+* Wrong reference: Rigveda 10.121.3 → 10.136.7 (18.1, Keshi/Vayu reference; Devanagari too).
+* ಪ್ರಸಾದ is printed ಹಸಾದ in 18.56, 18.58 and 18.73 (Kannada form of the word); stored text now follows the print. The Sanskrit padachheda keeps ಪ್ರಸಾದಾತ್.
+* Wrong-letter OCR: ಬಲಜ್ಜ್ಞಾನ, ಪ್ರಕೃಷ್ಣ→ಪ್ರಕೃಷ್ಟ, ತೈಗುಣ್ಯ→ತ್ರೈಗುಣ್ಯ, ಅಲ್ಬಂ→ಅಲ್ಪಂ, ಅಸಿಧ್ಯೋಃ→ಅಸಿದ್ಧ್ಯೋಃ, ವಿಶ್ಚೇಷಣೆ→ವಿಶ್ಲೇಷಣೆ, ದೀರ್ಥ→ದೀರ್ಘ, ಲಘ→ಲಘ್ವ, ಸಮಪಾಶ್ರಿತಃ→ಸಮುಪಾಶ್ರಿತಃ, ಹೃತ್ಯಮಲ→ಹೃತ್ಕಮಲ, ಆತ್ಮಸಾಕ್ಷೆ→ಆತ್ಮಸಾಕ್ಷಿ, ಸಮಪ್ಪಿರೂಪ→ಸಮಷ್ಟಿರೂಪ, ಸಂಸ್ಕೃತ್ಯ→ಸಂಸ್ಮೃತ್ಯ, ಎಲ್ಲಕ್ಕೆಂತ→ಎಲ್ಲಕ್ಕಿಂತ, ಕಲುಪಿತ→ಕಲುಷಿತ, ಶುದ್ದಿ→ಶುದ್ಧಿ.
+* Numeral ೮ is printed in a font where it looks like ಲ: "(ಲ)ಕ್ಷತ್ರಿಯರು", "(ಲ)ವಿಜ್ಞಾನ", "ಲ೦-ಅಂಶ" → ೮.
+* "॥೪೮॥" read for "--" in 18.48; verse-number "॥" dropped in the 18.55 large-type block; duplicated "|।" and "॥|" in 18.37; closing lines "॥ ಸರ್ವೇ ಜನಾಃ ಸುಖಿನೋ ಭವಂತು ॥" printed with double bars.
+* English glosses restored: (ನಾನು-Self), (Conviction), (Instrument), (Confidence), (courage).
+* Kept as printed: ಶ್ರದ್ಧೆ/ಶ್ರದ್ದೆ variants where printed, ವಿಶಾದೀ (18.28), ಭೂರ್ತಾನಾಂ (18.46), ಪ್ರರಾಬ್ಧ, ತನ್ನತನ್ನ, ನಿನ್ನನಿನ್ನ, ಅಣ್ಣ-ತಮ್ಮಂದಿರರಿದ್ದಾರೆ, ಶ್ರಿಲಕ್ಷ್ಮಿ, ಕೊನೇಯ, ವಿಶಿಷ್ಠ. ಸಮಾವಿಷ್ಠ (18.10) left as stored (unsure).
+* Agent-reported "ಧೀರ್ಘ" / "ಧೀರ್ಥ" corrected to ದೀರ್ಘ (print, confirmed on zoom in 17.8).
+
 ### C. English glosses in parentheses (printed in the book) wrong or missing
 (sense organs)→(Receiver); (twenty virtues)→(discipline); (code of conduct) missing; (face-saving)→(Insult);
 (honest life)→(Sincerity-Straightforwardness); (Steadfastness)→(Conviction); (Attachment)→(Ego) at 13.8;
@@ -98,4 +109,5 @@ Ch.14: ಭಗವಂತವಂತನನ್ನು (14.27), ಘಜೇಂದ್ರನ
 | 15 | Kannada proofread against all 24 scan pages (about 130 edits); filler removed from 15.7 in all four languages |
 | 16 | Kannada proofread against all 20 scan pages; missing text ported to EN/DEV/HI (16.15, 16.18) |
 | 17 | Kannada proofread against all 19 scan pages; duplicated 17.19 text removed from 17.18 |
-| 1–12, 18 | not yet proofread |
+| 18 | Kannada proofread against all 47 scan pages (about 190 edits, three restored passages); missing text ported to EN/DEV/HI |
+| 1–12 | not yet proofread |
