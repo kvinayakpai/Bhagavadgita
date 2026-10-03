@@ -47,6 +47,13 @@ Items are added to the categories below as new kinds of error turn up.
 * English glosses: (hypnosis)→(hypnotism), (desire for fruit)→(demand), (by awareness of self)→(awareness of self), (A-04)→(ಅ-೦೪); (Space) and (abbreviation) restored.
 * Agent-reported "corrections" must be re-checked against the scan: one (ಸ್ತಬ್ಧ for ಸ್ಥಬ್ಧ, 15.1) was wrong on zoom and was not applied.
 
+### A4. Chapter 16 patterns
+* Missing content: 16.15 lost the padachheda of two verses (16.13/16.14) and a run of its translation; 16.18 lost its closing paragraph ("ಹೀಗೆ ಆಸುರೀ ಜನರ ಸ್ವಭಾವ…"). A stray fragment (start of a verse block) was left at the end of 16.12.
+* Wrong-letter OCR: ಸಂಶುದ್ಗಿಃ→ಸತ್ತ್ವ ಸಂಶುದ್ಧಿ�ಃ, ಶ್ರೀಃ→ಹ್ರೀಃ, ಸಿಡುಕ, ಸಿರಿವಂತ, ತೃಪ್ತಿ, ಇಚ್ಚಿಸು, ಆರ್ಜವಂ, ಮೂರ್ಖತನದ, ಕಟ್ಟಳೆ, ಸಾಕ್ಷಾತ್ಕರಿಸಿಕೊಂಡ; "|" for ।/॥; "-." for "--".
+* English glosses restored: (Fearlessness), (Conviction), (Pure Mind), (Straightforwardness), (Insult), (Softness), (forgiveness), (Ego), (crisis), (Divine Wealth), (Over Estimation of Self).
+* Kept as printed: ಇಪ್ಪಾತ್ತಾರು, ತ್ರಿಬಿಃ, ಒಳ್ಳಯ, ಕಾಮ-ಕ್ರೋದ; ಅಪ್ಪೈಶುನಮ್ unsure. Atharva reference digits in 16.4 are ambiguous on the scan.
+* A quote-normalisation false positive (16.18, opening double quote turned single) was caught and reverted.
+
 ### C. English glosses in parentheses (printed in the book) wrong or missing
 (sense organs)→(Receiver); (twenty virtues)→(discipline); (code of conduct) missing; (face-saving)→(Insult);
 (honest life)→(Sincerity-Straightforwardness); (Steadfastness)→(Conviction); (Attachment)→(Ego) at 13.8;
@@ -80,4 +87,5 @@ Ch.14: ಭಗವಂತವಂತನನ್ನು (14.27), ಘಜೇಂದ್ರನ
 | 13 | Proofread against all 25 scan pages; fixes applied (commit f1f650e) |
 | 14 | Kannada proofread against all 28 scan pages (22 keys, 109 edits); missing content ported to EN/DEV/HI |
 | 15 | Kannada proofread against all 24 scan pages (about 130 edits); filler removed from 15.7 in all four languages |
-| 1–12, 16–18 | not yet proofread |
+| 16 | Kannada proofread against all 20 scan pages; missing text ported to EN/DEV/HI (16.15, 16.18) |
+| 1–12, 17–18 | not yet proofread |
