@@ -49,7 +49,7 @@ Items are added to the categories below as new kinds of error turn up.
 
 ### A4. Chapter 16 patterns
 * Missing content: 16.15 lost the padachheda of two verses (16.13/16.14) and a run of its translation; 16.18 lost its closing paragraph ("ಹೀಗೆ ಆಸುರೀ ಜನರ ಸ್ವಭಾವ…"). A stray fragment (start of a verse block) was left at the end of 16.12.
-* Wrong-letter OCR: ಸಂಶುದ್ಗಿಃ→ಸತ್ತ್ವ ಸಂಶುದ್ಧಿ�ಃ, ಶ್ರೀಃ→ಹ್ರೀಃ, ಸಿಡುಕ, ಸಿರಿವಂತ, ತೃಪ್ತಿ, ಇಚ್ಚಿಸು, ಆರ್ಜವಂ, ಮೂರ್ಖತನದ, ಕಟ್ಟಳೆ, ಸಾಕ್ಷಾತ್ಕರಿಸಿಕೊಂಡ; "|" for ।/॥; "-." for "--".
+* Wrong-letter OCR: ಸಂಶುದ್ಗಿಃ→ಸತ್ತ್ವ ಸಂಶುದ್ಧಿಃ, ಶ್ರೀಃ→ಹ್ರೀಃ, ಸಿಡುಕ, ಸಿರಿವಂತ, ತೃಪ್ತಿ, ಇಚ್ಚಿಸು, ಆರ್ಜವಂ, ಮೂರ್ಖತನದ, ಕಟ್ಟಳೆ, ಸಾಕ್ಷಾತ್ಕರಿಸಿಕೊಂಡ; "|" for ।/॥; "-." for "--".
 * English glosses restored: (Fearlessness), (Conviction), (Pure Mind), (Straightforwardness), (Insult), (Softness), (forgiveness), (Ego), (crisis), (Divine Wealth), (Over Estimation of Self).
 * Kept as printed: ಇಪ್ಪಾತ್ತಾರು, ತ್ರಿಬಿಃ, ಒಳ್ಳಯ, ಕಾಮ-ಕ್ರೋದ; ಅಪ್ಪೈಶುನಮ್ unsure. Atharva reference digits in 16.4 are ambiguous on the scan.
 * A quote-normalisation false positive (16.18, opening double quote turned single) was caught and reverted.
