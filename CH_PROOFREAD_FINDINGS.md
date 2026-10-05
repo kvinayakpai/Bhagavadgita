@@ -122,7 +122,8 @@ Ch.14: ಭಗವಂತವಂತನನ್ನು (14.27), ಘಜೇಂದ್ರನ
 | 2 | Kannada proofread against all 53 scan pages (about 220 edits); missing 2.1 closing paragraph, 2.52 closing sentences and 2.55 speaker line added; 2.32 translation and 2.44 padachheda restored to the print; the same content ported to EN/DEV/HI. Printer typos kept (ಸಂಖೇ, ಅದ್ಯಾತ್ಮ, ದ್ರುವ, ಪ್ರತ್ಯವಾಯಃ) |
 | 3 | Kannada proofread against all 31 scan pages (about 85 edits); missing 3.5 closing sentence and two 3.36 paragraphs restored; English glosses (Divine Will, temptation, Possessiveness, Inter dependent) restored; 3.5/3.36 content ported to EN/DEV/HI. Left as printed: ಖುಷಭ, ಎತ್ಯೈಃ, ಶುಖಾಚಾರ್ಯ, ಸ್ಪುಟ |
 | 4 | Kannada proofread against all 36 scan pages (about 160 edits); dropped passages restored (4.20 sentences, 4.33 explanation, 4.36 quote, 4.13 line break); OCR junk lines removed from 4.21/4.22/4.24; many inline English glosses restored; printer typos restored to the print (ಖುಷಯಃ, ಅನಾಧಿ, ಅರ್ಜುನನನಿಗೆ, ನಿಷ್ಕ್ರೀಯ, ಯೋಗನಂದರು); 4.33 explanation ported to EN. 4.34 is stored as a shortened duplicate of the combined 4.34–4.35 print block and was left as is |
-| 5–12 | not yet proofread |
+| 5 | Kannada proofread against all 29 scan pages (about 130 edits); truncated 5.1 ending (two paragraphs incl. the 'ಕೃಷ್ಣ' address) restored and ported to EN/DEV/HI; leaked compact verse blocks removed from 5.16/5.17; stray 'ಣ' paragraph removed from 5.20; English glosses restored; printer typos restored (ಖುಷಿಗಳು, ಖುಷಯಃ, ಖುಚ್ಛತಿ, ಪ್ರತ್ರಿಯೊಂದರಲ್ಲೂ, ಜಿಫ್ರನ್ನಶ್ನನ್, ಅನಾಧಿ). Danda | vs ।, 5.27 reconstructed pada lines and ತತ್ತ್ವ ವಿತ್ spacing left as is |
+| 6–12 | not yet proofread |
 
 
 ## A8. Chapter 2 patterns
@@ -149,3 +150,9 @@ Ch.14: ಭಗವಂತವಂತನನ್ನು (14.27), ಘಜೇಂದ್ರನ
 - Compact large-type verse fragments leaked into the end of the previous verse (4.21, 4.24) and OCR junk opened 4.22; all removed.
 - Print combines 4.34 and 4.35 into one block; stored 4.34 is a partial duplicate.
 - Closing curly quotes (”) where the print uses straight quotes were the most common quote error.
+
+
+## A11. Chapter 5 patterns
+
+- Page-break truncation (5.1) and leaked compact blocks (5.16, 5.17) again; checked for both in every chapter.
+- Curly single quotes in print around quoted terms are stored as ASCII ' by convention.
