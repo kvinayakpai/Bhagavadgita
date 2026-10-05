@@ -124,7 +124,8 @@ Ch.14: ಭಗವಂತವಂತನನ್ನು (14.27), ಘಜೇಂದ್ರನ
 | 4 | Kannada proofread against all 36 scan pages (about 160 edits); dropped passages restored (4.20 sentences, 4.33 explanation, 4.36 quote, 4.13 line break); OCR junk lines removed from 4.21/4.22/4.24; many inline English glosses restored; printer typos restored to the print (ಖುಷಯಃ, ಅನಾಧಿ, ಅರ್ಜುನನನಿಗೆ, ನಿಷ್ಕ್ರೀಯ, ಯೋಗನಂದರು); 4.33 explanation ported to EN. 4.34 is stored as a shortened duplicate of the combined 4.34–4.35 print block and was left as is |
 | 5 | Kannada proofread against all 29 scan pages (about 130 edits); truncated 5.1 ending (two paragraphs incl. the 'ಕೃಷ್ಣ' address) restored and ported to EN/DEV/HI; leaked compact verse blocks removed from 5.16/5.17; stray 'ಣ' paragraph removed from 5.20; English glosses restored; printer typos restored (ಖುಷಿಗಳು, ಖುಷಯಃ, ಖುಚ್ಛತಿ, ಪ್ರತ್ರಿಯೊಂದರಲ್ಲೂ, ಜಿಫ್ರನ್ನಶ್ನನ್, ಅನಾಧಿ). Danda | vs ।, 5.27 reconstructed pada lines and ತತ್ತ್ವ ವಿತ್ spacing left as is |
 | 6 | Kannada proofread against all 36 scan pages (about 70 edits); compact verse blocks that leaked onto the tail of the previous verse removed (6.5, 6.12, 6.30, 6.31); 6.45 first padachheda line restored; quote pairs normalised; ಹಸಾದ, ಸದ್ಬುದ್ಧಿ, ಅಪರೋಕ್ಷ and similar spellings fixed. Left as stored: compact blocks at the start of 6.1/6.6/6.32/6.37/6.39, the 6.23 combined note, ಉಚ್ಛ್ರಿತಂ conjunct (unsure). No content gaps found, so no EN/DEV/HI changes |
-| 7–12 | not yet proofread |
+| 7 | proofread against scans (pp. 227–263); ~25 verses fixed in KN; 7.8 intro sentence added to all four languages |
+| 8–12 | not yet proofread |
 
 
 ## A8. Chapter 2 patterns
@@ -163,3 +164,11 @@ Ch.14: ಭಗವಂತವಂತನನ್ನು (14.27), ಘಜೇಂದ್ರನ
 
 - Print uses curly quotes throughout this chapter; stored mixed a curly opener with a straight closer. Normalised to ASCII ' per convention.
 - Compact verse blocks sometimes sit at the tail of the previous verse's section (6.5, 6.12, 6.30, 6.31); removed.
+
+## A13 – Chapter 7 patterns
+- Mixed quote pairs (“X\' , "X\' , \'X”) normalised to ASCII single quotes; nested double+single quotes left.
+- Split words rejoined (ಸ್ನಾ ನ, ಉತ್ಪ ನ್ನ ರಾದ, ಅದ್ಭು ತ …); stray periods before continuing sentences removed.
+- ಋ printed as ಖು restored (ಖುಗ್ವೇದ, ಖುಷಭ); avagraha ಽ in ಸಾಧ್ಯಾಽಧ್ಯಾಯ.
+- Sanskrit verse quotes corrected to print (ಇದಂ ಪ್ರೋತಂ, ತೇಜಶ್ಚಾಸ್ಮಿ, ಏತೈರುಪಾಯೈರ್ಯತತೇ, ವಿದ್ವಾಂಸ್ತಸ್ಯೈಷ …).
+- Missing introductory sentence at the start of 7.8 added (KN/EN/DEV/HI); placed at end of 7.7 text.
+- Left: 7.23 closing paragraph sits before 7.24 verse in print; uncertain ಮಯ್ಯೈಃ/ಭಾವ್ಯೈಃ (7.13).
