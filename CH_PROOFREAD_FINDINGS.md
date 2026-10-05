@@ -120,7 +120,8 @@ Ch.14: ಭಗವಂತವಂತನನ್ನು (14.27), ಘಜೇಂದ್ರನ
 | 18 | Kannada proofread against all 47 scan pages (about 190 edits, three restored passages); missing text ported to EN/DEV/HI |
 | 1 | Kannada proofread against all 33 scan pages (about 110 edits); non-print rewordings in 1.5 and the 1.14 padachheda restored to the print; colophon added |
 | 2 | Kannada proofread against all 53 scan pages (about 220 edits); missing 2.1 closing paragraph, 2.52 closing sentences and 2.55 speaker line added; 2.32 translation and 2.44 padachheda restored to the print; the same content ported to EN/DEV/HI. Printer typos kept (ಸಂಖೇ, ಅದ್ಯಾತ್ಮ, ದ್ರುವ, ಪ್ರತ್ಯವಾಯಃ) |
-| 3–12 | not yet proofread |
+| 3 | Kannada proofread against all 31 scan pages (about 85 edits); missing 3.5 closing sentence and two 3.36 paragraphs restored; English glosses (Divine Will, temptation, Possessiveness, Inter dependent) restored; 3.5/3.36 content ported to EN/DEV/HI. Left as printed: ಖುಷಭ, ಎತ್ಯೈಃ, ಶುಖಾಚಾರ್ಯ, ಸ್ಪುಟ |
+| 4–12 | not yet proofread |
 
 
 ## A8. Chapter 2 patterns
@@ -131,3 +132,12 @@ Ch.14: ಭಗವಂತವಂತನನ್ನು (14.27), ಘಜೇಂದ್ರನ
 - English glosses restored to the print's capitalisation and spacing, e.g. (Total Submission), (Mental depression).
 - Whole sentences dropped in earlier editing (2.1, 2.52) and a speaker line (2.55) reinstated.
 - Reworded stored text replaced with the printed wording (2.32, 2.44).
+
+
+## A9. Chapter 3 patterns
+
+- Split words (ಎನ್ನು ವ, ಅಗ್ನಿ ಯ, ಇನ್ನೊಬ್ಬ ನಲ್ಲಿ) joined; stray periods removed; closing curly quotes normalised to the print's straight quotes.
+- Truncated paragraphs at page breaks (3.5, 3.36) completed.
+- Inline English glosses dropped by earlier editing restored.
+- Arrow chain in 3.16 is printed literally as <->.
+- Keys 3.33/3.34 in the data files have irregular indentation; scripts must match lines with trimStart().
