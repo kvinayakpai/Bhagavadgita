@@ -127,7 +127,8 @@ Ch.14: ಭಗವಂತವಂತನನ್ನು (14.27), ಘಜೇಂದ್ರನ
 | 7 | proofread against scans (pp. 227–263); ~25 verses fixed in KN; 7.8 intro sentence added to all four languages |
 | 8 | proofread against scans (pp. 264–285); ~16 verses fixed in KN; 8.3 gloss ported to EN/DEV/HI |
 | 9 | proofread against scans (pp. 286–318); ~21 verses fixed in KN; missing 9.34 paragraph and 9.1 gloss ported to all four languages |
-| 10–12 | not yet proofread |
+| 10 | proofread against scans (pp. 319–366); ~35 verses fixed in KN; missing text in 10.4, 10.18, 10.22 restored (10.4/10.18 ported to EN/DEV/HI) |
+| 11–12 | not yet proofread |
 
 
 ## A8. Chapter 2 patterns
@@ -186,3 +187,9 @@ Ch.14: ಭಗವಂತವಂತನನ್ನು (14.27), ಘಜೇಂದ್ರನ
 - 9.16 bracket/quote structure of the sacrifice-term glosses corrected (ಕ್ರತು, ಸ್ವಧಾ, ಮಂತ್ರ, ಅಗ್ನಿ with closing ']'); ಪಿತೃ, ಆಜ್ಯ, ಕಾಣುತ್ತೇವೆ etc.
 - 9.17 Vedic quotes and varnamala line (ಎ, ಒ) per print; 9.25 ಪಿತೄನ್; ಖು for ಋ (9.33, 9.17 ಖುತ್ವಿಜಂ).
 - Left (UNSURE or printed forms): 9.11 ನಶ್ಚರ, 9.17 ಋತಂಭರ/ೠಘ glyph list, dot counts in Vedic quotes, ಸ್ವಸ್ತಿನೋ reconstruction, 9.7/9.25 printed merged words, large-type verse headings not stored, paragraph-break layout differences.
+
+## A16 – Chapter 10 patterns
+- Three content gaps: end of 10.4 (sukha-duhkha dvandva paragraphs), end of 10.18 (ear-cup nectar paragraph), 10.22 (hand/fox story, vāsava, mind, awareness) restored in KN; 10.4/10.18 ported to EN/DEV/HI (10.22 already present there).
+- Gloss separators in etymology brackets: print uses '=' or '+' (e.g. ಪು+ರು+ಷಃ=ಪುರುಷಃ, ಕಾಮ=ಬಯಸಿದ್ದನ್ನು) — stored hyphens/colons corrected where the report was clear.
+- ಖು for ಋ (10.2, 10.24 ದೇವಂ-ಖುತ್ವಿಜಂ, 10.25); ಸತ್ತ್ವ, ಸಪ್ತರ್ಷಿ, ಆಜ್ಞಾಚಕ್ರ, ವಿಷ್ಟಭ್ಯ/ವಿಷ್ವಂ in 10.42 etc.
+- Left (UNSURE or not clearly confirmed): 10.12 split-word verse line and editorial note, 10.13 ಋ/ಖು in padapatha, 10.21 ಶ=ಎಲ್ಲಾ garble, 10.23 ಅಹಿರ್ಬುಧ್ನ್ಯ and ದೃಢ/ದೃಥ, 10.24 'ಕಾರ್ಯಪ್ಪ'/Velikovsky glyph, 10.25 ಸನ್ನಿದಾನ and merged-word spacing, 10.26 ಎನಿಸಿ/ಬದುಕುತ್ತಿದ್ದಳು/ಅಂತಃವಾಣಿ, 10.30–10.35 spacing before '=', dot/stray paragraph breaks at page boundaries.
