@@ -126,7 +126,8 @@ Ch.14: ಭಗವಂತವಂತನನ್ನು (14.27), ಘಜೇಂದ್ರನ
 | 6 | Kannada proofread against all 36 scan pages (about 70 edits); compact verse blocks that leaked onto the tail of the previous verse removed (6.5, 6.12, 6.30, 6.31); 6.45 first padachheda line restored; quote pairs normalised; ಹಸಾದ, ಸದ್ಬುದ್ಧಿ, ಅಪರೋಕ್ಷ and similar spellings fixed. Left as stored: compact blocks at the start of 6.1/6.6/6.32/6.37/6.39, the 6.23 combined note, ಉಚ್ಛ್ರಿತಂ conjunct (unsure). No content gaps found, so no EN/DEV/HI changes |
 | 7 | proofread against scans (pp. 227–263); ~25 verses fixed in KN; 7.8 intro sentence added to all four languages |
 | 8 | proofread against scans (pp. 264–285); ~16 verses fixed in KN; 8.3 gloss ported to EN/DEV/HI |
-| 9–12 | not yet proofread |
+| 9 | proofread against scans (pp. 286–318); ~21 verses fixed in KN; missing 9.34 paragraph and 9.1 gloss ported to all four languages |
+| 10–12 | not yet proofread |
 
 
 ## A8. Chapter 2 patterns
@@ -179,3 +180,9 @@ Ch.14: ಭಗವಂತವಂತನನ್ನು (14.27), ಘಜೇಂದ್ರನ
 - 8.3: gloss "(thymus gland)" per print (replacing Anahata chakra); "[awareness of self]" added (KN).
 - 8.12 verse line corrected to print (ಪ್ರಾಣಮಾಸ್ಥಿತೋ ಯೋಗಧಾರಣಾಮ್).
 - Left: continuous (sandhi) verse lines printed before the word-split lines for 8.23–8.28 are not stored (only word-split form); 8.12 editorial bracket note; 8.15 space before period; en-dash vs hyphen.
+
+## A15 – Chapter 9 patterns
+- Missing paragraph in 9.34 ("ನಾವು ನಮ್ಮ ಜೀವನದಲ್ಲಿ ಸಾಧಿಸಬೇಕಾದ ಒಂದೇ ಒಂದು ಸಂಗತಿ…ಶ್ರೀ ಸೂಕ್ತದಲ್ಲಿ") restored in KN/EN/DEV/HI; "(Quality)" gloss in 9.1.
+- 9.16 bracket/quote structure of the sacrifice-term glosses corrected (ಕ್ರತು, ಸ್ವಧಾ, ಮಂತ್ರ, ಅಗ್ನಿ with closing ']'); ಪಿತೃ, ಆಜ್ಯ, ಕಾಣುತ್ತೇವೆ etc.
+- 9.17 Vedic quotes and varnamala line (ಎ, ಒ) per print; 9.25 ಪಿತೄನ್; ಖು for ಋ (9.33, 9.17 ಖುತ್ವಿಜಂ).
+- Left (UNSURE or printed forms): 9.11 ನಶ್ಚರ, 9.17 ಋತಂಭರ/ೠಘ glyph list, dot counts in Vedic quotes, ಸ್ವಸ್ತಿನೋ reconstruction, 9.7/9.25 printed merged words, large-type verse headings not stored, paragraph-break layout differences.
