@@ -119,4 +119,15 @@ Ch.14: ಭಗವಂತವಂತನನ್ನು (14.27), ಘಜೇಂದ್ರನ
 | 17 | Kannada proofread against all 19 scan pages; duplicated 17.19 text removed from 17.18 |
 | 18 | Kannada proofread against all 47 scan pages (about 190 edits, three restored passages); missing text ported to EN/DEV/HI |
 | 1 | Kannada proofread against all 33 scan pages (about 110 edits); non-print rewordings in 1.5 and the 1.14 padachheda restored to the print; colophon added |
-| 2–12 | not yet proofread |
+| 2 | Kannada proofread against all 53 scan pages (about 220 edits); missing 2.1 closing paragraph, 2.52 closing sentences and 2.55 speaker line added; 2.32 translation and 2.44 padachheda restored to the print; the same content ported to EN/DEV/HI. Printer typos kept (ಸಂಖೇ, ಅದ್ಯಾತ್ಮ, ದ್ರುವ, ಪ್ರತ್ಯವಾಯಃ) |
+| 3–12 | not yet proofread |
+
+
+## A8. Chapter 2 patterns
+
+- Split-word OCR/typesetting breaks (ಎನ್ನು ವ, ತಿನ್ನು ವುದರಿಂದ, ಇನ್ನೊ ಬ್ಬರ) joined throughout.
+- Stray periods and ellipses inside sentences (ನಾವು. ನಮ್ಮ, ನಿಲ್ಲು... ದ್ವಂದ್ವ) removed.
+- Curly and straight quote mismatches normalised to the print.
+- English glosses restored to the print's capitalisation and spacing, e.g. (Total Submission), (Mental depression).
+- Whole sentences dropped in earlier editing (2.1, 2.52) and a speaker line (2.55) reinstated.
+- Reworded stored text replaced with the printed wording (2.32, 2.44).
