@@ -129,7 +129,7 @@ Ch.14: ಭಗವಂತವಂತನನ್ನು (14.27), ಘಜೇಂದ್ರನ
 | 9 | proofread against scans (pp. 286–318); ~21 verses fixed in KN; missing 9.34 paragraph and 9.1 gloss ported to all four languages |
 | 10 | proofread against scans (pp. 319–366); ~35 verses fixed in KN; missing text in 10.4, 10.18, 10.22 restored (10.4/10.18 ported to EN/DEV/HI) |
 | 11 | proofread against scans (pp. 367–395); ~29 verses fixed in KN; missing 11.35 closing paragraph added to all four languages |
-| 12 | not yet proofread |
+| 12 | proofread against scans (pp. 396–411); ~13 verses fixed in KN; missing phrases in 12.14 and 12.19 restored (EN/HI ported) |
 
 
 ## A8. Chapter 2 patterns
@@ -199,3 +199,11 @@ Ch.14: ಭಗವಂತವಂತನನ್ನು (14.27), ಘಜೇಂದ್ರನ
 - Missing closing paragraph of 11.35 (Arjuna begins to praise; bracketed note on epithets) restored in KN/EN/DEV/HI.
 - ಖು for ಋ (11.2, 11.15, 11.21, 11.32, 11.36); sandhi-joined verse words (ದಂಷ್ಟ್ರಾಕರಾಳ, ಯೇ ಚ, ಸರ್ವೇ ಯೇ); 11.27 padaccheda line aksharas; ವಾಽಪಿ in 11.42; 11.50 ವಾಸು+ದೇವ; colophon ಇತ್ಯೇಕಾದಶೋಽಧ್ಯಾಯಃ.
 - Left: editorial bracketed pointers at 11.10/11.26/11.41, 11.1 ‘ಮತ್’ spacing, UNSURE items (11.40 ಸಮಾಪ್ನೋಷಿ, 11.41 ॥೪೦॥, 11.34 ಯುದ್ಧ್ಯ ಸ್ವ, 11.16 curly opener).
+
+## A18 – Chapter 12 patterns
+- Content gaps: 12.14 ("ಯಾವ ಜೀವಿಗಳಲ್ಲು ಹಗೆಯಿರದವನು … ತಾಳ್ಮೆ ತಪ್ಪದವನು") and 12.19 ("ಹಗೆಯ-ಗೆಳೆಯರಲ್ಲಿ ಭೇದ ಬಗೆಯದವನು … ಯಾವುದಕ್ಕೂ ಅಂಟಿಕೊಳ್ಳದವನು") restored in KN; ported to EN and HI (DEV is a condensed rendering and was left).
+- ತತ್ತ್ವ → ತತ್ವ in 12.4 (print spelling); ವಾಯುರ್ಜ್ಯೋತಿರಾಪಃ; ಪೂರ್ಣಾನುಗ್ರಹ, ಉದ್ಧರಿಸುತ್ತೇನೆ, ನಾವು ಸಮರ್ಥರಲ್ಲ; missing closing quotes in 12.16.
+- Left: 12.18 padaccheda pair not stored (content-model decision); editorial bracketed pointers at 12.3/12.6/12.13/12.18; UNSURE glyphs (12.9 ನಿಷೇಧಾಸ್ಸ್ಯುಃ, 12.6 ಅನನ್ಯೇನೈವ); printed typos kept (ಅಪ್ರಭುದ್ಧ, ಪರಿಸಬಹುದು, merged words in 12.1/12.4).
+
+## Status
+All 18 chapters have now been proofread against the scans.
