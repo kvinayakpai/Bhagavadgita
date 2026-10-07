@@ -128,7 +128,8 @@ Ch.14: ಭಗವಂತವಂತನನ್ನು (14.27), ಘಜೇಂದ್ರನ
 | 8 | proofread against scans (pp. 264–285); ~16 verses fixed in KN; 8.3 gloss ported to EN/DEV/HI |
 | 9 | proofread against scans (pp. 286–318); ~21 verses fixed in KN; missing 9.34 paragraph and 9.1 gloss ported to all four languages |
 | 10 | proofread against scans (pp. 319–366); ~35 verses fixed in KN; missing text in 10.4, 10.18, 10.22 restored (10.4/10.18 ported to EN/DEV/HI) |
-| 11–12 | not yet proofread |
+| 11 | proofread against scans (pp. 367–395); ~29 verses fixed in KN; missing 11.35 closing paragraph added to all four languages |
+| 12 | not yet proofread |
 
 
 ## A8. Chapter 2 patterns
@@ -193,3 +194,8 @@ Ch.14: ಭಗವಂತವಂತನನ್ನು (14.27), ಘಜೇಂದ್ರನ
 - Gloss separators in etymology brackets: print uses '=' or '+' (e.g. ಪು+ರು+ಷಃ=ಪುರುಷಃ, ಕಾಮ=ಬಯಸಿದ್ದನ್ನು) — stored hyphens/colons corrected where the report was clear.
 - ಖು for ಋ (10.2, 10.24 ದೇವಂ-ಖುತ್ವಿಜಂ, 10.25); ಸತ್ತ್ವ, ಸಪ್ತರ್ಷಿ, ಆಜ್ಞಾಚಕ್ರ, ವಿಷ್ಟಭ್ಯ/ವಿಷ್ವಂ in 10.42 etc.
 - Left (UNSURE or not clearly confirmed): 10.12 split-word verse line and editorial note, 10.13 ಋ/ಖು in padapatha, 10.21 ಶ=ಎಲ್ಲಾ garble, 10.23 ಅಹಿರ್ಬುಧ್ನ್ಯ and ದೃಢ/ದೃಥ, 10.24 'ಕಾರ್ಯಪ್ಪ'/Velikovsky glyph, 10.25 ಸನ್ನಿದಾನ and merged-word spacing, 10.26 ಎನಿಸಿ/ಬದುಕುತ್ತಿದ್ದಳು/ಅಂತಃವಾಣಿ, 10.30–10.35 spacing before '=', dot/stray paragraph breaks at page boundaries.
+
+## A17 – Chapter 11 patterns
+- Missing closing paragraph of 11.35 (Arjuna begins to praise; bracketed note on epithets) restored in KN/EN/DEV/HI.
+- ಖು for ಋ (11.2, 11.15, 11.21, 11.32, 11.36); sandhi-joined verse words (ದಂಷ್ಟ್ರಾಕರಾಳ, ಯೇ ಚ, ಸರ್ವೇ ಯೇ); 11.27 padaccheda line aksharas; ವಾಽಪಿ in 11.42; 11.50 ವಾಸು+ದೇವ; colophon ಇತ್ಯೇಕಾದಶೋಽಧ್ಯಾಯಃ.
+- Left: editorial bracketed pointers at 11.10/11.26/11.41, 11.1 ‘ಮತ್’ spacing, UNSURE items (11.40 ಸಮಾಪ್ನೋಷಿ, 11.41 ॥೪೦॥, 11.34 ಯುದ್ಧ್ಯ ಸ್ವ, 11.16 curly opener).
