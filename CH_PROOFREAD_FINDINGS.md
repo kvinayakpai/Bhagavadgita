@@ -223,3 +223,6 @@ Resolved against the scans after the all-chapter proofread:
 - 18.10 ಸಮಾವಿಷ್ಠ → ಸಮಾವಿಷ್ಟ (subscript is ಟ, not the circular ಠ seen in ಅಂಗುಷ್ಠ). Fixed.
 DEV 12.14 / 12.19: checked, nothing to port. The restored phrases sit in the verse's word-by-word gloss, which the DEV entries for these two verses do not carry (they open with the Sanskrit verse and go straight to commentary), so adding them would be a structural change, not a fix.
 No proofreading items remain open.
+
+## ಋ vs ಖು (2026-10-08)
+The book's font draws ಋ like ಖು. Per Vinayak, words for sages, the Rigveda and related ṛ-words take the true ಋ. 37 places in 24 verses changed ಖು → ಋ (2.72, 3.41, 4.2, 4.3, 4.15, 5.5, 5.25, 5.29, 6.4, 7.8, 7.11, 7.16, 8.6, 8.7, 9.17, 9.33, 10.2, 10.24, 10.25, 11.2, 11.15, 11.21, 11.32, 11.36). The 18 places where ಖುಷಿ / ಖುಶಿ means joy (4.20, 5.21, 5.24, 6.32, 10.1, 10.5, 11.45, 12.17, 14.1, 14.9, 16.15, 17.8, 17.11, 18.9, 18.37, 18.45, 18.77) keep ಖು.
