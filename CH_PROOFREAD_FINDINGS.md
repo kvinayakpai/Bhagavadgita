@@ -214,7 +214,7 @@ All 18 chapters have now been proofread against the scans.
 ## Open-item review (2026-10-08)
 Resolved against the scans after the all-chapter proofread:
 - 9.11 / 13.12 / 13.14 ನಶ್ಚರ → ನಶ್ವರ (scan prints ನಶ್ವರ; OCR misread ವ as ಚ). Fixed.
-- 10.13 padapatha line: scan prints the ಖು-looking form of ಋ; stored ಋಷಯಃ/ಋಷಿಃ changed to ಖುಷಯಃ/ಖುಷಿಃ to match the book-wide convention. Fixed.
+- 10.13 padapatha line: the book's font draws ಋ like ಖು, but the right words are ಋಷಯಃ / ಋಷಿಃ (Vinayak, 2026-10-08). Stored as true ಋ. An earlier change to ಖು in this session was reverted.
 - 11.40: padapatha line prints ಸಮಾಪ್ರೋಷಿ while the verse line prints ಸಮಾಪ್ನೋಷಿ; stored matches print (printed inconsistency kept).
 - 12.6: verse line ಸಂನ್ಯಸ್ಯ / ಅನನ್ಯೇನೈವ confirmed as stored.
 - 12.9: at high zoom the scan clearly prints ನಿಷೇಧಾಸ್ಸ್ಯ followed by a separate ಹುಃ; stored form changed from ನಿಷೇಧಾಸ್ಸ್ಯುಃ to ನಿಷೇಧಾಸ್ಸ್ಯಹುಃ (as printed).
