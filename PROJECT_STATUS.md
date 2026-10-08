@@ -1,6 +1,6 @@
 # Tatva Jalam — Project Status
 
-**Last updated:** September 7, 2026
+**Last updated:** October 8, 2026
 **GitHub:** https://github.com/kvinayakpai/Bhagavadgita
 **Deployment:** https://kvinayakpai.github.io/Bhagavadgita
 
@@ -15,6 +15,7 @@ All three major correction/translation passes are finished for all 18 chapters, 
 | **KN content-gap audit** | Kannada source vs. printed book, page-by-page | ✅ Complete — see `archive/CONTENT_GAP_AUDIT_PLAN.md` |
 | **Four-language translation** | EN / HI / DEV translated & verified against KN | ✅ Complete — see `archive/EN_RETRANSLATION_PLAN.md` |
 | **DEV full-fidelity re-pass** | Sanskrit (DEV) re-derived for completeness vs. KN | ✅ Complete — see `archive/DEV_FULL_REPASS_PLAN.md` |
+| **Chapter-by-chapter scan proofread** | KN text re-read line by line against `gita_pages/` scans (spelling, split words, quote pairs, punctuation, gloss separators, missing/extra text); content-level fixes carried into EN / HI / DEV | ✅ Complete for all 18 chapters (2026-10-08) — findings, patterns and open UNSURE items in `CH_PROOFREAD_FINDINGS.md` |
 
 ### Deliverables
 
@@ -86,6 +87,7 @@ Active planning documents (root)
 README.md                    project overview, tier schema, edge vocabulary
 PROJECT_STATUS.md            this file
 FUTURE_AGENT_GUIDELINES.md   living reference: error patterns, verification checklists
+CH_PROOFREAD_FINDINGS.md     chapter-by-chapter scan-proofread log: per-chapter status table, error patterns (A3–A18), open items
 BRIDGE_PLAN.md               active plan for the cross-corpus Bridge feature
 
 Historical record
@@ -147,6 +149,8 @@ git push origin main
 
 ## What's Next
 
+- **Open proofreading items** (see the end of each A-section in `CH_PROOFREAD_FINDINGS.md`): UNSURE glyph readings, the editorial "given together in the next verse" pointers (e.g. 10.12, 11.10, 12.3), the 12.18 word-split lines, and 8.23–8.28 continuous verse lines that are not stored
+- **Native-speaker review** of the EN / HI / DEV text written to fill content gaps during the proofread (e.g. 9.34, 10.4, 10.18, 11.35, 12.14, 12.19)
 - **Bridge feature** (`BRIDGE_PLAN.md`) — phase 4 and later: broaden beyond the Katha Upanishad to the wider Vedic/Puranic/Itihasa corpus, resolve the remaining orthogonal open items listed there
 - Any future content correction work should start from `FUTURE_AGENT_GUIDELINES.md`'s error-pattern taxonomy (section 2E) rather than rediscovering these patterns from scratch
 

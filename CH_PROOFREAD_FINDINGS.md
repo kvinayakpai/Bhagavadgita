@@ -1,5 +1,7 @@
 # Proofreading findings (Kannada text vs. page scans)
 
+**Status (2026-10-08): all 18 chapters proofread.** See the status table below and the per-chapter pattern sections (A3–A18) at the end.
+
 Living list. Method: each chapter's pages are compared line by line against the scans
 (`gita_pages/page_NNNN.png`); the OCR text layer is only a pointer, never the authority.
 Items are added to the categories below as new kinds of error turn up.

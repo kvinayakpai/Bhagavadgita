@@ -26,7 +26,7 @@ One-click language toggle: English (IAST diacritics) · देवनागरी
 | Anchor verses (quad-script) | **112** |
 | Tiers | **12** |
 | Madhva-distinctive callouts | **22** |
-| Bannanje commentary entries | **701** (all 18 chapters, all 4 languages) |
+| Bannanje commentary entries | **701** (all 18 chapters, all 4 languages; Kannada proofread against the page scans, Oct 2026) |
 
 Every concept has its own anchor verse in all four scripts. 115 of the 124 typed relations carry a quad-script gloss; the remaining 9 (`is-a` / `opposite-of` taxonomic edges whose meaning is given by the type badge alone) carry no per-edge gloss.
 
