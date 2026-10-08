@@ -221,4 +221,5 @@ Resolved against the scans after the all-chapter proofread:
 - 16.4: Atharva reference confirmed as ೩-೧೭-೧ by matching digit glyphs against verse numbers elsewhere.
 - 15.14 / 15.15 ಕಠೋಪನಿಷತ್: the font prints ಠ like ರ (same in ಕಠಿಣ on the same page), so ಕಠೋ… is correct. No change.
 - 18.10 ಸಮಾವಿಷ್ಠ → ಸಮಾವಿಷ್ಟ (subscript is ಟ, not the circular ಠ seen in ಅಂಗುಷ್ಠ). Fixed.
-Still open: DEV 12.14 / 12.19 not ported; 12.9 stray glyph.
+DEV 12.14 / 12.19: checked, nothing to port. The restored phrases sit in the verse's word-by-word gloss, which the DEV entries for these two verses do not carry (they open with the Sanskrit verse and go straight to commentary), so adding them would be a structural change, not a fix.
+Still open: 12.9 stray glyph only.
