@@ -209,3 +209,16 @@ Ch.14: ಭಗವಂತವಂತನನ್ನು (14.27), ಘಜೇಂದ್ರನ
 
 ## Status
 All 18 chapters have now been proofread against the scans.
+
+
+## Open-item review (2026-10-08)
+Resolved against the scans after the all-chapter proofread:
+- 9.11 / 13.12 / 13.14 ನಶ್ಚರ → ನಶ್ವರ (scan prints ನಶ್ವರ; OCR misread ವ as ಚ). Fixed.
+- 10.13 padapatha line: scan prints the ಖು-looking form of ಋ; stored ಋಷಯಃ/ಋಷಿಃ changed to ಖುಷಯಃ/ಖುಷಿಃ to match the book-wide convention. Fixed.
+- 11.40: padapatha line prints ಸಮಾಪ್ರೋಷಿ while the verse line prints ಸಮಾಪ್ನೋಷಿ; stored matches print (printed inconsistency kept).
+- 12.6: verse line ಸಂನ್ಯಸ್ಯ / ಅನನ್ಯೇನೈವ confirmed as stored.
+- 12.9: the scan shows a stray ಹು-like glyph after ನಿಷೇಧಾಸ್ಸ್ಯ; reading not settled, stored form left unchanged.
+- 16.4: Atharva reference confirmed as ೩-೧೭-೧ by matching digit glyphs against verse numbers elsewhere.
+- 15.14 / 15.15 ಕಠೋಪನಿಷತ್: the font prints ಠ like ರ (same in ಕಠಿಣ on the same page), so ಕಠೋ… is correct. No change.
+- 18.10 ಸಮಾವಿಷ್ಠ → ಸಮಾವಿಷ್ಟ (subscript is ಟ, not the circular ಠ seen in ಅಂಗುಷ್ಠ). Fixed.
+Still open: DEV 12.14 / 12.19 not ported; 12.9 stray glyph.
