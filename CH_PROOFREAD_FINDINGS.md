@@ -215,7 +215,7 @@ All 18 chapters have now been proofread against the scans.
 Resolved against the scans after the all-chapter proofread:
 - 9.11 / 13.12 / 13.14 ನಶ್ಚರ → ನಶ್ವರ (scan prints ನಶ್ವರ; OCR misread ವ as ಚ). Fixed.
 - 10.13 padapatha line: the book's font draws ಋ like ಖು, but the right words are ಋಷಯಃ / ಋಷಿಃ (Vinayak, 2026-10-08). Stored as true ಋ. An earlier change to ಖು in this session was reverted.
-- 11.40: padapatha line prints ಸಮಾಪ್ರೋಷಿ while the verse line prints ಸಮಾಪ್ನೋಷಿ; stored matches print (printed inconsistency kept).
+- 11.40: the book's padapatha line prints ಸಮಾಪ್ರೋಷಿ while its verse line prints ಸಮಾಪ್ನೋಷಿ. Vinayak: ಸಮಾಪ್ನೋಷಿ in both places. Stored as ಸಮಾಪ್ನೋಷಿ.
 - 12.6: verse line ಸಂನ್ಯಸ್ಯ / ಅನನ್ಯೇನೈವ confirmed as stored.
 - 12.9: at high zoom the scan clearly prints ನಿಷೇಧಾಸ್ಸ್ಯ followed by a separate ಹುಃ; stored form changed from ನಿಷೇಧಾಸ್ಸ್ಯುಃ to ನಿಷೇಧಾಸ್ಸ್ಯಹುಃ (as printed).
 - 16.4: Atharva reference confirmed as ೩-೧೭-೧ by matching digit glyphs against verse numbers elsewhere.
@@ -226,3 +226,5 @@ No proofreading items remain open.
 
 ## ಋ vs ಖು (2026-10-08)
 The book's font draws ಋ like ಖು. Per Vinayak, words for sages, the Rigveda and related ṛ-words take the true ಋ. 37 places in 24 verses changed ಖು → ಋ (2.72, 3.41, 4.2, 4.3, 4.15, 5.5, 5.25, 5.29, 6.4, 7.8, 7.11, 7.16, 8.6, 8.7, 9.17, 9.33, 10.2, 10.24, 10.25, 11.2, 11.15, 11.21, 11.32, 11.36). The 18 places where ಖುಷಿ / ಖುಶಿ means joy (4.20, 5.21, 5.24, 6.32, 10.1, 10.5, 11.45, 12.17, 14.1, 14.9, 16.15, 17.8, 17.11, 18.9, 18.37, 18.45, 18.77) keep ಖು.
+
+Explicit overrides of the book by Vinayak (10.13, the 37 ಖು→ಋ places, 11.40) are recorded in `FUTURE_AGENT_GUIDELINES.md` section 1a.

@@ -49,6 +49,20 @@ commit messages.
 
 ---
 
+## 1a. Where Vinayak explicitly overrode the book
+
+The default rule is that the page scans are the only authority and printed typos stay as printed. The entries below are the exceptions: places where Vinayak looked at what the book prints and said the right text is something else. Do not revert them to the printed form, and do not flag them again as mismatches with the scan. Add a new entry here whenever he overrides the book again, with the date and the exact words he gave.
+
+| Date | Where | What the book prints | What Vinayak said is right | What is stored |
+|---|---|---|---|---|
+| 2026-10-08 | 10.13, word-by-word line | The book's font draws ಋ so that it looks like ಖು (ಖುಷಯಃ, ಖುಷಿಃ) | "the right words ಋಷಯಃ / ಋಷಿಃ" | ಋಷಯಃ, ಋಷಿಃ |
+| 2026-10-08 | ಖು in 37 places in 24 verses: 2.72, 3.41, 4.2, 4.3, 4.15, 5.5, 5.25, 5.29, 6.4, 7.8, 7.11, 7.16, 8.6, 8.7, 9.17, 9.33, 10.2, 10.24, 10.25, 11.2, 11.15, 11.21, 11.32, 11.36 | The same font quirk: the ṛ-words look like ಖು (ಖುಷಿಗಳು, ಖುಗ್ವೇದ, ಭರತ ಖುಷಭ, ಖುಚ್ಛತಿ, ಖುತೇ, ದೇವಂ-ಖುತ್ವಿಜಂ) | "Group 1 should be ಋ": sages, the Rigveda and related ṛ-words take the true ಋ | ಋಷಿಗಳು, ಋಗ್ವೇದ, ಭರತ ಋಷಭ, ಋಚ್ಛತಿ, ಋತೇ, ದೇವಂ-ಋತ್ವಿಜಂ |
+| 2026-10-08 | 11.40, word-by-word line | ಸಮಾಪ್ರೋಷಿ (the book's own verse line above it prints ಸಮಾಪ್ನೋಷಿ) | "It should be ಸಮಾಪ್ನೋಷಿ in both places" | ಸಮಾಪ್ನೋಷಿ. The KN file stores only the word-by-word line; the compact verse line is not stored, as for every verse |
+
+**What stays as it was.** The 18 places where ಖುಷಿ or ಖುಶಿ means joy keep ಖು, because that is the right letter for that word: 4.20, 5.21, 5.24, 6.32, 10.1, 10.5, 11.45, 12.17, 14.1, 14.9, 16.15, 17.8, 17.11, 18.9, 18.37, 18.45, 18.77.
+
+**How to use this.** When a scan shows ಖು, the font cannot tell you whether the letter is ಖು or ಋ. Read the word: a sage (ಋಷಿ), the Rigveda (ಋಗ್ವೇದ), ಋಷಭ, ಋತ, ಋತ್ವಿಜ, ಋಚ್ಛತಿ and similar words take ಋ. ಖುಷಿ meaning joy keeps ಖು. This covers only the cases listed; for any other printed typo, keep it as printed unless Vinayak says otherwise.
+
 ## 2. Common Challenges & OCR Pitfalls to Watch For
 
 ### A. OCR-Garbled Vowel Marks (Matras)

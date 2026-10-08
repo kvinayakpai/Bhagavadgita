@@ -66,8 +66,22 @@ OPEN ITEMS
 - 12.18 word-split lines and 8.23–8.28 continuous verse lines not stored.
 - Native-speaker review of EN/HI/DEV text written to fill gaps: 7.8 intro, 8.3 gloss,
   9.1, 9.34, 10.4, 10.18, 11.35, 12.14, 12.19 and earlier chapters' additions.
-- 16.4 Atharva digits; ಕಠೋಪನಿಷತ್ vs ಕರೋಪನಿಷತ್ (15.14/15.15); 18.10 ಸಮಾವಿಷ್ಠ.
+- The earlier UNSURE glyph items (9.11, 10.13, 11.40, 12.6, 12.9, 15.14/15.15, 16.4, 18.10) were all
+  resolved on 2026-10-08. See "OVERRIDES" below and CH_PROOFREAD_FINDINGS.md.
+- 13.34/13.35: same bracketed editorial note in both verses; decision needed on whether intended.
 - Bridge: phase 4+.
+
+
+OVERRIDES: WHERE VINAYAK EXPLICITLY OVERWROTE THE BOOK
+------------------------------------------------------
+Default rule: scans are the only authority and printed typos stay as printed. These are the
+exceptions, by Vinayak's instruction (2026-10-08). Do not revert them or re-flag them. Full table
+in FUTURE_AGENT_GUIDELINES.md section 1a.
+- 10.13 word-by-word line: ಋಷಯಃ / ಋಷಿಃ (the book's font draws ಋ like ಖು).
+- ಖು -> ಋ in 37 places in 24 verses (sages, Rigveda and related ṛ-words): 2.72, 3.41, 4.2, 4.3,
+  4.15, 5.5, 5.25, 5.29, 6.4, 7.8, 7.11, 7.16, 8.6, 8.7, 9.17, 9.33, 10.2, 10.24, 10.25, 11.2,
+  11.15, 11.21, 11.32, 11.36. The 18 places where ಖುಷಿ/ಖುಶಿ means joy keep ಖು.
+- 11.40 word-by-word line: ಸಮಾಪ್ನೋಷಿ (the book prints ಸಮಾಪ್ರೋಷಿ there).
 
 
 TOOLING & WORKFLOW (proofread method)
@@ -78,7 +92,7 @@ TOOLING & WORKFLOW (proofread method)
   anchor occurs exactly once in that key, replace the single line (match with
   l.trimStart().startsWith(JSON.stringify(key)+': ')), re-parse, assert 702 keys, write.
 - Mixed quote pairs are normalised to ASCII ' by regex; avagraha stored as ಽ; ಋ printed
-  like ಖು is stored as ಖು; stored '|' left alone.
+  like ಖು is stored as ಋ (see OVERRIDES); stored '|' left alone.
 - Then: python3 build-bundle.py; git add -A; git commit; git push origin main;
   republish the artifact.
 
